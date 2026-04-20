@@ -8,7 +8,7 @@
 
 ## Overview
 
-PERSONA.md is a declarative specification for AI Persona identity. A conforming PERSONA.md file is a Markdown document with a YAML frontmatter block that captures who an AI agent is across nine dimensions of personhood.
+PERSONA.md is a declarative specification that defines who an AI agent is. A conforming PERSONA.md file is a Markdown document with a YAML frontmatter block that captures the complete picture of an AI agent across nine dimensions: identity, character, personality, cognition, affect, drives, constraints, memory, and persona.
 
 This document is the normative reference. It defines required fields, optional fields, allowed values, and validation rules.
 

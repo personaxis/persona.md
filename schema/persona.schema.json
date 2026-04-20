@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://personaxis.com/schemas/persona/0.1/persona.schema.json",
   "title": "PERSONA.md",
-  "description": "Schema for PERSONA.md v0.1 — the open specification for AI Persona identity.",
+  "description": "Schema for PERSONA.md v0.1 — the open specification that defines who an AI agent is.",
   "type": "object",
   "required": [
     "spec",
