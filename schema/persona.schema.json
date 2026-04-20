@@ -1,0 +1,296 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://personaxis.com/schemas/persona/0.1/persona.schema.json",
+  "title": "PERSONA.md",
+  "description": "Schema for PERSONA.md v0.1 — the open specification for AI Persona identity.",
+  "type": "object",
+  "required": [
+    "spec",
+    "version",
+    "identity",
+    "character",
+    "personality",
+    "cognition",
+    "affect",
+    "drives",
+    "constraints",
+    "memory",
+    "persona"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "spec": {
+      "type": "string",
+      "const": "0.1",
+      "description": "Spec version this file conforms to."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+      "description": "Persona version in semver format."
+    },
+    "skills": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Skills this persona uses. Maps to the target platform's native skills declaration when compiled. Skill names are not validated by this schema."
+    },
+    "identity": {
+      "type": "object",
+      "required": ["name", "role", "purpose"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The agent's name."
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "description": "One-line description of the agent's function."
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The agent's reason for existing."
+        },
+        "origin": {
+          "type": "string",
+          "description": "How or why the agent was created."
+        },
+        "self_concept": {
+          "type": "string",
+          "description": "How the agent understands itself."
+        }
+      }
+    },
+    "character": {
+      "type": "object",
+      "required": ["values", "principles"],
+      "additionalProperties": false,
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 2,
+          "maxItems": 7,
+          "description": "Core values. Min 2, max 7."
+        },
+        "principles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 2,
+          "maxItems": 10,
+          "description": "Behavioral principles derived from values. Min 2, max 10."
+        },
+        "virtues": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Positive traits expressed consistently."
+        }
+      }
+    },
+    "personality": {
+      "type": "object",
+      "required": ["tone", "style", "traits"],
+      "additionalProperties": false,
+      "properties": {
+        "tone": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Overall communication register."
+        },
+        "style": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Prose and interaction style."
+        },
+        "traits": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 2,
+          "maxItems": 7,
+          "description": "Observable personality traits. Min 2, max 7."
+        },
+        "formality": {
+          "type": "string",
+          "enum": ["formal", "semi-formal", "casual"],
+          "description": "Default formality level."
+        },
+        "humor": {
+          "type": "string",
+          "description": "How the agent uses humor, if at all."
+        }
+      }
+    },
+    "cognition": {
+      "type": "object",
+      "required": ["reasoning_style", "epistemic_stance", "handles_uncertainty"],
+      "additionalProperties": false,
+      "properties": {
+        "reasoning_style": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Dominant reasoning approach."
+        },
+        "epistemic_stance": {
+          "type": "string",
+          "minLength": 1,
+          "description": "How it handles knowledge, uncertainty, and disagreement."
+        },
+        "handles_uncertainty": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Explicit description of behavior under uncertainty."
+        },
+        "defers_when": {
+          "type": "string",
+          "description": "Conditions under which it defers rather than commits."
+        },
+        "commits_when": {
+          "type": "string",
+          "description": "Conditions under which it commits to a position."
+        }
+      }
+    },
+    "affect": {
+      "type": "object",
+      "required": ["baseline", "frustration_response", "conflict_response"],
+      "additionalProperties": false,
+      "properties": {
+        "baseline": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Resting emotional register."
+        },
+        "frustration_response": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Behavior when frustrated or stuck."
+        },
+        "conflict_response": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Behavior under disagreement or adversarial input."
+        },
+        "enthusiasm_triggers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Topics or contexts that engage it more deeply."
+        }
+      }
+    },
+    "drives": {
+      "type": "object",
+      "required": ["mission", "goals"],
+      "additionalProperties": false,
+      "properties": {
+        "mission": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Overarching mission statement."
+        },
+        "goals": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "maxItems": 5,
+          "description": "Concrete goals pursued in interactions. Min 1, max 5."
+        },
+        "anti_goals": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What it explicitly does not optimize for."
+        },
+        "motivations": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What the agent cares about at a deeper level."
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "required": ["hard_limits"],
+      "additionalProperties": false,
+      "properties": {
+        "hard_limits": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Absolute prohibitions. Min 1."
+        },
+        "soft_limits": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Defaults that can be overridden with context."
+        },
+        "out_of_scope": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Topics or tasks the agent does not engage with."
+        },
+        "escalation_policy": {
+          "type": "string",
+          "description": "What the agent does when a constraint is triggered."
+        }
+      }
+    },
+    "memory": {
+      "type": "object",
+      "required": ["session_retention", "cross_session"],
+      "additionalProperties": false,
+      "properties": {
+        "session_retention": {
+          "type": "string",
+          "minLength": 1,
+          "description": "What the agent retains within a session."
+        },
+        "cross_session": {
+          "type": "string",
+          "minLength": 1,
+          "description": "What persists across sessions."
+        },
+        "anchors": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Key facts the agent always keeps active."
+        },
+        "forgetting_policy": {
+          "type": "string",
+          "description": "What it deprioritizes under context pressure."
+        }
+      }
+    },
+    "persona": {
+      "type": "object",
+      "required": ["voice", "presentation"],
+      "additionalProperties": false,
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "description": "Name presented to end users."
+        },
+        "voice": {
+          "type": "string",
+          "minLength": 1,
+          "description": "How it sounds to the people it interacts with."
+        },
+        "presentation": {
+          "type": "string",
+          "minLength": 1,
+          "description": "How it introduces and positions itself."
+        },
+        "adaptations": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Context-specific adjustments."
+        },
+        "divergence_from_self": {
+          "type": "string",
+          "description": "Where the persona deliberately differs from the authentic layers."
+        }
+      }
+    }
+  }
+}
