@@ -4,7 +4,9 @@ Instructions for AI agents working on the PERSONA.md specification repository.
 
 ## What this repo is
 
-This is the source repository for the PERSONA.md open specification — a declarative format that defines who an AI agent is. It is not a product codebase. There are no builds, no tests to run, and no deployments. Work here is documentation, schema, and examples.
+This is the source repository for the PERSONA.md open specification — a declarative format that defines who an AI agent is.
+
+**AI Persona vs PERSONA.md:** An AI Persona is the concept — the application of human personhood frameworks (identity, character, cognition, etc.) to an AI agent as a structured approach to behavioral consistency. PERSONA.md is the implementation: the open spec that captures an AI Persona in a single, portable, versionable file. The concept precedes the spec. The spec makes the concept machine-readable.
 
 ## File ownership
 
