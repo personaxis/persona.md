@@ -100,6 +100,10 @@ PERSONA.md completes the triangle. It does not replace the standards you already
 
 See [docs/SPEC.md](./docs/SPEC.md) for the full normative specification and field reference.
 
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines. If you are an AI agent working on this repository, read [AGENTS.md](./AGENTS.md) first — it covers what to update when making changes to the spec.
+
 ## Live example
 
 This repository uses its own spec. [PERSONA.md](./PERSONA.md) at the root defines the shared behavioral baseline for any agent working on this project — the character, values, and constraints that should guide decisions about the spec itself.
