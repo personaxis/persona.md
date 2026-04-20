@@ -14,9 +14,29 @@ PERSONA.md is the artifact that was missing. A single file that captures who an 
 
 ## Using the spec today
 
-1. Copy the structure from any persona in [`examples/`](./examples/)
-2. Validate your file against [`schema/persona.schema.json`](./schema/persona.schema.json) using any JSON Schema validator (e.g. [ajv-cli](https://github.com/ajv-validator/ajv-cli))
-3. Drop the result into your agent's system prompt or configuration file
+**Option A — manually:**
+
+1. Create `.personaxis/personas/<your-agent-name>/` in your project
+2. Copy [`examples/marketing-specialist/PERSONA.md`](./examples/marketing-specialist/PERSONA.md) as a starting point
+3. Edit each field to match your agent's role and character
+4. Validate against [`schema/persona.schema.json`](./schema/persona.schema.json) using any JSON Schema validator (e.g. [ajv-cli](https://github.com/ajv-validator/ajv-cli))
+5. Paste the frontmatter content into your agent's system prompt or configuration file
+
+**Option B — let an agent do it:**
+
+Send this prompt to your AI agent:
+
+```
+Read the PERSONA.md spec at https://raw.githubusercontent.com/personaxis/persona.md/main/docs/SPEC.md.
+
+Then create a new persona for [describe the role] in my project:
+1. Create the folder .personaxis/personas/<name>/
+2. Create PERSONA.md inside it following the spec exactly — fill every required field with real content for this role
+3. Validate the result against the schema at https://raw.githubusercontent.com/personaxis/persona.md/main/schema/persona.schema.json
+4. Report any validation errors
+
+Use https://raw.githubusercontent.com/personaxis/persona.md/main/examples/marketing-specialist/PERSONA.md as a reference for quality and depth.
+```
 
 ## Package structure
 
@@ -90,7 +110,7 @@ See [examples/](./examples/) for complete, production-ready personas.
 
 ## Registry
 
-Discover and share personas at [personaxis.com](https://personaxis.com).
+A public registry for discovering, publishing, and sharing personas is in development at [personaxis.com](https://personaxis.com). Until then, share personas by publishing them to a public GitHub repository.
 
 ## License
 
