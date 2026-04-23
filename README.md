@@ -1,8 +1,8 @@
 # PERSONA.md
 
-PERSONA.md is a declarative specification — YAML frontmatter and Markdown — that defines who an AI agent is across nine dimensions: identity, character, personality, cognition, affect, drives, constraints, memory, and persona.
+PERSONA.md is a declarative specification — YAML frontmatter and Markdown — that defines who an AI agent is across ten dimensions: identity, character, personality, cognition, affect, drives_values, normative_self_reg, memory, reflexivity, and persona.
 
-The nine dimensions are borrowed from the frameworks that psychology, philosophy, and ethics have developed to describe what makes a human being coherent and consistent over time — not to claim that AI agents have personhood, but because those frameworks are the best available map of what holds an entity together. PERSONA.md applies that structure to AI agents.
+The ten dimensions are borrowed from the frameworks that psychology, philosophy, and ethics have developed to describe what makes a human being coherent and consistent over time — not to claim that AI agents have personhood, but because those frameworks are the best available map of what holds an entity together. PERSONA.md applies that structure to AI agents.
 
 It is the source of truth for an agent's behavioral identity. Portable across every model and tool. Versionable like any other piece of infrastructure. Auditable when it matters.
 
@@ -44,7 +44,7 @@ A persona is a directory, not a single file.
 
 ```
 marketing-specialist/
-├── PERSONA.md       # The spec — nine dimensions of identity
+├── PERSONA.md       # The spec — ten dimensions of identity
 ├── samples/         # Real outputs this persona produces
 ├── refs/            # Frameworks and reference materials it draws on
 └── README.md        # Human-readable description and use cases
@@ -72,18 +72,19 @@ PERSONA.md                          ← project-wide behavioral baseline
 ```
 
 
-## The nine layers
+## The ten layers
 
 | Layer | What it captures |
 |---|---|
 | `identity` | Who the agent is: name, role, purpose, self-concept |
 | `character` | Values, principles, and the moral commitments it holds |
-| `personality` | Observable style and temperament |
-| `cognition` | How it reasons and handles uncertainty |
+| `personality` | Observable style and temperament (HEXACO-6) |
+| `cognition` | First-order reasoning style and epistemic stance |
 | `affect` | Emotional tendencies and conflict response |
-| `drives` | Mission, goals, and underlying motivations |
-| `constraints` | Hard limits and what it will not do under any pressure |
-| `memory` | What persists across sessions and how |
+| `drives_values` | Mission, goals, and the value hierarchy that resolves conflicts |
+| `normative_self_reg` | Internalized principled refusals and self-monitoring for drift |
+| `memory` | What persists across sessions: semantic, episodic, autobiographical |
+| `reflexivity` | Second-order self-model and meta-volitions |
 | `persona` | How it presents itself to the world |
 
 ## Relationship to existing standards

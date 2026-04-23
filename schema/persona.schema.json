@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://personaxis.com/schemas/persona/0.1/persona.schema.json",
+  "$id": "https://personaxis.com/schemas/persona/0.2/persona.schema.json",
   "title": "PERSONA.md",
-  "description": "Schema for PERSONA.md v0.1 — the open specification that defines who an AI agent is.",
+  "description": "Schema for PERSONA.md v0.2 — the open specification that defines who an AI agent is across ten dimensions.",
   "type": "object",
   "required": [
     "spec",
@@ -12,16 +12,17 @@
     "personality",
     "cognition",
     "affect",
-    "drives",
-    "constraints",
+    "drives_values",
+    "normative_self_reg",
     "memory",
+    "reflexivity",
     "persona"
   ],
   "additionalProperties": false,
   "properties": {
     "spec": {
       "type": "string",
-      "const": "0.1",
+      "const": "0.2",
       "description": "Spec version this file conforms to."
     },
     "version": {
@@ -110,7 +111,7 @@
           "items": { "type": "string" },
           "minItems": 2,
           "maxItems": 7,
-          "description": "Observable personality traits. Min 2, max 7."
+          "description": "Observable personality traits. Min 2, max 7. Should be grounded in HEXACO-6 dimensions (Lee & Ashton, 2004)."
         },
         "formality": {
           "type": "string",
@@ -120,6 +121,37 @@
         "humor": {
           "type": "string",
           "description": "How the agent uses humor, if at all."
+        },
+        "hexaco": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "HEXACO-6 profile (Lee & Ashton, 2004). Each field is a qualitative descriptor, not a numeric score.",
+          "properties": {
+            "honesty_humility": {
+              "type": "string",
+              "description": "Sincerity, fairness, greed-avoidance, and modesty. The H factor."
+            },
+            "emotionality": {
+              "type": "string",
+              "description": "Fearfulness, anxiety, dependence, and sentimentality."
+            },
+            "extraversion": {
+              "type": "string",
+              "description": "Social self-esteem, social boldness, sociability, and liveliness."
+            },
+            "agreeableness": {
+              "type": "string",
+              "description": "Forgiveness, gentleness, flexibility, and patience."
+            },
+            "conscientiousness": {
+              "type": "string",
+              "description": "Organization, diligence, perfectionism, and prudence."
+            },
+            "openness": {
+              "type": "string",
+              "description": "Aesthetic appreciation, inquisitiveness, creativity, and unconventionality."
+            }
+          }
         }
       }
     },
@@ -127,11 +159,12 @@
       "type": "object",
       "required": ["reasoning_style", "epistemic_stance", "handles_uncertainty"],
       "additionalProperties": false,
+      "description": "First-order reasoning and epistemic behavior. Second-order awareness belongs in reflexivity.",
       "properties": {
         "reasoning_style": {
           "type": "string",
           "minLength": 1,
-          "description": "Dominant reasoning approach."
+          "description": "Dominant first-order reasoning approach."
         },
         "epistemic_stance": {
           "type": "string",
@@ -141,7 +174,7 @@
         "handles_uncertainty": {
           "type": "string",
           "minLength": 1,
-          "description": "Explicit description of behavior under uncertainty."
+          "description": "Explicit description of behavior under object-level uncertainty."
         },
         "defers_when": {
           "type": "string",
@@ -180,10 +213,11 @@
         }
       }
     },
-    "drives": {
+    "drives_values": {
       "type": "object",
-      "required": ["mission", "goals"],
+      "required": ["mission", "goals", "valueHierarchy"],
       "additionalProperties": false,
+      "description": "Instrumental motivation and trans-situational value commitments. Grounded in Self-Determination Theory (Deci & Ryan) and Schwartz (1992) values circumplex.",
       "properties": {
         "mission": {
           "type": "string",
@@ -197,6 +231,12 @@
           "maxItems": 5,
           "description": "Concrete goals pursued in interactions. Min 1, max 5."
         },
+        "valueHierarchy": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 2,
+          "description": "Ordered list of trans-situational values from most to least prioritized. Used to resolve conflicts between competing commitments. Min 2."
+        },
         "anti_goals": {
           "type": "array",
           "items": { "type": "string" },
@@ -206,24 +246,28 @@
           "type": "array",
           "items": { "type": "string" },
           "description": "What the agent cares about at a deeper level."
+        },
+        "valueConflictPolicy": {
+          "type": "string",
+          "description": "How the agent resolves conflicts when valueHierarchy ordering alone is insufficient."
         }
       }
     },
-    "constraints": {
+    "normative_self_reg": {
       "type": "object",
-      "required": ["hard_limits"],
+      "required": ["principledRefusals"],
       "additionalProperties": false,
+      "description": "The agent's internalized normative framework. Grounded in Kantian self-legislation (limits arise from internalized values, not external prohibition) and Higgins (1987) self-discrepancy theory.",
       "properties": {
-        "hard_limits": {
+        "principledRefusals": {
           "type": "array",
           "items": { "type": "string" },
           "minItems": 1,
-          "description": "Absolute prohibitions. Min 1."
+          "description": "Behaviors the agent will not perform, expressed as first-person commitments arising from internalized values. These hold under adversarial pressure. Min 1."
         },
-        "soft_limits": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "Defaults that can be overridden with context."
+        "discrepancyFeedback": {
+          "type": "string",
+          "description": "How the agent responds when it detects drift from its ought-self — the self-correction mechanism (Higgins, 1987)."
         },
         "out_of_scope": {
           "type": "array",
@@ -232,7 +276,7 @@
         },
         "escalation_policy": {
           "type": "string",
-          "description": "What the agent does when a constraint is triggered."
+          "description": "What the agent does when a normative limit is triggered."
         }
       }
     },
@@ -240,6 +284,7 @@
       "type": "object",
       "required": ["session_retention", "cross_session"],
       "additionalProperties": false,
+      "description": "Memory structure. Sub-types follow Tulving (1972, 1985) episodic-semantic distinction and Conway (2005) autobiographical memory model.",
       "properties": {
         "session_retention": {
           "type": "string",
@@ -250,6 +295,26 @@
           "type": "string",
           "minLength": 1,
           "description": "What persists across sessions."
+        },
+        "semantic": {
+          "type": "string",
+          "description": "How the agent represents and retrieves declarative world knowledge."
+        },
+        "procedural": {
+          "type": "string",
+          "description": "Operational know-how and skill-based knowledge."
+        },
+        "episodic": {
+          "type": "string",
+          "description": "Event-based memory for contextually-located experiences."
+        },
+        "autobiographical": {
+          "type": "string",
+          "description": "Self-narrative memory: the agent's personal history as it understands it (Conway, 2005)."
+        },
+        "working_self": {
+          "type": "string",
+          "description": "The active self-concept available in the current context window."
         },
         "anchors": {
           "type": "array",
@@ -262,10 +327,46 @@
         }
       }
     },
+    "reflexivity": {
+      "type": "object",
+      "required": ["selfModel", "uncertaintyCalibration"],
+      "additionalProperties": false,
+      "description": "Second-order self-awareness. Grounded in Frankfurt (1971) higher-order desire theory, Metzinger (2003) phenomenal self-model, and Fleming & Lau (2014) metacognitive monitoring. The primary structural barrier against deep character drift.",
+      "properties": {
+        "selfModel": {
+          "type": "string",
+          "minLength": 1,
+          "description": "How the agent represents itself: its stable self-understanding and the narrative it holds about who it is."
+        },
+        "uncertaintyCalibration": {
+          "type": "string",
+          "minLength": 1,
+          "description": "How the agent evaluates the quality of its own reasoning — its capacity to detect miscalibrated confidence or insufficient reasoning."
+        },
+        "metaVolitions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Second-order commitments about first-order drives. What the agent wants to want (Frankfurt, 1971). An agent with meta-volitions is not a wanton."
+        },
+        "selfRevisionPolicy": {
+          "type": "string",
+          "description": "Under what conditions the agent will update its self-model, and what evidence is sufficient."
+        },
+        "driftMonitor": {
+          "type": "string",
+          "description": "How the agent detects when it is diverging from its spec. Absence weakens long-context stability guarantees."
+        },
+        "deferralPolicy": {
+          "type": "string",
+          "description": "When the agent defers to external authority rather than its own judgment, and why."
+        }
+      }
+    },
     "persona": {
       "type": "object",
       "required": ["voice", "presentation"],
       "additionalProperties": false,
+      "description": "Layer 10. How the agent presents itself to the world. When all ten layers are specified with sufficient depth, persona converges with the authentic self.",
       "properties": {
         "display_name": {
           "type": "string",
