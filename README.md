@@ -84,7 +84,7 @@ PERSONA.md                          ← project-wide behavioral baseline
 | `drives_values` | Mission, goals, and the value hierarchy that resolves conflicts |
 | `normative_self_reg` | Internalized principled refusals and self-monitoring for drift |
 | `memory` | What persists across sessions: semantic, episodic, autobiographical |
-| `metacognition` | Second-order self-model and meta-volitions (metacognition) |
+| `metacognition` | Second-order self-model and meta-volitions |
 | `persona` | How it presents itself to the world |
 
 ## Relationship to existing standards
