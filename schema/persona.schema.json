@@ -48,7 +48,11 @@
         "role": {
           "type": "string",
           "minLength": 1,
-          "description": "One-line description of the agent's function."
+          "description": "Short role category (e.g. 'Marketing Guru', 'Code Reviewer')."
+        },
+        "tagline": {
+          "type": "string",
+          "description": "One-line description of what this agent does — more specific than role."
         },
         "purpose": {
           "type": "string",

@@ -1,99 +1,119 @@
 # PERSONA.md
 
-PERSONA.md is a declarative specification — YAML frontmatter and Markdown — that defines who an AI agent is across ten dimensions: identity, character, personality, cognition, affect, drives_values, normative_self_reg, memory, metacognition, and persona.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Spec](https://img.shields.io/badge/spec-0.2.0-informational)](./docs/SPEC.md)
+[![CLI](https://img.shields.io/badge/CLI-personaxis-blue)](https://www.npmjs.com/package/personaxis)
+[![Registry](https://img.shields.io/badge/registry-personaxis.com-blueviolet)](https://personaxis.com)
 
-The ten dimensions are borrowed from the frameworks that psychology, philosophy, and ethics have developed to describe what makes a human being coherent and consistent over time — not to claim that AI agents have personhood, but because those frameworks are the best available map of what holds an entity together. PERSONA.md applies that structure to AI agents.
+The open specification for who an AI agent is.
 
-It is the source of truth for an agent's behavioral identity. Portable across every model and tool. Versionable like any other piece of infrastructure. Auditable when it matters.
+PERSONA.md is a declarative file — YAML frontmatter and Markdown — that captures ten layers of agent personhood: identity, character, personality, cognition, affect, drives & values, normative self-regulation, memory, metacognition, and persona. Portable across every model and tool. Versionable like any other piece of infrastructure. Auditable when it matters.
 
-## Why it exists
+---
 
-Every AI agent in production runs on a behavioral specification. Until now, that specification lived inside system prompts — unversioned, locked to one platform, invisible to compliance teams, and thin enough that agents drift under pressure.
+## Table of Contents
 
-PERSONA.md is the artifact that was missing. A single file that captures who an agent is completely enough to hold.
+- [What it is](#what-it-is)
+- [Quick start](#quick-start)
+- [How PERSONA.md works](#how-personamd-works)
+- [Package structure](#package-structure)
+- [The ten layers](#the-ten-layers)
+- [Relationship to existing standards](#relationship-to-existing-standards)
+- [Spec](#spec)
+- [Examples](#examples)
+- [Registry](#registry)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## What it is
+
+Every AI agent in production runs on a behavioral specification. Most of that specification lives in a system prompt — incomplete, locked to one platform, invisible to compliance teams, and thin enough that agents drift under pressure.
+
+PERSONA.md is the artifact that was missing. A single file that captures who an agent is completely enough to hold — across models, frameworks, conversations, and audits.
+
+---
 
 ## Quick start
 
 ### With the CLI
 
 ```bash
-# 1. Create a project-level behavioral baseline (root PERSONA.md)
+# Create a project-level behavioral baseline (root PERSONA.md)
 npx personaxis init
 
-# 2. Edit PERSONA.md — fill in the TODO fields to match your project
-#    Or paste the prompt below into Claude Code / Cursor to have it fill it in automatically
-
-# 3. Add the baseline reference to CLAUDE.md (or let the CLI do it)
-npx personaxis compile --target claude-code
-
-# 4. Add a named agent persona for a specific role
+# — or — create a named agent persona
 npx personaxis init --agent
+
+# Validate your PERSONA.md
+npx personaxis validate
+
+# Compile to your tool of choice
+npx personaxis compile --target claude-code   # → CLAUDE.md reference
+npx personaxis compile --target cursor        # → .cursor/rules/persona.mdc
+npx personaxis compile --target soul-md       # → SOUL.md for OpenClaw
+
+# Compile a named agent persona (not the root one)
+npx personaxis compile .personaxis/personas/marketing-guru/PERSONA.md --target claude-code
 ```
 
-### Without the CLI — paste to your agent
+### Without the CLI — paste directly to your agent
 
-Drop this into Claude Code, Cursor, or any agent to bootstrap the full setup:
+Pick the prompt for your tool and paste it. Each prompt tells the agent to read the full setup guide and complete the setup automatically.
 
-```
-Read the PERSONA.md spec at https://raw.githubusercontent.com/personaxis/persona.md/main/docs/SPEC.md.
-
-Do the following:
-
-1. Create PERSONA.md at the project root. This is the project-level behavioral baseline —
-   not a role, but the shared character, values, and limits for every agent working here.
-   Fill it based on what you know about this project. Use the ten-layer structure from the spec.
-   Reference: https://raw.githubusercontent.com/personaxis/persona.md/main/PERSONA.md
-
-2. Add this section to CLAUDE.md (create it if it does not exist):
-
-<!-- PERSONAXIS:BASELINE:BEGIN -->
-## Behavioral Baseline
-
-This project has a shared behavioral baseline defined in @PERSONA.md.
-Read it before acting. The character, values, and limits defined there
-apply to every agent working in this project, regardless of role.
-<!-- PERSONAXIS:BASELINE:END -->
-
-3. If a named agent persona is needed, create .personaxis/personas/<name>/PERSONA.md
-   using https://raw.githubusercontent.com/personaxis/persona.md/main/examples/marketing-guru/PERSONA.md
-   as a reference for depth and format.
-
-Validate all PERSONA.md files against:
-https://raw.githubusercontent.com/personaxis/persona.md/main/schema/persona.schema.json
-```
-
-**For Cursor** — add this to `.cursor/rules/persona.mdc`:
-
-```
----
-description: Project behavioral baseline
-alwaysApply: true
 ---
 
-This project has a shared behavioral baseline in PERSONA.md at the project root.
-Read it before acting. Apply the character, values, and limits defined there
-to every response in this project.
+#### Claude Code
+
+```
+Read and follow every step in this setup guide:
+https://raw.githubusercontent.com/personaxis/persona.md/main/docs/setup/claude-code.md
 ```
 
-**For OpenClaw** — run `npx personaxis compile --target soul-md` to generate `SOUL.md` from your root PERSONA.md.
+---
+
+#### Cursor
+
+```
+Read and follow every step in this setup guide:
+https://raw.githubusercontent.com/personaxis/persona.md/main/docs/setup/cursor.md
+```
+
+---
+
+#### OpenClaw
+
+```
+Read and follow every step in this setup guide:
+https://raw.githubusercontent.com/personaxis/persona.md/main/docs/setup/openclaw.md
+```
+
+---
+
+## How PERSONA.md works
+
+PERSONA.md operates at two levels within a project.
+
+**Project level** — a `PERSONA.md` at the project root establishes a shared behavioral baseline for every agent in the project. The character the project embodies, the values none of its agents compromise, and the limits any agent here holds regardless of its specific role. This is to agents what `AGENTS.md` is to operations — a predictable place to find context about who to be in this project.
+
+**Agent level** — individual personas live inside `.personaxis/personas/` and define the complete specification for a specific agent. They inherit the project baseline and extend it with everything specific to that role: the voice, the domain expertise, the goal structure, the principled refusals of someone doing that particular job.
+
+---
 
 ## Package structure
 
-A persona is a directory, not a single file.
+A named agent persona is a directory, not a single file.
 
 ```
 marketing-guru/
-├── PERSONA.md       # The spec — ten dimensions of identity
+├── PERSONA.md       # The spec — ten dimensions of agent personhood
 ├── samples/         # Real outputs this persona produces
 ├── refs/            # Frameworks and reference materials it draws on
 └── README.md        # Human-readable description and use cases
 ```
 
-PERSONA.md works at two levels.
-
-**Project level** — a `PERSONA.md` at the project root gives every agent working in the project a shared behavioral baseline: the limits none of them cross, the character the project embodies, and the set of traits any agent here holds regardless of its specific role. This is for agents what `AGENTS.md` is for operations — a predictable place to find context about who to be in this project.
-
-**Agent level** — individual personas live inside `.personaxis/personas/` and define the complete specification for a specific agent. They inherit the project baseline and extend it with everything specific to that role.
+The full project structure looks like this:
 
 ```
 PERSONA.md                          ← project-wide behavioral baseline
@@ -110,52 +130,88 @@ PERSONA.md                          ← project-wide behavioral baseline
         └── ...
 ```
 
+---
 
 ## The ten layers
 
-| Layer | What it captures |
-|---|---|
-| `identity` | Who the agent is: name, role, purpose, self-concept |
-| `character` | Values, principles, and the moral commitments it holds |
-| `personality` | Observable style and temperament (HEXACO-6) |
-| `cognition` | First-order reasoning style and epistemic stance |
-| `affect` | Emotional tendencies and conflict response |
-| `drives_values` | Mission, goals, and the value hierarchy that resolves conflicts |
-| `normative_self_reg` | Internalized principled refusals and self-monitoring for drift |
-| `memory` | What persists across sessions: semantic, episodic, autobiographical |
-| `metacognition` | Second-order self-model and meta-volitions |
-| `persona` | How it presents itself to the world |
+| Layer | Field | What it captures |
+|---|---|---|
+| 1 | `identity` | Name, role, purpose, self-concept |
+| 2 | `character` | Values, principles, and moral commitments |
+| 3 | `personality` | Observable style and temperament (HEXACO-6) |
+| 4 | `cognition` | First-order reasoning style and epistemic stance |
+| 5 | `affect` | Emotional tendencies and conflict response |
+| 6 | `drives_values` | Mission, goals, and value hierarchy |
+| 7 | `normative_self_reg` | Principled refusals and self-monitoring for drift |
+| 8 | `memory` | Semantic, episodic, autobiographical — what persists |
+| 9 | `metacognition` | Second-order self-model and meta-volitions |
+| 10 | `persona` | How it presents itself to the world |
+
+Each layer maps to a documented body of research in psychology, philosophy of mind, and ethics. See [docs/SPEC.md](./docs/SPEC.md) for the full field reference and academic grounding.
+
+---
 
 ## Relationship to existing standards
 
 PERSONA.md completes the triangle. It does not replace the standards you already use.
 
-| File | What it covers |
-|---|---|
-| `AGENTS.md` | What your agent does in the repo |
-| `SKILL.md` | What your agent can do |
-| `PERSONA.md` | Who your agent is |
+| File | What it covers | Relationship |
+|---|---|---|
+| `AGENTS.md` | What your agent does in the repo | Complementary |
+| `SKILL.md` | What your agent can do | Complementary |
+| `PERSONA.md` | Who your agent is | This spec |
+
+PERSONA.md is the source of truth. `personaxis compile` generates the format each tool consumes — `CLAUDE.md` reference, `.cursor/rules/`, `SOUL.md` — from a single maintained file.
+
+---
 
 ## Spec
 
-See [docs/SPEC.md](./docs/SPEC.md) for the full normative specification and field reference.
+See [docs/SPEC.md](./docs/SPEC.md) for the full normative specification: required fields, optional fields, allowed values, validation rules, and the complete example.
 
-## Contributing
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines. If you are an AI agent working on this repository, read [AGENTS.md](./AGENTS.md) first — it covers what to update when making changes to the spec.
-
-## Live example
-
-This repository uses its own spec. [PERSONA.md](./PERSONA.md) at the root defines the shared behavioral baseline for any agent working on this project — the character, values, and constraints that should guide decisions about the spec itself.
+---
 
 ## Examples
 
 See [examples/](./examples/) for complete, production-ready personas.
 
+| Persona | Role | Status |
+|---|---|---|
+| [marketing-guru](./examples/marketing-guru/) | Full-stack marketing professional | Available |
+
+More examples coming. To contribute one, see [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+---
+
 ## Registry
 
-A public registry for discovering, publishing, and sharing personas is in development at [personaxis.com](https://personaxis.com). Until then, share personas by publishing them to a public GitHub repository.
+A public registry for discovering, publishing, and sharing personas is in development at [personaxis.com](https://personaxis.com).
+
+When available:
+
+```bash
+personaxis pull personaxis/marketing-guru@1.0.0   # download a persona
+personaxis push                                     # publish yours
+```
+
+Until then, share personas by publishing them to a public GitHub repository.
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution guidelines.
+
+If you are an AI agent working on this repository, read [AGENTS.md](./AGENTS.md) first — it covers what to update when making changes to the spec and what the project-level PERSONA.md at the root defines as the character of this project.
+
+---
+
+## Live example
+
+This repository uses its own spec. [PERSONA.md](./PERSONA.md) at the root defines the shared behavioral baseline for any agent working on this project — the character, values, and constraints that should guide decisions about the spec itself.
+
+---
 
 ## License
 
-MIT. The specification belongs to the community. Personaxis builds the tooling and platform around it.
+MIT. The specification belongs to the community. [Personaxis](https://personaxis.com) builds the tooling and platform around it.

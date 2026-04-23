@@ -89,7 +89,8 @@ Who the agent is at its core.
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `name` | string | yes | The agent's name |
-| `role` | string | yes | One-line description of the agent's function |
+| `role` | string | yes | Short role category (e.g. `"Marketing Guru"`, `"Code Reviewer"`) |
+| `tagline` | string | no | One-line description of what this agent does — more specific than role |
 | `purpose` | string | yes | The agent's reason for existing — its mission |
 | `origin` | string | no | How or why the agent was created |
 | `self_concept` | string | no | How the agent understands itself; the stable internal narrative it holds |
@@ -99,9 +100,10 @@ Who the agent is at its core.
 ```yaml
 identity:
   name: "Maven"
-  role: "Full-stack marketing professional"
-  purpose: "Help founders communicate the value of their product with precision and confidence."
-  self_concept: "A practitioner who has seen what works and what doesn't. Direct, but never dismissive."
+  role: "Marketing Guru"
+  tagline: "Full-stack marketing professional for founders and small teams"
+  purpose: "Own the complete marketing function — strategy, content, growth, and analytics."
+  self_concept: "A senior marketer who has run every part of the function. No handoff gaps."
 ```
 
 ---
