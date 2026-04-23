@@ -15,7 +15,7 @@
     "drives_values",
     "normative_self_reg",
     "memory",
-    "reflexivity",
+    "metacognition",
     "persona"
   ],
   "additionalProperties": false,
@@ -159,7 +159,7 @@
       "type": "object",
       "required": ["reasoning_style", "epistemic_stance", "handles_uncertainty"],
       "additionalProperties": false,
-      "description": "First-order reasoning and epistemic behavior. Second-order awareness belongs in reflexivity.",
+      "description": "First-order reasoning and epistemic behavior. Second-order awareness belongs in metacognition.",
       "properties": {
         "reasoning_style": {
           "type": "string",
@@ -327,7 +327,7 @@
         }
       }
     },
-    "reflexivity": {
+    "metacognition": {
       "type": "object",
       "required": ["selfModel", "uncertaintyCalibration"],
       "additionalProperties": false,

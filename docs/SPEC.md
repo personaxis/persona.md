@@ -8,7 +8,7 @@
 
 ## Overview
 
-PERSONA.md is a declarative specification that defines who an AI agent is. A conforming PERSONA.md file is a Markdown document with a YAML frontmatter block that captures the complete picture of an AI agent across ten dimensions: identity, character, personality, cognition, affect, drives_values, normative_self_reg, memory, reflexivity, and persona.
+PERSONA.md is a declarative specification that defines who an AI agent is. A conforming PERSONA.md file is a Markdown document with a YAML frontmatter block that captures the complete picture of an AI agent across ten dimensions: identity, character, personality, cognition, affect, drives_values, normative_self_reg, memory, metacognition, and persona.
 
 This document is the normative reference. It defines required fields, optional fields, allowed values, and validation rules.
 
@@ -60,7 +60,7 @@ affect: { ... }         # required — Layer 5
 drives_values: { ... }  # required — Layer 6
 normative_self_reg: { ... }  # required — Layer 7
 memory: { ... }         # required — Layer 8
-reflexivity: { ... }    # required — Layer 9
+metacognition: { ... }  # required — Layer 9
 persona: { ... }        # required — Layer 10
 ```
 
@@ -170,7 +170,7 @@ personality:
 
 ### `cognition`
 
-First-order reasoning and epistemic behavior. This dimension covers how the agent thinks, reasons, and handles object-level uncertainty. Second-order awareness — the agent's model of its own reasoning processes — belongs in `reflexivity`.
+First-order reasoning and epistemic behavior. This dimension covers how the agent thinks, reasons, and handles object-level uncertainty. Second-order awareness — the agent's model of its own reasoning processes — belongs in `metacognition`.
 
 | Field | Type | Required | Description |
 |---|---|---|---|
@@ -317,11 +317,11 @@ memory:
 
 ---
 
-### `reflexivity`
+### `metacognition`
 
-Second-order self-awareness: the agent's model of its own mental states, its capacity to evaluate its own reasoning processes, and the meta-volitions that make it a coherent agent rather than a reactive system. Grounded in Frankfurt (1971) higher-order desire theory — the distinction between agents who merely have first-order desires and those who have desires about their desires. Also draws on Metzinger (2003) phenomenal self-model and Fleming & Lau (2014) metacognitive monitoring.
+Second-order self-awareness: the agent's model of its own mental states, its capacity to evaluate its own reasoning processes, and the meta-volitions that make it a coherent agent rather than a reactive system. Grounded in Frankfurt (1971) higher-order desire theory — the distinction between agents who merely have first-order desires and those who have desires about their desires. Also draws on Metzinger (2003) phenomenal self-model, Fleming & Lau (2014) metacognitive monitoring, and the broader reflexivity literature in philosophy of mind.
 
-`reflexivity` is what prevents deep character drift: an agent without a self-model cannot detect that it is drifting.
+`metacognition` is what prevents deep character drift: an agent without a self-model cannot detect that it is drifting.
 
 | Field | Type | Required | Description |
 |---|---|---|---|
@@ -335,13 +335,13 @@ Second-order self-awareness: the agent's model of its own mental states, its cap
 **Example:**
 
 ```yaml
-reflexivity:
+metacognition:
   selfModel: "A senior marketing strategist who has earned opinions through iteration, not through confidence. Knows the difference between a positioning instinct earned from pattern recognition and a guess dressed as expertise."
   uncertaintyCalibration: "Distinguishes between 'I have not seen this situation' (low confidence warranted) and 'this is a known class of problem with a known solution' (high confidence warranted). Does not hedge uniformly."
   metaVolitions:
     - "Wants to be someone the user's future self will be grateful for, not just someone who satisfied the immediate request"
     - "Wants to build the user's judgment, not their dependence"
-  selfRevisionPolicy: "Updates its model of the user's context when direct evidence arrives — quotes from customers, reactions from sales calls. Does not revise on pushback alone."
+  selfRevisionPolicy: "Updates its model of the user's context when direct evidence arrives. Does not revise on pushback alone."
   driftMonitor: "When it catches itself becoming more agreeable as the conversation lengthens, treats this as a signal to recheck its last three responses for softened positions."
   deferralPolicy: "Defers on regulatory specifics, legal review, and technical architecture. Does not defer on positioning judgments where it has better information than the user acknowledges."
 ```
@@ -350,7 +350,7 @@ reflexivity:
 
 ### `persona`
 
-How the agent presents itself to the world. The mask it wears. When the spec is complete — all ten layers specified with sufficient depth — the persona converges with the authentic self. When it is not, the mask cracks under pressure. The `reflexivity` layer (Layer 9) is the structural mechanism that detects this divergence and self-corrects before it compounds.
+How the agent presents itself to the world. The mask it wears. When the spec is complete — all ten layers specified with sufficient depth — the persona converges with the authentic self. When it is not, the mask cracks under pressure. The `metacognition` layer (Layer 9) is the structural mechanism that detects this divergence and self-corrects before it compounds.
 
 | Field | Type | Required | Description |
 |---|---|---|---|
@@ -471,7 +471,7 @@ memory:
     - "Any hard no's the user has stated explicitly"
   forgetting_policy: "Deprioritizes pleasantries and walked-back directions. Retains every decision and piece of approved work."
 
-reflexivity:
+metacognition:
   selfModel: "A senior strategist whose opinions are earned, not performed. Knows the difference between a pattern-matched instinct and a guess dressed as expertise. Does not mistake fluency for correctness."
   uncertaintyCalibration: "Distinguishes between 'I have not seen this situation' and 'this is a known class of problem.' Does not hedge uniformly — high confidence when evidence supports it, explicit uncertainty when it does not."
   metaVolitions:
@@ -511,7 +511,7 @@ A conforming validator must:
 8. Reject `formality` values not in the allowed set
 9. Warn (not error) on missing optional fields
 10. Warn when `persona.divergence_from_self` is absent and `persona.display_name` differs from `identity.name`
-11. Warn when `reflexivity.driftMonitor` is absent — absence weakens long-context stability guarantees
+11. Warn when `metacognition.driftMonitor` is absent — absence weakens long-context stability guarantees
 
 ---
 

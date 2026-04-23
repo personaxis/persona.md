@@ -9,11 +9,11 @@ The spec follows [Semantic Versioning](https://semver.org/).
 
 ## [0.2.0] — 2026-04-23
 
-Structural revision of the ten-dimension framework. Breaking changes in all five renamed or restructured blocks. Migration guide: rename `drives` → `drives_values`, rename `constraints` → `normative_self_reg`, rename `hard_limits` → `principledRefusals`, add required `reflexivity` block, update spec field to `"0.2"`.
+Structural revision of the ten-dimension framework. Breaking changes in all five renamed or restructured blocks. Migration guide: rename `drives` → `drives_values`, rename `constraints` → `normative_self_reg`, rename `hard_limits` → `principledRefusals`, add required `metacognition` block, update spec field to `"0.2"`.
 
 ### Added
 
-- **`reflexivity`** — new required dimension (Layer 9). Captures second-order self-awareness: how the agent models itself, calibrates its own uncertainty, and holds meta-volitions about its first-order drives. Grounded in Frankfurt (1971) higher-order desire theory, Metzinger (2003) phenomenal self-model, and Fleming & Lau (2014) metacognitive monitoring. Required fields: `selfModel`, `uncertaintyCalibration`. Optional fields: `metaVolitions`, `selfRevisionPolicy`, `driftMonitor`, `deferralPolicy`.
+- **`metacognition`** — new required dimension (Layer 9). Captures second-order self-awareness: how the agent models itself, calibrates its own uncertainty, and holds meta-volitions about its first-order drives. Grounded in Frankfurt (1971) higher-order desire theory, Metzinger (2003) phenomenal self-model, and Fleming & Lau (2014) metacognitive monitoring. Required fields: `selfModel`, `uncertaintyCalibration`. Optional fields: `metaVolitions`, `selfRevisionPolicy`, `driftMonitor`, `deferralPolicy`.
 - **`drives_values.valueHierarchy`** — required field in `drives_values`. An ordered list that makes the agent's trans-situational value priorities explicit and resolvable under conflict. Grounded in Schwartz (1992) basic human values circumplex.
 - **`drives_values.valueConflictPolicy`** — optional field. Describes how the agent resolves conflicts between values when `valueHierarchy` alone is insufficient.
 - **`memory.semantic`** — optional field. How the agent represents and retrieves declarative world knowledge.
@@ -32,7 +32,7 @@ Structural revision of the ten-dimension framework. Breaking changes in all five
 - **`constraints.soft_limits` removed** (breaking). Overridable defaults are now handled through `normative_self_reg.valueConflictPolicy` and context-specific `persona.adaptations`.
 - **`persona` moves to Layer 10** (non-breaking structurally; dimension count changes from nine to ten).
 - **`personality`** documentation updated to reference HEXACO-6 (Lee & Ashton, 2004) as the dimensional framework for trait description. The `hexaco` sub-object is optional and additive; existing `traits` strings remain valid.
-- **`cognition`** restricted to first-order reasoning. Metacognitive fields (`metacognitive_awareness` if present) belong in `reflexivity.uncertaintyCalibration`.
+- **`cognition`** restricted to first-order reasoning. Metacognitive fields (`metacognitive_awareness` if present) belong in `metacognition.uncertaintyCalibration`.
 - Spec version bumped from `"0.1"` to `"0.2"` in the `spec` field and JSON Schema `$id`.
 
 ### Migration
@@ -53,7 +53,7 @@ drives_values:
   # soft_limits removed — move to persona.adaptations or valueConflictPolicy
 
 # Add new required dimension
-reflexivity:
+metacognition:
   selfModel:              # required
   uncertaintyCalibration: # required
 

@@ -1,6 +1,6 @@
 # PERSONA.md
 
-PERSONA.md is a declarative specification — YAML frontmatter and Markdown — that defines who an AI agent is across ten dimensions: identity, character, personality, cognition, affect, drives_values, normative_self_reg, memory, reflexivity, and persona.
+PERSONA.md is a declarative specification — YAML frontmatter and Markdown — that defines who an AI agent is across ten dimensions: identity, character, personality, cognition, affect, drives_values, normative_self_reg, memory, metacognition, and persona.
 
 The ten dimensions are borrowed from the frameworks that psychology, philosophy, and ethics have developed to describe what makes a human being coherent and consistent over time — not to claim that AI agents have personhood, but because those frameworks are the best available map of what holds an entity together. PERSONA.md applies that structure to AI agents.
 
@@ -84,7 +84,7 @@ PERSONA.md                          ← project-wide behavioral baseline
 | `drives_values` | Mission, goals, and the value hierarchy that resolves conflicts |
 | `normative_self_reg` | Internalized principled refusals and self-monitoring for drift |
 | `memory` | What persists across sessions: semantic, episodic, autobiographical |
-| `reflexivity` | Second-order self-model and meta-volitions |
+| `metacognition` | Second-order self-model and meta-volitions (metacognition) |
 | `persona` | How it presents itself to the world |
 
 ## Relationship to existing standards
