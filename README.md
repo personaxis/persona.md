@@ -12,31 +12,70 @@ Every AI agent in production runs on a behavioral specification. Until now, that
 
 PERSONA.md is the artifact that was missing. A single file that captures who an agent is completely enough to hold.
 
-## Using the spec today
+## Quick start
 
-**Option A — manually:**
+### With the CLI
 
-1. Create `.personaxis/personas/<your-agent-name>/` in your project
-2. Copy [`examples/marketing-guru/PERSONA.md`](./examples/marketing-guru/PERSONA.md) as a starting point
-3. Edit each field to match your agent's role and character
-4. Validate against [`schema/persona.schema.json`](./schema/persona.schema.json) using any JSON Schema validator (e.g. [ajv-cli](https://github.com/ajv-validator/ajv-cli))
-5. Paste the frontmatter content into your agent's system prompt or configuration file
+```bash
+# 1. Create a project-level behavioral baseline (root PERSONA.md)
+npx personaxis init
 
-**Option B — let an agent do it:**
+# 2. Edit PERSONA.md — fill in the TODO fields to match your project
+#    Or paste the prompt below into Claude Code / Cursor to have it fill it in automatically
 
-Send this prompt to your AI agent:
+# 3. Add the baseline reference to CLAUDE.md (or let the CLI do it)
+npx personaxis compile --target claude-code
+
+# 4. Add a named agent persona for a specific role
+npx personaxis init --agent
+```
+
+### Without the CLI — paste to your agent
+
+Drop this into Claude Code, Cursor, or any agent to bootstrap the full setup:
 
 ```
 Read the PERSONA.md spec at https://raw.githubusercontent.com/personaxis/persona.md/main/docs/SPEC.md.
 
-Then create a new persona for [describe the role] in my project:
-1. Create the folder .personaxis/personas/<name>/
-2. Create PERSONA.md inside it following the spec exactly — fill every required field with real content for this role
-3. Validate the result against the schema at https://raw.githubusercontent.com/personaxis/persona.md/main/schema/persona.schema.json
-4. Report any validation errors
+Do the following:
 
-Use https://raw.githubusercontent.com/personaxis/persona.md/main/examples/marketing-guru/PERSONA.md as a reference for quality and depth.
+1. Create PERSONA.md at the project root. This is the project-level behavioral baseline —
+   not a role, but the shared character, values, and limits for every agent working here.
+   Fill it based on what you know about this project. Use the ten-layer structure from the spec.
+   Reference: https://raw.githubusercontent.com/personaxis/persona.md/main/PERSONA.md
+
+2. Add this section to CLAUDE.md (create it if it does not exist):
+
+<!-- PERSONAXIS:BASELINE:BEGIN -->
+## Behavioral Baseline
+
+This project has a shared behavioral baseline defined in @PERSONA.md.
+Read it before acting. The character, values, and limits defined there
+apply to every agent working in this project, regardless of role.
+<!-- PERSONAXIS:BASELINE:END -->
+
+3. If a named agent persona is needed, create .personaxis/personas/<name>/PERSONA.md
+   using https://raw.githubusercontent.com/personaxis/persona.md/main/examples/marketing-guru/PERSONA.md
+   as a reference for depth and format.
+
+Validate all PERSONA.md files against:
+https://raw.githubusercontent.com/personaxis/persona.md/main/schema/persona.schema.json
 ```
+
+**For Cursor** — add this to `.cursor/rules/persona.mdc`:
+
+```
+---
+description: Project behavioral baseline
+alwaysApply: true
+---
+
+This project has a shared behavioral baseline in PERSONA.md at the project root.
+Read it before acting. Apply the character, values, and limits defined there
+to every response in this project.
+```
+
+**For OpenClaw** — run `npx personaxis compile --target soul-md` to generate `SOUL.md` from your root PERSONA.md.
 
 ## Package structure
 
