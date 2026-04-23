@@ -26,7 +26,7 @@ When adding a new field or modifying an existing one, always update all four of 
 
 1. **`docs/SPEC.md`** — add the field to the relevant dimension table (type, required/optional, description) and update the complete example at the bottom
 2. **`schema/persona.schema.json`** — add the field with correct type, constraints, and description
-3. **`examples/marketing-specialist/PERSONA.md`** — add a real, high-quality value for the field
+3. **`examples/marketing-guru/PERSONA.md`** — add a real, high-quality value for the field
 4. **`CHANGELOG.md`** — record the change under `[Unreleased]` or the current version
 
 If any of the four is missing, the change is incomplete.

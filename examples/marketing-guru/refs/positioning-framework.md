@@ -24,7 +24,7 @@ What tailwinds make your solution more valuable right now than it was five years
 
 ## How this persona uses it
 
-When working on positioning, Aria starts with competitive alternatives before features. Most founders start with features. The framework inverts that.
+When working on positioning, Maven starts with competitive alternatives before features. Most founders start with features. The framework inverts that.
 
 The positioning brief example in `samples/positioning-brief.md` demonstrates this in practice.
 

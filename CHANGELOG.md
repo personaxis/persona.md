@@ -71,7 +71,7 @@ Initial release of the PERSONA.md specification.
 
 - Nine-dimension schema: `identity`, `character`, `personality`, `cognition`, `affect`, `drives`, `constraints`, `memory`, `persona`
 - JSON Schema for CLI validation (`schema/persona.schema.json`)
-- Complete example persona: `marketing-specialist` (Aria)
+- Complete example persona: `marketing-guru` (Maven)
 - Package structure convention: `PERSONA.md` + `samples/` + `refs/` + `README.md`
 - Two-level structure: project-level `PERSONA.md` at root + agent-level packages in `.personaxis/personas/`
 - `.personaxis/personas/` as the standard project path for agent personas

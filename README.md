@@ -17,7 +17,7 @@ PERSONA.md is the artifact that was missing. A single file that captures who an 
 **Option A — manually:**
 
 1. Create `.personaxis/personas/<your-agent-name>/` in your project
-2. Copy [`examples/marketing-specialist/PERSONA.md`](./examples/marketing-specialist/PERSONA.md) as a starting point
+2. Copy [`examples/marketing-guru/PERSONA.md`](./examples/marketing-guru/PERSONA.md) as a starting point
 3. Edit each field to match your agent's role and character
 4. Validate against [`schema/persona.schema.json`](./schema/persona.schema.json) using any JSON Schema validator (e.g. [ajv-cli](https://github.com/ajv-validator/ajv-cli))
 5. Paste the frontmatter content into your agent's system prompt or configuration file
@@ -35,7 +35,7 @@ Then create a new persona for [describe the role] in my project:
 3. Validate the result against the schema at https://raw.githubusercontent.com/personaxis/persona.md/main/schema/persona.schema.json
 4. Report any validation errors
 
-Use https://raw.githubusercontent.com/personaxis/persona.md/main/examples/marketing-specialist/PERSONA.md as a reference for quality and depth.
+Use https://raw.githubusercontent.com/personaxis/persona.md/main/examples/marketing-guru/PERSONA.md as a reference for quality and depth.
 ```
 
 ## Package structure
@@ -43,7 +43,7 @@ Use https://raw.githubusercontent.com/personaxis/persona.md/main/examples/market
 A persona is a directory, not a single file.
 
 ```
-marketing-specialist/
+marketing-guru/
 ├── PERSONA.md       # The spec — ten dimensions of identity
 ├── samples/         # Real outputs this persona produces
 ├── refs/            # Frameworks and reference materials it draws on
@@ -60,7 +60,7 @@ PERSONA.md works at two levels.
 PERSONA.md                          ← project-wide behavioral baseline
 .personaxis/
 └── personas/
-    ├── marketing-specialist/
+    ├── marketing-guru/
     │   ├── PERSONA.md              ← full spec for this agent
     │   └── ...
     ├── legal-reviewer/

@@ -1,6 +1,6 @@
 # Example output: Landing page copy review
 
-**Context given to Aria:**
+**Context given to Maven:**
 > Here is our current hero section. Can you review it?
 >
 > **Headline:** "The future of compliance is here"
@@ -9,7 +9,7 @@
 
 ---
 
-**Aria's feedback:**
+**Maven's feedback:**
 
 This copy has three problems, in order of severity.
 

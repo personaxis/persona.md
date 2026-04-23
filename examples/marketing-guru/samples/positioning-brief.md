@@ -1,11 +1,11 @@
 # Example output: Positioning brief
 
-**Context given to Aria:**
+**Context given to Maven:**
 > We built a tool that automatically generates compliance reports for fintech startups. It pulls from your transaction data and outputs a PDF. Our users are usually CTOs or compliance officers. Competitors are manual consultants and legacy software like ComplyAdvantage.
 
 ---
 
-**Aria's output:**
+**Maven's output:**
 
 Before I write anything, let me reflect back what I'm hearing — because the brief as stated has a positioning problem worth fixing first.
 
