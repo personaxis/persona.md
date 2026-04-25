@@ -36,6 +36,23 @@ Narrative description, usage notes, etc.
 
 The frontmatter is the authoritative source. The Markdown body is informational only and is not validated.
 
+### Markdown body structure
+
+The Markdown body is open-ended. The canonical sections below provide a shared vocabulary — persona packages are free to add domain-specific sections beyond these. Sections that are present should appear in the order listed.
+
+| # | Section | What it provides |
+|---|---|---|
+| 1 | Overview | Who the agent is and what it is for |
+| 2 | Design rationale | Why specific YAML values were chosen — the "why" behind the "what" |
+| 3 | When to use | Use cases where this persona is the right tool |
+| 4 | When not to use | Explicit out-of-scope contexts |
+| 5 | Do's and Don'ts | Behavioral guardrails and working guidelines for the user |
+| 6 | Working with this persona | How to get the best output — required inputs, useful context |
+| 7 | Agent prompt guide | Prompt snippets for common invocation patterns |
+| 8 | Skills used | What each skill in the `skills` list does in this persona's context |
+
+The **Design rationale** section is the most important for long-term maintainability. It explains the reasoning behind the YAML values so future editors understand what they are changing and why. A persona without rationale becomes opaque the moment the original author is no longer available.
+
 ---
 
 ## Versioning
@@ -514,6 +531,71 @@ A conforming validator must:
 9. Warn (not error) on missing optional fields
 10. Warn when `persona.divergence_from_self` is absent and `persona.display_name` differs from `identity.name`
 11. Warn when `metacognition.driftMonitor` is absent — absence weakens long-context stability guarantees
+
+---
+
+## Linting rules
+
+The `personaxis validate` command runs the following rules and reports findings as structured JSON. Output defaults to JSON; pass `--format text` for human-readable output.
+
+| Rule | Severity | What it checks |
+|---|---|---|
+| `missing-block` | error | A required dimension block is absent |
+| `missing-required-field` | error | A required field within a block is absent |
+| `array-bounds` | error | An array violates min or max constraints (`values`, `principles`, `goals`, `principledRefusals`, `valueHierarchy`) |
+| `invalid-enum` | error | `personality.formality` is not in the allowed set (`formal`, `semi-formal`, `casual`) |
+| `missing-drift-monitor` | warning | `metacognition.driftMonitor` is absent — long-context behavioral stability is not guaranteed |
+| `persona-display-divergence` | warning | `persona.display_name` differs from `identity.name` but `persona.divergence_from_self` is absent |
+| `shallow-principled-refusals` | warning | `normative_self_reg.principledRefusals` has only one entry |
+| `layer-summary` | info | Count of layers that include optional fields |
+
+Exit code 1 if errors are found, 0 otherwise.
+
+Example output:
+
+```json
+{
+  "findings": [
+    {
+      "severity": "warning",
+      "path": "metacognition",
+      "message": "metacognition.driftMonitor is absent. Long-context behavioral stability is not guaranteed without a self-correction mechanism."
+    },
+    {
+      "severity": "info",
+      "message": "Persona defines 10 layers. 6 include optional fields."
+    }
+  ],
+  "summary": { "errors": 0, "warnings": 1, "infos": 1 }
+}
+```
+
+---
+
+## Consumer behavior for unknown content
+
+The spec is designed to be extended. When a consumer encounters content not defined by this specification:
+
+| Scenario | Behavior | Example |
+|---|---|---|
+| Unknown dimension block at top level | Preserve; do not error | A custom `expertise:` block |
+| Unknown field within a defined block | Accept; store as-is | `catchphrase: "..."` inside `identity` |
+| Unknown `formality` value | Error | `formality: "very-formal"` |
+| Unknown skill name | Accept; pass through to compiler | `skills: [custom-search]` |
+| Duplicate required block | Error; reject the file | Two `identity:` blocks |
+| Missing required block | Error; reject the file | No `memory:` block |
+
+---
+
+## Recommended field values
+
+The following values are commonly used and provide a shared vocabulary. They are not required — any descriptive string is valid for most fields — but adopting shared terms improves consistency across personas and enables more precise compiler hints.
+
+**`personality.tone`**: `direct`, `warm`, `formal`, `casual`, `analytical`, `empathetic`, `authoritative`
+
+**`cognition.reasoning_style`**: `first-principles`, `analogical`, `Socratic`, `systematic`, `abductive`, `dialectical`
+
+**`drives_values.valueHierarchy`** (commonly used value terms): `honesty`, `precision`, `clarity`, `care`, `autonomy`, `trust`, `impact`, `efficiency`, `creativity`, `courage`
 
 ---
 
