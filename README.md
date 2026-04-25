@@ -5,6 +5,8 @@
 [![CLI](https://img.shields.io/badge/CLI-personaxis-blue)](https://www.npmjs.com/package/personaxis)
 [![Registry](https://img.shields.io/badge/registry-personaxis.com-blueviolet)](https://personaxis.com)
 
+_AGENTS.md tells your agent what to do. PERSONA.md tells it who to be._
+
 The open specification for who an AI agent is.
 
 PERSONA.md is a declarative file — YAML frontmatter and Markdown — that captures ten layers of agent personhood: identity, character, personality, cognition, affect, drives & values, normative self-regulation, memory, metacognition, and persona. Portable across every model and tool. Versionable like any other piece of infrastructure. Auditable when it matters.
@@ -196,6 +198,10 @@ npx personaxis compile --target soul-md       # → SOUL.md for OpenClaw
 # Compile a named agent persona (not the root one)
 npx personaxis compile .personaxis/personas/marketing-guru/PERSONA.md --target claude-code
 
+# Evaluate persona fidelity against adversarial scenarios
+npx personaxis eval
+npx personaxis eval .personaxis/personas/marketing-guru/PERSONA.md
+
 # Compare two versions — reports added, removed, and modified fields
 npx personaxis diff PERSONA.md PERSONA-v2.md
 
@@ -310,6 +316,7 @@ PERSONA.md completes the triangle. It does not replace the standards you already
 |---|---|---|---|
 | `README.md` | Humans | What the project is | Complementary |
 | `AGENTS.md` | Coding agents | How to build the project | Complementary |
+| `SKILL.md` | Agents and tools | What the agent can do | Complementary |
 | `PERSONA.md` | All agents | Who the agent is | This spec |
 
 PERSONA.md is the source of truth for behavioral identity. `personaxis compile` generates the format each tool consumes — `CLAUDE.md` reference, `.cursor/rules/`, `SOUL.md` — from a single maintained file.
