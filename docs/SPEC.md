@@ -38,20 +38,31 @@ The frontmatter is the authoritative source. The Markdown body is informational 
 
 ### Markdown body structure
 
-The Markdown body is open-ended. The canonical sections below provide a shared vocabulary — persona packages are free to add domain-specific sections beyond these. Sections that are present should appear in the order listed.
+The Markdown body is open-ended. The canonical sections below provide a shared vocabulary. Sections that are present should appear in the order listed.
+
+The body serves two audiences: agents (who read the whole file) and humans (who maintain it). Sections 1–3 are read by both. Sections 4–8 are human-facing documentation — they belong in the `README.md` of an agent persona package, not in the PERSONA.md body itself.
+
+**In PERSONA.md body (read by agents and humans):**
 
 | # | Section | What it provides |
 |---|---|---|
-| 1 | Overview | Who the agent is and what it is for |
+| 1 | Overview | Who the agent is and what it is for — one paragraph |
 | 2 | Design rationale | Why specific YAML values were chosen — the "why" behind the "what" |
-| 3 | When to use | Use cases where this persona is the right tool |
-| 4 | When not to use | Explicit out-of-scope contexts |
-| 5 | Do's and Don'ts | Behavioral guardrails and working guidelines for the user |
-| 6 | Working with this persona | How to get the best output — required inputs, useful context |
-| 7 | Agent prompt guide | Prompt snippets for common invocation patterns |
-| 8 | Skills used | What each skill in the `skills` list does in this persona's context |
+| 3 | Do's and Don'ts | Behavioral guardrails the agent reads as interaction context |
+
+**In README.md of the agent package (human-facing only):**
+
+| Section | What it provides |
+|---|---|
+| When to use | Use cases where this persona is the right tool |
+| When not to use | Explicit out-of-scope contexts |
+| Working with this persona | How to get the best output — required inputs, useful context |
+| Agent prompt guide | Prompt snippets for common invocation patterns |
+| Skills used | What each skill in the `skills` list does in this persona's context |
 
 The **Design rationale** section is the most important for long-term maintainability. It explains the reasoning behind the YAML values so future editors understand what they are changing and why. A persona without rationale becomes opaque the moment the original author is no longer available.
+
+**Project baselines** (root `PERSONA.md`) only need sections 1 and 2 — Overview and Design rationale. They have no user-facing interface and no prompt guide.
 
 ---
 
@@ -85,7 +96,7 @@ All ten dimension blocks are required. A conforming validator must reject a file
 
 ### `skills` (top-level, optional)
 
-Skills are the operational capabilities this persona uses — what tools or packages it has access to. This field is separate from the nine identity dimensions because skills define what the agent *can do*, not who it *is*.
+Skills are the operational capabilities this persona uses — what tools or packages it has access to. This field is separate from the ten layers because skills define what the agent *can do*, not who it *is*.
 
 ```yaml
 skills:
