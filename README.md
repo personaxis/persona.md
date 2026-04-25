@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Spec](https://img.shields.io/badge/spec-0.2.0-informational)](./docs/SPEC.md)
-[![CLI](https://img.shields.io/badge/CLI-personaxis-blue)](https://www.npmjs.com/package/personaxis)
+[![CLI](https://img.shields.io/badge/CLI-%40personaxis%2Fpersona.md-blue)](https://www.npmjs.com/package/@personaxis/persona.md)
 [![Registry](https://img.shields.io/badge/registry-personaxis.com-blueviolet)](https://personaxis.com)
 
 _AGENTS.md tells your agent what to do. PERSONA.md tells it who to be._
@@ -25,6 +25,9 @@ PERSONA.md is a declarative file — YAML frontmatter and Markdown — that capt
 - [The ten layers](#the-ten-layers)
 - [Relationship to existing standards](#relationship-to-existing-standards)
 - [Spec](#spec)
+- [CLI reference](#cli-reference)
+- [Linting rules](#linting-rules)
+- [Programmatic API](#programmatic-api)
 - [Examples](#examples)
 - [Registry](#registry)
 - [Contributing](#contributing)
@@ -68,7 +71,7 @@ The frontmatter is authoritative. The Markdown body is informational only and is
 
 Below is a minimal PERSONA.md for a focused code reviewer. The YAML defines the precise behavioral spec; the Markdown body explains the intent.
 
-```yaml
+```
 ---
 spec: "0.2"
 version: "1.0.0"
@@ -142,12 +145,9 @@ Best used as a final check before merge — not a style enforcer, but a real bug
 - Don't ask for style enforcement when the logic is wrong — it will address logic first
 
 ## Agent prompt guide
-
-```
 Review this pull request as Lens. Follow PERSONA.md.
 Flag every issue ranked by impact: security first, logic second, clarity third.
 For each finding: what it is, why it matters, how to fix it.
-```
 ```
 
 For the complete field reference, see [docs/SPEC.md](./docs/SPEC.md).
@@ -181,34 +181,50 @@ Author a PERSONA.md directly in any editor. Every section is standard YAML front
 
 ```bash
 # Create a project-level behavioral baseline (root PERSONA.md)
-npx personaxis init
+npx @personaxis/persona.md init
 
 # — or — create a named agent persona
-npx personaxis init --agent
+npx @personaxis/persona.md init --agent
 
-# Validate your PERSONA.md — exits 1 if errors, 0 if clean
-npx personaxis validate
-npx personaxis validate .personaxis/personas/marketing-guru/PERSONA.md
+# Schema validation — exits 1 if invalid, 0 if clean
+npx @personaxis/persona.md validate
+npx @personaxis/persona.md validate .personaxis/personas/marketing-guru/PERSONA.md
+
+# Semantic lint — 8 rules, structured findings
+npx @personaxis/persona.md lint
+npx @personaxis/persona.md lint .personaxis/personas/marketing-guru/PERSONA.md
+npx @personaxis/persona.md lint --format json   # machine-readable output
 
 # Compile to your tool of choice
-npx personaxis compile --target claude-code   # → CLAUDE.md reference
-npx personaxis compile --target cursor        # → .cursor/rules/persona.mdc
-npx personaxis compile --target soul-md       # → SOUL.md for OpenClaw
+npx @personaxis/persona.md compile --target claude-code   # → CLAUDE.md reference
+npx @personaxis/persona.md compile --target cursor        # → .cursor/rules/persona.mdc
+npx @personaxis/persona.md compile --target soul-md       # → SOUL.md for OpenClaw
 
 # Compile a named agent persona (not the root one)
-npx personaxis compile .personaxis/personas/marketing-guru/PERSONA.md --target claude-code
+npx @personaxis/persona.md compile .personaxis/personas/marketing-guru/PERSONA.md --target claude-code
+
+# Export frontmatter as JSON (for tooling and CI)
+npx @personaxis/persona.md export --format json
+npx @personaxis/persona.md export --format json > persona.json
 
 # Compare two versions — reports added, removed, and modified fields
-npx personaxis diff PERSONA.md PERSONA-v2.md
-
-# List available persona templates
-npx personaxis templates
-
-# Scaffold a persona from a template
-npx personaxis use marketing-guru --target claude-code
+npx @personaxis/persona.md diff PERSONA.md PERSONA-v2.md
+npx @personaxis/persona.md diff PERSONA.md PERSONA-v2.md --format json
 
 # Output the spec — useful for injecting into agent prompts
-npx personaxis spec
+npx @personaxis/persona.md spec
+npx @personaxis/persona.md spec --rules           # spec + lint rules table
+npx @personaxis/persona.md spec --rules-only      # lint rules only
+npx @personaxis/persona.md spec --format json     # machine-readable
+
+# List available persona templates
+npx @personaxis/persona.md templates
+
+# Scaffold a persona from a template
+npx @personaxis/persona.md use marketing-guru --target claude-code
+
+# List personas installed in this project
+npx @personaxis/persona.md list
 ```
 
 ### Without the CLI — paste directly to your agent
@@ -322,6 +338,166 @@ PERSONA.md is the source of truth for behavioral identity. `personaxis compile` 
 ## Spec
 
 See [docs/SPEC.md](./docs/SPEC.md) for the full normative specification: required fields, optional fields, allowed values, validation rules, and the complete example.
+
+---
+
+## CLI reference
+
+Install or run without installing:
+
+```bash
+npm install -g @personaxis/persona.md
+# — or —
+npx @personaxis/persona.md <command>
+```
+
+Requires Node.js 18+.
+
+### `validate`
+
+Schema validation against the spec. Exits `1` if invalid, `0` if clean. Safe for CI.
+
+```bash
+personaxis validate [file]
+personaxis validate --all
+```
+
+`file` defaults to `./PERSONA.md`. `--all` validates the root PERSONA.md and every persona in `.personaxis/personas/`.
+
+### `lint`
+
+Semantic lint — runs 8 rules and reports structured findings. Exits `1` if errors found.
+
+```bash
+personaxis lint [file]
+personaxis lint [file] --format json   # structured JSON output
+```
+
+### `compile`
+
+Compile a PERSONA.md to a target format. The root `PERSONA.md` and agent personas (inside `.personaxis/personas/`) produce different output.
+
+```bash
+personaxis compile [file] --target <target>
+```
+
+| Target | Output | Description |
+|---|---|---|
+| `claude-code` | `CLAUDE.md` or `.claude/agents/{slug}.md` | Root injects a reference; agent creates a subagent |
+| `cursor` | `.cursor/rules/persona.mdc` | Cursor IDE rules |
+| `soul-md` | `SOUL.md` | OpenClaw agent framework |
+
+Options: `--out <path>` to override the output path, `--stdout` to print instead of write.
+
+### `export`
+
+Export parsed frontmatter to another format.
+
+```bash
+personaxis export [file] --format json
+```
+
+### `diff`
+
+Compare two PERSONA.md files field by field. Reports added, removed, and modified fields across all ten layers. Exits `1` if breaking changes are detected (required layer removed).
+
+```bash
+personaxis diff PERSONA.md PERSONA-v2.md
+personaxis diff PERSONA.md PERSONA-v2.md --format json
+```
+
+### `spec`
+
+Output the PERSONA.md specification. Useful for injecting spec context into agent prompts so the agent knows exactly what structure to produce.
+
+```bash
+personaxis spec                          # full spec text
+personaxis spec --rules                  # spec + lint rules table
+personaxis spec --rules-only             # lint rules only
+personaxis spec --rules-only --format json
+```
+
+### `init`
+
+Create a PERSONA.md interactively. Without `--agent` creates a project baseline at the root. With `--agent` creates a named agent persona inside `.personaxis/personas/`.
+
+```bash
+personaxis init          # project baseline
+personaxis init --agent  # named agent persona
+```
+
+### `use`
+
+Scaffold a persona from a built-in template in one step — no wizard.
+
+```bash
+personaxis use <template> [--name <name>] [--target claude-code|cursor|soul-md]
+```
+
+Run `personaxis templates` to see available options.
+
+### `list`
+
+List personas installed in this project (`.personaxis/personas/`).
+
+```bash
+personaxis list
+```
+
+### `templates`
+
+List built-in templates available for `personaxis use`.
+
+```bash
+personaxis templates
+```
+
+---
+
+## Linting rules
+
+The `personaxis lint` command runs 8 rules against a parsed PERSONA.md. Each rule produces findings at a fixed severity level: `error` (exit code 1), `warning`, or `info`.
+
+| Rule | Severity | What it checks |
+|---|---|---|
+| `missing-required-layers` | error | Any of the 10 required YAML layers is absent |
+| `todo-fields` | warning | Any field value starts with `"TODO"` |
+| `identity-completeness` | warning | `identity.name`, `role`, or `purpose` is missing or empty |
+| `spec-field` | warning | `spec` field is missing from frontmatter |
+| `version-field` | warning | `version` field is missing from frontmatter |
+| `refusals-present` | warning | `normative_self_reg.principledRefusals` is empty |
+| `drift-monitor` | info | `metacognition.driftMonitor` is not defined |
+| `layer-summary` | info | Count of defined layers — always emitted |
+
+Run `npx @personaxis/persona.md spec --rules` to see the rules table without installing.
+
+---
+
+## Programmatic API
+
+The linter is available as a TypeScript/JavaScript library:
+
+```typescript
+import { lint } from 'personaxis/linter';
+
+const report = lint(markdownString);
+
+console.log(report.findings);      // Finding[]
+console.log(report.summary);       // { errors, warnings, infos }
+console.log(report.layerCount);    // number of defined layers (out of 10)
+console.log(report.missingLayers); // string[] — names of absent layers
+```
+
+Each `Finding` has the shape:
+
+```typescript
+interface Finding {
+  rule: string;
+  severity: "error" | "warning" | "info";
+  path?: string;   // dot-notation path to the field, if applicable
+  message: string;
+}
+```
 
 ---
 
