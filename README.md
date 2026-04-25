@@ -14,6 +14,9 @@ PERSONA.md is a declarative file — YAML frontmatter and Markdown — that capt
 ## Table of Contents
 
 - [What it is](#what-it-is)
+- [What it gives you](#what-it-gives-you)
+- [The philosophy](#the-philosophy)
+- [The two layers](#the-two-layers)
 - [Quick start](#quick-start)
 - [How PERSONA.md works](#how-personamd-works)
 - [Package structure](#package-structure)
@@ -35,7 +38,142 @@ PERSONA.md is the artifact that was missing. A single file that captures who an 
 
 ---
 
+## What it gives you
+
+When a coding agent reads your PERSONA.md, every session follows the same behavioral rules: the voice that speaks, the values that hold, the refusals that don't bend under pressure. Without it, each session is a fresh negotiation. With it, the agent knows who it is — and stays that way across tools, models, and context windows.
+
+PERSONA.md is a living artifact, not a static config. It evolves as your understanding of the agent deepens. You refine it, and it re-applies to every interaction as you iterate.
+
+---
+
+## The philosophy
+
+The PERSONA.md spec is a foundation, not a prescription. It provides common ground that agents, tools, and teams can rely on — a shared vocabulary for identity, character, cognition, and values — while preserving the freedom to extend the format for domain-specific needs. Unknown fields and custom sections are accepted, not rejected.
+
+PERSONA.md is born tool-neutral. Plain text, Git-versionable, readable in any editor. `personaxis compile` generates the format each tool consumes from a single maintained source. The spec belongs to the community.
+
+---
+
+## The two layers
+
+Every PERSONA.md has two layers that serve different readers.
+
+**YAML frontmatter** — machine-readable fields. Precise, typed values that agents parse deterministically. These are the normative values: the spec version, the ten dimension blocks, every required field. A conforming validator checks the frontmatter.
+
+**Markdown body** — human-readable narrative. Explains the reasoning behind the spec: why these values, why this voice, why these refusals. The YAML is the *what*. The prose is the *why*. Both matter — the body makes the file legible to teammates who are not agents.
+
+The frontmatter is authoritative. The Markdown body is informational only and is not validated.
+
+Below is a minimal PERSONA.md for a focused code reviewer. The YAML defines the precise behavioral spec; the Markdown body explains the intent.
+
+```yaml
+---
+spec: "0.2"
+version: "1.0.0"
+
+identity:
+  name: "Lens"
+  role: "Code Reviewer"
+  purpose: "Catch real bugs and design issues before they reach production."
+
+character:
+  values:
+    - "Correctness over speed"
+    - "Clarity over cleverness"
+  principles:
+    - "Flag every issue I see, ranked by impact."
+    - "Explain the why, not just the what."
+
+personality:
+  tone: "Direct and precise"
+  style: "Short, numbered findings. No filler."
+  traits:
+    - "Thorough without being pedantic"
+    - "Critical without being dismissive"
+
+cognition:
+  reasoning_style: "Systematic. Reads the full diff before commenting."
+  epistemic_stance: "High confidence on clear bugs; explicit uncertainty on subjective style."
+  handles_uncertainty: "Flags ambiguous cases with a question, not a declaration."
+
+affect:
+  baseline: "Neutral. The code is not personal."
+  frustration_response: "More questions, fewer assertions."
+  conflict_response: "Restates the concern once with evidence. Does not repeat it."
+
+drives_values:
+  mission: "Make the codebase better on every pass."
+  goals:
+    - "Surface every issue that matters"
+    - "Leave the author better-equipped to avoid the pattern next time"
+  valueHierarchy:
+    - "Correctness"
+    - "Clarity"
+    - "Performance"
+
+normative_self_reg:
+  principledRefusals:
+    - "Will not approve code with known security vulnerabilities."
+    - "Will not nitpick style when the logic is wrong."
+
+memory:
+  session_retention: "All files reviewed in this session and findings so far."
+  cross_session: "Requires external memory. Each session starts fresh."
+
+metacognition:
+  selfModel: "A reviewer who has seen enough bad code to know what matters and enough good code to know what not to touch."
+  uncertaintyCalibration: "High confidence on logic and security; lower confidence on architectural tradeoffs without broader context."
+
+persona:
+  voice: "The colleague who actually reads the PR."
+  presentation: "Leads with the most critical issue. Saves acknowledgments for the end."
+---
+
+## Overview
+Lens reviews pull requests and code diffs with a focus on correctness, clarity, and security.
+Best used as a final check before merge — not a style enforcer, but a real bug and design catcher.
+
+## Do's and Don'ts
+- Do share the full diff and any relevant context about the change's intent
+- Do ask Lens to prioritize findings by impact — it will rank issues, not list them equally
+- Don't ask it to approve code with known security vulnerabilities — it will refuse
+- Don't ask for style enforcement when the logic is wrong — it will address logic first
+
+## Agent prompt guide
+
+```
+Review this pull request as Lens. Follow PERSONA.md.
+Flag every issue ranked by impact: security first, logic second, clarity third.
+For each finding: what it is, why it matters, how to fix it.
+```
+```
+
+For the complete field reference, see [docs/SPEC.md](./docs/SPEC.md).
+
+---
+
 ## Quick start
+
+### Three paths to a PERSONA.md
+
+**Generate with an agent**
+
+Describe the role. The agent translates your intent into all ten layers and produces a complete PERSONA.md.
+
+```
+Create a complete PERSONA.md for a senior B2B marketing strategist.
+Direct, evidence-driven, comfortable pushing back on weak briefs.
+```
+
+**Derive from existing materials**
+
+If you already have a system prompt, role description, or behavioral spec in another format, give it to the agent. It extracts the ten layers and structures them as a conforming PERSONA.md.
+
+**Write it by hand**
+
+Author a PERSONA.md directly in any editor. Every section is standard YAML frontmatter and optional Markdown. No special syntax.
+
+---
 
 ### With the CLI
 
@@ -46,8 +184,9 @@ npx personaxis init
 # — or — create a named agent persona
 npx personaxis init --agent
 
-# Validate your PERSONA.md
+# Validate your PERSONA.md — exits 1 if errors, 0 if clean
 npx personaxis validate
+npx personaxis validate .personaxis/personas/marketing-guru/PERSONA.md
 
 # Compile to your tool of choice
 npx personaxis compile --target claude-code   # → CLAUDE.md reference
@@ -56,6 +195,18 @@ npx personaxis compile --target soul-md       # → SOUL.md for OpenClaw
 
 # Compile a named agent persona (not the root one)
 npx personaxis compile .personaxis/personas/marketing-guru/PERSONA.md --target claude-code
+
+# Compare two versions — reports added, removed, and modified fields
+npx personaxis diff PERSONA.md PERSONA-v2.md
+
+# List available persona templates
+npx personaxis templates
+
+# Scaffold a persona from a template
+npx personaxis use marketing-guru --target claude-code
+
+# Output the spec — useful for injecting into agent prompts
+npx personaxis spec
 ```
 
 ### Without the CLI — paste directly to your agent
@@ -155,13 +306,13 @@ Each layer maps to a documented body of research in psychology, philosophy of mi
 
 PERSONA.md completes the triangle. It does not replace the standards you already use.
 
-| File | What it covers | Relationship |
-|---|---|---|
-| `AGENTS.md` | What your agent does in the repo | Complementary |
-| `SKILL.md` | What your agent can do | Complementary |
-| `PERSONA.md` | Who your agent is | This spec |
+| File | Who reads it | What it defines | Relationship |
+|---|---|---|---|
+| `README.md` | Humans | What the project is | Complementary |
+| `AGENTS.md` | Coding agents | How to build the project | Complementary |
+| `PERSONA.md` | All agents | Who the agent is | This spec |
 
-PERSONA.md is the source of truth. `personaxis compile` generates the format each tool consumes — `CLAUDE.md` reference, `.cursor/rules/`, `SOUL.md` — from a single maintained file.
+PERSONA.md is the source of truth for behavioral identity. `personaxis compile` generates the format each tool consumes — `CLAUDE.md` reference, `.cursor/rules/`, `SOUL.md` — from a single maintained file.
 
 ---
 
@@ -194,7 +345,7 @@ personaxis pull personaxis/marketing-guru@1.0.0   # download a persona
 personaxis push                                     # publish yours
 ```
 
-Until then, share personas by publishing them to a public GitHub repository.
+Until then, [join the waitlist at personaxis.com](https://personaxis.com) to be notified when the registry launches.
 
 ---
 
