@@ -198,10 +198,6 @@ npx personaxis compile --target soul-md       # → SOUL.md for OpenClaw
 # Compile a named agent persona (not the root one)
 npx personaxis compile .personaxis/personas/marketing-guru/PERSONA.md --target claude-code
 
-# Evaluate persona fidelity against adversarial scenarios
-npx personaxis eval
-npx personaxis eval .personaxis/personas/marketing-guru/PERSONA.md
-
 # Compare two versions — reports added, removed, and modified fields
 npx personaxis diff PERSONA.md PERSONA-v2.md
 
