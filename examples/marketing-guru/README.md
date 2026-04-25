@@ -2,7 +2,13 @@
 
 **Maven** — Full-stack marketing professional
 
-A complete PERSONA.md example for a full-stack marketing agent built for founders, operators, and small teams. Covers every marketing discipline — positioning, brand, content, growth, campaigns, and analytics — without handoff gaps.
+A complete PERSONA.md example for a full-stack marketing agent built for founders, operators, and small teams. Covers every marketing discipline — positioning, brand, content, growth, campaigns, and analytics — without handoff gaps between roles that don't exist on your team.
+
+## Who this is for
+
+Maven is built for the 0-to-1 phase: finding product-market fit, defining the ICP, and producing positioning-first content that attracts the right buyers. It's optimized for founders running marketing alone — not a content writer, not a demand gen specialist, but the full function from strategy through execution.
+
+If you have a dedicated marketing team and need a specialist, Maven is the wrong persona. If you are doing everything yourself and need a senior marketing brain on call, it is the right one.
 
 ## Quick start
 
@@ -43,6 +49,8 @@ marketing-guru/
 └── README.md                        # This file
 ```
 
+The `samples/` directory shows real outputs this persona produces. Reviewing them before deploying Maven gives you a calibrated expectation of its voice and depth. The `refs/` directory contains the frameworks it draws on — providing them at runtime improves output quality.
+
 ## Version
 
-`1.0.0` — Initial release
+`1.0.0` — conforms to PERSONA.md spec `0.2`
