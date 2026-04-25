@@ -7,7 +7,7 @@ Follow these steps exactly. Do not skip any step.
 Run this at the project root:
 
 ```bash
-npx personaxis init
+npx @personaxis/persona.md init
 ```
 
 Select **"Project baseline"** when prompted. Enter the project name.
@@ -35,7 +35,7 @@ Do not leave any field as a TODO. If you are uncertain about a value, make a rea
 ## Step 3 — Validate
 
 ```bash
-npx personaxis validate
+npx @personaxis/persona.md validate
 ```
 
 Fix any errors before continuing.
@@ -43,7 +43,7 @@ Fix any errors before continuing.
 ## Step 4 — Compile to SOUL.md
 
 ```bash
-npx personaxis compile --target soul-md
+npx @personaxis/persona.md compile --target soul-md
 ```
 
 This generates `SOUL.md` from your `PERSONA.md` in the format OpenClaw expects. Inject it as the agent's soul at startup — OpenClaw reads `SOUL.md` first and shapes all subsequent behavior from it.
@@ -59,7 +59,7 @@ After completing steps 1–4, give the user a brief summary:
 Then run:
 
 ```bash
-npx personaxis templates
+npx @personaxis/persona.md templates
 ```
 
 Show the user the output. Ask whether they want a role-specific agent persona — for example, a dedicated marketing agent, a code reviewer, or a legal assistant.
@@ -67,7 +67,7 @@ Show the user the output. Ask whether they want a role-specific agent persona �
 If the user says yes, help them choose from the list and run:
 
 ```bash
-npx personaxis use <template-name> --target soul-md
+npx @personaxis/persona.md use <template-name> --target soul-md
 ```
 
 This creates the persona in `.personaxis/personas/` and compiles it to `SOUL.md` for that specific agent role.
