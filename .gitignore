@@ -1,0 +1,4 @@
+# Test artifacts from local CLI runs
+.claude/
+.cursor/
+.personaxis/
