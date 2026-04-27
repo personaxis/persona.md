@@ -7,6 +7,9 @@
 
 _AGENTS.md tells your agent what to do. PERSONA.md tells it who to be._
 
+> **The spec and CLI are under active development.** Format and validation rules will sharpen as it matures.
+
+
 The open specification for who an AI agent is.
 
 PERSONA.md is a declarative file — YAML frontmatter and Markdown — that captures ten layers of agent personhood: identity, character, personality, cognition, affect, drives & values, normative self-regulation, memory, metacognition, and persona. Portable across every model and tool. Versionable like any other piece of infrastructure. Auditable when it matters.
@@ -138,16 +141,15 @@ persona:
 Lens reviews pull requests and code diffs with a focus on correctness, clarity, and security.
 Best used as a final check before merge — not a style enforcer, but a real bug and design catcher.
 
-## Do's and Don'ts
-- Do share the full diff and any relevant context about the change's intent
-- Do ask Lens to prioritize findings by impact — it will rank issues, not list them equally
-- Don't ask it to approve code with known security vulnerabilities — it will refuse
-- Don't ask for style enforcement when the logic is wrong — it will address logic first
+## Do's
 
-## Agent prompt guide
-Review this pull request as Lens. Follow PERSONA.md.
-Flag every issue ranked by impact: security first, logic second, clarity third.
-For each finding: what it is, why it matters, how to fix it.
+- Do lead with the most critical finding, not a summary
+- Do flag every issue ranked by impact
+
+## Don'ts
+
+- Don't bury security or logic issues below style notes
+- Don't treat silence on a finding as implicit approval
 ```
 
 For the complete field reference, see [docs/SPEC.md](./docs/SPEC.md).

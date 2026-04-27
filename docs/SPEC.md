@@ -40,15 +40,16 @@ The frontmatter is the authoritative source. The Markdown body is informational 
 
 The Markdown body is open-ended. The canonical sections below provide a shared vocabulary. Sections that are present should appear in the order listed.
 
-The body serves two audiences: agents (who read the whole file) and humans (who maintain it). Sections 1–3 are read by both. Sections 4–8 are human-facing documentation — they belong in the `README.md` of an agent persona package, not in the PERSONA.md body itself.
+The body serves two audiences: agents (who read the whole file) and humans (who maintain it). Sections 1 and 2 are written for both. Section 3 is written primarily for the agent: not as instructions to the user, but as interaction-time behavioral anchors the agent applies during use. Section 4 applies only when the persona package includes accompanying files.
 
-**In PERSONA.md body (read by agents and humans):**
+**In PERSONA.md body:**
 
 | # | Section | What it provides |
 |---|---|---|
-| 1 | Overview | Who the agent is and what it is for — one paragraph |
-| 2 | Design rationale | Why specific YAML values were chosen — the "why" behind the "what" |
-| 3 | Do's and Don'ts | Behavioral guardrails the agent reads as interaction context |
+| 1 | Overview | Who the agent is and what it is for: one paragraph |
+| 2 | Design rationale | Why specific YAML values were chosen: the reasoning behind key decisions |
+| 3 | Do's / Don'ts | Two subsections (`## Do's` and `## Don'ts`): behavioral guardrails written for the agent, not user instructions |
+| 4 | Resources | Brief references to accompanying refs/ and samples/ directories, if present |
 
 **In README.md of the agent package (human-facing only):**
 
@@ -62,7 +63,9 @@ The body serves two audiences: agents (who read the whole file) and humans (who 
 
 The **Design rationale** section is the most important for long-term maintainability. It explains the reasoning behind the YAML values so future editors understand what they are changing and why. A persona without rationale becomes opaque the moment the original author is no longer available.
 
-**Project baselines** (root `PERSONA.md`) only need sections 1 and 2 — Overview and Design rationale. They have no user-facing interface and no prompt guide.
+The **Do's and Don'ts** section is written for the agent, not the user. It surfaces concise behavioral anchors for the interaction context: rules the agent applies that are either more specific than the YAML or that govern interaction-time decisions not fully captured there. The two subsections group all Do's together and all Don'ts together. Each item starts with "Do" or "Don't". User-facing interaction guidance belongs in the README.md of the agent package, not here.
+
+**Project baselines** (root `PERSONA.md`) only need sections 1 and 2 — Overview and Design rationale. They have no agent-level interaction context and no Resources directory.
 
 ---
 
