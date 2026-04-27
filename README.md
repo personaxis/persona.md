@@ -21,7 +21,7 @@ PERSONA.md is a declarative file — YAML frontmatter and Markdown — that capt
 - [What it is](#what-it-is)
 - [What it gives you](#what-it-gives-you)
 - [The philosophy](#the-philosophy)
-- [The two layers](#the-two-layers)
+- [The two parts](#the-two-parts)
 - [Quick start](#quick-start)
 - [How PERSONA.md works](#how-personamd-works)
 - [Package structure](#package-structure)
@@ -62,15 +62,27 @@ PERSONA.md is born tool-neutral. Plain text, Git-versionable, readable in any ed
 
 ---
 
-## The two layers
+## The two parts
 
-Every PERSONA.md has two layers that serve different readers.
+A PERSONA.md file contains two parts: YAML frontmatter and a Markdown body.
 
-**YAML frontmatter** — machine-readable fields. Precise, typed values that agents parse deterministically. These are the normative values: the spec version, the ten dimension blocks, every required field. A conforming validator checks the frontmatter.
+The **YAML frontmatter** is the schema — machine-readable behavioral specifications, typed, structured, and schema-validated. These are the normative values: the spec version and the ten dimension blocks that define who the agent is.
 
-**Markdown body** — human-readable narrative. Explains the reasoning behind the spec: why these values, why this voice, why these refusals. The YAML is the *what*. The prose is the *why*. Both matter — the body makes the file legible to teammates who are not agents.
+The **Markdown body** provides what the schema cannot carry: the reasoning behind those specifications, interaction-time guidance, and references to supporting materials. The frontmatter is the normative definition; the Markdown body provides context for how to apply it.
 
-The frontmatter is authoritative. The Markdown body is informational only and is not validated.
+### Sections
+
+Every PERSONA.md Markdown body follows the same structure. Sections can be omitted if they are not relevant, but those present should appear in the sequence listed below. All sections use `##` headings.
+
+**Section order:**
+
+1. **Overview** — Who the agent is and what it is built for
+2. **Design rationale** — Why specific YAML values were chosen
+3. **Do's** — Behavioral guardrails written for the agent
+4. **Don'ts** — Anti-patterns the agent guards against
+5. **Resources** — References to accompanying `refs/` and `samples/` directories
+
+Project baselines (root `PERSONA.md`) only include sections 1 and 2. Agent-level personas may include all five.
 
 Below is a minimal PERSONA.md for a focused code reviewer. The YAML defines the precise behavioral spec; the Markdown body explains the intent.
 
