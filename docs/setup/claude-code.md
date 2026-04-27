@@ -49,13 +49,13 @@ npx @personaxis/persona.md compile --target claude-code
 This adds the following section to `CLAUDE.md` (creating it if it does not exist):
 
 ```markdown
-<!-- PERSONAXIS:BASELINE:BEGIN -->
+<!-- PERSONA:BASELINE:BEGIN -->
 ## Behavioral Baseline
 
-This project has a shared behavioral baseline defined in @PERSONA.md.
-Read it before acting. The character, values, and limits defined there
-apply to every agent working in this project, regardless of role.
-<!-- PERSONAXIS:BASELINE:END -->
+Always read @PERSONA.md at project root before acting.
+Apply everything defined there to every decision, regardless of role.
+Read your own @PERSONA.md too if one was provided to you.
+<!-- PERSONA:BASELINE:END -->
 ```
 
 The `@PERSONA.md` syntax tells Claude Code to read the live file each session. If `PERSONA.md` changes, Claude Code automatically picks up the new version — no need to recompile or update memory.
