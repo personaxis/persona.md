@@ -1,4 +1,3 @@
-# Test artifacts from local CLI runs
-.claude/
+# Local Claude Code settings (not the committed .claude/agents/)
+.claude/settings.local.json
 .cursor/
-.personaxis/

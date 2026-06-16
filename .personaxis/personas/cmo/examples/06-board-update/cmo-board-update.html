@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Marketing — Board update — Q2 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #f6f5ef;
+    --paper: #ffffff;
+    --ink: #131313;
+    --muted: #6c6c66;
+    --border: #d6d6cf;
+    --accent: #4a3fcc;
+    --good: #4f7b3a;
+    --warn: #b07a23;
+    --bad: #b04148;
+    --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    --serif: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 14.5px; line-height: 1.55; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 56px 28px 96px; background: var(--paper); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  h1 { font-family: var(--serif); font-size: 38px; letter-spacing: -0.012em; line-height: 1.15; margin: 8px 0 6px; font-weight: 500; }
+  h2 { font-size: 18px; margin: 56px 0 12px; font-weight: 600; letter-spacing: -0.01em; }
+  h3 { font-size: 14px; margin: 22px 0 8px; font-weight: 600; }
+  p { margin: 10px 0; }
+  .doc-meta { display: flex; flex-wrap: wrap; gap: 22px; font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 12px; }
+  .doc-meta span strong { color: var(--ink); margin-right: 6px; }
+
+  .ribbon-headline {
+    background: #131313;
+    color: #f6f5ef;
+    padding: 24px 28px;
+    border-radius: 4px;
+    margin: 30px 0 36px;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+  .ribbon-headline strong { color: #ffd089; }
+
+  .three-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 16px 0 8px; }
+  @media (max-width: 760px) { .three-cards { grid-template-columns: 1fr; } }
+  .three-cards .card {
+    background: #fbfbf6;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px;
+  }
+  .three-cards .card .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+  .three-cards .card h4 { margin: 0 0 4px; font-size: 15px; }
+  .three-cards .card p { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+
+  .scorecard {
+    background: #fbfbf6;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 0;
+    overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 11px 16px; border-bottom: 1px solid var(--border); vertical-align: top; text-align: left; font-size: 13.5px; }
+  th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); font-weight: 500; background: #fff; }
+  td.num, th.num { font-family: var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: none; }
+
+  .badge { font-family: var(--mono); font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid; display: inline-block; }
+  .badge.good { color: var(--good); border-color: var(--good); background: #f1f8ec; }
+  .badge.warn { color: var(--warn); border-color: var(--warn); background: #fcf2dc; }
+  .badge.bad { color: var(--bad); border-color: var(--bad); background: #fbeaea; }
+
+  .chart-frame {
+    background: #fbfbf6;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px;
+    margin-top: 8px;
+  }
+  svg.chart { display: block; width: 100%; height: auto; }
+
+  .miss-callout {
+    border-left: 3px solid var(--bad);
+    background: #fbeaea;
+    padding: 18px 22px;
+    margin: 14px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .miss-callout h4 { margin: 0 0 8px; font-size: 14px; color: var(--bad); }
+  .win-callout {
+    border-left: 3px solid var(--good);
+    background: #f1f8ec;
+    padding: 18px 22px;
+    margin: 14px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .win-callout h4 { margin: 0 0 8px; font-size: 14px; color: var(--good); }
+
+  .signoff {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="eyebrow">Board update · Q2 2026 · Marketing section</div>
+<h1>Marketing missed the quarter. Here is what happened, what we are doing, and what we need from the board.</h1>
+<div class="doc-meta">
+  <span><strong>From:</strong> CMO</span>
+  <span><strong>Co-author:</strong> CEO</span>
+  <span><strong>For:</strong> Board of Directors</span>
+  <span><strong>Date:</strong> 2026-07-08</span>
+  <span><strong>Distribution:</strong> Board + observer (CFO partner)</span>
+</div>
+
+<div class="ribbon-headline">
+  <strong>Headline:</strong> Marketing-sourced pipeline came in at $2.8M against a $3.4M plan (-18%).
+  Root cause: the activation-rate problem we surfaced in May is downstream of an ICP-targeting issue
+  in two paid channels. We have rebuilt targeting, redefined the activation event, and started a customer-marketing loop.
+  Lead measures (60-day window) are already moving. Confidence in Q3 plan remains 6/10.
+</div>
+
+<h2>Three things to know</h2>
+<div class="three-cards">
+  <div class="card">
+    <div class="label">1 · Demand engine</div>
+    <h4>$2.8M sourced (−18% to plan)</h4>
+    <p>Activation rate from paid channels was 18% (bench 35–55%). Two channels cut, $30K/mo redirected.</p>
+  </div>
+  <div class="card">
+    <div class="label">2 · Brand engine</div>
+    <h4>Continuous-compliance vocabulary holding</h4>
+    <p>Aided recall +6pts. Share of search +4pts. Two flywheel pieces above 50 external citations.</p>
+  </div>
+  <div class="card">
+    <div class="label">3 · Org</div>
+    <h4>PMM search active, 3 candidates</h4>
+    <p>Top candidate signed offer 2026-07-05; start date 2026-08-04. Backup contractor secured for Q3 launch.</p>
+  </div>
+</div>
+
+<h2>Three things to act on</h2>
+<div class="three-cards">
+  <div class="card">
+    <div class="label">Ask 1 · Introductions</div>
+    <h4>4 Series A/B fintech CCO intros</h4>
+    <p>For the Q3 dinner series. Ask: each board member share one name from portfolio companies.</p>
+  </div>
+  <div class="card">
+    <div class="label">Ask 2 · Budget approval</div>
+    <h4>$60K reallocation</h4>
+    <p>From cut paid channels to customer-marketing program build (newsletter + advisory board + case studies).</p>
+  </div>
+  <div class="card">
+    <div class="label">Ask 3 · Q3 plan review</div>
+    <h4>30 min sync, week of 2026-07-15</h4>
+    <p>Walk the lead measures and the activation-event redefinition. Decision-grade review, not formality.</p>
+  </div>
+</div>
+
+<h2>Three things to watch</h2>
+<div class="three-cards">
+  <div class="card">
+    <div class="label">Watch 1</div>
+    <h4>Activation rate trend</h4>
+    <p>30 / 60 / 90 day cohorts. Target: +6pts by 60 days. If flat at 60d, ICP hypothesis is wrong.</p>
+  </div>
+  <div class="card">
+    <div class="label">Watch 2</div>
+    <h4>Enterprise-tier launch (Q3 week 4)</h4>
+    <p>5 closed-won target. Highest-variance KR in Q3 plan. KR3.3 (mid-market guardrail) is the safety net.</p>
+  </div>
+  <div class="card">
+    <div class="label">Watch 3</div>
+    <h4>Competitor vocabulary response</h4>
+    <p>Two competitors started using "continuous compliance" in copy. We are 6–10 weeks ahead. Distinctive-asset investment is the moat.</p>
+  </div>
+</div>
+
+<h2>Q2 scorecard</h2>
+<div class="scorecard">
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 38%;">Key result</th>
+        <th class="num">Plan</th>
+        <th class="num">Actual</th>
+        <th>Status</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Marketing-sourced pipeline</td>
+        <td class="num">$3.4M</td>
+        <td class="num">$2.8M</td>
+        <td><span class="badge bad">−18%</span></td>
+        <td>Activation downstream from paid leak</td>
+      </tr>
+      <tr>
+        <td>Marketing-sourced qualified opportunities</td>
+        <td class="num">120</td>
+        <td class="num">96</td>
+        <td><span class="badge bad">−20%</span></td>
+        <td>Conversion below bench at 38%</td>
+      </tr>
+      <tr>
+        <td>Aided brand recall (continuous compliance)</td>
+        <td class="num">26%</td>
+        <td class="num">28%</td>
+        <td><span class="badge good">+2 pts</span></td>
+        <td>2 flywheel pieces drove recall lift</td>
+      </tr>
+      <tr>
+        <td>Share of search</td>
+        <td class="num">14%</td>
+        <td class="num">16%</td>
+        <td><span class="badge good">+2 pts</span></td>
+        <td>Branded search +18% MoM</td>
+      </tr>
+      <tr>
+        <td>Blended CAC payback</td>
+        <td class="num">14 mo</td>
+        <td class="num">18 mo</td>
+        <td><span class="badge bad">+4 mo</span></td>
+        <td>Worsened on retention, not CAC alone</td>
+      </tr>
+      <tr>
+        <td>Flywheel pieces published</td>
+        <td class="num">3</td>
+        <td class="num">3</td>
+        <td><span class="badge good">on plan</span></td>
+        <td>2 of 3 above 50-citation bar</td>
+      </tr>
+      <tr>
+        <td>Analyst report citations</td>
+        <td class="num">1</td>
+        <td class="num">0</td>
+        <td><span class="badge warn">slipped</span></td>
+        <td>Forrester wave moved to Q3; on track now</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h2>The material miss — narrated honestly</h2>
+<div class="miss-callout">
+  <h4>What went wrong</h4>
+  <p>
+    Paid acquisition fed the top of the funnel as planned. Activation rate from those channels (18%) was
+    half the benchmark we should have been targeting. We did not have the activation-rate instrumentation
+    sharp enough in Q1 to catch it before it produced the Q2 miss.
+  </p>
+  <p>
+    Two paid channels (LinkedIn lookalike + a B2B-publication sponsorship) were sourcing volume but the
+    accounts they sourced did not match the sharpened ICP we locked in March. We discovered the gap in week 10
+    of the quarter, which left no recovery time.
+  </p>
+</div>
+
+<div class="win-callout">
+  <h4>What we are doing about it</h4>
+  <p>
+    Three coordinated interventions, each with a thesis, a lead measure, a kill criterion, and a 60-day
+    review window. Detailed in the Q3 plan attached.
+  </p>
+  <ol>
+    <li>ICP-tightened paid targeting (cut 2 channels, redirected $30K/mo to highest-activating sources).</li>
+    <li>Activation event redefined (from "3 reports in 14 days" to "weekly use + 1 teammate invited"). Onboarding rebuilt.</li>
+    <li>Customer-marketing program build (newsletter, advisory board, case studies). Feeds Loop C in 6-9 months.</li>
+  </ol>
+</div>
+
+<h2>Q3 trajectory — 60-day lead measures</h2>
+<div class="chart-frame">
+  <svg class="chart" viewBox="0 0 760 280" role="img" aria-label="Lead measures trajectory chart">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#4a3fcc" stop-opacity="0.4"/>
+        <stop offset="100%" stop-color="#4a3fcc" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+
+    <!-- axes -->
+    <line x1="60" y1="20" x2="60" y2="230" stroke="#d6d6cf"/>
+    <line x1="60" y1="230" x2="730" y2="230" stroke="#d6d6cf"/>
+
+    <!-- y-axis labels -->
+    <g font-family="ui-monospace" font-size="10" fill="#6c6c66">
+      <text x="50" y="34" text-anchor="end">50%</text>
+      <text x="50" y="86" text-anchor="end">40%</text>
+      <text x="50" y="138" text-anchor="end">30%</text>
+      <text x="50" y="190" text-anchor="end">20%</text>
+      <text x="50" y="232" text-anchor="end">10%</text>
+    </g>
+
+    <!-- x labels: weeks 1 ... 12 -->
+    <g font-family="ui-monospace" font-size="10" fill="#6c6c66" text-anchor="middle">
+      <text x="60" y="252">W1</text>
+      <text x="120" y="252">W2</text>
+      <text x="180" y="252">W3</text>
+      <text x="240" y="252">W4</text>
+      <text x="300" y="252">W5</text>
+      <text x="360" y="252">W6</text>
+      <text x="420" y="252">W7</text>
+      <text x="480" y="252">W8</text>
+      <text x="540" y="252">W9</text>
+      <text x="600" y="252">W10</text>
+      <text x="660" y="252">W11</text>
+      <text x="720" y="252">W12</text>
+    </g>
+
+    <!-- Target activation rate line: rising from 18% to ~42% -->
+    <polyline fill="none" stroke="#4a3fcc" stroke-width="2.5"
+      points="60,200 120,193 180,184 240,170 300,150 360,135 420,118 480,104 540,92 600,82 660,74 720,68"/>
+    <polygon fill="url(#g1)"
+      points="60,200 120,193 180,184 240,170 300,150 360,135 420,118 480,104 540,92 600,82 660,74 720,68 720,230 60,230"/>
+
+    <!-- Benchmark band 35-55% -->
+    <rect x="60" y="50" width="670" height="55" fill="#4f7b3a" opacity="0.10"/>
+    <text x="730" y="55" font-family="ui-monospace" font-size="10" fill="#4f7b3a" text-anchor="end">benchmark 35–55%</text>
+
+    <!-- Actual reading dots Q2 close + Q3 W1 W3 -->
+    <circle cx="60" cy="200" r="5" fill="#b04148"/>
+    <text x="74" y="195" font-family="ui-monospace" font-size="11" fill="#b04148">Q2 close 18%</text>
+    <circle cx="180" cy="184" r="5" fill="#4a3fcc"/>
+    <circle cx="300" cy="150" r="5" fill="#4a3fcc"/>
+    <text x="306" y="148" font-family="ui-monospace" font-size="11" fill="#4a3fcc">W5: 28% (early signal)</text>
+  </svg>
+  <p style="font-family: var(--mono); font-size: 11px; color: var(--muted); margin: 12px 0 0;">
+    Lead measure: activation rate by week. Q2-close baseline 18%. Target trajectory toward bench 35–55% by Q3 week 12.
+    Two intervention checkpoints (week 5, week 9) gate further investment.
+  </p>
+</div>
+
+<h2>Honest reads</h2>
+<p>
+  Two things I want the board to hear directly, without spin.
+</p>
+<p style="border-left: 3px solid var(--muted); padding-left: 18px; color: var(--ink); font-style: italic;">
+  One — the Q2 miss is mine. We had the instrumentation to catch the activation leak in March and we did not
+  prioritize it because Q1 acquisition was beating plan. That is a process failure I am fixing in the Q3
+  weekly cadence, not a market failure.
+</p>
+<p style="border-left: 3px solid var(--muted); padding-left: 18px; color: var(--ink); font-style: italic;">
+  Two — the $10M-by-EOY plan is reachable but it requires the activation interventions to land within the
+  60-day window. If lead measures are flat at the week 5 checkpoint, I will surface that to the CEO before
+  the next board cadence, not at the next board cadence.
+</p>
+
+<h2>Appendices attached</h2>
+<ul>
+  <li>Q3 marketing plan (full version) — separate document</li>
+  <li>Activation-event redefinition memo</li>
+  <li>Customer-marketing program proposal</li>
+  <li>Competitive vocabulary teardown (2 competitors)</li>
+</ul>
+
+<div class="signoff">
+  <div>
+    Confidential board document · 2026-07-08<br/>
+    Authored: CMO · Co-authored: CEO · Reviewed: CFO observer
+  </div>
+  <div style="text-align: right;">
+    Personaxis CMO persona<br/>
+    spec v0.5.0 · cmo@1.0.0 · policy.improvement_policy=locked
+  </div>
+</div>
+
+</div>
+</body>
+</html>

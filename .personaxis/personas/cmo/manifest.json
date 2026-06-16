@@ -1,0 +1,23 @@
+{
+  "$schema": "https://personaxis.com/schemas/manifest/0.7/manifest.schema.json",
+  "manifest_version": "0.7.0",
+  "persona_id": "cmo",
+  "persona_version": "2.0.0",
+
+  "last_compile": {
+    "op": "compile",
+    "model": "claude-sonnet-4-6",
+    "source": "cli-agent",
+    "timestamp": "2026-05-29T12:00:00Z",
+    "personaxis_md_hash": "sha256:placeholder-personaxis-md-hash",
+    "compiled_md_hash": "sha256:placeholder-persona-md-hash"
+  },
+
+  "last_decompile": null,
+
+  "tracked_hashes": {
+    "personaxis.md": "sha256:placeholder-personaxis-md-hash",
+    "policy.yaml": "sha256:placeholder-policy-yaml-hash",
+    "./PERSONA.md": "sha256:placeholder-persona-md-hash"
+  }
+}

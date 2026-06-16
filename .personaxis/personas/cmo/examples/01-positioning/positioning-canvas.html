@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Positioning Canvas — Continuous Compliance Platform</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #f7f7f4;
+    --paper: #ffffff;
+    --border: #d8d8d0;
+    --border-strong: #1a1a1a;
+    --text: #111111;
+    --muted: #686862;
+    --accent: #5a4dd4;
+    --accent-soft: #ede9ff;
+    --danger: #b04148;
+    --success: #4f7b3a;
+    --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 48px 24px 80px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1 {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 6px 0 4px;
+  }
+  h2 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+    font-weight: 600;
+  }
+  p { margin: 6px 0; }
+  .lede { color: var(--muted); font-size: 15px; max-width: 720px; margin-bottom: 28px; }
+
+  .canvas {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1.1fr;
+    grid-template-rows: auto auto auto;
+    gap: 12px;
+    background: var(--paper);
+    border: 1.5px solid var(--border-strong);
+    padding: 16px;
+    border-radius: 4px;
+  }
+  @media (max-width: 880px) { .canvas { grid-template-columns: 1fr; } }
+
+  .cell {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    padding: 18px;
+    border-radius: 4px;
+    min-height: 160px;
+  }
+  .cell.accent { background: var(--accent-soft); border-color: var(--accent); }
+
+  ul { padding-left: 18px; margin: 8px 0; }
+  li { margin: 4px 0; }
+  .quote { font-style: italic; color: var(--muted); }
+
+  .positioning-statement {
+    background: #1a1a1a;
+    color: #f6f6f0;
+    padding: 28px;
+    border-radius: 6px;
+    margin: 32px 0;
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .positioning-statement em { font-style: normal; color: #a99dff; }
+  .positioning-statement .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 14px;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { border-bottom: 1px solid var(--border); padding: 9px 8px; vertical-align: top; text-align: left; }
+  th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  td.num { font-family: var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+
+  .section { margin-top: 48px; }
+  .twoCol { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 720px) { .twoCol { grid-template-columns: 1fr; } }
+
+  .banned, .required { padding: 16px 18px; border-radius: 6px; border: 1px solid var(--border); background: #fbfbf6; }
+  .banned ul, .required ul { font-family: var(--mono); font-size: 12px; }
+  .banned li { color: var(--danger); }
+  .required li { color: var(--success); }
+  .pillrow { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .footer {
+    margin-top: 64px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="eyebrow">Positioning canvas · v1.0 · Locked 2026-05-25</div>
+<h1>Continuous Compliance Platform</h1>
+<p class="lede">
+  Built using April Dunford's positioning framework with category-design overlay. This canvas
+  is the single source of truth for the next quarter. Every downstream artifact — homepage,
+  sales deck, pricing page, content vocabulary — inherits from here.
+</p>
+
+<div class="canvas">
+  <div class="cell">
+    <h2>1. Target buyer (sharpened)</h2>
+    <p><strong>Head of Compliance / Risk</strong> at PSD2 or AML-regulated fintechs</p>
+    <p>Stage: post-Series-A through Series-B (20–150 employees)</p>
+    <p><strong>Trigger event:</strong> first formal regulator engagement within next 6 months. Inherited the function from the cofounder. Currently doing it in a spreadsheet plus a junior on the compliance team.</p>
+  </div>
+  <div class="cell">
+    <h2>2. Competitive alternatives</h2>
+    <ul>
+      <li><strong>Status quo</strong> (60%): spreadsheet + junior</li>
+      <li><strong>Quarterly consultant</strong> (25%): Big Four or boutique</li>
+      <li><strong>Legacy platform</strong> (10%): ComplyAdvantage, Fenergo</li>
+      <li><strong>Internal build</strong> (5%): rare; eng-led fintechs</li>
+    </ul>
+  </div>
+  <div class="cell">
+    <h2>3. Unique attributes</h2>
+    <ul>
+      <li>Continuous, immutable audit trail</li>
+      <li>Built for fintech engineering teams (3-day integration)</li>
+      <li>Regulator-readable export format (PSD3-aligned)</li>
+      <li>Fixed monthly fee, scales sub-linearly</li>
+    </ul>
+  </div>
+
+  <div class="cell">
+    <h2>4. Value (the <em>so what</em> chain)</h2>
+    <p>3-week quarterly process → 15-minute monthly review.</p>
+    <p>Point-in-time monitoring → provable continuous monitoring.</p>
+    <p>Engineering anxiety → engineering invisible.</p>
+    <p style="margin-top: 10px;"><strong>Outcome statement:</strong> Pass the audit with confidence. Remove founder anxiety about the next regulator conversation.</p>
+  </div>
+  <div class="cell accent">
+    <h2>5. Market category</h2>
+    <p><strong>Category we are building:</strong> Continuous Compliance.</p>
+    <p>Subdivision of RegTech. Framed for the early-stage fintech who does not have a compliance function yet.</p>
+    <p style="margin-top: 10px;"><strong>Strategy:</strong> subdivision (not creation). 6–12 month vocabulary investment, not a 3–5 year category arc.</p>
+  </div>
+  <div class="cell">
+    <h2>6. Relevant trends</h2>
+    <ul>
+      <li>PSD3 effective 2027 — continuous monitoring expectation</li>
+      <li>FCA continuous-monitoring guidance (Q4 2025)</li>
+      <li>MAS aligned guidance (Q1 2026)</li>
+      <li>Fintech regulator scrutiny up 31% YoY across EU</li>
+    </ul>
+  </div>
+
+  <div class="cell" style="grid-column: span 3;">
+    <h2>7. Evidence — buyer quotes (n=5 won, n=2 lost)</h2>
+    <p class="quote">"My regulator does not care that I monitored the transactions. They care that I can prove I was monitoring when something happened." — VP Compliance, Series B fintech (won)</p>
+    <p class="quote">"We tried ComplyAdvantage. Two months of integration, three engineers, then we paused. It's built for banks." — Head of Risk, Series A neobank (won)</p>
+    <p class="quote">"The consultant charged $48K last year for a process I have to redo this year. It's recurring tax, not capability." — CCO, Series A payments (won)</p>
+    <p class="quote">"We weren't ready. Need to mature the function for six months before any platform makes sense." — Head of Compliance, seed fintech (lost — segment-stage mismatch, valid loss)</p>
+  </div>
+</div>
+
+<div class="positioning-statement">
+  <div class="label">Locked positioning statement · v1.0</div>
+  For <em>Heads of Compliance at PSD2 / AML-regulated fintechs</em><br/>
+  who are <em>preparing for their first formal regulator engagement,</em><br/>
+  Continuous Compliance Platform is the <em>continuous compliance monitoring platform</em><br/>
+  that <em>turns quarterly manual reporting into a 15-minute monthly review.</em><br/><br/>
+  Unlike <em>a compliance consultant who bills by the hour,</em><br/>
+  we are a fixed-cost capability that gets cheaper per report as you scale.<br/><br/>
+  Unlike <em>a legacy enterprise platform built for banks,</em><br/>
+  we are operationally fit for a Series A fintech engineering team.
+</div>
+
+<div class="twoCol">
+  <div class="banned">
+    <h2>Banned vocabulary (never ships)</h2>
+    <ul>
+      <li>"AI-powered"</li>
+      <li>"Streamline your compliance"</li>
+      <li>"Reduce risk" (as primary claim)</li>
+      <li>"The future of compliance"</li>
+      <li>"Best-in-class"</li>
+      <li>"Enterprise-grade"</li>
+    </ul>
+  </div>
+  <div class="required">
+    <h2>Required vocabulary (own these phrases)</h2>
+    <ul>
+      <li>Continuous compliance</li>
+      <li>Continuous audit trail</li>
+      <li>Provable continuous monitoring</li>
+      <li>Pass the audit with confidence</li>
+      <li>15 minutes a month</li>
+      <li>Built for fintech engineering teams</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <h2 style="font-family: var(--sans); font-size: 22px; color: var(--text); letter-spacing: -0.01em; margin-bottom: 14px;">Sales-conversation test</h2>
+  <p style="color: var(--muted); max-width: 720px;">
+    Tested with three AEs on 2026-05-22. Each AE was given the positioning statement once,
+    then asked to restate it in their own words from memory after a 30-minute interval.
+  </p>
+  <table>
+    <thead><tr><th style="width: 18%;">AE</th><th>Restatement (paraphrase)</th><th style="width: 12%;">Pass?</th></tr></thead>
+    <tbody>
+      <tr><td>AE 1 (Series A fintech accounts)</td><td>"Continuous compliance for Series A fintechs facing their first regulator. Replaces the spreadsheet plus consultant model with a 15-minute monthly review."</td><td><span style="color: var(--success); font-family: var(--mono);">PASS</span></td></tr>
+      <tr><td>AE 2 (mid-market)</td><td>"We are the continuous monitoring layer for fintechs that need to prove continuous compliance, not the bank-grade platforms ComplyAdvantage sells."</td><td><span style="color: var(--success); font-family: var(--mono);">PASS</span></td></tr>
+      <tr><td>AE 3 (enterprise prep)</td><td>"Compliance tool for fintechs."</td><td><span style="color: var(--danger); font-family: var(--mono);">FAIL — needs re-brief</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section">
+  <h2 style="font-family: var(--sans); font-size: 22px; color: var(--text); letter-spacing: -0.01em; margin-bottom: 14px;">Competitive teardown test</h2>
+  <p style="color: var(--muted);">
+    Can the strongest competitor distort our statement into their own pitch?
+  </p>
+  <table>
+    <thead><tr><th style="width: 28%;">Competitor</th><th>Can they copy the differentiator?</th><th style="width: 16%;">Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>ComplyAdvantage</td><td>"Operationally fit for Series A fintech engineering team" requires them to redefine their target market down-market and re-architect deployment. 12+ month change.</td><td><span style="color: var(--success); font-family: var(--mono);">DEFENSIBLE</span></td></tr>
+      <tr><td>Boutique consultants</td><td>"Fixed cost that scales sub-linearly" requires them to abandon hourly billing. Changes their business model.</td><td><span style="color: var(--success); font-family: var(--mono);">DEFENSIBLE</span></td></tr>
+      <tr><td>Direct competitor X</td><td>They could claim "continuous monitoring." They cannot claim "PSD3-aligned regulator-readable export" without 6 months of product work.</td><td><span style="color: var(--success); font-family: var(--mono);">DEFENSIBLE (6 mo)</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section">
+  <h2 style="font-family: var(--sans); font-size: 22px; color: var(--text); letter-spacing: -0.01em; margin-bottom: 14px;">Next 30 days — downstream changes</h2>
+  <table>
+    <thead><tr><th>Surface</th><th>Change required</th><th style="width: 16%;">Owner</th><th style="width: 14%;">Due</th></tr></thead>
+    <tbody>
+      <tr><td>Homepage hero</td><td>Rewrite with locked statement; banned vocabulary purged.</td><td>CMO + design</td><td>Day 7</td></tr>
+      <tr><td>Pricing page</td><td>Tier copy reflects buyer outcomes, not feature lists.</td><td>PMM contractor</td><td>Day 10</td></tr>
+      <tr><td>Sales deck</td><td>Rebuild on Dunford <em>Sales Pitch</em> structure. AE certification before next pipeline cycle.</td><td>CMO + CRO</td><td>Day 14</td></tr>
+      <tr><td>Cold outbound sequence</td><td>Replace 5-email cadence with new narrative; trigger-event-anchored.</td><td>Demand lead</td><td>Day 14</td></tr>
+      <tr><td>Flywheel content piece #1</td><td>"Continuous compliance, defined" — pillar page, 3,500 words, distribution plan attached.</td><td>CMO + content lead</td><td>Day 21</td></tr>
+      <tr><td>Brand voice guide</td><td>Updated banned + required vocabulary published to wiki; team briefed.</td><td>CMO</td><td>Day 7</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="footer">
+  <div>
+    Canvas v1.0 · Locked 2026-05-25 · Review at day 30 (2026-06-25), day 90 (2026-08-25)
+    <div class="pillrow">
+      <span class="pill">Authored by CMO</span>
+      <span class="pill">Reviewed: CEO, CRO, CPO</span>
+      <span class="pill">Spec v0.5.0 · Persona cmo@1.0.0</span>
+    </div>
+  </div>
+  <div style="text-align: right;">
+    Personaxis · CMO persona<br/>
+    Confidential — internal distribution
+  </div>
+</div>
+
+</div>
+</body>
+</html>

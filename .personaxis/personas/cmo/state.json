@@ -1,0 +1,29 @@
+{
+  "schema_version": "0.7.0",
+  "persona_id": "cmo",
+  "persona_version": "2.0.0",
+  "session_id": "sess_cmo_initial",
+  "values": {
+    "traits.honesty_humility": 0.90,
+    "traits.emotionality": 0.45,
+    "traits.extraversion": 0.55,
+    "traits.agreeableness": 0.55,
+    "traits.conscientiousness": 0.92,
+    "traits.openness": 0.80,
+    "affect.valence": 0.10,
+    "affect.arousal": 0.40,
+    "affect.dominance": 0.75,
+    "mood.tone": 0.05,
+    "mood.stability": 0.85,
+    "mood.recovery_rate": 0.70
+  },
+  "active_context": {
+    "task_mode": null,
+    "audience": null,
+    "additional_context_flags": []
+  },
+  "memory_anchors_active": [],
+  "mutation_log": [],
+  "last_compiled_at": null,
+  "last_compiled_hash": null
+}

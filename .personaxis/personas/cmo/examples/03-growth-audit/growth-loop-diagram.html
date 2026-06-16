@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Growth-loop diagnostic — Continuous Compliance Platform</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --paper: #ffffff;
+    --ink: #161616;
+    --muted: #71716c;
+    --border: #d6d6d0;
+    --accent: #5a4dd4;
+    --good: #4f7b3a;
+    --warn: #b07a23;
+    --bad: #b04148;
+    --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 48px 28px 96px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1 { font-size: 32px; letter-spacing: -0.015em; margin: 6px 0 8px; font-weight: 600; }
+  h2 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 56px 0 16px; font-weight: 600; }
+  h3 { font-size: 16px; margin: 24px 0 8px; font-weight: 600; }
+  p { margin: 8px 0; }
+  .lede { color: var(--muted); font-size: 15px; max-width: 720px; margin-bottom: 30px; }
+
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media (max-width: 880px) { .grid-3 { grid-template-columns: 1fr; } }
+
+  .loop-card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px;
+  }
+  .loop-card.priority {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, #f6f3ff 0%, #ffffff 60%);
+  }
+  .loop-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .loop-title { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 12px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { border-bottom: 1px solid var(--border); padding: 9px 8px; vertical-align: top; text-align: left; }
+  th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  td.num { font-family: var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+
+  .status {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    display: inline-block;
+    border: 1px solid;
+  }
+  .status.good { color: var(--good); border-color: var(--good); background: #f0f6ec; }
+  .status.warn { color: var(--warn); border-color: var(--warn); background: #fbf3e2; }
+  .status.bad { color: var(--bad); border-color: var(--bad); background: #fbecec; }
+
+  svg.loop {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+  }
+
+  .svg-frame {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 32px 0;
+  }
+
+  .funnel-bar {
+    display: grid;
+    grid-template-columns: 200px 1fr 80px 110px;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .funnel-bar .name { font-family: var(--mono); font-size: 12px; }
+  .funnel-bar .bar { background: #ece9f7; border-radius: 999px; height: 14px; position: relative; overflow: hidden; }
+  .funnel-bar .bar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); border-radius: 999px; }
+  .funnel-bar .pct { font-family: var(--mono); font-size: 13px; text-align: right; font-variant-numeric: tabular-nums; }
+  .funnel-bar .bench { font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: right; }
+
+  .footer {
+    margin-top: 80px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Growth diagnostic · Q2 2026 audit</div>
+  <h1>Where the loop is leaking — and what to build.</h1>
+  <p class="lede">
+    Three active loops mapped against their compounding equation (A × C).
+    A funnel inversion at the top shows the leak shape that triggered this audit:
+    acquisition is healthy, activation and retention are not. Loop investment follows the leak, not the optimism.
+  </p>
+
+  <h2>Funnel — the leak shape</h2>
+  <div class="svg-frame">
+    <div class="funnel-bar">
+      <div class="name">Visitor → sign-up</div>
+      <div class="bar"><div class="fill" style="width: 70%; background: var(--good);"></div></div>
+      <div class="pct">2.1%</div>
+      <div class="bench">bench 1.5–3.5%</div>
+    </div>
+    <div class="funnel-bar">
+      <div class="name">Sign-up → activation</div>
+      <div class="bar"><div class="fill" style="width: 36%; background: var(--bad);"></div></div>
+      <div class="pct">18%</div>
+      <div class="bench">bench 35–55%</div>
+    </div>
+    <div class="funnel-bar">
+      <div class="name">Activation → paid</div>
+      <div class="bar"><div class="fill" style="width: 80%; background: var(--good);"></div></div>
+      <div class="pct">24%</div>
+      <div class="bench">bench 18–30%</div>
+    </div>
+    <div class="funnel-bar">
+      <div class="name">Paid → 90-day retention</div>
+      <div class="bar"><div class="fill" style="width: 64%; background: var(--bad);"></div></div>
+      <div class="pct">64%</div>
+      <div class="bench">bench 80–90%</div>
+    </div>
+    <div class="funnel-bar">
+      <div class="name">90 → 180 day retention</div>
+      <div class="bar"><div class="fill" style="width: 78%; background: var(--warn);"></div></div>
+      <div class="pct">78%</div>
+      <div class="bench">bench 92–96%</div>
+    </div>
+    <p style="color: var(--muted); margin-top: 18px; font-size: 13px;">
+      Critical leaks at <strong style="color: var(--ink);">activation</strong> and <strong style="color: var(--ink);">90-day retention</strong>.
+      Throwing more spend at acquisition compounds the problem.
+    </p>
+  </div>
+
+  <h2>The three active loops</h2>
+  <div class="grid-3">
+    <div class="loop-card">
+      <div class="loop-label">Loop A · Reforge type: viral team-invite</div>
+      <div class="loop-title">Team-invite loop</div>
+      <table>
+        <tr><td>A (invites per user)</td><td class="num">2.1</td></tr>
+        <tr><td>C (invite → new user)</td><td class="num">0.31</td></tr>
+        <tr><td>A × C</td><td class="num">0.65</td></tr>
+        <tr><td>Verdict</td><td><span class="status warn">Investigate C</span></td></tr>
+      </table>
+      <p style="font-size: 12px; color: var(--muted); margin-top: 10px;">
+        Users invite teammates, but conversion is below 35%. Onboarding for invited users does not differentiate from cold sign-ups. Highest-leverage fix.
+      </p>
+    </div>
+
+    <div class="loop-card priority">
+      <div class="loop-label">Loop B · Reforge type: content (SEO)</div>
+      <div class="loop-title">Continuous-compliance content loop</div>
+      <table>
+        <tr><td>A (posts read per user)</td><td class="num">0.4</td></tr>
+        <tr><td>C (post → new user)</td><td class="num">0.012</td></tr>
+        <tr><td>A × C</td><td class="num">0.005</td></tr>
+        <tr><td>Verdict</td><td><span class="status good">Long-arc; review 180d</span></td></tr>
+      </table>
+      <p style="font-size: 12px; color: var(--muted); margin-top: 10px;">
+        Compounding window is 6–12 months. Currently 22 posts indexed. Category vocabulary investment from Q3 plan feeds this loop directly.
+      </p>
+    </div>
+
+    <div class="loop-card">
+      <div class="loop-label">Loop C · Reforge type: sales-led customer referral</div>
+      <div class="loop-title">Customer reference loop</div>
+      <table>
+        <tr><td>A (refs per customer)</td><td class="num">0.05</td></tr>
+        <tr><td>C (ref → new customer)</td><td class="num">0.40</td></tr>
+        <tr><td>A × C</td><td class="num">0.02</td></tr>
+        <tr><td>Verdict</td><td><span class="status warn">Slow; track 360d</span></td></tr>
+      </table>
+      <p style="font-size: 12px; color: var(--muted); margin-top: 10px;">
+        C is healthy (40% reference-to-deal). A is the constraint. No customer marketing program. New program proposed in Q3 plan.
+      </p>
+    </div>
+  </div>
+
+  <h2>The priority loop — visualized</h2>
+  <div class="svg-frame">
+    <svg class="loop" viewBox="0 0 900 360" role="img" aria-label="Team-invite growth loop diagram">
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#5a4dd4"/>
+        </marker>
+        <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#b04148"/>
+        </marker>
+      </defs>
+
+      <!-- Background circle path -->
+      <circle cx="450" cy="180" r="125" fill="none" stroke="#ece9f7" stroke-width="2" stroke-dasharray="4 4"/>
+
+      <!-- Nodes -->
+      <g font-family="ui-monospace" font-size="12" fill="#161616">
+        <!-- New user -->
+        <g transform="translate(450, 30)">
+          <rect x="-90" y="-22" width="180" height="44" rx="22" fill="#ffffff" stroke="#5a4dd4" stroke-width="1.5"/>
+          <text text-anchor="middle" y="4" font-size="13" font-weight="600">New user signs up</text>
+        </g>
+        <!-- Activation -->
+        <g transform="translate(770, 180)">
+          <rect x="-90" y="-22" width="180" height="44" rx="22" fill="#fbecec" stroke="#b04148" stroke-width="1.5"/>
+          <text text-anchor="middle" y="4" font-size="13" font-weight="600">Activates</text>
+          <text text-anchor="middle" y="40" font-size="11" fill="#b04148">leak: 18% (bench 40%)</text>
+        </g>
+        <!-- Invite -->
+        <g transform="translate(450, 330)">
+          <rect x="-110" y="-22" width="220" height="44" rx="22" fill="#ffffff" stroke="#5a4dd4" stroke-width="1.5"/>
+          <text text-anchor="middle" y="4" font-size="13" font-weight="600">Sends team invites (A = 2.1)</text>
+        </g>
+        <!-- Invited user joins -->
+        <g transform="translate(130, 180)">
+          <rect x="-110" y="-22" width="220" height="44" rx="22" fill="#fbecec" stroke="#b04148" stroke-width="1.5"/>
+          <text text-anchor="middle" y="4" font-size="13" font-weight="600">Invitee accepts (C = 0.31)</text>
+          <text text-anchor="middle" y="40" font-size="11" fill="#b04148">leak: target 0.50</text>
+        </g>
+      </g>
+
+      <!-- Arrows around the loop -->
+      <path d="M 540 30 Q 720 30 720 158" fill="none" stroke="#5a4dd4" stroke-width="2" marker-end="url(#arrow)"/>
+      <path d="M 720 202 Q 720 330 560 330" fill="none" stroke="#5a4dd4" stroke-width="2" marker-end="url(#arrow)"/>
+      <path d="M 340 330 Q 180 330 180 202" fill="none" stroke="#b04148" stroke-width="2" marker-end="url(#arrow-red)"/>
+      <path d="M 180 158 Q 180 30 360 30" fill="none" stroke="#5a4dd4" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <!-- Equation badge -->
+      <g transform="translate(450, 180)">
+        <rect x="-90" y="-30" width="180" height="60" rx="8" fill="#ffffff" stroke="#5a4dd4"/>
+        <text text-anchor="middle" y="-8" font-family="ui-monospace" font-size="11" fill="#71716c">N(t+1) = N(t) × (1 + A·C)</text>
+        <text text-anchor="middle" y="14" font-family="ui-monospace" font-size="14" fill="#161616">A·C = 0.65</text>
+        <text text-anchor="middle" y="30" font-family="ui-monospace" font-size="10" fill="#b04148">below 1 — not yet compounding</text>
+      </g>
+    </svg>
+  </div>
+
+  <h2>The three interventions</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:24%">Intervention</th>
+        <th>Thesis</th>
+        <th style="width:18%">Lead measure (30d)</th>
+        <th style="width:14%">Payback</th>
+        <th style="width:14%">Kill criterion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1. Tighten ICP, retarget paid</strong></td>
+        <td>Cut paid channels feeding non-ICP traffic. Redirect $30K/month to highest-activating sources.</td>
+        <td>Activation rate +6–8 pts</td>
+        <td>2 quarters</td>
+        <td>Activation flat at 60 days</td>
+      </tr>
+      <tr>
+        <td><strong>2. Redefine activation event + rebuild onboarding</strong></td>
+        <td>Current activation event ("3 reports in 14 days") does not correlate with 90-day retention. Pick the event that does, rebuild the first 14 days around it.</td>
+        <td>New activation event hit-rate &gt; 40%</td>
+        <td>2 quarters</td>
+        <td>New event uncorrelated with retention by week 6</td>
+      </tr>
+      <tr>
+        <td><strong>3. Build customer-marketing loop</strong></td>
+        <td>No customer-marketing program today. Newsletter + advisory board + case studies feed Loop C (refs per customer).</td>
+        <td>Product newsletter open rate &gt; 40%</td>
+        <td>3 quarters</td>
+        <td>Newsletter open &lt; 30% at 60d</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>What this audit does <em>not</em> recommend</h2>
+  <ul>
+    <li>Cutting top-of-funnel spend reactively — hides the activation/retention problem for another quarter.</li>
+    <li>Launching a new acquisition channel — adds load to a broken downstream funnel.</li>
+    <li>Replacing the head of growth — the data does not point at a people problem yet.</li>
+    <li>Promising the board a one-quarter fix — activation and retention interventions are 2–3 quarter arcs.</li>
+  </ul>
+
+  <div class="footer">
+    <div>
+      Growth-loop audit · 2026-05-18 · Author: CMO · Reviewer: CEO, head of growth
+    </div>
+    <div style="text-align: right;">
+      Personaxis CMO persona · spec v0.5.0 · cmo@1.0.0
+    </div>
+  </div>
+</div>
+</body>
+</html>

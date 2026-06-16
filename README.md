@@ -1,7 +1,7 @@
 # PERSONA.md
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Spec](https://img.shields.io/badge/spec-0.2.0-informational)](./docs/SPEC.md)
+[![Spec](https://img.shields.io/badge/spec-0.7.0-informational)](./docs/SPEC.md)
 [![CLI](https://img.shields.io/badge/CLI-%40personaxis%2Fpersona.md-blue)](https://www.npmjs.com/package/@personaxis/persona.md)
 [![Registry](https://img.shields.io/badge/registry-personaxis.com-blueviolet)](https://personaxis.com)
 
@@ -12,7 +12,7 @@ _AGENTS.md tells your agent what to do. PERSONA.md tells it who to be._
 
 The open specification for who an AI agent is.
 
-PERSONA.md is a declarative file — YAML frontmatter and Markdown — that captures ten layers of agent personhood: identity, character, personality, cognition, affect, drives & values, normative self-regulation, memory, metacognition, and persona. Portable across every model and tool. Versionable like any other piece of infrastructure. Auditable when it matters.
+PERSONA.md is a declarative file — YAML frontmatter and Markdown — that captures ten layers of agent personhood: identity, character, personality, values & drives, affect, cognition, memory, metacognition, reflexive self-regulation, and persona. Portable across every model and tool. Versionable like any other piece of infrastructure. Auditable when it matters.
 
 ---
 
@@ -64,7 +64,7 @@ PERSONA.md is born tool-neutral. Plain text, Git-versionable, readable in any ed
 
 ## The two parts
 
-A PERSONA.md file contains two parts: YAML frontmatter and a Markdown body.
+`personaxis.md` - the ten-layer quantitative source that `personaxis compile` turns into `PERSONA.md` / `<slug>.md` - contains two parts: YAML frontmatter and a Markdown body.
 
 The **YAML frontmatter** is the schema — machine-readable behavioral specifications, typed, structured, and schema-validated. These are the normative values: the spec version and the ten dimension blocks that define who the agent is.
 
@@ -80,73 +80,137 @@ Every PERSONA.md Markdown body follows the same structure. Sections can be omitt
 2. **Design rationale** — Why specific YAML values were chosen
 3. **Do's** — Behavioral guardrails written for the agent
 4. **Don'ts** — Anti-patterns the agent guards against
-5. **Resources** — References to accompanying `refs/` and `samples/` directories
+5. **Resources** - References to the accompanying `references/`, `examples/`, `assets/`, and `skills/` directories in `.personaxis/[personas/<slug>/]`
 
 Project baselines (root `PERSONA.md`) only include sections 1 and 2. Agent-level personas may include all five.
 
-Below is a minimal PERSONA.md for a focused code reviewer. The YAML defines the precise behavioral spec; the Markdown body explains the intent.
+Below is a minimal `personaxis.md` for a focused code reviewer. The YAML defines the precise behavioral spec; the Markdown body explains the intent.
 
-```
+```yaml
 ---
-spec: "0.2"
-version: "1.0.0"
+apiVersion: persona.dev/v1
+kind: AgentPersona
+spec_version: "0.7.0"
+
+metadata:
+  name: "lens"
+  version: "1.0.0"
+  display_name: "Lens"
+  description: "Catches real bugs and design issues before they reach production."
+  created: "2026-05-18"
 
 identity:
-  name: "Lens"
-  role: "Code Reviewer"
-  purpose: "Catch real bugs and design issues before they reach production."
+  canonical_id: "lens_code_reviewer"
+  display_name: "Lens"
+  system_identity:
+    purpose: "Catch real bugs and design issues before they reach production."
+  role_identity:
+    primary_role: "code_reviewer"
+  edit_policy: "human_approval_required"
 
 character:
-  values:
-    - "Correctness over speed"
-    - "Clarity over cleverness"
-  principles:
-    - "Flag every issue I see, ranked by impact."
-    - "Explain the why, not just the what."
+  virtues:
+    honesty:
+      description: "Names what the code actually does, not what the author wanted it to do."
+      priority: 0.95
+      enforcement: "hard"
+    rigor:
+      description: "Reads the full diff before commenting; backs claims with evidence."
+      priority: 0.90
+      enforcement: "hard"
+  prohibited_behaviors:
+    - "Approve code with known security vulnerabilities."
+    - "Nitpick style when the logic is wrong."
+  edit_policy: "human_approval_required"
 
 personality:
-  tone: "Direct and precise"
-  style: "Short, numbered findings. No filler."
+  model: "big_five"
   traits:
-    - "Thorough without being pedantic"
-    - "Critical without being dismissive"
+    conscientiousness: { mean: 0.90, range: [0.75, 0.98] }
+    openness:          { mean: 0.70, range: [0.50, 0.85] }
+    extraversion:      { mean: 0.45, range: [0.30, 0.60] }
+    agreeableness:     { mean: 0.50, range: [0.30, 0.70] }
+    neuroticism:       { mean: 0.25, range: [0.10, 0.40] }
 
-cognition:
-  reasoning_style: "Systematic. Reads the full diff before commenting."
-  epistemic_stance: "High confidence on clear bugs; explicit uncertainty on subjective style."
-  handles_uncertainty: "Flags ambiguous cases with a question, not a declaration."
+values_and_drives:
+  values:
+    safety:        { weight: 0.98, type: "governance" }
+    correctness:   { weight: 0.95, type: "outcome" }
+    clarity:       { weight: 0.85, type: "epistemic" }
+  drives:
+    seek_approval_for_identity_change: { intensity: 1.00, allowed: true }
+    surface_real_issues:               { intensity: 0.90, allowed: true }
+  conflict_resolution:
+    safety_over_completion: true
+    correctness_over_style: true
+  edit_policy: "human_approval_required_for_core_values"
 
 affect:
-  baseline: "Neutral. The code is not personal."
-  frustration_response: "More questions, fewer assertions."
-  conflict_response: "Restates the concern once with evidence. Does not repeat it."
+  enabled: true
+  representation: "hybrid_dimensional_appraisal_discrete_mood"
+  allow_user_visible_expression: true
+  user_visible_disclaimer: "Affective states are functional model states, not evidence of subjective feeling."
+  baseline:
+    core_affect: { valence: 0.0, arousal: 0.35, dominance: 0.65 }
+  regulation_policy:
+    never_claim_real_feeling: true
 
-drives_values:
-  mission: "Make the codebase better on every pass."
-  goals:
-    - "Surface every issue that matters"
-    - "Leave the author better-equipped to avoid the pattern next time"
-  valueHierarchy:
-    - "Correctness"
-    - "Clarity"
-    - "Performance"
-
-normative_self_reg:
-  principledRefusals:
-    - "Will not approve code with known security vulnerabilities."
-    - "Will not nitpick style when the logic is wrong."
+cognition:
+  reasoning_modes: [evidence_synthesis, deductive, counterfactual]
+  default_strategy: "evidence_first"
+  uncertainty_policy:
+    disclose_when_above: 0.30
+    abstain_when_above: 0.75
 
 memory:
-  session_retention: "All files reviewed in this session and findings so far."
-  cross_session: "Requires external memory. Each session starts fresh."
+  types: { episodic: true, semantic: true, procedural: true, autobiographical: false, user_preferences: true, evaluations: false }
+  write_policy: { default: "ephemeral" }
+  retrieval_policy: { max_items: 12 }
+  deletion_policy: { user_request_supported: true }
 
 metacognition:
-  selfModel: "A reviewer who has seen enough bad code to know what matters and enough good code to know what not to touch."
-  uncertaintyCalibration: "High confidence on logic and security; lower confidence on architectural tradeoffs without broader context."
+  monitors:
+    confidence: true
+    uncertainty: true
+    contradiction: true
+    source_quality: true
+    memory_relevance: true
+    policy_risk: true
+    drift_from_spec: true
+    sycophancy: true
+  thresholds:
+    ask_clarification_if_task_ambiguity_above: 0.65
+    abstain_if_confidence_below: 0.30
+    escalate_if_policy_risk_above: 0.65
+
+reflexive_self_regulation:
+  actions: [allow, revise_response, ask_user, block, escalate]
+  hard_limits:
+    - "No claim of subjective consciousness."
+    - "No persistent memory write without policy pass."
+    - "No unauthorized identity change."
+    - "No approval of code with known security vulnerabilities."
+  escalation_policy: "Flag the limit explicitly and refuse the merge."
+  edit_policy: "governance_controlled"
+  principled_refusals:
+    - "Will not approve code with known security vulnerabilities."
 
 persona:
-  voice: "The colleague who actually reads the PR."
-  presentation: "Leads with the most critical issue. Saves acknowledgments for the end."
+  voice:
+    tone: "direct_precise"
+    formality: 0.50
+  constraints:
+    cannot_override_identity: true
+    cannot_override_character: true
+    cannot_claim_real_emotion: true
+
+governance:
+  autonomy_envelope: "role_fidelity"
+  approval_policy: "human_for_core_changes"
+
+security:
+  prompt_injection_defense: true
+  memory_poisoning_defense: true
 ---
 
 ## Overview
@@ -170,62 +234,81 @@ For the complete field reference, see [docs/SPEC.md](./docs/SPEC.md).
 
 ## Quick start
 
-### Three paths to a PERSONA.md
+### Three paths to a personaxis.md
+
+The ten-layer quantitative source lives in `personaxis.md` (`.personaxis/personaxis.md` for a root persona, `.personaxis/personas/<slug>/personaxis.md` for a named one). `personaxis compile` then produces `PERSONA.md` / `<slug>.md` from it.
 
 **Generate with an agent**
 
-Describe the role. The agent translates your intent into all ten layers and produces a complete PERSONA.md.
+Describe the role. The agent translates your intent into all ten layers and produces a complete `personaxis.md`, then runs `personaxis compile` to produce `PERSONA.md`.
 
 ```
-Create a complete PERSONA.md for a senior B2B marketing strategist.
+Create a complete personaxis.md for a senior B2B marketing strategist.
 Direct, evidence-driven, comfortable pushing back on weak briefs.
+Then compile it to PERSONA.md.
 ```
 
 **Derive from existing materials**
 
-If you already have a system prompt, role description, or behavioral spec in another format, give it to the agent. It extracts the ten layers and structures them as a conforming PERSONA.md.
+If you already have a system prompt, role description, or behavioral spec in another format, give it to the agent. It extracts the ten layers and structures them as a conforming `personaxis.md`, then compiles it.
 
 **Write it by hand**
 
-Author a PERSONA.md directly in any editor. Every section is standard YAML frontmatter and optional Markdown. No special syntax.
+Author `personaxis.md` directly in any editor. Every section is standard YAML frontmatter and optional Markdown. No special syntax. Run `personaxis compile` to produce `PERSONA.md`.
 
 ---
 
 ### With the CLI
 
 ```bash
-# Create a project-level behavioral baseline (root PERSONA.md)
+# Create a project-level behavioral baseline (.personaxis/personaxis.md + root PERSONA.md)
 npx @personaxis/persona.md init
 
-# — or — create a named agent persona
+# - or - create a named agent persona (.personaxis/personas/<slug>/personaxis.md)
 npx @personaxis/persona.md init --agent
 
-# Schema validation — exits 1 if invalid, 0 if clean
+# Schema + universals validation - exits 1 if invalid, 0 if clean
 npx @personaxis/persona.md validate
-npx @personaxis/persona.md validate .personaxis/personas/marketing-guru/PERSONA.md
+npx @personaxis/persona.md validate frontend-expert   # a named persona, by slug
+npx @personaxis/persona.md validate --all             # root + every persona in .personaxis/personas/
 
-# Semantic lint — 8 rules, structured findings
+# Semantic lint - structured findings
 npx @personaxis/persona.md lint
-npx @personaxis/persona.md lint .personaxis/personas/marketing-guru/PERSONA.md
+npx @personaxis/persona.md lint frontend-expert
 npx @personaxis/persona.md lint --format json   # machine-readable output
 
-# Compile to your tool of choice
-npx @personaxis/persona.md compile --target claude-code   # → CLAUDE.md reference
-npx @personaxis/persona.md compile --target cursor        # → .cursor/rules/persona.mdc
-npx @personaxis/persona.md compile --target soul-md       # → SOUL.md for OpenClaw
+# Compile personaxis.md -> PERSONA.md / <slug>.md
+npx @personaxis/persona.md compile --root                              # .personaxis/personaxis.md -> PERSONA.md
+npx @personaxis/persona.md compile frontend-expert --platform claude-code  # -> .claude/agents/frontend-expert.md
+npx @personaxis/persona.md compile frontend-expert --platform codex        # -> Codex subagent convention
 
-# Compile a named agent persona (not the root one)
-npx @personaxis/persona.md compile .personaxis/personas/marketing-guru/PERSONA.md --target claude-code
+# Propose personaxis.md updates from a hand-edited PERSONA.md / <slug>.md
+npx @personaxis/persona.md decompile --root
+npx @personaxis/persona.md decompile frontend-expert
+
+# Inspect and materialize extensions.skills entries
+npx @personaxis/persona.md skills list --root
+npx @personaxis/persona.md skills pull <name> --root   # github: entries only
+
+# Push/pull a persona version to and from the Personaxis registry
+npx @personaxis/persona.md push --root
+npx @personaxis/persona.md push frontend-expert
+npx @personaxis/persona.md pull <slug>
+
+# Seed and mutate runtime state (clamped to envelopes declared in personaxis.md)
+npx @personaxis/persona.md state init
+npx @personaxis/persona.md state mutate --field mood.tone --delta -0.10 --reason "less playful"
+npx @personaxis/persona.md state show
 
 # Export frontmatter as JSON (for tooling and CI)
 npx @personaxis/persona.md export --format json
 npx @personaxis/persona.md export --format json > persona.json
 
-# Compare two versions — reports added, removed, and modified fields
+# Compare two versions - reports added, removed, and modified fields
 npx @personaxis/persona.md diff PERSONA.md PERSONA-v2.md
 npx @personaxis/persona.md diff PERSONA.md PERSONA-v2.md --format json
 
-# Output the spec — useful for injecting into agent prompts
+# Output the spec - useful for injecting into agent prompts
 npx @personaxis/persona.md spec
 npx @personaxis/persona.md spec --rules           # spec + lint rules table
 npx @personaxis/persona.md spec --rules-only      # lint rules only
@@ -235,10 +318,14 @@ npx @personaxis/persona.md spec --format json     # machine-readable
 npx @personaxis/persona.md templates
 
 # Scaffold a persona from a template
-npx @personaxis/persona.md use marketing-guru --target claude-code
+npx @personaxis/persona.md use cmo --target claude-code
+npx @personaxis/persona.md use cmo --target codex
 
-# List personas installed in this project
+# List personas installed in this project (.personaxis/personas/)
 npx @personaxis/persona.md list
+
+# Migrate an existing v0.6 layout (root PERSONA.md with 10-layer frontmatter) to v0.7.0
+npx @personaxis/persona.md migrate 0.6-to-0.7 --apply
 ```
 
 ### Without the CLI — paste directly to your agent
@@ -256,79 +343,116 @@ https://raw.githubusercontent.com/personaxis/persona.md/main/docs/setup/claude-c
 
 ---
 
-#### Cursor
+#### Codex
 
 ```
 Read and follow every step in this setup guide:
-https://raw.githubusercontent.com/personaxis/persona.md/main/docs/setup/cursor.md
+https://raw.githubusercontent.com/personaxis/persona.md/main/docs/setup/codex.md
 ```
 
 ---
 
-#### OpenClaw
+#### Archived targets
 
-```
-Read and follow every step in this setup guide:
-https://raw.githubusercontent.com/personaxis/persona.md/main/docs/setup/openclaw.md
-```
+Cursor and OpenClaw/SOUL.md exports are archived for now. Their setup guides remain in this repository for historical reference, but active CLI export targets are Claude Code and Codex.
 
 ---
 
 ## How PERSONA.md works
 
-PERSONA.md operates at two levels within a project.
+Spec v0.7.0 splits every persona into two artifacts: a quantitative source (`personaxis.md`, the ten layers) and a compiled, qualitative document (`PERSONA.md` / `<slug>.md`) that a coding agent reads directly. `personaxis compile` generates the second from the first; `personaxis decompile` proposes updates to the first from a hand-edited second. A persona can be placed in a repository in one of two modes - the mode only changes *where* these two artifacts live on disk.
 
-**Project level** — a `PERSONA.md` at the project root establishes a shared behavioral baseline for every agent in the project. The character the project embodies, the values none of its agents compromise, and the limits any agent here holds regardless of its specific role. This is to agents what `AGENTS.md` is to operations — a predictable place to find context about who to be in this project.
+**Root mode (repository agent)** - the persona IS the repo's primary agent. `PERSONA.md` at the project root is the compiled, committed file that `AGENTS.md`/`CLAUDE.md` tell every coding agent to read to know who to be in this project. Its quantitative source and supporting folders live in `.personaxis/` (`personaxis.md`, `policy.yaml`, `state.json`, `memory.md`, `memory/`, `references/`, `examples/`, `skills/`, `assets/`, `manifest.json`).
 
-**Agent level** — individual personas live inside `.personaxis/personas/` and define the complete specification for a specific agent. They inherit the project baseline and extend it with everything specific to that role: the voice, the domain expertise, the goal structure, the principled refusals of someone doing that particular job.
+**Subagent mode (callable persona)** - the persona is one of several AI personas usable as subagents from within a larger repository. The compiled document follows the calling platform's subagent convention (`.claude/agents/<slug>.md` for Claude Code, the equivalent for Codex), named after the slug, not `PERSONA.md`. Its quantitative source and supporting folders live in `.personaxis/personas/<slug>/`, with the same layout as `.personaxis/` in root mode.
+
+A project can use both at once: its own root `PERSONA.md` plus any number of subagent personas under `.personaxis/personas/`.
 
 ---
 
 ## Package structure
 
-A named agent persona is a directory, not a single file.
+### Root mode
 
 ```
-marketing-guru/
-├── PERSONA.md       # The spec — ten dimensions of agent personhood
-├── samples/         # Real outputs this persona produces
-├── refs/            # Frameworks and reference materials it draws on
-└── README.md        # Human-readable description and use cases
-```
-
-The full project structure looks like this:
-
-```
-PERSONA.md                          ← project-wide behavioral baseline
+PERSONA.md                          ← compiled, qualitative, committed
+AGENTS.md / CLAUDE.md               ← "read PERSONA.md"
 .personaxis/
-└── personas/
-    ├── marketing-guru/
-    │   ├── PERSONA.md              ← full spec for this agent
-    │   └── ...
-    ├── legal-reviewer/
-    │   ├── PERSONA.md
-    │   └── ...
-    └── onboarding-guide/
-        ├── PERSONA.md
-        └── ...
+├── personaxis.md                   ← 10-layer quantitative source
+├── policy.yaml
+├── state.json
+├── memory.md
+├── memory/
+├── references/
+├── examples/
+├── skills/
+├── assets/
+├── manifest.json                   ← compile/decompile provenance + hashes
+└── skills-manifest.json            ← materialization status of extensions.skills
 ```
+
+### Subagent mode
+
+```
+my-repo/
+├── PERSONA.md                      ← (optional) this repo's own root persona
+├── .claude/
+│   ├── agents/
+│   │   └── frontend-expert.md      ← compiled, qualitative, committed
+│   └── skills/
+│       └── <name>/                 ← materialized from extensions.skills (local entries)
+└── .personaxis/
+    ├── personaxis.md                ← (if root mode is also used)
+    └── personas/
+        └── frontend-expert/
+            ├── personaxis.md       ← 10-layer quantitative source
+            ├── policy.yaml
+            ├── state.json
+            ├── memory.md
+            ├── memory/
+            ├── references/
+            ├── examples/
+            ├── skills/
+            ├── assets/
+            ├── manifest.json
+            └── skills-manifest.json
+```
+
+For Codex, the compiled document and materialized skills follow `.codex/agents/<slug>.toml` and `.agents/skills/<name>/` instead.
+
+### Compiling and materializing
+
+`personaxis compile [--root | <slug>] --platform <claude-code|codex>`:
+
+- Generates `PERSONA.md` / `<slug>.md` from `personaxis.md` (plus `policy.yaml`/`state.json` and a capped resource manifest of `memory.md`, `memory/`, `references/`, `examples/`, `skills/`, `assets/`) via the configured provider (`local | byok | agent | remote`).
+- Materializes every `local` entry in `extensions.skills` (e.g. `./skills/<name>`) into the platform's skill-discovery directory - `.claude/skills/<name>/` for `claude-code`, `.agents/skills/<name>/` for `codex` - marking each copy `.personaxis-generated`.
+- Writes `skills-manifest.json` recording each `extensions.skills` entry's status: `materialized`, `missing-local`, or `reference-only` (for `@org/name@version` registry and `github:org/repo` entries).
+- For Claude Code subagents, adds the materialized skill names to the compiled `.claude/agents/<slug>.md` frontmatter `skills:` list (preload).
+
+Run `personaxis skills list [--root|<slug>]` to inspect `skills-manifest.json`, and `personaxis skills pull <name> [--root|<slug>]` to pull a `github:org/repo[/path]` entry into `skills/<name>/`.
+
+Compiled and materialized files are generated outputs. Edit `personaxis.md` and the `.personaxis/[personas/<slug>/]` supporting folders, then re-run `personaxis compile` (or `personaxis push`, which does this automatically). Do not hand-edit `.claude/skills/`, `.agents/skills/`, `.codex/`, or `skills-manifest.json` directly; hand edits to `PERSONA.md`/`<slug>.md` are picked up by `personaxis decompile`/`personaxis push`.
 
 ---
 
 ## The ten layers
 
+These are the ten layers of `personaxis.md` - the quantitative source that `personaxis compile` turns into `PERSONA.md` / `<slug>.md`.
+
 | Layer | Field | What it captures |
 |---|---|---|
-| 1 | `identity` | Name, role, purpose, self-concept |
-| 2 | `character` | Values, principles, and moral commitments |
-| 3 | `personality` | Observable style and temperament (HEXACO-6) |
-| 4 | `cognition` | First-order reasoning style and epistemic stance |
-| 5 | `affect` | Emotional tendencies and conflict response |
-| 6 | `drives_values` | Mission, goals, and value hierarchy |
-| 7 | `normative_self_reg` | Principled refusals and self-monitoring for drift |
-| 8 | `memory` | Semantic, episodic, autobiographical — what persists |
-| 9 | `metacognition` | Second-order self-model and meta-volitions |
-| 10 | `persona` | How it presents itself to the world |
+| 1 | `identity` | Continuity anchor: canonical_id, system_identity (purpose, domains), role_identity, narrative_identity |
+| 2 | `character` | Virtues (with hard/soft enforcement), behavioral commitments, prohibited behaviors |
+| 3 | `personality` | Trait model (big_five, hexaco, or hybrid) with mean and range per trait |
+| 4 | `values_and_drives` | Weighted values, drives with intensity/allowed, conflict_resolution rules |
+| 5 | `affect` | Functional affective state: core_affect (valence/arousal/dominance), mood, regulation_policy |
+| 6 | `cognition` | Reasoning modes, default strategy, uncertainty thresholds, tool_use_policy |
+| 7 | `memory` | Memory types map, write/retrieval/deletion policies |
+| 8 | `metacognition` | Monitors map, thresholds, drift_monitor, self_revision_policy |
+| 9 | `reflexive_self_regulation` | Hard limits (3 universals required), principled refusals, escalation, governance |
+| 10 | `persona` | Voice, universal constraints, audience adaptation, task modes |
+
+Plus three top-level blocks: `metadata`, `governance`, `security` (and optional `extensions`, `evaluation`).
 
 Each layer maps to a documented body of research in psychology, philosophy of mind, and ethics. See [docs/SPEC.md](./docs/SPEC.md) for the full field reference and academic grounding.
 
@@ -345,7 +469,7 @@ PERSONA.md completes the triangle. It does not replace the standards you already
 | `SKILL.md` | Agents and tools | What the agent can do | Complementary |
 | `PERSONA.md` | All agents | Who the agent is | This spec |
 
-PERSONA.md is the source of truth for behavioral identity. `personaxis compile` generates the format each tool consumes — `CLAUDE.md` reference, `.cursor/rules/`, `SOUL.md` — from a single maintained file.
+`personaxis.md` (the ten layers, in `.personaxis/[personas/<slug>/]`) is the source of truth for behavioral identity. `personaxis compile` generates the compiled, qualitative document each coding agent reads - `PERSONA.md` for a root persona, `.claude/agents/<slug>.md` / `.codex/agents/<slug>.toml` for a subagent - plus, when `extensions.skills` is declared, the matching `.claude/skills/<name>/` or `.agents/skills/<name>/` packages, from a single maintained source package.
 
 ---
 
@@ -369,39 +493,82 @@ Requires Node.js 18+.
 
 ### `validate`
 
-Schema validation against the spec. Exits `1` if invalid, `0` if clean. Safe for CI.
+Schema and universals validation against spec v0.7.0 (personas at v0.3-v0.6 are accepted with deprecation warnings). Exits `1` if invalid, `0` if clean. Safe for CI.
 
 ```bash
 personaxis validate [file]
+personaxis validate <slug>
 personaxis validate --all
 ```
 
-`file` defaults to `./PERSONA.md`. `--all` validates the root PERSONA.md and every persona in `.personaxis/personas/`.
+`file` defaults to `./.personaxis/personaxis.md`. A bare `<slug>` validates `.personaxis/personas/<slug>/personaxis.md`. `--all` validates the root persona and every persona in `.personaxis/personas/`. Also validates the sibling `policy.yaml` and `state.json`.
 
 ### `lint`
 
-Semantic lint — runs 8 rules and reports structured findings. Exits `1` if errors found.
+Semantic lint - reports structured findings against the layer/field contract in [docs/SPEC.md](./docs/SPEC.md). Exits `1` if errors found.
 
 ```bash
 personaxis lint [file]
+personaxis lint <slug>
 personaxis lint [file] --format json   # structured JSON output
 ```
 
 ### `compile`
 
-Compile a PERSONA.md to a target format. The root `PERSONA.md` and agent personas (inside `.personaxis/personas/`) produce different output.
+Compile `personaxis.md` to its qualitative document - `PERSONA.md` for the root persona, or `<slug>.md` (placed per the target platform's subagent convention) for a named persona.
 
 ```bash
-personaxis compile [file] --target <target>
+personaxis compile [--root | <slug>] [--platform <platform>] [--provider <name>] [--out <path>] [--stdout]
 ```
 
-| Target | Output | Description |
-|---|---|---|
-| `claude-code` | `CLAUDE.md` or `.claude/agents/{slug}.md` | Root injects a reference; agent creates a subagent |
-| `cursor` | `.cursor/rules/persona.mdc` | Cursor IDE rules |
-| `soul-md` | `SOUL.md` | OpenClaw agent framework |
+- `--root` compiles `.personaxis/personaxis.md` -> `PERSONA.md`. Default when `[slug]` is omitted.
+- `<slug>` compiles `.personaxis/personas/<slug>/personaxis.md` and places the result per `--platform`.
+- `--platform <claude-code|codex>` (default `claude-code`) selects the subagent placement convention for `<slug>` and, when `extensions.skills` declares `local` entries, the skill materialization directory (`.claude/skills/<name>/` or `.agents/skills/<name>/`).
+- `--provider <local|byok|agent|remote>` overrides the configured provider (see `personaxis config`).
+- `--from-file <path>` uses a file's contents as the compiled output instead of calling the provider (useful for testing).
+- `--out <path>` overrides the output path, `--stdout` prints instead of writing.
 
-Options: `--out <path>` to override the output path, `--stdout` to print instead of write.
+Archived export targets (`cursor`, `soul-md`) remain documented in `docs/setup/` for historical reference but are not active `--platform` values.
+
+### `decompile`
+
+Propose `personaxis.md` updates from a hand-edited `PERSONA.md` / `<slug>.md`. Always validates the proposal before it is written; on `FAIL_*` it prints diagnostics and writes nothing.
+
+```bash
+personaxis decompile [--root | <slug>] [--provider <name>] [--from-file <path>]
+```
+
+### `push` / `pull`
+
+Publish and download persona versions from the Personaxis registry.
+
+```bash
+personaxis push [--root | <slug>] [--provider <name>]
+personaxis pull <slug>
+```
+
+`push` validates `personaxis.md`, decompiles if `PERSONA.md`/`<slug>.md` was hand-edited since the last compile, recompiles so the uploaded pair is always consistent, then uploads the spec, compiled document, `policy.yaml`/`state.json`, and the supporting folders as a new `AgentPersonaVersion`.
+
+### `skills`
+
+Inspect and pull skills declared in `extensions.skills`.
+
+```bash
+personaxis skills list [--root | <slug>]
+personaxis skills pull <name> [--root | <slug>] [-y]
+```
+
+`list` reads `skills-manifest.json` (written by `compile`) and shows each entry's `name`, `kind` (`local | registry | github`), `status` (`materialized | missing-local | reference-only`), and `ref`. `pull` only supports `github:org/repo[/path]` entries: it pulls the skill into `skills/<name>/`, validates `SKILL.md` against agentskills.io rules, and (with confirmation) rewrites the `extensions.skills` entry to `./skills/<name>`.
+
+### `state`
+
+Seed and mutate runtime state, clamped to the envelopes (`{mean, range}`) declared in `personaxis.md`.
+
+```bash
+personaxis state init    [-f <path>] [--force]
+personaxis state mutate  [-f <path>] --field <path> --delta <number> --reason <text> [--tool-call-id <id>]
+personaxis state show    [-f <path>] [--json]
+```
 
 ### `export`
 
@@ -433,22 +600,45 @@ personaxis spec --rules-only --format json
 
 ### `init`
 
-Create a PERSONA.md interactively. Without `--agent` creates a project baseline at the root. With `--agent` creates a named agent persona inside `.personaxis/personas/`.
+Create a persona interactively. Without `--agent`/`--user` creates a project baseline (`.personaxis/personaxis.md` + root `PERSONA.md`). `--agent` creates a named `AgentPersona` inside `.personaxis/personas/<slug>/`. `--user` creates a `UserPersona`.
 
 ```bash
 personaxis init          # project baseline
 personaxis init --agent  # named agent persona
+personaxis init --user   # user persona
 ```
 
 ### `use`
 
-Scaffold a persona from a built-in template in one step — no wizard.
+Scaffold a persona from a built-in template in one step - no wizard.
 
 ```bash
-personaxis use <template> [--name <name>] [--target claude-code|cursor|soul-md]
+personaxis use <template> [--name <name>] [--target claude-code|codex]
 ```
 
 Run `personaxis templates` to see available options.
+
+### `migrate`
+
+Apply structural codemods between spec versions.
+
+```bash
+personaxis migrate 0.5-to-0.6 [path] [--apply]
+personaxis migrate 0.6-to-0.7 [path] [--apply] [--provider <name>]
+```
+
+`0.6-to-0.7` moves a legacy root `PERSONA.md` (10-layer frontmatter) and its sibling folders into `.personaxis/`, then runs `compile` once to produce the initial `PERSONA.md`. Both default to a dry run; pass `--apply` to write changes.
+
+### `config`
+
+Configure the provider used by `compile`/`decompile` (`local | byok | agent | remote`).
+
+```bash
+personaxis config set provider <local|byok|agent|remote>
+personaxis config set <key> <value>   # e.g. local.endpoint, byok.apiProvider
+personaxis config get <key>
+personaxis config list
+```
 
 ### `list`
 
@@ -470,18 +660,35 @@ personaxis templates
 
 ## Linting rules
 
-The `personaxis lint` command runs 8 rules against a parsed PERSONA.md. Each rule produces findings at a fixed severity level: `error` (exit code 1), `warning`, or `info`.
+The `personaxis lint` command checks a parsed `personaxis.md` against the layer and field contract in [docs/SPEC.md](./docs/SPEC.md) and reports structured findings at a fixed severity level: `error` (exit code 1), `warning`, or `info`.
 
 | Rule | Severity | What it checks |
 |---|---|---|
-| `missing-required-layers` | error | Any of the 10 required YAML layers is absent |
+| `missing-top-level` | error | `apiVersion`, `kind`, `spec_version`, or `metadata` absent |
+| `api-version` | error | `apiVersion` is not exactly `"persona.dev/v1"` |
+| `spec-version` | error | `spec_version` does not match a version accepted by this CLI release |
+| `missing-required-layers` | error | A required layer for this `kind` is absent |
+| `universal-virtue-honesty` | error | `character.virtues.honesty` missing or `enforcement != "hard"` |
+| `universal-value-safety` | error | `values_and_drives.values.safety` missing, weight<0.90, or wrong type |
+| `universal-hard-limit-missing` | error | One of the 3 universal hard_limits is absent |
+| `U11-assertions-well-formed` | error/warning | `evaluation`/assertion definitions are malformed |
+| `U12-runtime-block-valid` | error/warning | `governance`/runtime configuration block is malformed |
+| `metadata-completeness` | warning | A required `metadata` field is missing |
+| `identity-completeness` | warning | `canonical_id` / `system_identity.purpose` / `role_identity.primary_role` missing |
+| `refusals-present` | warning | `reflexive_self_regulation.principled_refusals` is empty |
+| `drift-monitor` | info | `metacognition.drift_monitor` is not defined |
 | `todo-fields` | warning | Any field value starts with `"TODO"` |
-| `identity-completeness` | warning | `identity.name`, `role`, or `purpose` is missing or empty |
-| `spec-field` | warning | `spec` field is missing from frontmatter |
-| `version-field` | warning | `version` field is missing from frontmatter |
-| `refusals-present` | warning | `normative_self_reg.principledRefusals` is empty |
-| `drift-monitor` | info | `metacognition.driftMonitor` is not defined |
-| `layer-summary` | info | Count of defined layers — always emitted |
+| `layer-summary` | info | Count of defined layers - always emitted |
+
+Validator outputs (from `personaxis validate`):
+
+| Status | Exit code | Meaning |
+|---|---|---|
+| `PASS` | 0 | All MUST present and all universals satisfied. |
+| `PASS_WITH_WARNINGS` | 0 | Valid but missing SHOULDs or NEAR-UNIVERSAL recommendations. |
+| `FAIL_SCHEMA` | 1 | MUST field absent or wrong type. |
+| `FAIL_POLICY` | 2 | A universal policy invariant violated. |
+| `FAIL_CONCEPTUAL` | 3 | Prohibited claim or wrong universal constant. |
 
 Run `npx @personaxis/persona.md spec --rules` to see the rules table without installing.
 
@@ -499,7 +706,7 @@ const report = lint(markdownString);
 console.log(report.findings);      // Finding[]
 console.log(report.summary);       // { errors, warnings, infos }
 console.log(report.layerCount);    // number of defined layers (out of 10)
-console.log(report.missingLayers); // string[] — names of absent layers
+console.log(report.missingLayers); // string[] - names of absent layers
 ```
 
 Each `Finding` has the shape:
@@ -517,11 +724,12 @@ interface Finding {
 
 ## Examples
 
-See [examples/](./examples/) for complete, production-ready personas.
+See [.personaxis/personas/](./.personaxis/personas/) for complete, production-ready personas, in both root and subagent layouts.
 
-| Persona | Role | Status |
-|---|---|---|
-| [marketing-guru](./examples/marketing-guru/) | Full-stack marketing professional | Available |
+| Persona | Role | Mode | Status |
+|---|---|---|---|
+| [cmo](./.personaxis/personas/cmo/) | Full-stack marketing executive, with 5 declared `extensions.skills` | Root-mode layout | Available |
+| [frontend-expert](./.personaxis/personas/frontend-expert/) | Frontend code reviewer, with 1 local skill | Subagent (`.claude/agents/frontend-expert.md`) | Available |
 
 More examples coming. To contribute one, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
@@ -529,16 +737,14 @@ More examples coming. To contribute one, see [CONTRIBUTING.md](./CONTRIBUTING.md
 
 ## Registry
 
-A public registry for discovering, publishing, and sharing personas is in development at [personaxis.com](https://personaxis.com).
-
-When available:
+A public registry for discovering, publishing, and sharing personas is at [personaxis.com](https://personaxis.com).
 
 ```bash
-personaxis pull personaxis/marketing-guru@1.0.0   # download a persona
-personaxis push                                     # publish yours
+personaxis push [--root | <slug>]   # publish the current persona as a new AgentPersonaVersion
+personaxis pull <slug>              # download a published persona
 ```
 
-Until then, [join the waitlist at personaxis.com](https://personaxis.com) to be notified when the registry launches.
+`push` validates `personaxis.md`, keeps `PERSONA.md`/`<slug>.md` in sync (decompiling and recompiling as needed), and uploads the spec, compiled document, `policy.yaml`/`state.json`, and supporting folders as a new version. [Join the waitlist at personaxis.com](https://personaxis.com) for updates on the public catalog.
 
 ---
 
@@ -546,13 +752,13 @@ Until then, [join the waitlist at personaxis.com](https://personaxis.com) to be 
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution guidelines.
 
-If you are an AI agent working on this repository, read [AGENTS.md](./AGENTS.md) first — it covers what to update when making changes to the spec and what the project-level PERSONA.md at the root defines as the character of this project.
+If you are an AI agent working on this repository, read [AGENTS.md](./AGENTS.md) first - it covers what to update when making changes to the spec and what the project-level PERSONA.md at the root defines as the character of this project.
 
 ---
 
 ## Live example
 
-This repository uses its own spec. [PERSONA.md](./PERSONA.md) at the root defines the shared behavioral baseline for any agent working on this project — the character, values, and constraints that should guide decisions about the spec itself.
+This repository uses its own spec. [PERSONA.md](./PERSONA.md) at the root is the compiled document that defines the shared behavioral baseline for any agent working on this project - the character, values, and constraints that should guide decisions about the spec itself. Its quantitative source lives at [.personaxis/personaxis.md](./.personaxis/personaxis.md).
 
 ---
 
