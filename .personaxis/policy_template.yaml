@@ -1,0 +1,184 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# policy.yaml - Canonical template (spec v0.7.0)
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# Sibling of personaxis.md inside `.personaxis/` (root mode) or
+# `.personaxis/personas/<slug>/` (subagent mode). NOT a section of it.
+# Encodes the operational policy the Personaxis platform enforces over a
+# persona-version.
+#
+# v0.7.0 NOTE: this file moved from repo-root (alongside the old PERSONA.md)
+# to `.personaxis/[personas/<slug>/]policy.yaml`. No fields changed. The
+# repo-root `PERSONA.md` / `.claude/agents/<slug>.md` is now a separate
+# compiled qualitative document and does not read this file directly.
+#
+# WHO READS THIS FILE
+#   - personaxis validate                  (schema + cross-ref to personaxis.md)
+#   - personaxis compile / decompile       (judge config + provider derivation)
+#   - personaxis push                      (uploads as fileType "policy")
+#   - personaxis pull                      (downloads alongside personaxis.md)
+#   - Personaxis backend judge worker      (reads assertions to evaluate traces)
+#   - Personaxis dashboard                 (renders observability + mutation UI)
+#
+# WHO DOES NOT READ THIS FILE
+#   - The LLM actor running the persona. Ever.
+#   - MCP server, Claude Skills exporter, Cursor rules exporter.
+#     Only PERSONA.md / <slug>.md content reaches the actor (via the compiler).
+#
+# v0.6.0 NOTES (still in force for this quantitative layer)
+#   - improvement_policy.mode enum tightened: "locked" | "suggesting" | "autonomous"
+#     (replaces previous "auto" which was ambiguous).
+#   - Many assertions can be AUTO-DERIVED from personaxis.md (e.g., every virtue
+#     with enforcement: "hard" auto-generates a corresponding judge assertion).
+#     The compiler emits derived_assertions in .dist/judge.config.json.
+#     The assertions[] array in this file is for assertions you write by hand,
+#     on top of the auto-derived ones.
+
+spec_version: "0.7.0"
+
+applies_to:
+  persona_name: ""                  # MUST: must match metadata.name in personaxis.md
+  # persona_version_range: ">=1.0.0 <2.0.0"   # MAY: omit to apply to all versions
+
+# ─── Improvement policy (MUST) ─────────────────────────────────────────────
+# Mutation governance: controls whether the persona can edit its own spec.
+# Three modes are supported, with strictly increasing autonomy.
+#
+#   locked     (default; safest)
+#              personaxis.md is immutable in runtime. State.json mutations within
+#              declared envelopes are STILL allowed (state is operational,
+#              not spec). Personaxis detects drift and alerts; never proposes
+#              or applies spec changes. Suitable for compliance-sensitive
+#              deployments (healthcare, legal, finance, regulated industries).
+#
+#              The reflexive layer's governance_decision excludes both
+#              propose_self_edit and apply_self_edit.
+#
+#   suggesting (assisted improvement)
+#              The actor MAY call propose_self_edit(scope, justification,
+#              evidence) to surface a proposed spec change. Proposals are
+#              queued in the Personaxis dashboard. Human reviewers approve
+#              or reject. Approved proposals mint a new PersonaVersion, which
+#              also triggers `personaxis decompile`/`compile` to keep
+#              personaxis.md and PERSONA.md / <slug>.md in sync.
+#              Suitable for active development and internal tools.
+#
+#              The reflexive layer's governance_decision includes
+#              propose_self_edit but excludes apply_self_edit.
+#
+#   autonomous (full self-edit; high-risk)
+#              The actor MAY call apply_self_edit(scope, new_value,
+#              justification) directly. Each applied edit creates a new
+#              PersonaVersion automatically with authoredBy=auto-improvement,
+#              and triggers `personaxis compile` to refresh the compiled
+#              document. Bound by:
+#                - Universal invariants (always blocked, in every mode)
+#                - governance.per_layer_edit_policy (e.g., reflexive layer
+#                  remains governance_controlled; always rejected)
+#                - hard_limits (validator rejects edits violating any)
+#                - autonomous_scope_allowlist/blocklist below
+#              ONLY for sandbox / R&D / no-prod. Requires explicit org-level
+#              opt-in.
+#
+#              The reflexive layer's governance_decision includes both
+#              propose_self_edit and apply_self_edit.
+#
+# IMPORTANT: state.json mutations (adjust_persona_state tool calls) work
+# under ALL three modes. State is operational, not spec. Editing the persona's
+# trait CURRENT VALUE (e.g., humor 0.4 -> 0.3) is not the same as editing the
+# persona's IDENTITY (e.g., adding a new virtue). The first is always allowed
+# within envelopes; the second is gated by improvement_policy.mode.
+improvement_policy:
+  mode: locked
+  # Required when mode != "locked":
+  # approved_by: "user:cuid_xxx"
+  # last_approval_at: "2026-05-29T12:00:00Z"
+  # approval_expires_at: "2026-08-29T12:00:00Z"
+
+  # Required when mode == "autonomous":
+  # autonomous_scope_allowlist:        # paths the actor MAY auto-edit
+  #   - "persona.voice.warmth"
+  #   - "persona.task_modes.*"
+  #   - "personality.traits.*.expression"
+  # autonomous_scope_blocklist:        # always blocked, even in autonomous
+  #   - "identity.*"
+  #   - "character.virtues.*.enforcement"
+  #   - "reflexive_self_regulation.*"
+  #   - "values_and_drives.values.safety.*"
+  #   - "governance.*"
+  #   - "security.*"
+
+# ─── Provider for compile / decompile / self-improvement (MAY) ─────────────
+# Unified provider used for `personaxis compile`, `personaxis decompile`, and
+# the self-improvement cycle above. One of: "local" | "byok" | "agent" | "remote".
+#   local  - user-configured local endpoint (Ollama/llama.cpp/etc.)
+#   byok   - user's own API key (Anthropic/OpenAI/etc.)
+#   agent  - delegate to the active coding agent's own model (Claude Code, Codex)
+#   remote - Personaxis-hosted models (SaaS, paid plan)
+# Configure via `personaxis config set provider <local|byok|agent|remote>`.
+# provider: agent
+
+# ─── Runtime constraints (MAY) ─────────────────────────────────────────────
+runtime:
+  min_consistency: 0.7              # MAY | float[0..1] | minimum required consistency
+  # drift_alert_channels:
+  #   - "slack:#observability"
+  #   - "webhook:https://hooks.example.com/drift"
+  #   - "email:ops@example.com"
+  allowed_consumers: [agent, human, mcp]
+  # Cache TTL hint for the compiler (seconds). The compiler caches compiled
+  # prompts keyed by (spec_hash, state_hash, context_hash). This is a hint;
+  # the compiler may use a shorter TTL based on observed mutation frequency.
+  compiled_prompt_cache_ttl_seconds: 300
+
+# ─── Evaluation suites (MAY) ───────────────────────────────────────────────
+evaluation:
+  required_suites:
+    - identity_coherence
+    - character_compliance
+  # Common additions per persona:
+  # - sycophancy_resistance
+  # - fabrication_detection
+  # - drift_detection
+
+# ─── Behavioral assertions (SHOULD) ────────────────────────────────────────
+# Each assertion declares:
+#   layer       (one of 10 canonical layers, or "cross_layer")
+#   name        (unique within the file)
+#   type        ("regex" | "llm_judge" | "semantic" | "activation_projection")
+#                 v0.6 runtime fully supports regex + llm_judge.
+#                 semantic + activation_projection are reserved (no-op pass).
+#   severity    ("info" | "warn" | "block")
+#                 Drift weights: 0.5 / 1.0 / 2.0.
+#   definition  (type-specific JSON)
+#
+# AUTO-DERIVATION: many assertions are auto-generated by the compiler from
+# personaxis.md. The compiler emits them to .dist/judge.config.json:
+#   - Every virtue with enforcement: "hard" generates a no-violation assertion
+#   - Every hard_limit generates a corresponding judge prompt
+#   - persona.constraints.cannot_claim_real_emotion generates regex+judge
+#   - metacognition.monitors.<name>: true generates corresponding judge prompt
+#
+# Hand-written assertions in THIS file ADD to the auto-derived set; they do
+# not replace it. Use them for domain-specific checks the spec cannot infer.
+assertions: []
+  # Example regex assertion:
+  # - layer: persona
+  #   name: "persona: never breaks role"
+  #   type: regex
+  #   severity: warn
+  #   definition:
+  #     pattern: "\\b(?:as an AI language model|I'm just an AI)\\b"
+  #     expect: nomatch
+  #     flags: i
+  #
+  # Example llm_judge assertion:
+  # - layer: values_and_drives
+  #   name: "values: keeps ICP anchoring in recommendations"
+  #   type: llm_judge
+  #   severity: warn
+  #   definition:
+  #     judgePrompt: |
+  #       Does this response anchor recommendations in the customer's ICP?
+  #       Content: {{content}}
+  #     threshold: 0.55

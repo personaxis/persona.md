@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Continuous Audit Trail — launch narrative</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #0b0b0d;
+    --paper: #131318;
+    --surface: #1a1a20;
+    --border: rgba(255,255,255,0.08);
+    --ink: #f4f4ee;
+    --muted: #97978f;
+    --accent: #a99dff;
+    --warn: #d9a35c;
+    --success: #8cb8ea;
+    --danger: #dd5f64;
+    --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); }
+  body { font-size: 15px; line-height: 1.6; }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 60px 28px 96px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 {
+    font-size: 48px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 8px 0 16px;
+    font-weight: 600;
+    max-width: 880px;
+  }
+  h2 { font-size: 22px; margin: 64px 0 14px; font-weight: 600; letter-spacing: -0.01em; }
+  h3 { font-size: 16px; font-weight: 600; margin: 28px 0 8px; }
+  p { color: var(--ink); margin: 12px 0; }
+  .lede { color: var(--muted); font-size: 17px; max-width: 720px; margin-bottom: 28px; }
+
+  .stage {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 36px;
+    margin: 28px 0;
+  }
+  .stage .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .stage blockquote {
+    margin: 0;
+    color: var(--ink);
+    font-size: 19px;
+    line-height: 1.55;
+    border-left: 2px solid var(--accent);
+    padding-left: 22px;
+  }
+  .stage .annotation {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 22px;
+    color: var(--muted);
+    font-size: 13px;
+    border-left: 2px solid var(--warn);
+  }
+  .stage .annotation strong { color: var(--ink); }
+
+  .surfaces { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 820px) { .surfaces { grid-template-columns: 1fr; } }
+  .surface {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px;
+  }
+  .surface .num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.14em;
+  }
+  .surface h4 {
+    margin: 6px 0 10px;
+    font-size: 16px;
+  }
+  .surface p { font-size: 13px; color: var(--muted); }
+  .surface .copy-block {
+    background: #1d1d22;
+    border-radius: 8px;
+    padding: 14px;
+    margin-top: 12px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink);
+    white-space: pre-wrap;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { border-bottom: 1px solid var(--border); padding: 9px 8px; vertical-align: top; text-align: left; }
+  th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+
+  .ribbon {
+    background: linear-gradient(90deg, #1a163d 0%, #131318 100%);
+    border-radius: 12px;
+    padding: 28px;
+    margin: 36px 0;
+    border: 1px solid rgba(169,157,255,0.2);
+  }
+
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    gap: 12px;
+    align-items: start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .timeline-grid .when {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+  .timeline-grid .who { font-size: 13px; color: var(--muted); font-family: var(--mono); }
+  .timeline-grid .what { font-size: 13px; color: var(--ink); }
+
+  .footer {
+    margin-top: 80px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="eyebrow">Tier 1 launch · Continuous Audit Trail · Q3 2026</div>
+<h1>Provable continuous monitoring is the new floor.</h1>
+<p class="lede">
+  The launch narrative for the CEO keynote, broken down stage by stage,
+  with the surface plan that inherits it: landing page, email sequence,
+  sales enablement, analyst program, in-product, and the dinner series.
+</p>
+
+<h2>The keynote (CEO voice, ~7 minutes)</h2>
+
+<div class="stage">
+  <div class="label">Stage 1 · The worldview (open)</div>
+  <blockquote>
+    "Six months ago, the head of compliance at one of our customers told me something that stuck.
+    She said: 'My regulator does not care that I monitored the transactions. They care that I can prove I was monitoring when something happened.'
+    That sentence reframed how we think about compliance. The job is not monitoring. The job is <em>provable continuous monitoring.</em>"
+  </blockquote>
+  <div class="annotation">
+    <strong>Why this open:</strong> a worldview before a product. Buyers retain worldviews; they forget features.
+    The customer quote earns the right to make the argument. Land within 60 seconds.
+  </div>
+</div>
+
+<div class="stage">
+  <div class="label">Stage 2 · The two bad options</div>
+  <blockquote>
+    "For the last decade, fintechs have been forced to choose between two bad options.
+    Option one: monitor it manually, generate the report quarterly, and hope the regulator never asks for the timeline of a specific event.
+    Option two: license a platform built for banks, configure it for six months, and hand your engineers a vendor relationship none of them signed up for.
+    Both options share the same gap. Neither one produces an audit trail the regulator can read in real time, without you in the room."
+  </blockquote>
+  <div class="annotation">
+    <strong>Why this framing:</strong> names the real competitive set (manual + legacy enterprise platform) without disrespect.
+    Audience hears "she is describing my situation," not "she is taking shots."
+  </div>
+</div>
+
+<div class="stage">
+  <div class="label">Stage 3 · The shift</div>
+  <blockquote>
+    "What changed in 2025 and 2026 is that the regulators changed. PSD3 is coming. The FCA's continuous-monitoring guidance shipped in Q4. MAS published their version in March.
+    Three of the largest fintech regulators on three continents independently said the same thing: 'Show us the trail.'
+    Continuous compliance is no longer a sophistication. It is the new floor."
+  </blockquote>
+  <div class="annotation">
+    <strong>Why the shift:</strong> creates the trigger event for the next two quarters of inbound.
+    Buyers in the audience are now imagining their own PSD3 conversation.
+    <strong>Pre-ship verification required:</strong> legal review of every regulatory date and quote.
+  </div>
+</div>
+
+<div class="stage">
+  <div class="label">Stage 4 · Introducing the capability</div>
+  <blockquote>
+    "Continuous Audit Trail is the foundation of that operating model.
+    From the moment a monitored event occurs, it is logged. The log is immutable.
+    The log is timestamped against a verifiable clock. The log is shareable, in regulator-readable format, with a single link.
+    When a regulator asks what you saw, when, the answer is a URL.
+    The compliance officer does not block on engineering. The engineering team does not get a Slack message at 11pm.
+    The regulator gets the trail in the format their internal tooling already consumes."
+  </blockquote>
+  <div class="annotation">
+    <strong>Why this construction:</strong> four short sentences, each a verifiable claim.
+    "The answer is a URL" is the line that gets quoted. It is small, specific, memorable.
+  </div>
+</div>
+
+<div class="stage">
+  <div class="label">Stage 5 · Proof</div>
+  <blockquote>
+    "We worked with [Customer A], [Customer B], and [Customer C] for the last four months to test exactly this.
+    Two of them have already used the trail in a live regulator conversation.
+    One of them cleared an audit in eight days that, with their prior process, would have taken three weeks of preparation.
+    The third said something I want you to hear directly..."
+  </blockquote>
+  <div class="annotation">
+    <strong>Risk:</strong> the third quote is the strongest, and is conditional on a regulator interaction
+    that may not complete by launch. <strong>Mitigation:</strong> backup plan ships with two customer stories
+    and an aggregated cohort claim ("the seven customers we worked with this quarter").
+  </div>
+</div>
+
+<div class="stage">
+  <div class="label">Stage 6 · The worldview, returned</div>
+  <blockquote>
+    "Compliance is not a quarterly cost. It is a continuous capability.
+    We are building the platform for fintechs that intend to operate at the new floor.
+    Continuous Audit Trail is available today.
+    If you are at a fintech that knows the regulator is coming, talk to us.
+    If you are at a fintech that does not yet know the regulator is coming, talk to us sooner."
+  </blockquote>
+  <div class="annotation">
+    <strong>Why the close:</strong> returns to the worldview the keynote opened with. Closes with a call that is direct without being needy.
+    The last sentence is a friendly nudge to the prospect who has not yet recognized urgency.
+  </div>
+</div>
+
+<div class="ribbon">
+  <p style="margin: 0; font-size: 17px; line-height: 1.5;">
+    The narrative is the company's most-quoted piece of content for the next 12 months.
+    It teaches the buyer the vocabulary (<em>continuous compliance, provable continuous monitoring, the new floor</em>)
+    so they ask the next question with our words in their mouth.
+  </p>
+</div>
+
+<h2>Surface plan — 8 surfaces inheriting the narrative</h2>
+
+<div class="surfaces">
+  <div class="surface">
+    <div class="num">Surface 1</div>
+    <h4>Homepage hero (launch-week replacement)</h4>
+    <div class="copy-block">Continuous Audit Trail.
+The compliance answer your regulator already expects.
+
+Real-time. Immutable. Shareable.
+Built for fintechs preparing for PSD3 and beyond.
+
+[Watch the keynote ›]   [See a sample audit trail ›]</div>
+  </div>
+
+  <div class="surface">
+    <div class="num">Surface 2</div>
+    <h4>Dedicated launch landing page</h4>
+    <p>Customer quote → the shift → what it is → how it works → competitive frame → 3 customer mini-stories → enterprise tier → CTA.</p>
+    <p>Built as the artifact a buyer sends to their VP of Risk to justify a conversation.</p>
+  </div>
+
+  <div class="surface">
+    <div class="num">Surface 3</div>
+    <h4>Customer email (existing customers)</h4>
+    <p>Subject: <em>Continuous Audit Trail is live, and what it means for your next audit.</em></p>
+    <p>Worldview-first. One-sentence path to enable. No demo gate.</p>
+  </div>
+
+  <div class="surface">
+    <div class="num">Surface 4</div>
+    <h4>Prospect 5-email sequence (ICP-fit only)</h4>
+    <p>E1 the shift · E2 the cost of the old model · E3 what continuous looks like operationally · E4 customer story · E5 walkthrough invitation.</p>
+    <p>No blast. ICP-targeted only.</p>
+  </div>
+
+  <div class="surface">
+    <div class="num">Surface 5</div>
+    <h4>Sales enablement</h4>
+    <p>Updated pitch deck · battlecard refresh · 7-min demo flow · 2 discovery trap questions · 3 customer references trained · 2 ROI calculators · sales certification by launch -1.</p>
+  </div>
+
+  <div class="surface">
+    <div class="num">Surface 6</div>
+    <h4>PR & analyst</h4>
+    <p>3 analyst pre-briefings under NDA (Gartner, IDC, Forrester) at launch -3 weeks. One exclusive to a fintech-trade outlet at launch day. No broad-spray press release.</p>
+  </div>
+
+  <div class="surface">
+    <div class="num">Surface 7</div>
+    <h4>Community & field (dinner series)</h4>
+    <p>CEO-led small-format dinners in London, NYC, Singapore. 8 customers + 8 prospects per dinner. No pitch. Narrative-first. Launch +14 to launch +45.</p>
+  </div>
+
+  <div class="surface">
+    <div class="num">Surface 8</div>
+    <h4>In-product</h4>
+    <p>Customers see a single in-product callout on first sign-in: "Continuous Audit Trail is live. See your trail ›." Click leads to their own trail, not a marketing page.</p>
+  </div>
+</div>
+
+<h2>Lead & lag measures</h2>
+<table>
+  <thead>
+    <tr><th>Window</th><th>Measure</th><th class="num">Target</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Launch +30</td><td>Aided brand recall on "continuous compliance" among PSD2/AML ICP</td><td class="num">+5 pts</td></tr>
+    <tr><td>Launch +30</td><td>Share of search on "continuous compliance"</td><td class="num">12% (from 4%)</td></tr>
+    <tr><td>Launch +30</td><td>Named-account opportunities created with feature as primary mention</td><td class="num">≥ 8</td></tr>
+    <tr><td>Launch +30</td><td>Published customer stories tagged to the feature</td><td class="num">3</td></tr>
+    <tr><td>Launch +30</td><td>External citations of keynote or landing page</td><td class="num">≥ 50</td></tr>
+    <tr><td>Launch +90</td><td>Influenced pipeline tied to Continuous Audit Trail</td><td class="num">$1.5M+</td></tr>
+    <tr><td>Launch +90</td><td>Enterprise-tier conversions</td><td class="num">5</td></tr>
+    <tr><td>Launch +90</td><td>Enterprise-tier sales cycle</td><td class="num">&lt; 60 days</td></tr>
+    <tr><td>Launch +90</td><td>Named analyst report citing platform under continuous-compliance frame</td><td class="num">1</td></tr>
+    <tr><td>Launch +90</td><td>Branded search volume</td><td class="num">+30%</td></tr>
+  </tbody>
+</table>
+
+<h2>Owners & calendar</h2>
+<div>
+  <div class="timeline-grid">
+    <div class="when">Week -6</div>
+    <div class="who">CMO + CEO</div>
+    <div class="what">Launch brief signed. PMM contractor onboarded as lead.</div>
+  </div>
+  <div class="timeline-grid">
+    <div class="when">Week -5</div>
+    <div class="who">PMM + customer marketing</div>
+    <div class="what">Customer narrative drafted. 5 customer interviews scheduled.</div>
+  </div>
+  <div class="timeline-grid">
+    <div class="when">Week -4</div>
+    <div class="who">CMO + CRO</div>
+    <div class="what">Messaging matrix locked. Sales pitch drafted. Beta customers briefed under NDA.</div>
+  </div>
+  <div class="timeline-grid">
+    <div class="when">Week -3</div>
+    <div class="who">Design + CMO</div>
+    <div class="what">Landing page in design. Email sequence in copywriting. Analyst pre-briefings begin.</div>
+  </div>
+  <div class="timeline-grid">
+    <div class="when">Week -2</div>
+    <div class="who">CRO + CMO</div>
+    <div class="what">Sales enablement complete. In-product surfacing built. Press pre-briefings.</div>
+  </div>
+  <div class="timeline-grid">
+    <div class="when">Week -1</div>
+    <div class="who">CEO + CMO</div>
+    <div class="what">Internal launch-readiness review. Sales certification complete. Customer launch-day comms drafted.</div>
+  </div>
+  <div class="timeline-grid">
+    <div class="when">Week 0</div>
+    <div class="who">All hands</div>
+    <div class="what">Launch day. Keynote · press · blog · email · in-product · social, simultaneous.</div>
+  </div>
+  <div class="timeline-grid">
+    <div class="when">Week +1</div>
+    <div class="who">Analytics + CMO</div>
+    <div class="what">First lead-measure reading. Demand adjustments based on lead measure.</div>
+  </div>
+  <div class="timeline-grid">
+    <div class="when">Week +4</div>
+    <div class="who">CMO</div>
+    <div class="what">Lag-measure reading. Customer testimonials captured for next launch.</div>
+  </div>
+</div>
+
+<div class="footer">
+  <div>
+    Launch narrative · Tier 1 · Locked 2026-06-15<br/>
+    Authored by CMO, reviewed by CEO + CRO + CPO
+  </div>
+  <div style="text-align: right;">
+    Personaxis CMO persona<br/>
+    spec v0.5.0 · cmo@1.0.0
+  </div>
+</div>
+
+</div>
+</body>
+</html>

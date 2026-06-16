@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://personaxis.com/schemas/state/0.7/state.schema.json",
+  "title": "state.json v0.7",
+  "description": "Mutable runtime state of an AI Persona. Sibling of personaxis.md inside .personaxis/[personas/<slug>/]. Holds current trait/affect/mood values, active context, and the mutation log. Mutations occur via the canonical adjust_persona_state tool, clamped to envelopes declared in personaxis.md. State mutations DO NOT modify personaxis.md or the compiled PERSONA.md/<slug>.md; they are operational, not spec edits.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "persona_id",
+    "persona_version",
+    "values"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["0.7.0", "0.6.0"],
+      "description": "state.json schema version. 0.7.0 is current (layout-only change, no field changes from 0.6.0)."
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]*$",
+      "description": "Must match metadata.name in personaxis.md."
+    },
+    "persona_version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+      "description": "Must match metadata.version in personaxis.md at compile time. Used by the compiler to detect spec/state mismatch."
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Optional session identifier. Useful when state is per-session rather than persisted across sessions."
+    },
+    "values": {
+      "type": "object",
+      "description": "Current values for all mutable fields. Keys are dot-notation paths into personaxis.md (e.g., 'traits.openness', 'affect.valence', 'mood.tone', 'drives.complete_task'). Each value is a number that must lie within the envelope (range) declared at the corresponding path in personaxis.md. The runtime clamps any out-of-envelope value at mutation time.",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "active_context": {
+      "type": "object",
+      "description": "Current contextual selectors that drive cold-slice injection in the compiled prompt.",
+      "additionalProperties": false,
+      "properties": {
+        "task_mode": {
+          "type": ["string", "null"],
+          "description": "Active task mode key. Must match a key in persona.task_modes, or null when no specific task is detected."
+        },
+        "audience": {
+          "type": ["string", "null"],
+          "description": "Active audience key. Must match a key in persona.audience_adaptation, or null when audience is undetermined."
+        },
+        "additional_context_flags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Per-persona context flags (e.g., 'high_pressure', 'creative_review'). Used by the compiler to optionally inject extra cold slices."
+        }
+      }
+    },
+    "memory_anchors_active": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of active memory anchor IDs. The compiler uses these to inject high-priority memory references into the compiled prompt. Maintained by the runtime via retrieval policies."
+    },
+    "mutation_log": {
+      "type": "array",
+      "description": "Append-only log of every state mutation. Provides audit trail. The runtime trims old entries based on retention policy.",
+      "items": {
+        "type": "object",
+        "required": ["ts", "field", "from", "to", "actor"],
+        "additionalProperties": false,
+        "properties": {
+          "ts": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp of the mutation."
+          },
+          "field": {
+            "type": "string",
+            "description": "Dot-notation path of the mutated field (matches a key in values)."
+          },
+          "from": {
+            "type": "number",
+            "description": "Previous value."
+          },
+          "to": {
+            "type": "number",
+            "description": "New value (post-clamp)."
+          },
+          "delta_requested": {
+            "type": "number",
+            "description": "Original delta requested. May differ from (to - from) if clamping occurred."
+          },
+          "clamped": {
+            "type": "boolean",
+            "description": "True if the requested mutation was clamped to envelope. The actor receives clamped=true to signal the floor/ceiling was reached."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Human-readable rationale for the mutation."
+          },
+          "actor": {
+            "type": "string",
+            "enum": ["actor-llm", "runtime-decay", "runtime-context", "human-operator", "judge-correction"],
+            "description": "Which subsystem triggered the mutation."
+          },
+          "tool_call_id": {
+            "type": "string",
+            "description": "ID of the adjust_persona_state tool call that produced this mutation, if applicable."
+          },
+          "governance_blocked": {
+            "type": "boolean",
+            "description": "True if the mutation was rejected by governance (e.g., hard-enforced virtue, hard limit, scope blocklist). When true, from === to and reason explains the block."
+          }
+        }
+      }
+    },
+    "last_compiled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the last compilation that consumed this state. Used by cache invalidation."
+    },
+    "last_compiled_hash": {
+      "type": "string",
+      "description": "Hash of the inputs that produced the last compiled prompt. Used by cache invalidation."
+    }
+  }
+}

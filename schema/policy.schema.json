@@ -1,0 +1,192 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://personaxis.com/schemas/persona/0.7/policy.schema.json",
+  "title": "policy.yaml v0.7",
+  "description": "Schema for the sibling policy.yaml file that lives next to personaxis.md inside .personaxis/[personas/<slug>/]. Encodes the operational policy the Personaxis platform enforces over a persona-version: behavioral assertions, runtime constraints, evaluation suites, and improvement_policy (mutation governance). policy.yaml is consumed by the Personaxis backend and dashboard; it is NEVER inlined into an LLM system prompt. v0.7 is a layout-only change (moved from repo-root to .personaxis/); v0.6 introduced the autonomous mode and explicit scope allowlist/blocklist for spec self-edits.",
+  "type": "object",
+  "required": ["spec_version", "applies_to", "improvement_policy"],
+  "additionalProperties": false,
+  "properties": {
+    "spec_version": {
+      "type": "string",
+      "enum": ["0.7.0", "0.6.0", "0.5.0"],
+      "description": "Schema version. 0.7.0 is current (layout-only change, no field changes from 0.6.0). 0.5.0 accepted for backward compatibility (auto-migrated)."
+    },
+    "applies_to": {
+      "type": "object",
+      "required": ["persona_name"],
+      "additionalProperties": false,
+      "description": "Reference to the personaxis.md this policy governs. Lets a registry hold multiple policy.yaml siblings for different version ranges of the same persona (rare, but supported).",
+      "properties": {
+        "persona_name": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$",
+          "description": "Must match the metadata.name of the personaxis.md in the same directory."
+        },
+        "persona_version_range": {
+          "type": "string",
+          "description": "Optional semver range (e.g. '>=1.0.0 <2.0.0'). When omitted, policy applies to all versions of the persona. Validator rejects when two policy.yaml files in the same registry have overlapping ranges for the same persona_name."
+        }
+      }
+    },
+    "improvement_policy": {
+      "type": "object",
+      "required": ["mode"],
+      "additionalProperties": false,
+      "description": "Mutation governance. Controls whether the Personaxis platform may suggest or apply changes to the persona-version based on observed drift. Default mode 'locked' is the only safe choice for production-critical personas.",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["locked", "suggesting", "autonomous", "auto"],
+          "description": "locked (default; safest): PERSONA.md is immutable at runtime. state.json mutations within envelopes are still allowed. Drift alerts only. suggesting: actor MAY call propose_self_edit; proposals queued in dashboard for human approval; approval mints a new PersonaVersion. autonomous (high-risk): actor MAY call apply_self_edit directly; each applied edit creates a new PersonaVersion. Bound by universal invariants, governance.per_layer_edit_policy, hard_limits, and autonomous_scope_allowlist/blocklist. 'auto' is a deprecated alias for 'autonomous' (v0.5 compatibility)."
+        },
+        "autonomous_scope_allowlist": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Dot-notation paths the actor MAY auto-edit when mode='autonomous'. Wildcards allowed (e.g., 'persona.task_modes.*'). Required when mode='autonomous'."
+        },
+        "autonomous_scope_blocklist": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Dot-notation paths always blocked, even when mode='autonomous'. Wildcards allowed. Recommended to always include identity.*, character.virtues.*.enforcement, reflexive_self_regulation.*, values_and_drives.values.safety.*, governance.*, security.*."
+        },
+        "approved_by": {
+          "type": "string",
+          "description": "User id or org id that authorized non-locked modes. Required by validator when mode != 'locked'."
+        },
+        "last_approval_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of the last human approval for non-locked modes. Required by validator when mode != 'locked'."
+        },
+        "approval_expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. If set, the platform reverts mode to 'locked' automatically after this timestamp. Encourages re-affirmation rather than indefinite consent."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "mode": { "enum": ["suggesting", "autonomous", "auto"] } }
+          },
+          "then": {
+            "required": ["mode", "approved_by", "last_approval_at"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "mode": { "enum": ["autonomous", "auto"] } }
+          },
+          "then": {
+            "required": ["mode", "approved_by", "last_approval_at", "autonomous_scope_allowlist"]
+          }
+        }
+      ]
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Runtime constraints declared by the spec author. Consumed by the Personaxis runtime and observability layer; opaque to the LLM actor.",
+      "properties": {
+        "min_consistency": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Drift status becomes 'regressed' if a layer's consistencyScore falls below this floor. Default 0.7 when omitted."
+        },
+        "drift_alert_channels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(slack|email|webhook|linear|pagerduty):"
+          },
+          "description": "Channel URIs (e.g. 'slack:#observability', 'webhook:https://...'). Resolved by the Personaxis dashboard, not by the spec runtime."
+        },
+        "allowed_consumers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["agent", "human", "mcp"]
+          },
+          "description": "Who may open a runtime session against this persona. Defaults to all three when omitted."
+        },
+        "compiled_prompt_cache_ttl_seconds": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Hint for the compiler's prompt-cache TTL (seconds). The compiler keys cached compiled prompts by (spec_hash, state_hash, context_hash). Default 300s. New in v0.6."
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Higher-order eval suites the persona-version must satisfy. Distinct from per-trace 'assertions': evaluation suites are batch runs over canonical prompt datasets (CI/CD gating, see Phase 2).",
+      "properties": {
+        "required_suites": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Named suites that must be present and passing for the version to be considered shippable. Suite definitions live in the registry."
+        }
+      }
+    },
+    "assertions": {
+      "type": "array",
+      "description": "Behavioral expectations evaluated at runtime by the Personaxis observability layer. Each assertion declares which spec layer it covers and how it is checked. The judge worker reads this block directly from the registry; it is NEVER inlined into the LLM system prompt.",
+      "items": {
+        "type": "object",
+        "required": ["layer", "name", "type", "definition", "severity"],
+        "additionalProperties": false,
+        "properties": {
+          "layer": {
+            "type": "string",
+            "enum": [
+              "identity",
+              "character",
+              "personality",
+              "values_and_drives",
+              "values_drives",
+              "affect",
+              "cognition",
+              "memory",
+              "metacognition",
+              "reflexive_self_regulation",
+              "persona",
+              "cross_layer"
+            ],
+            "description": "One of the 10 canonical personaxis.md layers. The v0.6 canonical name for Layer 4 is 'values_and_drives'; 'values_drives' is accepted for backward compatibility with v0.5 policies. 'cross_layer' is for assertions that span multiple layers."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "description": "Human-readable label shown in the dashboard."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "type": {
+            "type": "string",
+            "enum": ["regex", "semantic", "llm_judge", "activation_projection"],
+            "description": "Evaluation strategy. v0.5 runtime supports 'regex' and 'llm_judge' fully; 'semantic' and 'activation_projection' are reserved (no-op pass at evaluation time)."
+          },
+          "definition": {
+            "type": "object",
+            "description": "Type-specific configuration. Schema by type is documented in docs/personaxis-docs/architecture/observability-model.mdx.",
+            "additionalProperties": true
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["info", "warn", "block"],
+            "description": "Drift weight: info=0.5, warn=1.0, block=2.0."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Defaults to true. Set false to retain the assertion in policy.yaml but skip evaluation."
+          }
+        }
+      }
+    }
+  }
+}

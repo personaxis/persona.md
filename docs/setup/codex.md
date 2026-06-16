@@ -1,4 +1,4 @@
-# Setting up PERSONA.md with Claude Code
+# Setting up PERSONA.md with Codex
 
 Follow these steps exactly. Do not skip any step.
 
@@ -17,7 +17,7 @@ This creates `.personaxis/personaxis.md` at the project root with all ten requir
 ## Step 2 - Fill in personaxis.md based on the project
 
 Read the project to understand what it is and does. Check the following if they exist:
-`CLAUDE.md`, `README.md`, `package.json` / `pyproject.toml`, and the overall codebase structure.
+`AGENTS.md`, `README.md`, `package.json` / `pyproject.toml`, existing Codex files in `.codex/`, existing skills in `.agents/skills/`, and the overall codebase structure.
 
 Then open `.personaxis/personaxis.md` and replace every `TODO:` marker with real content derived from what you find:
 
@@ -42,13 +42,15 @@ npx @personaxis/persona.md validate
 
 Fix any errors before continuing.
 
-## Step 4 - Compile and wire into Claude Code
+## Step 4 - Compile and wire into Codex
 
 ```bash
 npx @personaxis/persona.md compile --root
 ```
 
-This produces the repo-root `PERSONA.md` - a compiled, qualitative document generated from `.personaxis/personaxis.md` (see [`PERSONA_template.md`](../../PERSONA_template.md) for its section contract) - and adds the following section to `CLAUDE.md` (creating it if it does not exist):
+This produces the repo-root `PERSONA.md` - a compiled, qualitative document generated from `.personaxis/personaxis.md` (see [`PERSONA_template.md`](../../PERSONA_template.md) for its section contract) - and adds a managed PERSONA.md section to `AGENTS.md` (creating it if it does not exist). Codex reads `AGENTS.md` as project instructions, so the section tells Codex to read the live root `PERSONA.md` and apply it as the behavioral baseline.
+
+The section is wrapped in markers:
 
 ```markdown
 <!-- PERSONA:BASELINE:BEGIN -->
@@ -60,7 +62,7 @@ Read your own @PERSONA.md too if one was provided to you.
 <!-- PERSONA:BASELINE:END -->
 ```
 
-The `@PERSONA.md` syntax tells Claude Code to read the live file each session. If `.personaxis/personaxis.md` changes and you recompile, Claude Code automatically picks up the new `PERSONA.md` - no need to update memory.
+Re-running the command replaces this section instead of duplicating it. Existing human-authored `AGENTS.md` content is preserved.
 
 If you hand-edit `PERSONA.md` directly, run `npx @personaxis/persona.md push --root` (or `decompile --root` to preview) before the next compile - this folds your edits back into `.personaxis/personaxis.md` so the two stay consistent.
 
@@ -68,8 +70,8 @@ If you hand-edit `PERSONA.md` directly, run `npx @personaxis/persona.md push --r
 
 After completing steps 1-4, give the user a brief summary:
 
-- `PERSONA.md` has been created and filled in based on this project. It defines the shared behavioral baseline - the character, values, and limits that apply to every agent here, regardless of role. Its source is `.personaxis/personaxis.md`.
-- `CLAUDE.md` has been updated with a reference section (`@PERSONA.md`). You will read this file at the start of every session.
+- `PERSONA.md` has been created and filled in based on this project. It defines the shared behavioral baseline for every agent here. Its source is `.personaxis/personaxis.md`.
+- `AGENTS.md` has been updated with a managed PERSONA.md section. Codex will read it as project instructions.
 - The user can open `.personaxis/personaxis.md` to review your interpretation and adjust any field that does not match their intent, then recompile - or edit `PERSONA.md` directly and let `push`/`decompile` fold the changes back.
 
 Then run:
@@ -83,16 +85,17 @@ Show the user the output. Ask whether they want to add a role-specific agent per
 If the user says yes, help them choose from the list and run:
 
 ```bash
-npx @personaxis/persona.md use <template-name> --target claude-code
+npx @personaxis/persona.md use <template-name> --target codex
 ```
 
-This creates the persona source package in `.personaxis/personas/<slug>/` (`personaxis.md`, `policy.yaml`, `state.json`, `memory.md`, `memory/`, `references/`, `examples/`, `skills/`, `assets/`, `manifest.json`) and compiles it to `.claude/agents/<slug>.md`. Local skills declared in `extensions.skills` are materialized to `.claude/skills/<name>/` by `personaxis compile`.
+This creates the source persona package in `.personaxis/personas/<slug>/` (`personaxis.md`, `policy.yaml`, `state.json`, `memory.md`, `memory/`, `references/`, `examples/`, `skills/`, `assets/`, `manifest.json`) and compiles it to `.codex/agents/<slug>.toml`. The `.codex/agents/<slug>.toml` file follows the Codex custom-agent format: a TOML file with `name`, `description`, and `developer_instructions` (the compiled persona instructions). Local skills declared in `extensions.skills` are materialized to `.agents/skills/<name>/` by `personaxis compile`.
 
 If the user is not sure, suggest they start with just the project baseline and add agent personas later when a specific need arises.
 
 ## Notes
 
-- Re-run `personaxis compile --root` after any change to `.personaxis/personaxis.md`. The section in `CLAUDE.md` is replaced, never duplicated.
-- If you already have a `CLAUDE.md` with existing content, the compile command appends the baseline section. Your existing content is untouched.
-- Named agent personas in `.personaxis/personas/<slug>/` compile to `.claude/agents/<slug>.md`. Local skills declared in `extensions.skills` are materialized to `.claude/skills/<name>/` (not `persona-<slug>`). These are generated files, not replacements for the source package.
-- Edit `.personaxis/personas/<slug>/personaxis.md` and recompile, or edit `.claude/agents/<slug>.md` directly and run `personaxis push <slug>` to fold the edit back. Do not edit materialized files in `.claude/skills/` directly.
+- Re-run `personaxis compile --root` after any change to `.personaxis/personaxis.md`. The managed section in `AGENTS.md` is replaced, never duplicated.
+- If you already have an `AGENTS.md` with existing content, the compile command appends or updates only the managed PERSONA.md section. Your existing content is untouched.
+- Named agent personas in `.personaxis/personas/<slug>/` compile to `.codex/agents/<slug>.toml`. Local skills declared in `extensions.skills` are materialized to `.agents/skills/<name>/` (not `persona-<slug>`). These are generated files, not replacements for the source package.
+- Edit `.personaxis/personas/<slug>/personaxis.md` and recompile, or edit `.codex/agents/<slug>.toml` directly and run `personaxis push <slug>` to fold the edit back. Do not edit materialized files in `.agents/skills/` directly.
+- `personaxis.md` does not define MCP servers, plugins, or command approval rules. The Codex target does not generate `.codex/config.toml` or `.codex/rules/` from behavioral persona fields.

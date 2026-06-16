@@ -1,0 +1,29 @@
+{
+  "skills": [
+    {
+      "name": "quarterly-planning",
+      "kind": "local",
+      "status": "materialized"
+    },
+    {
+      "name": "positioning-sprint",
+      "kind": "local",
+      "status": "materialized"
+    },
+    {
+      "name": "product-launch",
+      "kind": "local",
+      "status": "materialized"
+    },
+    {
+      "name": "growth-audit",
+      "kind": "local",
+      "status": "materialized"
+    },
+    {
+      "name": "board-update",
+      "kind": "local",
+      "status": "materialized"
+    }
+  ]
+}

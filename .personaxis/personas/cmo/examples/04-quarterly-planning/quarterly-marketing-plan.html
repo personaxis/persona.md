@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Q3 2026 Marketing Plan — Continuous Compliance Inc.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #0e0e10;
+    --surface: #16161a;
+    --surface-2: #1d1d22;
+    --border: rgba(255,255,255,0.08);
+    --text: #e7e7e3;
+    --text-muted: #9a9a93;
+    --accent: #9f91ff;
+    --success: #8cb8ea;
+    --warning: #d9a35c;
+    --danger: #dd5f64;
+    --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    --serif: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 56px 32px 96px; }
+  header.cover {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 32px;
+    margin-bottom: 48px;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 44px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+    line-height: 1.1;
+  }
+  h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 64px 0 16px;
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 28px 0 12px;
+    color: var(--text);
+  }
+  p { color: var(--text); margin: 12px 0; }
+  .meta-row {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 12px;
+    color: var(--text-muted); margin-top: 16px;
+  }
+  .meta-row span strong { color: var(--text); margin-right: 6px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .stat {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  @media (max-width: 720px) { .stat { grid-template-columns: 1fr 1fr; } }
+  .stat .tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 16px;
+  }
+  .stat .tile .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .stat .tile .value {
+    font-family: var(--mono);
+    font-size: 28px;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat .tile .delta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+  .delta.up { color: var(--success); }
+  .delta.down { color: var(--danger); }
+
+  /* OKR cards */
+  .okr {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin: 20px 0;
+  }
+  .okr .num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .okr .obj {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 6px 0 8px;
+  }
+  .okr p.why {
+    color: var(--text-muted);
+    font-size: 13px;
+    border-left: 2px solid var(--border);
+    padding-left: 14px;
+    margin: 14px 0 22px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 4px;
+    font-size: 13px;
+  }
+  th, td {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  td.num, th.num {
+    text-align: right;
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+  }
+  .conf {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    display: inline-block;
+    color: var(--text-muted);
+  }
+  .conf.c5 { color: var(--warning); border-color: rgba(217,163,92,0.4); }
+  .conf.c6 { color: var(--success); border-color: rgba(140,184,234,0.4); }
+  .conf.c7 { color: var(--success); border-color: rgba(140,184,234,0.6); }
+  .conf.c4 { color: var(--danger); border-color: rgba(221,95,100,0.4); }
+
+  /* Budget pie via svg */
+  .budget-row { display: grid; grid-template-columns: 280px 1fr; gap: 28px; align-items: center; }
+  @media (max-width: 720px) { .budget-row { grid-template-columns: 1fr; } }
+  .legend { font-family: var(--mono); font-size: 12px; }
+  .legend .row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; }
+
+  /* Cadence timeline */
+  .timeline {
+    border-left: 2px solid var(--border);
+    padding-left: 22px;
+    margin-top: 16px;
+  }
+  .timeline .tick {
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .timeline .tick::before {
+    content: "";
+    position: absolute;
+    left: -29px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--accent);
+  }
+  .timeline .when {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .timeline .what { font-size: 14px; color: var(--text); margin-top: 2px; }
+
+  .risk { display: grid; grid-template-columns: 60px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .risk:last-child { border-bottom: none; }
+  .risk .sev { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .sev.high { color: var(--danger); }
+  .sev.med { color: var(--warning); }
+  .sev.low { color: var(--success); }
+  .risk .body strong { display: block; margin-bottom: 4px; }
+
+  footer.foot {
+    margin-top: 80px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .pillrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .pill.live { color: var(--success); border-color: rgba(140,184,234,0.4); }
+  .pill.warn { color: var(--warning); border-color: rgba(217,163,92,0.4); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="cover">
+  <div class="eyebrow">Q3 2026 · Marketing operating plan</div>
+  <h1>Continuous Compliance — the quarter we own the vocabulary.</h1>
+  <p style="max-width: 720px; color: var(--text-muted); font-size: 17px; margin-top: 16px;">
+    Two quarters from the $10M ARR plan. Four objectives, $1.45M budget,
+    one category narrative we either own this quarter or rent for the next two years.
+  </p>
+  <div class="meta-row">
+    <span><strong>Owner:</strong> CMO</span>
+    <span><strong>Reviewers:</strong> CEO, CRO, CFO, CPO</span>
+    <span><strong>Cadence:</strong> Weekly KR check, monthly full review</span>
+    <span><strong>Plan version:</strong> 1.0 (locked 2026-06-28)</span>
+  </div>
+</header>
+
+<section>
+  <h2>1. The number behind the plan</h2>
+  <p>
+    Company target: <strong>$10.0M ARR</strong> by end of Q4. Current ARR: <strong>$6.2M</strong>.
+    Required net-new in two quarters: <strong>$3.8M</strong>. At current win rate
+    (24% on qualified opportunity) and ACV ($35K), the marketing-sourced demand
+    requirement breaks down as follows.
+  </p>
+  <div class="stat">
+    <div class="tile">
+      <div class="label">Q3 new ARR target</div>
+      <div class="value">$1.9M</div>
+      <div class="delta up">+82% vs Q2 actual</div>
+    </div>
+    <div class="tile">
+      <div class="label">Marketing-sourced qualified opp.</div>
+      <div class="value">140</div>
+      <div class="delta up">+46% vs Q2 (96)</div>
+    </div>
+    <div class="tile">
+      <div class="label">Marketing pipeline target</div>
+      <div class="value">$5.0M</div>
+      <div class="delta up">+78% vs Q2 ($2.8M)</div>
+    </div>
+    <div class="tile">
+      <div class="label">CAC payback target</div>
+      <div class="value">&lt;14 mo</div>
+      <div class="delta up">from 18 mo Q2</div>
+    </div>
+  </div>
+  <p style="color: var(--text-muted); font-size: 13px;">
+    Marketing-sourced share of qualified pipeline rises from 52% → 63%. That gap closure is the load-bearing assumption.
+    Sales-sourced motion is unchanged in this plan.
+  </p>
+</section>
+
+<section>
+  <h2>2. The four quarterly objectives</h2>
+
+  <article class="okr">
+    <div class="num">Objective 1</div>
+    <div class="obj">Make Continuous Compliance the category vocabulary buyers default to.</div>
+    <p class="why">If we win the vocabulary this quarter, every channel gets cheaper for two years. If a competitor wins it, we rent attention forever. The work is content + analyst + distinctive assets, compounding 6-12 months out.</p>
+    <table>
+      <thead><tr><th style="width:54%">Key result</th><th>Target</th><th>Confidence</th></tr></thead>
+      <tbody>
+        <tr><td>Aided brand recall on "continuous compliance" among PSD2/AML ICP</td><td class="num">32% (from 22%)</td><td><span class="conf c5">5/10</span></td></tr>
+        <tr><td>Share of search on "continuous compliance" + variants</td><td class="num">26% (from 12%)</td><td><span class="conf c6">6/10</span></td></tr>
+        <tr><td>Flywheel pieces shipped, each earning ≥50 external citations</td><td class="num">4 published, ≥3 citing</td><td><span class="conf c6">6/10</span></td></tr>
+        <tr><td>Cited in named analyst reports (Gartner / Forrester / IDC)</td><td class="num">2 reports</td><td><span class="conf c4">4/10</span></td></tr>
+      </tbody>
+    </table>
+  </article>
+
+  <article class="okr">
+    <div class="num">Objective 2</div>
+    <div class="obj">Build the demand engine to $5.0M sourced pipeline in Q3.</div>
+    <p class="why">The operational machine that converts category investment into pipeline. KRs are the throughput numbers sales needs to hit the company plan.</p>
+    <table>
+      <thead><tr><th style="width:54%">Key result</th><th>Target</th><th>Confidence</th></tr></thead>
+      <tbody>
+        <tr><td>Marketing-created opportunities in Q3</td><td class="num">370 (from 280)</td><td><span class="conf c5">5/10</span></td></tr>
+        <tr><td>Marketing-sourced qualified opportunities</td><td class="num">140 (from 96)</td><td><span class="conf c5">5/10</span></td></tr>
+        <tr><td>Marketing-sourced pipeline created</td><td class="num">$5.0M</td><td><span class="conf c6">6/10</span></td></tr>
+        <tr><td>Blended CAC payback</td><td class="num">&lt;14 months</td><td><span class="conf c6">6/10</span></td></tr>
+      </tbody>
+    </table>
+  </article>
+
+  <article class="okr">
+    <div class="num">Objective 3</div>
+    <div class="obj">Open the enterprise tier without compromising the mid-market motion.</div>
+    <p class="why">Enterprise tier launches in week 4 alongside Continuous Audit Trail. New ACV band ($90–180K) and different buyer (CRO + VP Risk). KR3.3 is the guardrail.</p>
+    <table>
+      <thead><tr><th style="width:54%">Key result</th><th>Target</th><th>Confidence</th></tr></thead>
+      <tbody>
+        <tr><td>Enterprise-tier closed-won</td><td class="num">5</td><td><span class="conf c5">5/10</span></td></tr>
+        <tr><td>Enterprise-tier qualified opportunities</td><td class="num">18</td><td><span class="conf c6">6/10</span></td></tr>
+        <tr><td>Mid-market motion vs. plan</td><td class="num">±5%</td><td><span class="conf c7">7/10</span></td></tr>
+        <tr><td>Analyst conversations placing us in enterprise frame</td><td class="num">2</td><td><span class="conf c6">6/10</span></td></tr>
+      </tbody>
+    </table>
+  </article>
+
+  <article class="okr">
+    <div class="num">Objective 4</div>
+    <div class="obj">Hire and onboard the PMM lead.</div>
+    <p class="why">Marketing is at the team size where the CMO can no longer also run PMM. Without a dedicated PMM, launch quality degrades and sales enablement stops being maintained. Q3 priority because the impact lands in Q4.</p>
+    <table>
+      <thead><tr><th style="width:54%">Key result</th><th>Target</th><th>Confidence</th></tr></thead>
+      <tbody>
+        <tr><td>PMM lead offer accepted</td><td class="num">By week 8</td><td><span class="conf c7">7/10</span></td></tr>
+        <tr><td>PMM shipping (Tier 2 launch independently)</td><td class="num">By week 12</td><td><span class="conf c6">6/10</span></td></tr>
+        <tr><td>First win-loss report delivered (CRO + CPO)</td><td class="num">Shipped</td><td><span class="conf c7">7/10</span></td></tr>
+      </tbody>
+    </table>
+  </article>
+</section>
+
+<section>
+  <h2>3. Budget allocation</h2>
+  <p style="color: var(--text-muted);">Total Q3 spend: <strong style="color: var(--text); font-family: var(--mono);">$1,450,000</strong>. Allocation defended line by line below.</p>
+
+  <div class="card">
+    <div class="budget-row">
+      <svg viewBox="0 0 220 220" width="100%" aria-label="Budget allocation donut chart">
+        <!-- 720K people 49.66% , 280K brand 19.31%, 260K capture 17.93%, 130K ABM 8.97%, 60K tools 4.14% -->
+        <g transform="translate(110,110)">
+          <!-- ring background -->
+          <circle r="92" fill="none" stroke="#1d1d22" stroke-width="28"/>
+          <!-- arcs computed as stroke-dasharray on the same circle, circumference ≈ 578.05 -->
+          <circle r="92" fill="none" stroke="#9f91ff" stroke-width="28" stroke-dasharray="287.07 290.97" transform="rotate(-90)"/>
+          <circle r="92" fill="none" stroke="#8cb8ea" stroke-width="28" stroke-dasharray="111.62 466.43" stroke-dashoffset="-287.07" transform="rotate(-90)"/>
+          <circle r="92" fill="none" stroke="#d9a35c" stroke-width="28" stroke-dasharray="103.65 474.4" stroke-dashoffset="-398.69" transform="rotate(-90)"/>
+          <circle r="92" fill="none" stroke="#dd5f64" stroke-width="28" stroke-dasharray="51.85 526.2" stroke-dashoffset="-502.34" transform="rotate(-90)"/>
+          <circle r="92" fill="none" stroke="#9a9a93" stroke-width="28" stroke-dasharray="23.93 554.12" stroke-dashoffset="-554.19" transform="rotate(-90)"/>
+          <text text-anchor="middle" y="6" font-family="ui-monospace" font-size="20" fill="#e7e7e3">$1.45M</text>
+        </g>
+      </svg>
+      <div class="legend">
+        <div class="row"><span class="swatch" style="background:#9f91ff"></span><span>People · $720K · 49.7%</span></div>
+        <div class="row"><span class="swatch" style="background:#8cb8ea"></span><span>Brand / demand creation · $280K · 19.3%</span></div>
+        <div class="row"><span class="swatch" style="background:#d9a35c"></span><span>Demand capture · $260K · 17.9%</span></div>
+        <div class="row"><span class="swatch" style="background:#dd5f64"></span><span>ABM (intent + outbound) · $130K · 9.0%</span></div>
+        <div class="row"><span class="swatch" style="background:#9a9a93"></span><span>Tools & infrastructure · $60K · 4.1%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Lines being defended in CFO review</h3>
+  <table>
+    <thead><tr><th>Line</th><th>Spend</th><th>Defense</th></tr></thead>
+    <tbody>
+      <tr><td>Analyst program</td><td class="num">$45K</td><td>Lead measure: 2 cited reports (KR1.4). Lag: deal-cycle compression on analyst-cited accounts (-12% in Q2).</td></tr>
+      <tr><td>Podcast sponsorships</td><td class="num">$60K</td><td>Self-reported attribution: #2 brand-discovery source. Defunding produces 6-9 mo pipeline drop invisible in last-click.</td></tr>
+      <tr><td>Distinctive-asset refresh</td><td class="num">$40K</td><td>Two competitors copying our category vocabulary. Asset gap drives mental-availability erosion.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Lines being killed or trimmed</h3>
+  <table>
+    <thead><tr><th>Line</th><th>Cut</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr><td>Two underperforming paid-acquisition channels</td><td class="num">-$45K</td><td>Activation rate &lt;12% across 90-day cohort</td></tr>
+      <tr><td>Generic content from prior agency</td><td class="num">-$28K</td><td>No category vocabulary, no cluster topology, no measurable contribution</td></tr>
+      <tr><td>Trade-show participation (low-pipeline events)</td><td class="num">-$32K</td><td>No measurable pipeline across last 4 events</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>4. Risks</h2>
+  <div class="card">
+    <div class="risk">
+      <div class="sev high">High</div>
+      <div class="body"><strong>PMM hire slips past week 8.</strong> Mitigation: 3 active candidates in pipeline, senior contractor as backup. CMO owns search.</div>
+    </div>
+    <div class="risk">
+      <div class="sev med">Medium</div>
+      <div class="body"><strong>Enterprise launch confuses mid-market buyers.</strong> Mitigation: KR3.3 guardrail; pricing-page validation with 8 customers pre-launch; sales certification before launch day.</div>
+    </div>
+    <div class="risk">
+      <div class="sev med">Medium</div>
+      <div class="body"><strong>Category-vocabulary KR1.1 misses badly (recall not moving).</strong> Mitigation: confidence already 5/10. Partial movement (≥28%) acceptable; would not invalidate strategy.</div>
+    </div>
+    <div class="risk">
+      <div class="sev low">Low</div>
+      <div class="body"><strong>Sales-marketing lead handoff degrades.</strong> Mitigation: weekly pipeline review with CRO; SLA on handoff response time tracked.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>5. Operating cadence</h2>
+  <div class="timeline">
+    <div class="tick"><div class="when">Weekly · Monday</div><div class="what">Marketing standup. KR trajectory check. Anomaly response.</div></div>
+    <div class="tick"><div class="when">Weekly · Tuesday</div><div class="what">Pipeline review with CRO. SLA, qualified-opportunity throughput.</div></div>
+    <div class="tick"><div class="when">Bi-weekly</div><div class="what">CEO 1:1 on strategic layer. PMM search, narrative shifts, board prep.</div></div>
+    <div class="tick"><div class="when">Monthly · last Thursday</div><div class="what">Full marketing review. All KRs scored, budget actuals, anomaly themes.</div></div>
+    <div class="tick"><div class="when">Quarter end</div><div class="what">OKR grade, Q4 plan v0 draft, board-update co-author with CEO.</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>6. Honest reads to the CEO</h2>
+  <div class="card">
+    <p>
+      The $10M-by-EOY target is reachable but it requires O1 and O2 to land at or above plan.
+      If KR2.1 (marketing-created opportunities) misses by 15%, we will not make the plan
+      even if every other KR lands.
+    </p>
+    <p>
+      The number to watch most carefully is <strong>KR2.2 (qualified opportunities)</strong>.
+      It is the lead indicator that will tell us in 6–8 weeks whether the plan is converging
+      or diverging. Waiting for closed-won to tell us means we are out of time.
+    </p>
+    <p>
+      O3 (enterprise tier) is the highest-variance objective. If it lands cleanly,
+      it unlocks the $10M+ ACV motion next year. If KR3.3 (mid-market guardrail) trips,
+      we pause the enterprise push and re-time it for Q4.
+    </p>
+  </div>
+</section>
+
+<footer class="foot">
+  <div>
+    Personaxis CMO persona · Q3 2026 marketing plan · Locked 2026-06-28
+    <div class="pillrow">
+      <span class="pill live">spec_version 0.5.0</span>
+      <span class="pill live">persona cmo@1.0.0</span>
+      <span class="pill warn">policy.improvement_policy=locked</span>
+    </div>
+  </div>
+  <div style="text-align: right;">
+    Confidential — internal distribution only.<br/>
+    Authored by CMO, reviewed by CEO + CFO.
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
