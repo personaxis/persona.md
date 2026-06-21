@@ -112,6 +112,14 @@
           "governance_blocked": {
             "type": "boolean",
             "description": "True if the mutation was rejected by governance (e.g., hard-enforced virtue, hard limit, scope blocklist). When true, from === to and reason explains the block."
+          },
+          "origin_node": {
+            "type": "string",
+            "description": "v0.8: stable id of the machine/instance that produced this mutation. Makes cross-OS reconciliation of a portable persona deterministic (last-writer-wins per field across machines)."
+          },
+          "session_id": {
+            "type": "string",
+            "description": "v0.8: id of the runtime session that produced this mutation, for traceability."
           }
         }
       }
