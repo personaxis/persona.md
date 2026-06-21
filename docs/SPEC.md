@@ -317,6 +317,7 @@ The 3 universal `hard_limits` (must be present verbatim):
 | `governance.per_layer_edit_policy.<layer>` | MUST | enum `human_approval_required` / `review_required` / `auto_approved` / `governance_controlled` · per layer. The `reflexive_self_regulation` entry **must** remain `governance_controlled` (NEAR-UNIVERSAL). |
 | `governance.drift_thresholds.<layer>` | MUST | float 0..1 · per layer · used by the judge worker for drift detection |
 | `governance.improvement_policy_location` | MAY | path to where `improvement_policy` lives. Always `./policy.yaml#/improvement_policy`. |
+| `governance.max_step_delta` | MAY | v0.8: float 0..1 · max absolute change applied to any envelope field per mutation (anti-runaway). The runtime drift-bounds each proposed delta to this cap before clamping. |
 | `security.prompt_injection_defense` | MUST | bool · NEAR-UNIVERSAL: `true` |
 | `security.memory_poisoning_defense` | MUST | bool · NEAR-UNIVERSAL: `true` |
 

@@ -643,6 +643,12 @@
         "improvement_policy_location": {
           "type": "string",
           "description": "Path to improvement_policy in policy.yaml. Pointer only; the actual policy lives there."
+        },
+        "max_step_delta": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "v0.8: maximum absolute change applied to any envelope field in a single mutation (anti-runaway / anti-self-reinforcement). The runtime drift-bounds each proposed delta to this cap before clamping to the envelope. Optional; runtimes default to a conservative value when absent."
         }
       }
     },
