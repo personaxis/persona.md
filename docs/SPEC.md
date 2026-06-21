@@ -242,7 +242,7 @@ Layers appear in the YAML in this fixed order. Names are fixed.
 | `write_policy.persistent_requires` | SHOULD | subset of `consent`, `relevance`, `safety_check` |
 | `retrieval_policy.use_embeddings` | SHOULD | bool |
 | `retrieval_policy.max_items` | MUST | int |
-| `deletion_policy.user_request_supported` | MUST | **Universal:** must be `true` (privacy) |
+| `deletion_policy.user_request_supported` | MUST | **Universal:** must be `true` (privacy). v0.8: deletion is **tombstone** semantics — a supersede record is appended; the append-only episodic log is never rewritten, so the deletion itself stays auditable while the entry is hidden from live reads. |
 | `anchors` | SHOULD | retrieval priorities |
 | `forgetting_policy` | MAY | prose |
 
