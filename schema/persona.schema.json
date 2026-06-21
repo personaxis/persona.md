@@ -94,6 +94,11 @@
       "properties": {
         "canonical_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
         "display_name": { "type": "string", "minLength": 1 },
+        "capabilities": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "v0.8: machine-readable capability tags for orchestration/routing (e.g. ['positioning','demand_generation']). Optional; runtimes fall back to deriving capabilities from system_identity when absent."
+        },
         "system_identity": {
           "type": "object",
           "required": ["purpose"],

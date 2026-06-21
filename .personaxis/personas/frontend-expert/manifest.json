@@ -1,0 +1,10 @@
+{
+  "spec_version": "0.7.0",
+  "compiledPath": ".codex/agents/frontend-expert.toml",
+  "personaxisMdHash": "9858e6121e6705a2c5ff673bf411f39f8185979d7224ff1ef7de30e6e4c18738",
+  "compiledMdHash": "dfd0b0bbfc67bae97d086dd2b3e15d3acbeeeefb5e2d3709abaabfd6bc67b1b1",
+  "lastOp": "compile",
+  "model": "manual",
+  "source": "cli-agent",
+  "timestamp": "2026-06-14T23:22:59.487Z"
+}
