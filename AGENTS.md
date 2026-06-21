@@ -62,7 +62,7 @@ A new example persona is a directory under `.personaxis/personas/<slug>/`. In ro
 - `memory/` - date-stamped episodic memory directory (can be empty initially)
 - `references/` - heavy framework prose (at least one file)
 - `examples/` - worked outputs (markdown samples or HTML deliverables)
-- `skills/` - agentskills.io-compatible sub-skills (optional)
+- `skills/` - Anthropic-compatible sub-skills (optional)
 - `assets/` - catchall (optional, can be empty)
 - `manifest.json` - compile/decompile provenance and content hashes
 - `README.md` - what the persona does, when to use it, when not to
@@ -102,11 +102,10 @@ Breaking changes require:
 Use the official CLI:
 
 ```bash
-npx @personaxis/persona.md validate [file]                        # defaults to .personaxis/personaxis.md
-npx @personaxis/persona.md validate <slug>                        # .personaxis/personas/<slug>/personaxis.md
-npx @personaxis/persona.md compile [--root | <slug>]              # personaxis.md -> PERSONA.md / <slug>.md
-npx @personaxis/persona.md decompile [--root | <slug>]            # PERSONA.md / <slug>.md -> personaxis.md proposal
-npx @personaxis/persona.md state mutate [-f <path>] --field X --delta Y
+npx @personaxis/persona.md validate <path-to-personaxis.md>
+npx @personaxis/persona.md compile <path-to-personaxis.md>      # personaxis.md -> PERSONA.md / <slug>.md
+npx @personaxis/persona.md decompile <path-to-PERSONA.md>       # PERSONA.md / <slug>.md -> personaxis.md proposal
+npx @personaxis/persona.md state mutate <path-to-state.json> --field X --delta Y
 ```
 
 Exit codes:
@@ -136,4 +135,4 @@ Exit codes:
 Always read @PERSONA.md at project root before acting.
 Apply everything defined there to every decision, regardless of role.
 Read your own @PERSONA.md too if one was provided to you.
-<!-- PERSONA:BASELINE:END -->
+<!-- PERSONA:BASELINE:END -->s

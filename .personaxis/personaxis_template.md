@@ -159,6 +159,7 @@ identity:
   # ── Identifiers (MUST) ──────────────────────────────────────────────────
   canonical_id: ""                    # MUST | string-slug | unique in registry. [RUNTIME]
   display_name: ""                    # MUST | string      | same as metadata.display_name. [ACTOR-HOT]
+  capabilities: []                    # MAY  | string[]    | v0.8: explicit capability tags for orchestration/routing. [RUNTIME]
 
   # ── System identity (purpose + scope) ──────────────────────────────────
   system_identity:

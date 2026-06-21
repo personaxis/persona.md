@@ -9,6 +9,10 @@ The spec follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added (v0.8, additive — backward compatible)
+
+- **`identity.capabilities`** (MAY) — an explicit, machine-readable list of capability tags for orchestration / multi-persona routing (e.g. `[positioning, demand_generation]`). Optional; runtimes that don't find it derive capabilities from `system_identity.purpose` / `allowed_domains` / role. Closes the gap where routing relied on brittle heuristics over prose. Schema, `personaxis_template.md`, and the CMO example updated.
+
 ---
 
 ## [0.7.0] - 2026-06-11

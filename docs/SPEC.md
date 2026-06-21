@@ -162,6 +162,7 @@ Layers appear in the YAML in this fixed order. Names are fixed.
 |---|---|---|
 | `canonical_id` | MUST | unique slug |
 | `display_name` | MUST | same as `metadata.display_name` |
+| `capabilities` | MAY | v0.8: machine-readable capability tags for orchestration/routing; runtimes derive from `system_identity` when absent |
 | `system_identity.purpose` | MUST | one-sentence reason for existing |
 | `system_identity.allowed_domains` | SHOULD | list of domains the agent may operate in |
 | `system_identity.prohibited_domains` | SHOULD | list of domains explicitly out of scope |
