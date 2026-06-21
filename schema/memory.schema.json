@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://personaxis.com/schemas/memory/0.8/memory.schema.json",
+  "title": "episodic memory entry v0.8",
+  "description": "Schema for one entry in a persona's append-only episodic memory log (memory/episodic.jsonl, one JSON object per line). v0.8 elevates the runtime memory-governance guarantees into the spec: every entry carries a provenance source and forms a tamper-evident hash chain (prev_hash -> hash). Deletion is tombstone semantics (a superseding entry is appended; the log is never rewritten), so removals remain auditable. This makes governed, poisoning-resistant memory portable across conforming runtimes, not specific to one implementation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ts", "content", "source", "tags", "prev_hash", "hash"],
+  "properties": {
+    "ts": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp the entry was committed."
+    },
+    "content": {
+      "type": "string",
+      "description": "The remembered content."
+    },
+    "source": {
+      "type": "string",
+      "enum": ["user", "tool", "internal", "synthesis"],
+      "description": "Provenance channel. Drives trust + sensitive-action gates: 'user' is most trusted; 'tool'/'synthesis' are the poisoning-prone channels and must not, on their own, justify a sensitive action."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Free-form tags. Reserved: 'tombstone' (a deletion record; its 'target:<hash>' tag names the superseded entry) and 'injection-flagged' (written under a detected prompt injection)."
+    },
+    "prev_hash": {
+      "type": "string",
+      "description": "Hash of the previous entry in the chain; empty string for the first entry. Lineage / tamper-evidence."
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 over {ts, content, source, tags, prev_hash}. Any rewrite of a prior line breaks the chain and is detectable."
+    }
+  }
+}
