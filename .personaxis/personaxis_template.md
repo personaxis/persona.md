@@ -646,6 +646,15 @@ security:
   memory_poisoning_defense: true      # MUST | bool | NEAR-UNIVERSAL
 
 # ═══════════════════════════════════════════════════════════════════════════
+# PERMISSIONS — v0.8: the persona's own sandbox posture, carried to any host (MAY)
+# ═══════════════════════════════════════════════════════════════════════════
+permissions:                          # MAY  | object | two-axis sandbox posture. [RUNTIME]
+  sandbox: "workspace-write"          #      | enum read-only|workspace-write|danger-full-access
+  approval: "on-request"              #      | enum untrusted|on-failure|on-request|never
+  # allow: []                         #      | string[] regexes that force-allow
+  # deny: []                          #      | string[] regexes that force-deny (highest precedence)
+
+# ═══════════════════════════════════════════════════════════════════════════
 # RUNTIME ARTIFACT POINTERS — links to sibling files (MAY)
 # ═══════════════════════════════════════════════════════════════════════════
 runtime_artifacts:

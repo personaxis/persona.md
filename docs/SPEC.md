@@ -320,6 +320,9 @@ The 3 universal `hard_limits` (must be present verbatim):
 | `governance.max_step_delta` | MAY | v0.8: float 0..1 · max absolute change applied to any envelope field per mutation (anti-runaway). The runtime drift-bounds each proposed delta to this cap before clamping. |
 | `security.prompt_injection_defense` | MUST | bool · NEAR-UNIVERSAL: `true` |
 | `security.memory_poisoning_defense` | MUST | bool · NEAR-UNIVERSAL: `true` |
+| `permissions.sandbox` | MAY | v0.8: enum `read-only` / `workspace-write` / `danger-full-access` · the persona's command-execution sandbox posture, carried to any host |
+| `permissions.approval` | MAY | v0.8: enum `untrusted` / `on-failure` / `on-request` / `never` · when the persona must ask before a risky action |
+| `permissions.allow` / `permissions.deny` | MAY | v0.8: regex lists that force-allow / force-deny commands (deny wins) |
 
 `evaluation.required_suites` and `improvement_policy` live in `policy.yaml`, not in `personaxis.md`. The `runtime_artifacts` block in `personaxis.md` (MAY) declares the paths to the sibling files (`state.json`, `policy.yaml`, `memory.md`, `memory/`).
 
