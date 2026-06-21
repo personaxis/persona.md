@@ -596,6 +596,7 @@ governance:
                                       # NEAR-UNIVERSAL: "role_fidelity"
   approval_policy: "human_for_core_changes"  # MUST | enum
                                              # NEAR-UNIVERSAL: "human_for_core_changes"
+  max_step_delta: 0.15                        # MAY  | number 0..1 | v0.8: per-mutation drift cap (anti-runaway). [RUNTIME]
 
   # ── Per-layer edit policy (MUST) ────────────────────────────────────────
   # Single source of truth for who/how each layer can be edited.
