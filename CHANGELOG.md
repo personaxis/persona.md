@@ -16,6 +16,11 @@ The spec follows [Semantic Versioning](https://semver.org/).
 - **`governance.max_step_delta`** (MAY, float 0..1) — declarative per-mutation drift cap (anti-runaway / anti-self-reinforcement). The runtime drift-bounds each proposed delta to this value before clamping to the envelope, instead of relying on a hardcoded runtime default. Schema, template, and CMO example updated.
 - **`permissions`** block (MAY) — the persona's own two-axis sandbox posture (`sandbox`, `approval`, `allow`/`deny` regex lists), carried to any host so command-execution policy travels with the identity rather than being host-specific. Schema, template, and CMO example updated.
 
+### Clarified (v0.8)
+
+- **`memory.deletion_policy.user_request_supported`** — deletion is normatively **tombstone** semantics: a supersede record is appended and the entry is hidden from live reads, but the append-only episodic log is never rewritten, so the deletion itself remains auditable (you can prove what was removed and when).
+- **`state.json` `schema_version`** — forward-compatible: `0.7.0` is current and `0.6.0` is accepted (no field changes); runtimes write `0.7.0`.
+
 ---
 
 ## [0.7.0] - 2026-06-11
