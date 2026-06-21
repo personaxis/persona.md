@@ -673,6 +673,34 @@
         "memory_semantic_file": { "type": "string" },
         "memory_episodic_dir": { "type": "string" }
       }
+    },
+
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "v0.8: the persona's own runtime permission posture (carried to any host). Two-axis sandbox model. Optional; runtimes default to a conservative posture when absent.",
+      "properties": {
+        "sandbox": {
+          "type": "string",
+          "enum": ["read-only", "workspace-write", "danger-full-access"],
+          "description": "What the persona may read/write/network when executing commands."
+        },
+        "approval": {
+          "type": "string",
+          "enum": ["untrusted", "on-failure", "on-request", "never"],
+          "description": "When the persona must ask before a risky action."
+        },
+        "allow": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Regexes that force-allow a matching command."
+        },
+        "deny": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Regexes that force-deny a matching command (highest precedence)."
+        }
+      }
     }
   },
 

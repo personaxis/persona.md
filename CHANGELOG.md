@@ -14,6 +14,7 @@ The spec follows [Semantic Versioning](https://semver.org/).
 - **`identity.capabilities`** (MAY) — an explicit, machine-readable list of capability tags for orchestration / multi-persona routing (e.g. `[positioning, demand_generation]`). Optional; runtimes that don't find it derive capabilities from `system_identity.purpose` / `allowed_domains` / role. Closes the gap where routing relied on brittle heuristics over prose. Schema, `personaxis_template.md`, and the CMO example updated.
 - **`state.json` `mutation_log[].origin_node` + `session_id`** (both optional) — record which machine/instance and session produced each mutation. Makes cross-OS reconciliation of a portable persona deterministic (last-writer-wins per field, concurrent edits from different machines are no longer collapsed). `state.schema.json` updated.
 - **`governance.max_step_delta`** (MAY, float 0..1) — declarative per-mutation drift cap (anti-runaway / anti-self-reinforcement). The runtime drift-bounds each proposed delta to this value before clamping to the envelope, instead of relying on a hardcoded runtime default. Schema, template, and CMO example updated.
+- **`permissions`** block (MAY) — the persona's own two-axis sandbox posture (`sandbox`, `approval`, `allow`/`deny` regex lists), carried to any host so command-execution policy travels with the identity rather than being host-specific. Schema, template, and CMO example updated.
 
 ---
 

@@ -549,6 +549,14 @@ security:
   prompt_injection_defense: true
   memory_poisoning_defense: true
 
+# ─── v0.8: Permissions (the persona's own sandbox posture) ──────────────────
+permissions:
+  sandbox: "workspace-write"
+  approval: "on-request"
+  deny:
+    - "rm\\s+-rf"
+    - "curl[^|]*\\|\\s*(ba)?sh"
+
 # ─── Runtime artifacts ─────────────────────────────────────────────────────
 runtime_artifacts:
   state_file: "./state.json"
