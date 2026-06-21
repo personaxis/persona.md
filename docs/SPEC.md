@@ -1,10 +1,20 @@
 # personaxis.md Specification
 
-**Version:** 0.7.0 (Personaxis v12)
+**Version:** 0.8.0 (Personaxis v13)
 **Status:** Current
 **License:** MIT
 
 ---
+
+## 0a. What's new in 0.8.0
+
+v0.8.0 is **additive and backward compatible** with 0.7.0 — only new OPTIONAL fields; no existing field changed, so a v0.7.0 persona validates unchanged (`personaxis migrate 0.7-to-0.8` just bumps `spec_version`). The theme is **lifting runtime-governance guarantees into the spec** so any conforming runtime provides them, not just one implementation:
+
+- `identity.capabilities` (MAY) — explicit, machine-readable tags for reliable multi-persona routing.
+- `governance.max_step_delta` (MAY) — declarative per-mutation drift cap (anti-runaway).
+- `permissions` block (MAY) — the persona's own two-axis sandbox posture (`sandbox`, `approval`, `allow`/`deny`), carried to any host.
+- `state.json` `mutation_log[].origin_node` + `session_id` (MAY) — deterministic cross-OS reconciliation of a portable persona.
+- `schema/memory.schema.json` (new) — normative episodic-memory entry (`source` provenance + `prev_hash`/`hash` chain; tombstone deletion) — poisoning-resistant memory as a portable guarantee.
 
 ## 0. What's new in 0.7.0
 

@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://personaxis.com/schemas/persona/0.7/persona.schema.json",
-  "title": "personaxis.md v0.7",
-  "description": "Schema for the quantitative 10-layer persona spec, spec v0.7.0 (Personaxis v11). As of v0.7.0 this document lives at `.personaxis/[personas/<slug>/]personaxis.md` (root or subagent mode); the repo-root `PERSONA.md` / `.claude/agents/<slug>.md` is a separate, LLM-compiled qualitative document generated from this file via `personaxis compile` and is not described by this schema. v0.6 field model (unchanged in v0.7): (a) three-artifact information model (personaxis.md spec / state.json runtime / .dist compiled), (b) unified governance block with per_layer_edit_policy and drift_thresholds, (c) categorized reflexive decisions (replacing flat actions[]), (d) envelope-based trait/affect/mood (current values live in state.json), (e) removal of redundant fields (personality.context_modifiers, extensions.knowledge_anchors, scattered edit_policy). Operational metadata lives in policy.yaml; runtime state lives in state.json.",
+  "$id": "https://personaxis.com/schemas/persona/0.8/persona.schema.json",
+  "title": "personaxis.md v0.8",
+  "description": "Schema for the quantitative 10-layer persona spec, spec v0.8.0 (Personaxis v13). v0.8 is additive and backward compatible with v0.7.0: new OPTIONAL fields lift runtime-governance guarantees into the spec — identity.capabilities (routing), governance.max_step_delta (per-step drift cap), a permissions block (per-persona sandbox posture), mutation_log.origin_node/session_id (cross-OS reconciliation), and a normative episodic-memory entry schema (provenance + hash chain). No existing field changed; a v0.7.0 persona validates unchanged. As of v0.7.0 this document lives at `.personaxis/[personas/<slug>/]personaxis.md` (root or subagent mode); the repo-root `PERSONA.md` / `.claude/agents/<slug>.md` is a separate, LLM-compiled qualitative document generated from this file via `personaxis compile` and is not described by this schema. v0.6 field model (unchanged in v0.7): (a) three-artifact information model (personaxis.md spec / state.json runtime / .dist compiled), (b) unified governance block with per_layer_edit_policy and drift_thresholds, (c) categorized reflexive decisions (replacing flat actions[]), (d) envelope-based trait/affect/mood (current values live in state.json), (e) removal of redundant fields (personality.context_modifiers, extensions.knowledge_anchors, scattered edit_policy). Operational metadata lives in policy.yaml; runtime state lives in state.json.",
   "type": "object",
   "required": [
     "apiVersion",
@@ -36,8 +36,8 @@
     },
     "spec_version": {
       "type": "string",
-      "enum": ["0.7.0", "0.6.0", "0.5.0", "0.4.0", "0.3.0"],
-      "description": "Spec version. 0.7.0 is current (layout-only change: this document moved from repo-root PERSONA.md to .personaxis/[personas/<slug>/]personaxis.md; no field changes from 0.6.0). 0.3-0.6 accepted with deprecation warnings; the validator points to 'personaxis migrate' for automatic upgrade."
+      "enum": ["0.8.0", "0.7.0", "0.6.0", "0.5.0", "0.4.0", "0.3.0"],
+      "description": "Spec version. 0.8.0 is current (additive: new optional fields only — capabilities, governance.max_step_delta, permissions, mutation_log origin_node/session_id, episodic-memory entry schema; no field changes from 0.7.0). 0.7.0 accepted unchanged. 0.3-0.6 accepted with deprecation warnings; the validator points to 'personaxis migrate' for automatic upgrade."
     },
 
     "metadata": {

@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://personaxis.com/schemas/state/0.7/state.schema.json",
-  "title": "state.json v0.7",
+  "$id": "https://personaxis.com/schemas/state/0.8/state.schema.json",
+  "title": "state.json v0.8",
   "description": "Mutable runtime state of an AI Persona. Sibling of personaxis.md inside .personaxis/[personas/<slug>/]. Holds current trait/affect/mood values, active context, and the mutation log. Mutations occur via the canonical adjust_persona_state tool, clamped to envelopes declared in personaxis.md. State mutations DO NOT modify personaxis.md or the compiled PERSONA.md/<slug>.md; they are operational, not spec edits.",
   "type": "object",
   "required": [
@@ -14,7 +14,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["0.7.0", "0.6.0"],
+      "enum": ["0.8.0", "0.7.0", "0.6.0"],
       "description": "state.json schema version. 0.7.0 is current (layout-only change, no field changes from 0.6.0)."
     },
     "persona_id": {

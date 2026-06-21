@@ -9,12 +9,19 @@ The spec follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-### Added (v0.8, additive — backward compatible)
+---
+
+## [0.8.0] - 2026-06-21
+
+**Additive, backward compatible with 0.7.0** — only new OPTIONAL fields; no existing field changed. A v0.7.0 persona validates unchanged. Migrate with `personaxis migrate 0.7-to-0.8` (bumps `spec_version` only). Theme: lifting runtime-governance guarantees into the spec so any conforming runtime — not just one implementation — provides reliable routing, bounded evolution, portable permissions, cross-OS reconciliation, and poisoning-resistant memory.
+
+### Added
 
 - **`identity.capabilities`** (MAY) — an explicit, machine-readable list of capability tags for orchestration / multi-persona routing (e.g. `[positioning, demand_generation]`). Optional; runtimes that don't find it derive capabilities from `system_identity.purpose` / `allowed_domains` / role. Closes the gap where routing relied on brittle heuristics over prose. Schema, `personaxis_template.md`, and the CMO example updated.
 - **`state.json` `mutation_log[].origin_node` + `session_id`** (both optional) — record which machine/instance and session produced each mutation. Makes cross-OS reconciliation of a portable persona deterministic (last-writer-wins per field, concurrent edits from different machines are no longer collapsed). `state.schema.json` updated.
 - **`governance.max_step_delta`** (MAY, float 0..1) — declarative per-mutation drift cap (anti-runaway / anti-self-reinforcement). The runtime drift-bounds each proposed delta to this value before clamping to the envelope, instead of relying on a hardcoded runtime default. Schema, template, and CMO example updated.
 - **`permissions`** block (MAY) — the persona's own two-axis sandbox posture (`sandbox`, `approval`, `allow`/`deny` regex lists), carried to any host so command-execution policy travels with the identity rather than being host-specific. Schema, template, and CMO example updated.
+- **Episodic-memory entry schema** (`schema/memory.schema.json`, new) — normative shape for one append-only episodic memory entry: `{ ts, content, source(user|tool|internal|synthesis), tags, prev_hash, hash }`. Every entry carries provenance and forms a tamper-evident hash chain; deletion is tombstone semantics. Lifts the runtime's poisoning-resistant memory guarantees (Zombie-Agent defense) into the spec so they're portable across conforming runtimes.
 
 ### Clarified (v0.8)
 

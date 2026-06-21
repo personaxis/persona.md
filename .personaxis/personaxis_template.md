@@ -109,7 +109,7 @@
 
 apiVersion: persona.dev/v1            # MUST | UNIVERSAL — always "persona.dev/v1"
 kind: AgentPersona                    # MUST | enum<AgentPersona|UserPersona>
-spec_version: "0.7.0"                 # MUST | semver | spec version
+spec_version: "0.8.0"                 # MUST | semver | spec version
 
 # ═══════════════════════════════════════════════════════════════════════════
 # METADATA — registry-level identification (MUST)

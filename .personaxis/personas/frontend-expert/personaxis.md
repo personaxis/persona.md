@@ -1,7 +1,7 @@
 ---
 apiVersion: persona.dev/v1
 kind: AgentPersona
-spec_version: "0.7.0"
+spec_version: "0.8.0"
 
 # v0.7.0 SUBAGENT EXAMPLE: this file lives at
 # `.personaxis/personas/frontend-expert/personaxis.md` (subagent mode), a
