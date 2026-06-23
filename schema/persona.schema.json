@@ -671,8 +671,7 @@
         "state_file": { "type": "string" },
         "policy_file": { "type": "string" },
         "memory_semantic_file": { "type": "string" },
-        "memory_episodic_dir": { "type": "string" },
-        "agent_state_file": { "type": "string", "description": "v0.9: pointer to the agent-loop STATE.md spine (resumable task state)." }
+        "memory_episodic_dir": { "type": "string" }
       }
     },
 

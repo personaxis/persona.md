@@ -563,7 +563,6 @@ runtime_artifacts:
   policy_file: "./policy.yaml"
   memory_semantic_file: "./memory.md"
   memory_episodic_dir: "./memory/"
-  agent_state_file: "./STATE.md"
 
 # ─── v0.9: Verification (objective maker≠checker gates for the agent loop) ──
 verification:

@@ -19,8 +19,7 @@ The spec follows [Semantic Versioning](https://semver.org/).
 - **`verification`** — objective gates for the agent loop (the maker≠checker split): `mode` (off|advisory|blocking), `quorum`, `on_fail`, `max_retries`, and typed `gates` (`command` test-runner, `predicate` assertion, `llm_judge`, `rubric`). Generalizes "definition of done + how to check it" to any domain (coding uses test-runners; research/marketing/legal use rubric/judge).
 - **`agent_budget`** — first-class stop-conditions and caps for the agent loop (anti runaway / Ralph-Wiggum): `max_steps`, `max_tokens`, `max_cost_usd`, `max_wall_seconds`, `stop_conditions`, `on_exhaust`.
 - **`observability`** — tracing posture (`trace` off|jsonl|otlp|both, `trace_dir`, `redact`, `sample_rate`); the engine's mutation_log + hash-chained memory + event bus export as a causal trace (native JSONL + OpenTelemetry-compatible).
-- **`runtime_artifacts.agent_state_file`** — pointer to the resumable agent-loop `STATE.md` spine.
-- **state.json `agent_session`** — live agent-loop tracking (active_task, step/token/cost counts, stop_reason).
+- **state.json `agent_session`** — live agent-loop tracking (active_task, step/token/cost counts, stop_reason). Agent runs are recorded as episodic memory (which consolidates into `memory.md`); no separate state file is introduced.
 
 ---
 
