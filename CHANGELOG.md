@@ -11,6 +11,19 @@ The spec follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.9.0] - 2026-06-23
+
+**Additive, backward compatible with 0.8.0** — only new OPTIONAL blocks; no existing field changed. A v0.8.0 persona validates unchanged. Migrate with `personaxis migrate 0.8-to-0.9` (bumps `spec_version` only). Theme: **lifting production-autonomy guarantees into the spec** — objective verification, bounded loops, and causal observability, so a conforming runtime runs *real, non-coding tasks* safely, not just coding.
+
+### Added (all OPTIONAL)
+- **`verification`** — objective gates for the agent loop (the maker≠checker split): `mode` (off|advisory|blocking), `quorum`, `on_fail`, `max_retries`, and typed `gates` (`command` test-runner, `predicate` assertion, `llm_judge`, `rubric`). Generalizes "definition of done + how to check it" to any domain (coding uses test-runners; research/marketing/legal use rubric/judge).
+- **`agent_budget`** — first-class stop-conditions and caps for the agent loop (anti runaway / Ralph-Wiggum): `max_steps`, `max_tokens`, `max_cost_usd`, `max_wall_seconds`, `stop_conditions`, `on_exhaust`.
+- **`observability`** — tracing posture (`trace` off|jsonl|otlp|both, `trace_dir`, `redact`, `sample_rate`); the engine's mutation_log + hash-chained memory + event bus export as a causal trace (native JSONL + OpenTelemetry-compatible).
+- **`runtime_artifacts.agent_state_file`** — pointer to the resumable agent-loop `STATE.md` spine.
+- **state.json `agent_session`** — live agent-loop tracking (active_task, step/token/cost counts, stop_reason).
+
+---
+
 ## [0.8.0] - 2026-06-21
 
 **Additive, backward compatible with 0.7.0** — only new OPTIONAL fields; no existing field changed. A v0.7.0 persona validates unchanged. Migrate with `personaxis migrate 0.7-to-0.8` (bumps `spec_version` only). Theme: lifting runtime-governance guarantees into the spec so any conforming runtime — not just one implementation — provides reliable routing, bounded evolution, portable permissions, cross-OS reconciliation, and poisoning-resistant memory.
