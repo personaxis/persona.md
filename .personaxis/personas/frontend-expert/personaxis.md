@@ -1,7 +1,7 @@
 ---
 apiVersion: persona.dev/v1
 kind: AgentPersona
-spec_version: "0.8.0"
+spec_version: "0.9.0"
 
 # v0.7.0 SUBAGENT EXAMPLE: this file lives at
 # `.personaxis/personas/frontend-expert/personaxis.md` (subagent mode), a
@@ -376,6 +376,38 @@ runtime_artifacts:
   policy_file: "./policy.yaml"
   memory_semantic_file: "./memory.md"
   memory_episodic_dir: "./memory/"
+  agent_state_file: "./STATE.md"
+
+# ─── v0.9: objective verification gate (maker≠checker) ───────────────────────
+verification:
+  mode: "blocking"
+  quorum: "all"
+  on_fail: "retry"
+  max_retries: 2
+  gates:
+    - type: "command"
+      name: "typecheck-and-test"
+      run: "pnpm -s typecheck && pnpm -s test"
+      timeout_ms: 300000
+
+# ─── v0.9: agent loop budget ────────────────────────────────────────────────
+agent_budget:
+  max_steps: 25
+  max_tokens: 250000
+  max_cost_usd: 6.0
+  max_wall_seconds: 900
+  stop_conditions:
+    - "goal_met"
+    - "execution_error"
+  on_exhaust: "stop"
+
+# ─── v0.9: observability ────────────────────────────────────────────────────
+observability:
+  trace: "both"
+  trace_dir: "./traces"
+  redact:
+    - "(?i)api[_-]?key"
+  sample_rate: 1.0
 
 ---
 

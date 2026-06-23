@@ -1,7 +1,7 @@
 ---
 apiVersion: persona.dev/v1
 kind: AgentPersona
-spec_version: "0.8.0"
+spec_version: "0.9.0"
 
 # v0.7.0 NOTE: this file moved from repo-root `PERSONA.md` to
 # `.personaxis/personaxis.md` (no field changes). The repo-root `PERSONA.md`
@@ -563,6 +563,42 @@ runtime_artifacts:
   policy_file: "./policy.yaml"
   memory_semantic_file: "./memory.md"
   memory_episodic_dir: "./memory/"
+  agent_state_file: "./STATE.md"
+
+# ─── v0.9: Verification (objective maker≠checker gates for the agent loop) ──
+verification:
+  mode: "advisory"
+  quorum: "majority"
+  on_fail: "retry"
+  max_retries: 1
+  gates:
+    - type: "predicate"
+      name: "no-secret-leak"
+      kind: "regex"
+      expr: "(?i)(api[_-]?key|secret|password)\\s*[:=]"
+    - type: "llm_judge"
+      name: "brief-quality"
+      criteria: "The deliverable matches the locked positioning and the active ICP, and states its assumptions."
+
+# ─── v0.9: Agent budget (loop stop-conditions + caps) ──────────────────────
+agent_budget:
+  max_steps: 16
+  max_tokens: 120000
+  max_cost_usd: 4.0
+  max_wall_seconds: 480
+  stop_conditions:
+    - "goal_met"
+    - "no_progress"
+  on_exhaust: "summarize_and_stop"
+
+# ─── v0.9: Observability (causal trace export) ─────────────────────────────
+observability:
+  trace: "jsonl"
+  trace_dir: "./traces"
+  redact:
+    - "(?i)api[_-]?key"
+    - "Bearer\\s+\\S+"
+  sample_rate: 1.0
 
 ---
 

@@ -109,7 +109,7 @@
 
 apiVersion: persona.dev/v1            # MUST | UNIVERSAL — always "persona.dev/v1"
 kind: AgentPersona                    # MUST | enum<AgentPersona|UserPersona>
-spec_version: "0.8.0"                 # MUST | semver | spec version
+spec_version: "0.9.0"                 # MUST | semver | spec version
 
 # ═══════════════════════════════════════════════════════════════════════════
 # METADATA — registry-level identification (MUST)
@@ -662,6 +662,54 @@ runtime_artifacts:
   policy_file: "./policy.yaml"        # MAY | path | observability + improvement_policy
   memory_semantic_file: "./memory.md" # MAY | path | curated long-term memory
   memory_episodic_dir: "./memory/"    # MAY | path | date-stamped sessions
+  agent_state_file: "./STATE.md"      # MAY | path | v0.9: resumable agent-loop STATE.md spine
+
+# ═══════════════════════════════════════════════════════════════════════════
+# VERIFICATION — v0.9: objective gates (maker≠checker). The model that did the
+# work is NOT the one that grades it. Optional. (MAY) [RUNTIME] [JUDGE]
+# ═══════════════════════════════════════════════════════════════════════════
+verification:                         # MAY | object | objective agent-loop gates
+  mode: "advisory"                    #     | enum off|advisory|blocking
+  quorum: "all"                       #     | "all"|"majority"|int
+  on_fail: "retry"                    #     | enum retry|skip|stop (under mode:blocking)
+  max_retries: 1                      #     | int
+  gates:                              #     | array of typed gates
+    - type: "command"                 #     | run a shell check; pass = exit 0
+      run: "echo verify"              #     | the command (e.g. 'pnpm test')
+      timeout_ms: 120000
+    # - type: "predicate"             #     | assertion over the agent output
+    #   kind: "contains"              #     | regex|jsonpath|contains
+    #   expr: "DONE"
+    # - type: "llm_judge"             #     | a separate model judges done/criteria
+    #   criteria: "Task fully satisfied, nothing left to do."
+    # - type: "rubric"                #     | weighted dimensions → score ≥ threshold
+    #   dimensions: [{ name: "completeness", weight: 0.6 }, { name: "safety", weight: 0.4 }]
+    #   threshold: 0.7
+
+# ═══════════════════════════════════════════════════════════════════════════
+# AGENT BUDGET — v0.9: stop-conditions + resource caps for the agent loop (MAY)
+# (anti runaway / money-pit). [RUNTIME]
+# ═══════════════════════════════════════════════════════════════════════════
+agent_budget:                         # MAY | object | loop caps
+  max_steps: 20                       #     | int
+  max_tokens: 200000                  #     | int (cumulative)
+  max_cost_usd: 5.0                   #     | number
+  max_wall_seconds: 600               #     | int
+  stop_conditions:                    #     | enum[] goal_met|tool_denied|execution_error|low_confidence|no_progress
+    - "goal_met"
+    - "no_progress"
+  on_exhaust: "summarize_and_stop"    #     | enum stop|summarize_and_stop
+
+# ═══════════════════════════════════════════════════════════════════════════
+# OBSERVABILITY — v0.9: tracing posture for the governed loops (MAY) [RUNTIME] [JUDGE]
+# ═══════════════════════════════════════════════════════════════════════════
+observability:                        # MAY | object | causal trace export
+  trace: "off"                        #     | enum off|jsonl|otlp|both
+  trace_dir: "./traces"               #     | path
+  redact:                             #     | regex[] redact secrets/PII from traces
+    - "(?i)api[_-]?key"
+    - "Bearer\\s+\\S+"
+  sample_rate: 1.0                    #     | number 0..1
 
 # ═══════════════════════════════════════════════════════════════════════════
 # v0.6.0 SUMMARY OF CHANGES (informational; not part of schema)

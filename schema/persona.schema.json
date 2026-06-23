@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://personaxis.com/schemas/persona/0.8/persona.schema.json",
-  "title": "personaxis.md v0.8",
+  "$id": "https://personaxis.com/schemas/persona/0.9/persona.schema.json",
+  "title": "personaxis.md v0.9",
   "description": "Schema for the quantitative 10-layer persona spec, spec v0.8.0 (Personaxis v13). v0.8 is additive and backward compatible with v0.7.0: new OPTIONAL fields lift runtime-governance guarantees into the spec — identity.capabilities (routing), governance.max_step_delta (per-step drift cap), a permissions block (per-persona sandbox posture), mutation_log.origin_node/session_id (cross-OS reconciliation), and a normative episodic-memory entry schema (provenance + hash chain). No existing field changed; a v0.7.0 persona validates unchanged. As of v0.7.0 this document lives at `.personaxis/[personas/<slug>/]personaxis.md` (root or subagent mode); the repo-root `PERSONA.md` / `.claude/agents/<slug>.md` is a separate, LLM-compiled qualitative document generated from this file via `personaxis compile` and is not described by this schema. v0.6 field model (unchanged in v0.7): (a) three-artifact information model (personaxis.md spec / state.json runtime / .dist compiled), (b) unified governance block with per_layer_edit_policy and drift_thresholds, (c) categorized reflexive decisions (replacing flat actions[]), (d) envelope-based trait/affect/mood (current values live in state.json), (e) removal of redundant fields (personality.context_modifiers, extensions.knowledge_anchors, scattered edit_policy). Operational metadata lives in policy.yaml; runtime state lives in state.json.",
   "type": "object",
   "required": [
@@ -36,8 +36,8 @@
     },
     "spec_version": {
       "type": "string",
-      "enum": ["0.8.0", "0.7.0", "0.6.0", "0.5.0", "0.4.0", "0.3.0"],
-      "description": "Spec version. 0.8.0 is current (additive: new optional fields only — capabilities, governance.max_step_delta, permissions, mutation_log origin_node/session_id, episodic-memory entry schema; no field changes from 0.7.0). 0.7.0 accepted unchanged. 0.3-0.6 accepted with deprecation warnings; the validator points to 'personaxis migrate' for automatic upgrade."
+      "enum": ["0.9.0", "0.8.0", "0.7.0", "0.6.0", "0.5.0", "0.4.0", "0.3.0"],
+      "description": "Spec version. 0.9.0 is current (additive: new OPTIONAL runtime-governance blocks — verification (objective maker≠checker gates), agent_budget (loop stop-conditions + budget caps), observability (tracing), runtime_artifacts.agent_state_file; no field changes from 0.8.0, a v0.8 persona validates unchanged). 0.8.0 added capabilities, governance.max_step_delta, permissions, mutation_log origin_node/session_id. 0.7.0 accepted unchanged. 0.3-0.6 accepted with deprecation warnings; the validator points to 'personaxis migrate' for automatic upgrade."
     },
 
     "metadata": {
@@ -671,7 +671,8 @@
         "state_file": { "type": "string" },
         "policy_file": { "type": "string" },
         "memory_semantic_file": { "type": "string" },
-        "memory_episodic_dir": { "type": "string" }
+        "memory_episodic_dir": { "type": "string" },
+        "agent_state_file": { "type": "string", "description": "v0.9: pointer to the agent-loop STATE.md spine (resumable task state)." }
       }
     },
 
@@ -700,6 +701,108 @@
           "items": { "type": "string" },
           "description": "Regexes that force-deny a matching command (highest precedence)."
         }
+      }
+    },
+
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "v0.9: objective verification gates for the agent loop (the maker≠checker split). The model that did the work is NOT the one that grades it; an independent, deterministic-where-possible verifier decides pass/fail. Optional; runtimes skip verification when absent. [RUNTIME] [JUDGE]",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["off", "advisory", "blocking"],
+          "description": "off: no verification. advisory: run + report but never block. blocking: a failing gate prevents 'finish' and triggers on_fail."
+        },
+        "quorum": {
+          "description": "How many gates must pass: 'all', 'majority', or an integer.",
+          "oneOf": [
+            { "type": "string", "enum": ["all", "majority"] },
+            { "type": "integer", "minimum": 1 }
+          ]
+        },
+        "on_fail": {
+          "type": "string",
+          "enum": ["retry", "skip", "stop"],
+          "description": "Behavior when the quorum is not met under mode=blocking."
+        },
+        "max_retries": { "type": "integer", "minimum": 0 },
+        "gates": {
+          "type": "array",
+          "description": "The objective checks. Each gate has a type and type-specific fields.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type"],
+            "properties": {
+              "type": { "type": "string", "enum": ["command", "predicate", "llm_judge", "rubric"] },
+              "name": { "type": "string" },
+              "run": { "type": "string", "description": "command: the shell command to run (pass = exit 0)." },
+              "timeout_ms": { "type": "integer", "minimum": 1 },
+              "kind": { "type": "string", "enum": ["regex", "jsonpath", "contains"], "description": "predicate: how to test the agent output." },
+              "expr": { "type": "string", "description": "predicate: the pattern/path/substring to test." },
+              "criteria": { "type": "string", "description": "llm_judge/rubric: the done/quality criteria in natural language." },
+              "model": { "type": "string", "description": "llm_judge: optional model override (defaults to the configured checker model)." },
+              "dimensions": {
+                "type": "array",
+                "description": "rubric: weighted scoring dimensions.",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["name", "weight"],
+                  "properties": {
+                    "name": { "type": "string" },
+                    "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+                    "criteria": { "type": "string" }
+                  }
+                }
+              },
+              "threshold": { "type": "number", "minimum": 0, "maximum": 1, "description": "rubric: minimum aggregate score to pass." }
+            }
+          }
+        }
+      }
+    },
+
+    "agent_budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "v0.9: first-class stop-conditions and resource caps for the agent loop (anti runaway / Ralph-Wiggum / money-pit). Optional; runtimes apply a conservative default cap when absent. [RUNTIME]",
+      "properties": {
+        "max_steps": { "type": "integer", "minimum": 1 },
+        "max_tokens": { "type": "integer", "minimum": 1 },
+        "max_cost_usd": { "type": "number", "minimum": 0 },
+        "max_wall_seconds": { "type": "integer", "minimum": 1 },
+        "stop_conditions": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["goal_met", "tool_denied", "execution_error", "low_confidence", "no_progress"] },
+          "description": "Conditions that halt the loop before the hard caps."
+        },
+        "on_exhaust": {
+          "type": "string",
+          "enum": ["stop", "summarize_and_stop"],
+          "description": "What to do when a cap/condition is hit."
+        }
+      }
+    },
+
+    "observability": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "v0.9: tracing posture for the governed loops. The engine's audit (mutation_log + hash-chained memory + event bus) is exported as a causal trace. Optional. [RUNTIME] [JUDGE]",
+      "properties": {
+        "trace": {
+          "type": "string",
+          "enum": ["off", "jsonl", "otlp", "both"],
+          "description": "off: none. jsonl: native line-delimited spans. otlp: OpenTelemetry-compatible JSON. both: emit both."
+        },
+        "trace_dir": { "type": "string", "description": "Where trace files are written (default ./traces)." },
+        "redact": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Regexes whose matches are redacted from traces (secrets/PII)."
+        },
+        "sample_rate": { "type": "number", "minimum": 0, "maximum": 1, "description": "Fraction of spans to record (1.0 = all)." }
       }
     }
   },
