@@ -13,8 +13,7 @@ v0.9.0 is **additive and backward compatible** with 0.8.0 — only new OPTIONAL 
 - **`verification`** (MAY) — objective gates for the agent loop, the *maker≠checker* split: the model that did the work is not the one that grades it. `mode` (off|advisory|blocking), `quorum`, `on_fail`, `max_retries`, and typed `gates`: `command` (run a test/build/lint, pass = exit 0), `predicate` (regex/jsonpath/contains assertion), `llm_judge` (a separate model judges against criteria), `rubric` (weighted dimensions ≥ threshold). This generalizes "definition of done + how to verify it" to any domain — coding uses test-runners; research/marketing/legal use rubric/judge.
 - **`agent_budget`** (MAY) — first-class stop-conditions + caps so an autonomous loop never runs away: `max_steps`, `max_tokens`, `max_cost_usd`, `max_wall_seconds`, `stop_conditions`, `on_exhaust`.
 - **`observability`** (MAY) — tracing posture: `trace` (off|jsonl|otlp|both), `trace_dir`, `redact`, `sample_rate`. The mutation_log + hash-chained memory + event bus export as a causal trace (native JSONL + OpenTelemetry-compatible) for audit/compliance.
-- **`runtime_artifacts.agent_state_file`** (MAY) — pointer to the resumable agent-loop `STATE.md` spine ("the agent forgets, the file does not").
-- **state.json `agent_session`** (MAY) — live agent-loop tracking (active task, step/token/cost counts, stop reason).
+- **state.json `agent_session`** (MAY) — live agent-loop tracking (active task, step/token/cost counts, stop reason). Each agent run is recorded as an episodic memory entry (consolidated into `memory.md`); resumption uses the existing memory + `agent_session`, with no extra state file.
 
 ---
 

@@ -662,7 +662,6 @@ runtime_artifacts:
   policy_file: "./policy.yaml"        # MAY | path | observability + improvement_policy
   memory_semantic_file: "./memory.md" # MAY | path | curated long-term memory
   memory_episodic_dir: "./memory/"    # MAY | path | date-stamped sessions
-  agent_state_file: "./STATE.md"      # MAY | path | v0.9: resumable agent-loop STATE.md spine
 
 # ═══════════════════════════════════════════════════════════════════════════
 # VERIFICATION — v0.9: objective gates (maker≠checker). The model that did the

@@ -376,7 +376,6 @@ runtime_artifacts:
   policy_file: "./policy.yaml"
   memory_semantic_file: "./memory.md"
   memory_episodic_dir: "./memory/"
-  agent_state_file: "./STATE.md"
 
 # ─── v0.9: objective verification gate (maker≠checker) ───────────────────────
 verification:
