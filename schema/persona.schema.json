@@ -596,6 +596,19 @@
       }
     },
 
+    "improvement_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "v0.10: the self-improvement posture read by the runtime (readMode). Authoritative inline mirror of policy.yaml#/improvement_policy. Optional; absent => 'locked'.",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["locked", "suggesting", "autonomous"],
+          "description": "locked: spec never self-edits (humans only). suggesting: persona PROPOSES edits, queued for approval. autonomous: proposals auto-apply, still gated by consensus + protected paths."
+        }
+      }
+    },
+
     "governance": {
       "type": "object",
       "required": ["autonomy_envelope", "approval_policy", "per_layer_edit_policy", "drift_thresholds"],
