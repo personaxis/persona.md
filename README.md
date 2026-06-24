@@ -456,6 +456,11 @@ Plus three top-level blocks: `metadata`, `governance`, `security` (and optional 
 
 Each layer maps to a documented body of research in psychology, philosophy of mind, and ethics. See [docs/SPEC.md](./docs/SPEC.md) for the full field reference and academic grounding.
 
+The compiled, LLM-facing `PERSONA.md` is a **persona-prompting artifact**: the techniques it
+encodes (role adoption, character-card + scene-contracts, voice exemplars, consistency layers,
+break-character guardrails) and the research behind them are documented in
+[docs/PERSONA_PROMPTING.md](./docs/PERSONA_PROMPTING.md).
+
 ---
 
 ## Relationship to existing standards
