@@ -11,6 +11,21 @@ The spec follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.10.0] - 2026-06-24
+
+**Additive, backward compatible with 0.9.0** — only new OPTIONAL fields; no existing field changed. A v0.9.0 persona validates unchanged. Migrate with `personaxis migrate 0.9-to-0.10` (bumps `spec_version` only). Theme: **making `PERSONA.md` a persona-prompting artifact**. The compiled, LLM-facing document is no longer a generic profile — it is engineered from evidence-based persona-prompting techniques so a model *adopts and stays in* the persona, and the persona's qualitative material can evolve under the same governance as its numbers.
+
+### Added (all OPTIONAL)
+- **`identity.short_name`** (string ≤24) — the clean handle a persona is addressed by in chat/UI (e.g. `Clio`); tools fall back to `display_name`/`canonical_id` when absent.
+- **`improvement_policy.mode`** (inline `locked | suggesting | autonomous`) — authoritative inline mirror of `policy.yaml#/improvement_policy`, read by the runtime (`readMode`). Change it from the CLI with `personaxis improve <mode>` or the REPL `/improve`. (Fixes a latent mismatch where the runtime read a frontmatter block the schema forbade, so the mode was effectively always `locked`.)
+- **`persona_prompting`** block — the persona-prompting **source material** the compiler assembles into `PERSONA.md`: `address` (second-person role adoption + `you_are`), `voice_exemplars` (few-shot voice), `scene_contracts` (RRP situation→behavior→actions), `behavioral_anchors` (do/dont + examples), `break_character_guardrails` (stay-in-role, never overriding safety), and `consistency` (stable/evolving/situational layers).
+
+### Changed
+- **Compile** now produces a persona-prompting `PERSONA.md` (second-person role adoption, character card, voice exemplars, scene contracts, consistency layers, guardrails) instead of a generic profile; **decompile** maps prose edits back to `persona_prompting`. `PERSONA_template.md` redesigned to match.
+- New methodology doc **[docs/PERSONA_PROMPTING.md](docs/PERSONA_PROMPTING.md)** documents the techniques + research (RRP character-card/scene-contracts [arXiv:2509.00482], sociodemographic priming [arXiv:2507.16076], memory-driven role-play [arXiv:2603.19313], role adoption, consistency layers).
+
+---
+
 ## [0.9.0] - 2026-06-23
 
 **Additive, backward compatible with 0.8.0** — only new OPTIONAL blocks; no existing field changed. A v0.8.0 persona validates unchanged. Migrate with `personaxis migrate 0.8-to-0.9` (bumps `spec_version` only). Theme: **lifting production-autonomy guarantees into the spec** — objective verification, bounded loops, and causal observability, so a conforming runtime runs *real, non-coding tasks* safely, not just coding.

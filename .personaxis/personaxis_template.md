@@ -109,7 +109,7 @@
 
 apiVersion: persona.dev/v1            # MUST | UNIVERSAL — always "persona.dev/v1"
 kind: AgentPersona                    # MUST | enum<AgentPersona|UserPersona>
-spec_version: "0.9.0"                 # MUST | semver | spec version
+spec_version: "0.10.0"                # MUST | semver | spec version
 
 # ═══════════════════════════════════════════════════════════════════════════
 # METADATA — registry-level identification (MUST)
@@ -159,6 +159,7 @@ identity:
   # ── Identifiers (MUST) ──────────────────────────────────────────────────
   canonical_id: ""                    # MUST | string-slug | unique in registry. [RUNTIME]
   display_name: ""                    # MUST | string      | same as metadata.display_name. [ACTOR-HOT]
+  # short_name: ""                    # MAY  | string<=24  | v0.10: chat/UI handle (e.g. "Clio"). [ACTOR-HOT]
   capabilities: []                    # MAY  | string[]    | v0.8: explicit capability tags for orchestration/routing. [RUNTIME]
 
   # ── System identity (purpose + scope) ──────────────────────────────────
@@ -637,6 +638,44 @@ governance:
   # The improvement policy itself lives in policy.yaml (operational artifact).
   # This pointer just confirms which file owns it.
   improvement_policy_location: "./policy.yaml#/improvement_policy"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# IMPROVEMENT_POLICY — v0.10 (MAY): inline self-improvement posture
+# ═══════════════════════════════════════════════════════════════════════════
+# The runtime reads improvement_policy.mode (readMode). Authoritative inline mirror
+# of policy.yaml#/improvement_policy; absent => "locked". Change from the CLI with
+# `personaxis improve <mode>` or the REPL `/improve`.
+# improvement_policy:
+#   mode: locked                       # MAY | locked | suggesting | autonomous
+
+# ═══════════════════════════════════════════════════════════════════════════
+# PERSONA_PROMPTING — v0.10 (MAY): persona-prompting SOURCE MATERIAL
+# ═══════════════════════════════════════════════════════════════════════════
+# The compiler assembles these into the LLM-facing PERSONA.md (role adoption,
+# character-card/scene-contracts, few-shot voice, anti-break-character guardrails).
+# All optional; absence degrades to compiling from the quantitative layers.
+# See docs/PERSONA_PROMPTING.md.
+# persona_prompting:
+#   address:
+#     second_person: true              # compile to "You are <name>…" direct address
+#     you_are: ""                      # one-line role-adoption statement
+#   voice_exemplars:                   # few-shot voice samples (anchor tone/register)
+#     - context: ""
+#       user: ""
+#       persona: ""
+#   scene_contracts:                   # RRP: situation -> behavior -> concrete actions
+#     - situation: ""
+#       expected_behavior: ""
+#       actions: []
+#   behavioral_anchors:                # concrete do/don't with examples
+#     do: []
+#     dont: []
+#     examples: []
+#   break_character_guardrails: []     # stay-in-role rules (NEVER override hard limits)
+#   consistency:                       # persona dimensions by stability
+#     stable: []
+#     evolving: []
+#     situational: []
 
 # ═══════════════════════════════════════════════════════════════════════════
 # SECURITY — operational defaults (MUST)
