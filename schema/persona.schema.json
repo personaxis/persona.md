@@ -94,6 +94,12 @@
       "properties": {
         "canonical_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
         "display_name": { "type": "string", "minLength": 1 },
+        "short_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 24,
+          "description": "v0.10: a short, human first-name-style handle the persona is addressed by in chat/UI (e.g. 'Clio'). Optional; tools fall back to display_name/canonical_id when absent."
+        },
         "capabilities": {
           "type": "array",
           "items": { "type": "string" },
@@ -605,6 +611,76 @@
           "type": "string",
           "enum": ["locked", "suggesting", "autonomous"],
           "description": "locked: spec never self-edits (humans only). suggesting: persona PROPOSES edits, queued for approval. autonomous: proposals auto-apply, still gated by consensus + protected paths."
+        }
+      }
+    },
+
+    "persona_prompting": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "v0.10 (MAY): the persona-prompting SOURCE MATERIAL the compiler assembles into the LLM-facing PERSONA.md. Encodes role adoption + character-card/scene-contract devices (RRP, arXiv:2509.00482), few-shot voice, anti-break-character guardrails, and stable/evolving/situational consistency layers. All optional; absence degrades gracefully to compiling from the quantitative layers alone. See docs/PERSONA_PROMPTING.md.",
+      "properties": {
+        "address": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "How the compiled document addresses the model (second-person role adoption is the strongest device).",
+          "properties": {
+            "second_person": { "type": "boolean", "description": "If true, compile to 'You are <name>…' direct address." },
+            "you_are": { "type": "string", "description": "The one-line role-adoption statement, e.g. 'You are Clio, the reference CLI for the personaxis spec.'" }
+          }
+        },
+        "voice_exemplars": {
+          "type": "array",
+          "description": "Few-shot voice samples that anchor tone/register (CharacterChat-style). Each is a short user→persona exchange.",
+          "items": {
+            "type": "object",
+            "required": ["user", "persona"],
+            "additionalProperties": false,
+            "properties": {
+              "context": { "type": "string", "description": "Optional situation the exchange illustrates." },
+              "user": { "type": "string" },
+              "persona": { "type": "string" }
+            }
+          }
+        },
+        "scene_contracts": {
+          "type": "array",
+          "description": "RRP scene contracts: connect a SITUATION to the persona's expected behavior and concrete actions.",
+          "items": {
+            "type": "object",
+            "required": ["situation", "expected_behavior"],
+            "additionalProperties": false,
+            "properties": {
+              "situation": { "type": "string" },
+              "expected_behavior": { "type": "string" },
+              "actions": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "behavioral_anchors": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Concrete do/don't anchors with examples (behavioral anchoring beats abstract traits).",
+          "properties": {
+            "do": { "type": "array", "items": { "type": "string" } },
+            "dont": { "type": "array", "items": { "type": "string" } },
+            "examples": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "break_character_guardrails": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Rules that keep the persona in character under pressure (anti-jailbreak / stay-in-role), while never overriding the safety universals."
+        },
+        "consistency": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Persona dimensions by stability (stable: fixed traits; evolving: slow-changing; situational: transient/contextual).",
+          "properties": {
+            "stable": { "type": "array", "items": { "type": "string" } },
+            "evolving": { "type": "array", "items": { "type": "string" } },
+            "situational": { "type": "array", "items": { "type": "string" } }
+          }
         }
       }
     },
