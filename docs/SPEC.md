@@ -1,12 +1,24 @@
 # personaxis.md Specification
 
-**Version:** 0.9.0 (Personaxis v14)
+**Version:** 0.10.0 (Personaxis v15)
 **Status:** Current
 **License:** MIT
 
 ---
 
-## 0a. What's new in 0.9.0
+## 0a. What's new in 0.10.0
+
+v0.10.0 is **additive and backward compatible** with 0.9.0 — only new OPTIONAL fields; no existing field changed, so a v0.9.0 persona validates unchanged (`personaxis migrate 0.9-to-0.10` just bumps `spec_version`). The theme is **making the compiled `PERSONA.md` a persona-prompting artifact**, not a generic profile — so a language model *adopts and stays in* the persona — and letting the persona's **qualitative** material evolve under the same governance as its numbers. Full methodology + citations: [docs/PERSONA_PROMPTING.md](./PERSONA_PROMPTING.md).
+
+- **`identity.short_name`** (MAY, string ≤24) — the clean handle the persona is addressed by in chat/UI (e.g. `Mira`). Tools fall back to `display_name`/`canonical_id` when absent.
+- **`improvement_policy.mode`** (MAY, `locked | suggesting | autonomous`) — an authoritative **inline** mirror of `policy.yaml#/improvement_policy`, read by the runtime (`readMode`). Change it from the CLI with `personaxis improve <mode>` or the REPL `/improve`. (Previously the runtime read a frontmatter block the schema forbade, so the mode was effectively always `locked`; the block is now schema-valid.)
+- **`persona_prompting`** (MAY) — the persona-prompting **source material** the compiler assembles into `PERSONA.md`: `address` (second-person role adoption + `you_are`), `voice_exemplars` (few-shot `{context,user,persona}`), `scene_contracts` (RRP `{situation, expected_behavior, actions}`), `behavioral_anchors` (`do`/`dont`/`examples`), `break_character_guardrails` (stay-in-role rules that **never** override the safety universals), and `consistency` (`stable`/`evolving`/`situational` layers). The compiler derives each section from the quantitative layers when the corresponding field is absent.
+
+**Governed qualitative self-evolution.** Because `persona_prompting` fields are structured, a persona may now propose edits to its *qualitative* material (voice, scene contracts, anchors, guardrails) through the same append-only hash-chained ledger + verifier quorum + reversible overlay as numeric edits. A deterministic qualitative-safety verifier rejects any prose edit that injects a prohibited claim (real feelings/consciousness) or weakens the safety rails; `identity`/`character`/`values` remain protected paths.
+
+---
+
+## 0a-prev9. What's new in 0.9.0
 
 v0.9.0 is **additive and backward compatible** with 0.8.0 — only new OPTIONAL blocks; no existing field changed, so a v0.8.0 persona validates unchanged (`personaxis migrate 0.8-to-0.9` just bumps `spec_version`). The theme is **lifting production-autonomy guarantees into the spec** so a conforming runtime can run real, non-coding tasks safely:
 
