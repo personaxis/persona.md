@@ -1,3 +1,4 @@
 # Local Claude Code settings (not the committed .claude/agents/)
 .claude/settings.local.json
 .cursor/
+.recompile-pending.json
