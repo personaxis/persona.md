@@ -36,8 +36,8 @@
     },
     "spec_version": {
       "type": "string",
-      "enum": ["0.9.0", "0.8.0", "0.7.0", "0.6.0", "0.5.0", "0.4.0", "0.3.0"],
-      "description": "Spec version. 0.9.0 is current (additive: new OPTIONAL runtime-governance blocks — verification (objective maker≠checker gates), agent_budget (loop stop-conditions + budget caps), observability (tracing), runtime_artifacts.agent_state_file; no field changes from 0.8.0, a v0.8 persona validates unchanged). 0.8.0 added capabilities, governance.max_step_delta, permissions, mutation_log origin_node/session_id. 0.7.0 accepted unchanged. 0.3-0.6 accepted with deprecation warnings; the validator points to 'personaxis migrate' for automatic upgrade."
+      "enum": ["0.10.0", "0.9.0", "0.8.0", "0.7.0", "0.6.0", "0.5.0", "0.4.0", "0.3.0"],
+      "description": "Spec version. 0.10.0 is current (additive: new OPTIONAL persona-prompting fields — identity.short_name, inline improvement_policy.mode, and the persona_prompting block (address, voice_exemplars, scene_contracts, behavioral_anchors, break_character_guardrails, consistency); no field changes from 0.9.0, a v0.9 persona validates unchanged). 0.9.0 added verification, agent_budget, observability, runtime_artifacts.agent_state_file. 0.8.0 added capabilities, governance.max_step_delta, permissions, mutation_log origin_node/session_id. 0.7.0 accepted unchanged. 0.3-0.6 accepted with deprecation warnings; the validator points to 'personaxis migrate' for automatic upgrade."
     },
 
     "metadata": {
