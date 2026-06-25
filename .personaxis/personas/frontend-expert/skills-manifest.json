@@ -1,0 +1,9 @@
+{
+  "skills": [
+    {
+      "name": "component-review",
+      "kind": "local",
+      "status": "materialized"
+    }
+  ]
+}
