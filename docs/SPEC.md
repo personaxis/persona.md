@@ -6,6 +6,27 @@
 
 ---
 
+## 0a. What's new in 0.11.0 (reference runtime)
+
+v0.11.0 changes **no spec fields** — `spec_version` stays `0.10.0` and a v0.10 persona validates
+unchanged. It is a **reference-runtime** release that makes the spec's existing promises real:
+
+- **All six `memory.types` are now enforced.** `episodic` and `semantic` already were; v0.11
+  implements `procedural`, `autobiographical`, `user_preferences`, and `evaluations`, each with a
+  real producer/consumer that honors its flag. `evaluations` is a deterministic offline quality
+  scorer (safety + usefulness). The linter no longer warns that these are "declared but unenforced".
+- **Qualitative self-evolution actually runs in the live loop**, governed by
+  `improvement_policy.mode`: `locked` blocks, `suggesting` queues proposals for human review,
+  `autonomous` auto-applies — always gated by the verifier quorum, the protected-path list, and a
+  `user`-trust provenance gate (so an internal tick cannot self-edit). Numeric envelope nudges stay
+  reversible/clamped, so `suggesting`==`autonomous` for them; the distinction is meaningful for
+  qualitative edits.
+- **The compiled `PERSONA.md` is purely qualitative** — runtime numbers live in `state.json`, never
+  injected into the LLM-facing document. Conversation **sessions** persist per persona under
+  `.personaxis/[personas/<slug>/]sessions/` as a schema-less runtime artifact (like `episodic.jsonl`).
+
+---
+
 ## 0a. What's new in 0.10.0
 
 v0.10.0 is **additive and backward compatible** with 0.9.0 — only new OPTIONAL fields; no existing field changed, so a v0.9.0 persona validates unchanged (`personaxis migrate 0.9-to-0.10` just bumps `spec_version`). The theme is **making the compiled `PERSONA.md` a persona-prompting artifact**, not a generic profile — so a language model *adopts and stays in* the persona — and letting the persona's **qualitative** material evolve under the same governance as its numbers. Full methodology + citations: [docs/PERSONA_PROMPTING.md](./PERSONA_PROMPTING.md).

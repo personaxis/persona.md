@@ -11,6 +11,32 @@ The spec follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.11.0] - 2026-06-29
+
+**No spec field changes** — `spec_version` stays `0.10.0`; a v0.10 persona validates unchanged.
+This is a **reference-runtime** release that makes the spec's existing promises real: fields the
+spec already declared but the runtime ignored are now fully enforced.
+
+### Enforced (previously declared-only)
+- **All six `memory.types`** — `episodic`, `semantic`, `procedural`, `autobiographical`,
+  `user_preferences`, `evaluations` now have real producers/consumers, each honoring its flag.
+  `evaluations` is a deterministic offline quality scorer (safety/usefulness). The linter no
+  longer warns "unenforced" for these.
+- **Qualitative self-evolution under `improvement_policy.mode`** — the persona's qualitative
+  material (`persona_prompting`) can now evolve in the live loop under the same governance as its
+  numbers: `locked` blocks, `suggesting` queues for human review, `autonomous` auto-applies —
+  always gated by consensus verifiers, the protected-path list, and a `user`-trust provenance
+  gate. (Numeric envelope nudges remain reversible/clamped, so `suggesting`==`autonomous` for
+  them; the mode distinction is meaningful for qualitative edits.)
+
+### Clarified
+- The compiled `PERSONA.md` is **purely qualitative** — runtime state (numbers) belongs in
+  `state.json`, never injected into the LLM-facing document.
+- Conversation **sessions** are a runtime artifact (no schema), like `episodic.jsonl` /
+  `self-edits.jsonl`, stored per persona under `.personaxis/[personas/<slug>/]sessions/`.
+
+---
+
 ## [0.10.0] - 2026-06-24
 
 **Additive, backward compatible with 0.9.0** — only new OPTIONAL fields; no existing field changed. A v0.9.0 persona validates unchanged. Migrate with `personaxis migrate 0.9-to-0.10` (bumps `spec_version` only). Theme: **making `PERSONA.md` a persona-prompting artifact**. The compiled, LLM-facing document is no longer a generic profile — it is engineered from evidence-based persona-prompting techniques so a model *adopts and stays in* the persona, and the persona's qualitative material can evolve under the same governance as its numbers.
