@@ -22,12 +22,16 @@ spec already declared but the runtime ignored are now fully enforced.
   `user_preferences`, `evaluations` now have real producers/consumers, each honoring its flag.
   `evaluations` is a deterministic offline quality scorer (safety/usefulness). The linter no
   longer warns "unenforced" for these.
-- **Qualitative self-evolution under `improvement_policy.mode`** — the persona's qualitative
-  material (`persona_prompting`) can now evolve in the live loop under the same governance as its
-  numbers: `locked` blocks, `suggesting` queues for human review, `autonomous` auto-applies —
-  always gated by consensus verifiers, the protected-path list, and a `user`-trust provenance
-  gate. (Numeric envelope nudges remain reversible/clamped, so `suggesting`==`autonomous` for
-  them; the mode distinction is meaningful for qualitative edits.)
+- **Whole-spec self-evolution under `improvement_policy.mode` + `governance.per_layer_edit_policy`** —
+  any spec section (not only `persona_prompting`) can now evolve in the live loop, except the
+  protected safety floor (identity, character, hard_limits, the safety value, deletion_policy, …,
+  which can never self-edit). Editability is decided per layer: the author's
+  `governance.per_layer_edit_policy.<layer>` is now load-bearing at runtime —
+  `human_approval_required`/`review_required` force human review even in `autonomous`,
+  `auto_approved` auto-applies, `governance_controlled` follows the global mode. Always gated by
+  consensus verifiers, the protected-path list, and a `user`-trust provenance gate. (Numeric
+  envelope nudges remain reversible/clamped, so `suggesting`==`autonomous` for them; the mode +
+  per-layer distinction is meaningful for the rest of the spec.)
 
 ### Clarified
 - The compiled `PERSONA.md` is **purely qualitative** — runtime state (numbers) belongs in
