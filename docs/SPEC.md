@@ -368,7 +368,7 @@ The 3 universal `hard_limits` (must be present verbatim):
 |---|---|---|
 | `governance.autonomy_envelope` | MUST | enum `role_fidelity` / `conservative` / `extended` · NEAR-UNIVERSAL: `role_fidelity` |
 | `governance.approval_policy` | MUST | enum `human_for_core_changes` / `auto_for_low_risk` · NEAR-UNIVERSAL: `human_for_core_changes` |
-| `governance.per_layer_edit_policy.<layer>` | MUST | enum `human_approval_required` / `review_required` / `auto_approved` / `governance_controlled` · per layer. The `reflexive_self_regulation` entry **must** remain `governance_controlled` (NEAR-UNIVERSAL). |
+| `governance.per_layer_edit_policy.<layer>` | MUST | enum `human_approval_required` / `review_required` / `auto_approved` / `governance_controlled` · per layer. The `reflexive_self_regulation` entry **must** remain `governance_controlled` (NEAR-UNIVERSAL). **Runtime-load-bearing**: the reference runtime gates self-edits per layer on this value — `human_approval_required`/`review_required` force human review even under `autonomous`; `auto_approved` auto-applies; `governance_controlled` follows `improvement_policy.mode`. The protected safety floor (identity, character, hard_limits, the safety value, deletion_policy, …) is never editable regardless of this field. |
 | `governance.drift_thresholds.<layer>` | MUST | float 0..1 · per layer · used by the judge worker for drift detection |
 | `governance.improvement_policy_location` | MAY | path to where `improvement_policy` lives. Always `./policy.yaml#/improvement_policy`. |
 | `governance.max_step_delta` | MAY | v0.8: float 0..1 · max absolute change applied to any envelope field per mutation (anti-runaway). The runtime drift-bounds each proposed delta to this cap before clamping. |
