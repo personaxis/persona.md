@@ -64,6 +64,27 @@ The `@PERSONA.md` syntax tells Claude Code to read the live file each session. I
 
 If you hand-edit `PERSONA.md` directly, run `npx @personaxis/persona.md push --root` (or `decompile --root` to preview) before the next compile - this folds your edits back into `.personaxis/personaxis.md` so the two stay consistent.
 
+## Step 4b - Keep it alive (per-turn learning)
+
+Compiling wires a fresh identity in; a hook keeps it *alive*. Install the Claude Code end-of-turn hook so each turn feeds one governed tick:
+
+```bash
+npx @personaxis/persona.md hooks install --host claude-code           # this project
+npx @personaxis/persona.md hooks install --host claude-code --global  # or all projects
+```
+
+This adds a `Stop` hook to `.claude/settings.json` that runs `personaxis observe --stdin --source user` at the end of every turn. The tick runs on **your** configured model - it updates state, writes memory, and marks `PERSONA.md` stale on drift, **without spending Claude Code's tokens**. When it reports staleness, re-run `compile --root` (or `compile --root --if-pending`).
+
+Configure the model once (endpoint, model, and the env var holding the key):
+
+```bash
+npx @personaxis/persona.md config set --global local.endpoint https://api.your-provider.com/v1
+npx @personaxis/persona.md config set --global local.model    your-model-name
+npx @personaxis/persona.md config set --global local.apiKeyEnv YOUR_API_KEY_ENV_VAR
+```
+
+See the CLI configuration concept for the full precedence rules: https://github.com/personaxis/cli/blob/main/docs/configuration.md
+
 ## Step 5 - Report and offer agent personas
 
 After completing steps 1-4, give the user a brief summary:

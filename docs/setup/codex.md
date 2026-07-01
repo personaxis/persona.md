@@ -66,6 +66,23 @@ Re-running the command replaces this section instead of duplicating it. Existing
 
 If you hand-edit `PERSONA.md` directly, run `npx @personaxis/persona.md push --root` (or `decompile --root` to preview) before the next compile - this folds your edits back into `.personaxis/personaxis.md` so the two stay consistent.
 
+## Step 4b - Keep it alive (per-turn learning)
+
+The end-of-turn `hooks install` mechanism is **Claude-Code-specific today** (it wires Claude Code's `Stop` hook). Codex has no equivalent per-turn hook yet, so Codex keeps the persona alive through the **subagent + on-demand tools** path:
+
+- **Subagent:** `.codex/agents/<slug>.toml` (Step 5) — Codex adopts the persona as a custom agent.
+- **On-demand tools:** register the `personaxis-mcp` MCP server, or run `personaxis serve` for an HTTP boundary, so Codex can read/adjust the persona and run a governed `observe` tick when it chooses to.
+
+Either way, configure the model once (endpoint, model, and the env var holding the key):
+
+```bash
+npx @personaxis/persona.md config set --global local.endpoint https://api.your-provider.com/v1
+npx @personaxis/persona.md config set --global local.model    your-model-name
+npx @personaxis/persona.md config set --global local.apiKeyEnv YOUR_API_KEY_ENV_VAR
+```
+
+See the CLI configuration concept for the full precedence rules: https://github.com/personaxis/cli/blob/main/docs/configuration.md
+
 ## Step 5 - Report and offer agent personas
 
 After completing steps 1-4, give the user a brief summary:
