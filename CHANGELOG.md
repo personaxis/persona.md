@@ -35,9 +35,14 @@ spec already declared but the runtime ignored are now fully enforced.
 
 ### Clarified
 - The compiled `PERSONA.md` is **purely qualitative** — runtime state (numbers) belongs in
-  `state.json`, never injected into the LLM-facing document.
+  `state.json`, never injected into the LLM-facing document. (`personaxis.md` is the editable source;
+  `PERSONA.md` is a generated view — the two are not the same artifact.)
 - Conversation **sessions** are a runtime artifact (no schema), like `episodic.jsonl` /
   `self-edits.jsonl`, stored per persona under `.personaxis/[personas/<slug>/]sessions/`.
+- **How a persona stays alive** is a runtime concern, not a spec field: the reference CLI keeps
+  `PERSONA.md` fresh via host hooks (`personaxis observe` per turn, on the operator's own model) and/or
+  an optional `personaxis watch` daemon; the model/key resolve through a layered config
+  (env > project > global, key never required in a file). See the CLI's `docs/architecture/deployment.md`.
 
 ---
 
