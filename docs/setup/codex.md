@@ -68,7 +68,15 @@ If you hand-edit `PERSONA.md` directly, run `npx @personaxis/persona.md push --r
 
 ## Step 4b - Keep it alive (per-turn learning)
 
-The end-of-turn `hooks install` mechanism is **Claude-Code-specific today** (it wires Claude Code's `Stop` hook). Codex has no equivalent per-turn hook yet, so Codex keeps the persona alive through the **subagent + on-demand tools** path:
+Codex has a **`Stop` hook** (like Claude Code), so per-turn learning is one command:
+
+```bash
+npx @personaxis/persona.md hooks install --host codex          # project (.codex/hooks.json)
+npx @personaxis/persona.md hooks install --host codex --global # user (~/.codex/hooks.json)
+```
+
+This runs `personaxis observe --stdin` at the end of every turn — one governed tick on **your** model,
+recompiling on drift, with no Codex tokens spent. You can additionally keep the persona alive through:
 
 - **Subagent:** `.codex/agents/<slug>.toml` (Step 5) — Codex adopts the persona as a custom agent.
 - **On-demand tools:** register the `personaxis-mcp` MCP server, or run `personaxis serve` for an HTTP boundary, so Codex can read/adjust the persona and run a governed `observe` tick when it chooses to.
