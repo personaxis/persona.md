@@ -11,7 +11,7 @@ This is the source repository for the open Personaxis spec standard - a declarat
 - **`.personaxis/[personas/<slug>/]personaxis.md`** - the committed, quantitative 10-layer spec (the source of identity).
 - **`PERSONA.md`** (repo root, root mode) or **`.claude/agents/<slug>.md`** (subagent mode) - the committed, LLM-compiled qualitative document a coding agent reads to know who it is and how to behave. Generated from `personaxis.md` via `personaxis compile`; hand-edits flow back via `personaxis decompile`.
 
-**Current spec version: 0.7.0** (Personaxis v12). v0.7.0 is a layout-only move (no field changes from v0.6.0): the quantitative spec moved from repo-root `PERSONA.md` to `.personaxis/personaxis.md`, and the repo-root `PERSONA.md` is now the compiled qualitative document. See [CHANGELOG.md](./CHANGELOG.md) for migration notes.
+**Current spec version: 0.10.0** (Personaxis v15). v0.10.0 is additive on v0.9.0 (v0.9 personas validate unchanged): new OPTIONAL fields make the compiled `PERSONA.md` a persona-prompting artifact — `identity.short_name`, inline `improvement_policy.mode`, and a `persona_prompting` block (`address`, `voice_exemplars`, `scene_contracts`, `behavioral_anchors`, `break_character_guardrails`, `consistency`). The quantitative spec lives at `.personaxis/personaxis.md`; the repo-root `PERSONA.md` is the compiled qualitative document. Migrate with `personaxis migrate 0.9-to-0.10`. See [CHANGELOG.md](./CHANGELOG.md) for migration notes.
 
 ## File ownership
 
@@ -44,13 +44,15 @@ When adding a new field or modifying an existing one, always update ALL six of t
 
 If any of the six is missing, the change is incomplete.
 
-The current spec version is **0.7.0** (Personaxis v12). The schemas live at `schema/`:
+The current spec version is **0.10.0** (Personaxis v15). Because v0.8–v0.10 are additive, the schema
+`$id`s are only bumped when a schema actually changes, so they trail `spec_version`. Current `$id`s
+under `schema/`:
 
-- `persona.schema.json` with `$id: https://personaxis.com/schemas/persona/0.7/persona.schema.json`
-- `policy.schema.json` with `$id: https://personaxis.com/schemas/persona/0.7/policy.schema.json`
-- `state.schema.json` with `$id: https://personaxis.com/schemas/state/0.7/state.schema.json`
+- `persona.schema.json` with `$id: https://personaxis.com/schemas/persona/0.9/persona.schema.json`
+- `policy.schema.json` with `$id: https://personaxis.com/schemas/persona/0.8/policy.schema.json`
+- `state.schema.json` with `$id: https://personaxis.com/schemas/state/0.9/state.schema.json`
 
-## Rules for adding a new example persona (v0.7+)
+## Rules for adding a new example persona (v0.10+)
 
 A new example persona is a directory under `.personaxis/personas/<slug>/`. In root mode (a persona meant to be deployed as a repository agent), it must contain:
 
