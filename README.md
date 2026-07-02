@@ -1,7 +1,7 @@
 # PERSONA.md
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Spec](https://img.shields.io/badge/spec-0.7.0-informational)](./docs/SPEC.md)
+[![Spec](https://img.shields.io/badge/spec-0.10.0-informational)](./docs/SPEC.md)
 [![CLI](https://img.shields.io/badge/CLI-%40personaxis%2Fpersona.md-blue)](https://www.npmjs.com/package/@personaxis/persona.md)
 [![Registry](https://img.shields.io/badge/registry-personaxis.com-blueviolet)](https://personaxis.com)
 
@@ -90,7 +90,7 @@ Below is a minimal `personaxis.md` for a focused code reviewer. The YAML defines
 ---
 apiVersion: persona.dev/v1
 kind: AgentPersona
-spec_version: "0.7.0"
+spec_version: "0.10.0"
 
 metadata:
   name: "lens"
@@ -324,8 +324,8 @@ npx @personaxis/persona.md use cmo --target codex
 # List personas installed in this project (.personaxis/personas/)
 npx @personaxis/persona.md list
 
-# Migrate an existing v0.6 layout (root PERSONA.md with 10-layer frontmatter) to v0.7.0
-npx @personaxis/persona.md migrate 0.6-to-0.7 --apply
+# Migrate a v0.9 persona to v0.10 (additive: bumps spec_version, scaffolds optional persona_prompting)
+npx @personaxis/persona.md migrate 0.9-to-0.10 --apply
 ```
 
 ### Without the CLI — paste directly to your agent
@@ -352,15 +352,35 @@ https://raw.githubusercontent.com/personaxis/persona.md/main/docs/setup/codex.md
 
 ---
 
+#### OpenClaw
+
+```
+Read and follow every step in this setup guide:
+https://raw.githubusercontent.com/personaxis/persona.md/main/docs/setup/openclaw.md
+```
+
+---
+
+#### Hermes
+
+```
+Read and follow every step in this setup guide:
+https://raw.githubusercontent.com/personaxis/persona.md/main/docs/setup/hermes.md
+```
+
+---
+
 #### Archived targets
 
-Cursor and OpenClaw/SOUL.md exports are archived for now. Their setup guides remain in this repository for historical reference, but active CLI export targets are Claude Code and Codex.
+The Cursor export is archived for now; its setup guide (`docs/setup/cursor.md`) remains for historical
+reference. Active CLI export targets are Claude Code, Codex, OpenClaw, and Hermes (the last two compile
+to a `SOUL.md` document).
 
 ---
 
 ## How PERSONA.md works
 
-Spec v0.7.0 splits every persona into two artifacts: a quantitative source (`personaxis.md`, the ten layers) and a compiled, qualitative document (`PERSONA.md` / `<slug>.md`) that a coding agent reads directly. `personaxis compile` generates the second from the first; `personaxis decompile` proposes updates to the first from a hand-edited second. A persona can be placed in a repository in one of two modes - the mode only changes *where* these two artifacts live on disk.
+The spec splits every persona into two artifacts: a quantitative source (`personaxis.md`, the ten layers) and a compiled, qualitative **persona-prompting** document (`PERSONA.md` / `<slug>.md`) that a coding agent reads directly. `personaxis compile` generates the second from the first; `personaxis decompile` proposes updates to the first from a hand-edited second. A persona can be placed in a repository in one of two modes - the mode only changes *where* these two artifacts live on disk.
 
 **Root mode (repository agent)** - the persona IS the repo's primary agent. `PERSONA.md` at the project root is the compiled, committed file that `AGENTS.md`/`CLAUDE.md` tell every coding agent to read to know who to be in this project. Its quantitative source and supporting folders live in `.personaxis/` (`personaxis.md`, `policy.yaml`, `state.json`, `memory.md`, `memory/`, `references/`, `examples/`, `skills/`, `assets/`, `manifest.json`).
 
@@ -498,7 +518,7 @@ Requires Node.js 18+.
 
 ### `validate`
 
-Schema and universals validation against spec v0.7.0 (personas at v0.3-v0.6 are accepted with deprecation warnings). Exits `1` if invalid, `0` if clean. Safe for CI.
+Schema and universals validation against spec v0.10.0 (personas at v0.3-v0.9 are accepted; older layouts get deprecation warnings). Exits `1` if invalid, `0` if clean. Safe for CI.
 
 ```bash
 personaxis validate [file]
@@ -628,11 +648,14 @@ Run `personaxis templates` to see available options.
 Apply structural codemods between spec versions.
 
 ```bash
-personaxis migrate 0.5-to-0.6 [path] [--apply]
-personaxis migrate 0.6-to-0.7 [path] [--apply] [--provider <name>]
+personaxis migrate 0.5-to-0.6  [path] [--apply]
+personaxis migrate 0.6-to-0.7  [path] [--apply] [--provider <name>]
+personaxis migrate 0.7-to-0.8  [path] [--apply]
+personaxis migrate 0.8-to-0.9  [path] [--apply]
+personaxis migrate 0.9-to-0.10 [path] [--apply]
 ```
 
-`0.6-to-0.7` moves a legacy root `PERSONA.md` (10-layer frontmatter) and its sibling folders into `.personaxis/`, then runs `compile` once to produce the initial `PERSONA.md`. Both default to a dry run; pass `--apply` to write changes.
+`0.6-to-0.7` moves a legacy root `PERSONA.md` (10-layer frontmatter) and its sibling folders into `.personaxis/`, then runs `compile` once to produce the initial `PERSONA.md`. `0.7-to-0.8`, `0.8-to-0.9`, and `0.9-to-0.10` are **additive** — they bump `spec_version` and scaffold the new optional fields (v0.10 adds the `persona_prompting` block) without changing existing content. All default to a dry run; pass `--apply` to write changes.
 
 ### `config`
 

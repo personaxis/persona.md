@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is the source repository for the **open Personaxis spec standard**, not the CLI tooling (published separately as `@personaxis/persona.md`). The repo contains the spec document, JSON Schemas, example personas, and documentation.
 
-**Current spec version: 0.7.0** (Personaxis v12). v0.7.0 is a layout-only move (no field changes from v0.6.0): the quantitative 10-layer spec moved from repo-root `PERSONA.md` to `.personaxis/[personas/<slug>/]personaxis.md`, and the repo-root `PERSONA.md` (or `.claude/agents/<slug>.md` in subagent mode) is now a separate, LLM-compiled qualitative document generated via `personaxis compile`. See [CHANGELOG.md](./CHANGELOG.md) for migration notes.
+**Current spec version: 0.10.0** (Personaxis v15). v0.10.0 is additive on v0.9.0 (v0.9 personas validate unchanged): it makes the compiled `PERSONA.md` a **persona-prompting artifact** via new OPTIONAL fields — `identity.short_name`, inline `improvement_policy.mode`, and a `persona_prompting` block (`address`, `voice_exemplars`, `scene_contracts`, `behavioral_anchors`, `break_character_guardrails`, `consistency`) that `compile` assembles into a second-person character-card + scene-contract document (methodology in `docs/PERSONA_PROMPTING.md`). The quantitative 10-layer spec lives at `.personaxis/[personas/<slug>/]personaxis.md`; the repo-root `PERSONA.md` (or `.claude/agents/<slug>.md` in subagent mode) is the separate, LLM-compiled qualitative document generated via `personaxis compile`. Migrate with `personaxis migrate 0.9-to-0.10`. See [CHANGELOG.md](./CHANGELOG.md) for notes.
 
 ## Validation
 
@@ -16,12 +16,12 @@ npx @personaxis/persona.md validate <slug>                    # named persona (.
 npx @personaxis/persona.md compile [--root | <slug>]          # personaxis.md -> PERSONA.md / <slug>.md
 npx @personaxis/persona.md decompile [--root | <slug>]        # PERSONA.md / <slug>.md -> personaxis.md proposal
 npx @personaxis/persona.md state mutate [-f <path>] --field X --delta Y
-npx @personaxis/persona.md migrate 0.6-to-0.7 [--apply]      # auto-migrate layout (layout-only)
+npx @personaxis/persona.md migrate 0.9-to-0.10 [--apply]     # additive: bumps spec_version, adds optional persona_prompting scaffold
 ```
 
 Exit codes: PASS / PASS_WITH_WARNINGS / FAIL_SCHEMA / FAIL_POLICY / FAIL_CONCEPTUAL.
 
-## Architecture (v0.7)
+## Architecture (v0.10)
 
 The spec defines a **three-artifact information model**:
 
@@ -51,16 +51,16 @@ Three canonical sources of truth must stay in sync:
 5. `.personaxis/personas/cmo/personaxis.md` (the reference example, then regenerate `.personaxis/personas/cmo/PERSONA.md` via `personaxis compile`)
 6. `CHANGELOG.md`
 
-## personaxis.md file structure (v0.7)
+## personaxis.md file structure (v0.10)
 
-Every conforming v0.7 `personaxis.md` has:
+Every conforming v0.10 `personaxis.md` has:
 
-- **YAML frontmatter** — authoritative, machine-validated. Required: `apiVersion: persona.dev/v1`, `kind: AgentPersona | UserPersona`, `spec_version: "0.7.0"`, `metadata`, all 10 layers (in canonical order), top-level `governance`, `security`. Optional: `extensions`, `runtime_artifacts`.
+- **YAML frontmatter** — authoritative, machine-validated. Required: `apiVersion: persona.dev/v1`, `kind: AgentPersona | UserPersona`, `spec_version: "0.10.0"`, `metadata`, all 10 layers (in canonical order), top-level `governance`, `security`. Optional: `extensions`, `runtime_artifacts`, `improvement_policy` (inline `mode`), `persona_prompting`, and the v0.8/v0.9 blocks `permissions`, `verification`, `agent_budget`, `observability`.
 - **Markdown body** — informational only. Sections: Overview, Design Rationale, Self-Improvement Modes, Do's, Don'ts, Resources.
 
 The ten canonical layers (fixed order): `identity`, `character`, `personality`, `values_and_drives`, `affect`, `cognition`, `memory`, `metacognition`, `reflexive_self_regulation`, `persona`.
 
-The repo-root `PERSONA.md` (or `.claude/agents/<slug>.md`) translates these layers into prose: see `PERSONA_template.md` for its section contract (Identity & Purpose, Character, Personality & Voice, Values, How You Think, Limits, Self-Improvement, Resources).
+The repo-root `PERSONA.md` (or `.claude/agents/<slug>.md`) translates these layers into a **persona-prompting** document: a second-person character card (`# You are …`) with Who you are, How you speak (+ Voice Exemplars), What you always/never do, Scene Contracts, How you think, What is fixed/what can change, Hard limits, Staying in character, Memory & resources, and Self-improvement. The optional `persona_prompting` block feeds those sections directly. See `PERSONA_template.md` for the section contract and `docs/PERSONA_PROMPTING.md` for the methodology.
 
 ## v0.6 unified governance
 
@@ -99,7 +99,7 @@ Defined in `policy.yaml#/improvement_policy/mode`:
 
 State.json mutations (`adjust_persona_state`) work under ALL modes. They are operational, not spec edits.
 
-## Example persona package (v0.7)
+## Example persona package (v0.10)
 
 A complete example persona under `.personaxis/personas/<slug>/` requires (root-mode layout, flattened):
 
