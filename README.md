@@ -324,7 +324,7 @@ npx @personaxis/persona.md use cmo --target codex
 # List personas installed in this project (.personaxis/personas/)
 npx @personaxis/persona.md list
 
-# Migrate a v0.9 persona to v0.10 (additive: bumps spec_version, scaffolds optional persona_prompting)
+# Migrate a v0.9 persona to v0.10 (additive: bumps spec_version; persona_prompting etc. become available to add)
 npx @personaxis/persona.md migrate 0.9-to-0.10 --apply
 ```
 
@@ -655,7 +655,7 @@ personaxis migrate 0.8-to-0.9  [path] [--apply]
 personaxis migrate 0.9-to-0.10 [path] [--apply]
 ```
 
-`0.6-to-0.7` moves a legacy root `PERSONA.md` (10-layer frontmatter) and its sibling folders into `.personaxis/`, then runs `compile` once to produce the initial `PERSONA.md`. `0.7-to-0.8`, `0.8-to-0.9`, and `0.9-to-0.10` are **additive** — they bump `spec_version` and scaffold the new optional fields (v0.10 adds the `persona_prompting` block) without changing existing content. All default to a dry run; pass `--apply` to write changes.
+`0.6-to-0.7` moves a legacy root `PERSONA.md` (10-layer frontmatter) and its sibling folders into `.personaxis/`, then runs `compile` once to produce the initial `PERSONA.md`. `0.7-to-0.8`, `0.8-to-0.9`, and `0.9-to-0.10` are **additive** — they bump `spec_version` only (no field changes; an existing persona stays valid). The bump makes the new OPTIONAL fields *available* to add by hand — v0.10 unlocks the `persona_prompting` block, `identity.short_name`, and inline `improvement_policy.mode`. All default to a dry run; pass `--apply` to write changes.
 
 ### `config`
 
