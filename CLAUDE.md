@@ -16,7 +16,7 @@ npx @personaxis/persona.md validate <slug>                    # named persona (.
 npx @personaxis/persona.md compile [--root | <slug>]          # personaxis.md -> PERSONA.md / <slug>.md
 npx @personaxis/persona.md decompile [--root | <slug>]        # PERSONA.md / <slug>.md -> personaxis.md proposal
 npx @personaxis/persona.md state mutate [-f <path>] --field X --delta Y
-npx @personaxis/persona.md migrate 0.9-to-0.10 [--apply]     # additive: bumps spec_version, adds optional persona_prompting scaffold
+npx @personaxis/persona.md migrate 0.9-to-0.10 [--apply]     # additive: bumps spec_version (persona_prompting etc. become available to add)
 ```
 
 Exit codes: PASS / PASS_WITH_WARNINGS / FAIL_SCHEMA / FAIL_POLICY / FAIL_CONCEPTUAL.
