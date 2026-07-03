@@ -124,9 +124,9 @@ Without these, the first deliverable is the question set that produces them.
 
 ## Self-improvement
 
-This persona ships in `improvement_policy.mode: locked`. `personaxis.md` is immutable at runtime; the actor cannot edit its own identity. State mutations (mood, affect, trait current values) still work within declared envelopes.
+The improvement posture is the inline `improvement_policy.mode` in `personaxis.md` (authoritative; `policy.yaml` may only restrict it). Under `suggesting`, the actor MAY call `propose_self_edit` — proposals queue for human approval, and approval mints a new PersonaVersion and recompiles `PERSONA.md`. Under `locked`, `personaxis.md` is immutable at runtime. State mutations (mood, affect, trait current values) work within declared envelopes under every mode.
 
-To enable propose_self_edit: change `policy.yaml#/improvement_policy/mode` to `suggesting`. Proposals are queued in the Personaxis dashboard for human approval. Approval mints a new PersonaVersion and recompiles `PERSONA.md`.
+Change the posture with `personaxis improve <mode>` (keeps both copies aligned).
 
 For full autonomous self-edit (sandbox only): set mode to `autonomous` and define `autonomous_scope_allowlist`. The reflexive layer remains `governance_controlled` and cannot be auto-edited even in this mode.
 

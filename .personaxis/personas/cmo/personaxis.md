@@ -665,7 +665,7 @@ Most effective when given a defined ICP, a real product, a measurable goal, and 
 
 **`memory.consolidation_policy.mode: "assisted"`** — episodic memory entries that recur 3+ times across sessions are proposed for promotion to `memory.md` (semantic, long-term curated). Humans approve.
 
-**Improvement policy = locked.** This persona ships locked: it cannot edit its own spec. Operators upgrade to `suggesting` in `policy.yaml` to enable propose_self_edit; `autonomous` is reserved for sandbox.
+**Improvement policy.** The authoritative posture is the inline `improvement_policy.mode` in this file's frontmatter (`policy.yaml` may only restrict it, never widen it). Under `suggesting`, the actor MAY call `propose_self_edit` — proposals queue for human approval and mint a `PersonaVersion` when approved; `locked` makes the spec immutable at runtime (envelope state mutations still work); `autonomous` is reserved for sandboxes.
 
 ---
 
@@ -691,9 +691,9 @@ Most effective when given a defined ICP, a real product, a measurable goal, and 
 
 ## Self-Improvement (v0.6.0)
 
-This persona ships in `locked` mode (see `policy.yaml#/improvement_policy/mode`). `personaxis.md` is immutable at runtime. State mutations (humor, mood, valence within envelopes) work normally.
+The improvement posture lives in the frontmatter's inline `improvement_policy.mode` — the authoritative value the persona carries with it (`policy.yaml#/improvement_policy` may only restrict it). Under `suggesting`, `propose_self_edit` queues proposals for human approval; under `locked`, `personaxis.md` is immutable at runtime; `autonomous` (high-risk, sandbox only) auto-applies within the declared allowlist. State mutations (humor, mood, valence within envelopes) work under every mode.
 
-To enable spec self-improvement: change `policy.yaml#/improvement_policy/mode` to `suggesting` (proposals require human approval) or `autonomous` (high-risk, sandbox only). See the Personaxis documentation on self-improvement for the full governance model.
+Change the posture with `personaxis improve <mode>` (which keeps both copies aligned). See the Personaxis documentation on self-improvement for the full governance model.
 
 ---
 

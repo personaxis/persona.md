@@ -66,8 +66,9 @@
 #       ├── policy.yaml       # observability + assertions + improvement_policy
 #       ├── state.json        # MUTABLE runtime state (current values)
 #       ├── memory.md         # long-term curated semantic memory
-#       ├── memory/           # episodic, date-stamped sessions
-#       │   └── YYYY-MM-DD.md
+#       ├── memory/           # episodic memory (normative format: schema/memory.schema.json)
+#       │   └── episodic.jsonl    # append-only, hash-chained (tamper-evident); any .md
+#       │                         # files here are generated human views, never sources
 #       ├── references/       # heavy knowledge prose (Anthropic Skills convention)
 #       ├── examples/         # worked outputs for voice/format calibration
 #       ├── skills/           # Anthropic-compatible sub-skills (optional)
@@ -372,13 +373,16 @@ cognition:
 # ═══════════════════════════════════════════════════════════════════════════
 # LAYER 7: MEMORY — continuity of experience
 # ═══════════════════════════════════════════════════════════════════════════
-# v0.6.0: dual structure clarified.
+# v0.6.0: dual structure clarified; v0.8.0: the episodic format is NORMATIVE
+#   (schema/memory.schema.json — one JSON object per line, provenance + hash chain).
 #   - memory.md (FILE)   = long-term curated semantic memory. Stable.
-#   - memory/ (FOLDER)   = date-stamped episodic memory. Volatile.
+#   - memory/ (FOLDER)   = episodic memory: memory/episodic.jsonl (append-only,
+#     hash-chained, tombstone deletion). Date-stamped .md files are generated
+#     human-readable views of the log, never the source of truth.
 #
 memory:
   types:                              # MUST | map<string, bool> | [RUNTIME]
-    episodic: true                    # writes to memory/YYYY-MM-DD.md
+    episodic: true                    # writes to memory/episodic.jsonl (hash-chained; see memory.schema.json)
     semantic: true                    # consolidates to memory.md
     procedural: true
     autobiographical: false

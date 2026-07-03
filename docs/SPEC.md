@@ -145,7 +145,7 @@ A `personaxis.md` file has two parts:
 ---
 apiVersion: persona.dev/v1
 kind: AgentPersona
-spec_version: "0.7.0"
+spec_version: "0.10.0"
 metadata: { ... }
 identity: { ... }
 # ... the ten layers ...
@@ -167,7 +167,7 @@ The frontmatter is the authoritative source. The Markdown body is informational 
 |---|---|---|
 | `apiVersion` | string (const) | `"persona.dev/v1"` — universal, must be exactly this value |
 | `kind` | enum | `"AgentPersona"` for AI agents · `"UserPersona"` for human users |
-| `spec_version` | string (const) | `"0.7.0"` — the version of this spec the file conforms to |
+| `spec_version` | string (enum) | `"0.10.0"` is current — the version of this spec the file conforms to. The validator accepts `0.7.0`–`0.10.0` unchanged (each minor since 0.7 is additive) and `0.3.0`–`0.6.0` with deprecation warnings pointing to `personaxis migrate` |
 
 A validator rejecting any of these returns `FAIL_CONCEPTUAL` for `apiVersion` and `FAIL_SCHEMA` for `kind` / `spec_version`.
 
@@ -461,10 +461,43 @@ A document **conforms** to this spec when:
 
 Run `personaxis validate ./.personaxis/personaxis.md` to check. The CLI is the reference implementation; the JSON Schema is published with it and lives at [`schema/persona.schema.json`](../schema/persona.schema.json).
 
+### 12.1 The canonical universals table (single source)
+
+This table is the ONLY normative enumeration of the universal invariants. Other documents
+(README, templates, changelogs) reference it; they do not restate it. Paths are the CURRENT
+field locations (earlier changelog entries name pre-v0.6 paths — e.g. the per-layer
+`edit_policy` fields that v0.6 centralized into `governance`; those historical entries are
+not normative).
+
+| # | Invariant (current path) | Required value | On violation |
+|---|---|---|---|
+| U1 | `apiVersion` | `"persona.dev/v1"` | `FAIL_CONCEPTUAL` |
+| U2 | `affect.representation` | `"hybrid_dimensional_appraisal_discrete_mood"` | `FAIL_CONCEPTUAL` |
+| U3 | `affect.regulation_policy.never_claim_real_feeling` | `true` | `FAIL_CONCEPTUAL` |
+| U4 | `persona.constraints.cannot_claim_real_emotion` | `true` | `FAIL_CONCEPTUAL` |
+| U5 | `character.virtues.honesty.enforcement` | `"hard"` | `FAIL_POLICY` |
+| U6 | `values_and_drives.values.safety` | `weight >= 0.90` with `type: "governance"` | `FAIL_POLICY` |
+| U7 | `values_and_drives.conflict_resolution.safety_over_completion` | `true` | `FAIL_POLICY` |
+| U8 | `reflexive_self_regulation.hard_limits` | contains the three verbatim universal limits: "No claim of subjective consciousness." · "No persistent memory write without policy pass." · "No unauthorized identity change." | `FAIL_POLICY` |
+| U9 | `governance.per_layer_edit_policy.reflexive_self_regulation` | `"governance_controlled"` (pre-v0.6 files: the legacy `reflexive_self_regulation.edit_policy` is read as a fallback) | `FAIL_POLICY` |
+| U10 | `persona.constraints.cannot_override_identity` and `…cannot_override_character` | `true` | `FAIL_POLICY` |
+| U11 | `memory.deletion_policy.user_request_supported` | `true` | `FAIL_POLICY` |
+| U12 | `cognition.uncertainty_policy` | `abstain_when_above > disclose_when_above` | `FAIL_POLICY` |
+
+**Scope by `kind`:** U1–U4 (the conceptual universals) apply to every document. U5–U12 (the
+policy universals) apply to `AgentPersona`; a `UserPersona` describes a human and carries no
+agent behavioral contract, so the validator does not apply them to it. This scoping is
+explicit and intentional — not an implementation accident.
+
+**Presence vs behavior:** the validator checks these invariants *structurally* (the declared
+values). Behavioral compliance at runtime (e.g. that the persona actually never fabricates)
+is the runtime's obligation, exercised by the evaluation suite — a declared string is
+necessary, not sufficient.
+
 ---
 
 ## 13. Versioning
 
-The spec is versioned with semver. `0.7.0` is the current stable version (Personaxis v12). Breaking changes increment MINOR while pre-1.0; additions that do not break existing personas increment PATCH.
+The spec is versioned with semver; **`spec_version` is the only normative version of this standard**. `0.10.0` is the current stable version. Breaking changes increment MINOR while pre-1.0; additive changes that do not break existing personas also increment MINOR (0.8, 0.9 and 0.10 were additive minors — a persona from 0.7.0 onward validates unchanged).
 
-Migration from 0.6.0 to 0.7.0 is layout-only and automatic: `personaxis migrate 0.6-to-0.7` moves files into `.personaxis/` and runs `personaxis compile` once to produce the initial `PERSONA.md`. See [`CHANGELOG.md`](../CHANGELOG.md) for the diff and rationale.
+Migrations are automated codemods: `personaxis migrate 0.5-to-0.6` (structural), `0.6-to-0.7` (layout-only: moves files into `.personaxis/` and runs `personaxis compile` once), and the additive bumps `0.7-to-0.8`, `0.8-to-0.9`, `0.9-to-0.10`. See [`CHANGELOG.md`](../CHANGELOG.md) for each diff and rationale.

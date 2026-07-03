@@ -108,7 +108,7 @@ A complete example persona under `.personaxis/personas/<slug>/` requires (root-m
 - `policy.yaml` (observability + improvement_policy)
 - `state.json` (mutable runtime state)
 - `memory.md` (long-term curated)
-- `memory/` (episodic, date-stamped)
+- `memory/` (episodic: `episodic.jsonl`, hash-chained per `schema/memory.schema.json`; `.md` files are generated views)
 - `references/` (heavy knowledge prose)
 - `examples/` (worked outputs, markdown or HTML)
 - `skills/` (optional Anthropic-compatible sub-skills)
