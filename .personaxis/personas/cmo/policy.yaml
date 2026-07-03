@@ -14,7 +14,7 @@
 # WHO DOES NOT READ THIS
 #   - The LLM actor running the persona.
 
-spec_version: "0.7.0"
+spec_version: "0.10.0"
 
 applies_to:
   persona_name: "cmo"
@@ -30,13 +30,17 @@ applies_to:
 #               PersonaVersion automatically. Sandbox only.
 #
 # State.json mutations (adjust_persona_state tool) work under ALL three modes.
+#
+# PRECEDENCE (v0.10): the inline improvement_policy.mode in personaxis.md is the
+# authoritative posture the persona carries with it; this file may only RESTRICT it
+# (effective mode = the more restrictive of the two, over locked < suggesting < autonomous).
+# Keep the two aligned — the validator warns on a mismatch.
 improvement_policy:
-  mode: locked
+  mode: suggesting
 
-  # Uncomment when transitioning to suggesting or autonomous:
-  # approved_by: "user:CEO_id"
-  # last_approval_at: "2026-05-29T12:00:00Z"
-  # approval_expires_at: "2026-08-29T12:00:00Z"
+  approved_by: "user:CEO_id"
+  last_approval_at: "2026-06-24T12:00:00Z"
+  # approval_expires_at: "2026-09-24T12:00:00Z"
 
   # Required when mode == autonomous:
   # autonomous_scope_allowlist:

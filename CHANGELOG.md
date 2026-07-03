@@ -7,7 +7,52 @@ The spec follows [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [Unreleased]
+## [Unreleased] — integrity sweep (F1 of the master architecture review; see `cli/ARCHITECTURE_REVIEW.md`)
+
+**No spec field changes.** This closes the drift between the spec's own documents, catalogued by
+the 2026-07 architecture audit:
+
+### Fixed — normative documents
+- **SPEC.md body was three minors stale**: §2/§3 declared `spec_version` const `"0.7.0"` and §13
+  called 0.7.0 current while the header, schema, template and both golden examples were at 0.10.0.
+  Now §3 states 0.10.0 with the accepted range, and §13 records the additive-minor policy and the
+  full codemod list, plus: `spec_version` is the ONLY normative version of this standard.
+- **SPEC.md §12.1 — the canonical universals table** (single source): the twelve universal
+  invariants with their CURRENT paths and FAIL codes. This supersedes the informal list that only
+  existed in the 0.3.0 changelog entry, whose #10 still named the pre-v0.6
+  `reflexive_self_regulation.edit_policy` path (now `governance.per_layer_edit_policy.
+  reflexive_self_regulation`). Scope by `kind` (U1–U4 all documents; U5–U12 AgentPersona) is now
+  explicit, and the presence-vs-behavior distinction is stated.
+- **`persona.schema.json` self-identification**: `$id`/title said 0.9, description said "spec
+  v0.8.0" — all now 0.10; the dangling reference to the dropped `runtime_artifacts.
+  agent_state_file` removed; the marketing "Personaxis vN" label removed from normative text.
+- **`policy.schema.json` rejected current versions**: its `spec_version` enum stopped at 0.7.0 —
+  now forward-compatible through 0.10.0 ($id/title also refreshed).
+
+### Fixed — golden examples
+- **CMO improvement-mode self-contradiction**: inline `improvement_policy.mode: suggesting` vs
+  `policy.yaml mode: locked` vs prose "ships locked" (three copies, two values). Resolved to the
+  v0.10 precedence rule — the inline mode is authoritative, `policy.yaml` may only restrict —
+  with policy.yaml aligned to `suggesting` and every prose passage (personaxis.md body ×2,
+  README.md) rewritten to not assert a mode. CMO policy.yaml `spec_version` bumped to 0.10.0.
+- **Broken manifest provenance**: `cmo/manifest.json` pointed at a lowercase `persona.md` that
+  does not exist (the hash matched `PERSONA.md` — path fixed); `frontend-expert/manifest.json`
+  tracked a non-canonical local `PERSONA.md` instead of the subagent contract's
+  `.claude/agents/frontend-expert.md` (path + hash fixed) — and the non-canonical `PERSONA.md`
+  was removed from the subagent folder per the documented layout ("minus PERSONA.md").
+
+### Fixed — episodic memory format statements
+- The normative episodic format is `memory/episodic.jsonl` (`schema/memory.schema.json`:
+  append-only, hash-chained, tombstone deletion) — but the template, AGENTS.md and CLAUDE.md
+  described date-stamped `memory/YYYY-MM-DD.md` files as the format. All statements now declare
+  the JSONL log as the source of truth and date-stamped `.md` files as generated human views.
+  (Regenerating the examples' memory dirs to the normative format lands with v1.0.)
+
+### Verified
+- The PERSONA_PROMPTING.md citation flagged by the audit as possibly fabricated
+  (arXiv:2603.19313) was verified live: the paper exists with the exact cited title. No change.
+- All three in-repo personas (`cmo`, `frontend-expert`, root maintainer) validate **PASS**
+  against the corrected schemas, including their `policy.yaml` files.
 
 ---
 

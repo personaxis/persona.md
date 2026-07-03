@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://personaxis.com/schemas/persona/0.8/policy.schema.json",
-  "title": "policy.yaml v0.8",
+  "$id": "https://personaxis.com/schemas/persona/0.10/policy.schema.json",
+  "title": "policy.yaml v0.10",
   "description": "Schema for the sibling policy.yaml file that lives next to personaxis.md inside .personaxis/[personas/<slug>/]. Encodes the operational policy the Personaxis platform enforces over a persona-version: behavioral assertions, runtime constraints, evaluation suites, and improvement_policy (mutation governance). policy.yaml is consumed by the Personaxis backend and dashboard; it is NEVER inlined into an LLM system prompt. v0.7 is a layout-only change (moved from repo-root to .personaxis/); v0.6 introduced the autonomous mode and explicit scope allowlist/blocklist for spec self-edits.",
   "type": "object",
   "required": ["spec_version", "applies_to", "improvement_policy"],
@@ -9,8 +9,8 @@
   "properties": {
     "spec_version": {
       "type": "string",
-      "enum": ["0.7.0", "0.6.0", "0.5.0"],
-      "description": "Schema version. 0.7.0 is current (layout-only change, no field changes from 0.6.0). 0.5.0 accepted for backward compatibility (auto-migrated)."
+      "enum": ["0.10.0", "0.9.0", "0.8.0", "0.7.0", "0.6.0", "0.5.0"],
+      "description": "Schema version, forward-compatible with the spec minors (policy.yaml has had no field changes since 0.6.0; 0.7.0 was layout-only). Accepts 0.6.0-0.10.0; 0.5.0 accepted for backward compatibility (auto-migrated)."
     },
     "applies_to": {
       "type": "object",

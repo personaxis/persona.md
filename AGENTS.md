@@ -61,7 +61,7 @@ A new example persona is a directory under `.personaxis/personas/<slug>/`. In ro
 - `policy.yaml` - observability + improvement_policy mode
 - `state.json` - initial mutable state (current values seeded from `personaxis.md` envelope means)
 - `memory.md` - long-term curated memory (can be skeleton with stable principles)
-- `memory/` - date-stamped episodic memory directory (can be empty initially)
+- `memory/` - episodic memory directory: `episodic.jsonl` (append-only, hash-chained — normative format in `schema/memory.schema.json`; can be empty initially). Date-stamped `.md` files are generated views, not sources.
 - `references/` - heavy framework prose (at least one file)
 - `examples/` - worked outputs (markdown samples or HTML deliverables)
 - `skills/` - Anthropic-compatible sub-skills (optional)
