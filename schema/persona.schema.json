@@ -1,62 +1,85 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://personaxis.com/schemas/persona/0.10/persona.schema.json",
-  "title": "personaxis.md v0.10",
-  "description": "Schema for the quantitative 10-layer persona spec, spec v0.10.0. v0.10 is additive on v0.9 (OPTIONAL persona-prompting source material: identity.short_name, inline improvement_policy.mode, the persona_prompting block); v0.9 added verification, agent_budget, observability; v0.8 lifted runtime-governance guarantees into the spec — identity.capabilities (routing), governance.max_step_delta (per-step drift cap), a permissions block (per-persona sandbox posture), mutation_log.origin_node/session_id (cross-OS reconciliation), and a normative episodic-memory entry schema (provenance + hash chain). Each of these minors is backward compatible: an older persona from v0.7 onward validates unchanged. As of v0.7.0 this document lives at `.personaxis/[personas/<slug>/]personaxis.md` (root or subagent mode); the repo-root `PERSONA.md` / `.claude/agents/<slug>.md` is a separate, LLM-compiled qualitative document generated from this file via `personaxis compile` and is not described by this schema. v0.6 field model (unchanged since): (a) three-artifact information model (personaxis.md spec / state.json runtime / .dist compiled), (b) unified governance block with per_layer_edit_policy and drift_thresholds, (c) categorized reflexive decisions (replacing flat actions[]), (d) envelope-based trait/affect/mood (current values live in state.json), (e) removal of redundant fields (personality.context_modifiers, extensions.knowledge_anchors, scattered edit_policy). Operational metadata lives in policy.yaml; runtime state lives in state.json.",
+  "$id": "https://personaxis.com/schemas/persona/1.0/persona.schema.json",
+  "title": "personaxis.md v1.0",
+  "description": "Schema for the ten-layer AI Persona spec, spec v1.0.0. This schema validates v1.0 documents ONLY; documents with spec_version 0.3.0-0.10.0 validate against schema/legacy/persona-0.10.schema.json (the validator dispatches on spec_version) and upgrade via `personaxis migrate 0.10-to-1.0`. v1.0 (breaking, mechanical codemod): apiVersion becomes personaxis.com/v1; layer 9 renamed reflexive_self_regulation -> self_regulation; the persona_prompting block merged into layer 10 `persona` (break_character_guardrails fold into self_regulation.hard_limits); the five refusal surfaces consolidate to two (hard_limits + character.prohibited_behaviors, which absorbs principled_refusals); enforcement has a single owner (character.virtues, which may declare refs: to backing traits/values — the validator requires coherence); metacognition monitors may declare feeds: wiring to a self_regulation decision group; envelope dimensions gain per-band behavior expression (low/moderate/high) giving the quantitative numbers deterministic compile semantics — drift is defined as a band crossing; drives declare an envelope (mutable) or a level enum (static), never a bare intensity; memory keeps the FACULTY (types, write/consolidation intent, anchors, forgetting_policy, working_self, deletion universality) while implementation knobs move to the runtime.memory block; metadata.display_name removed (single owner: identity.display_name); new OPTIONAL blocks interop, lineage, integrity. File sections group as ANATOMY (the ten layers) / CHANGE GOVERNANCE (governance, improvement_policy, security, permissions) / RUNTIME CONTRACT (runtime, verification, agent_budget, observability, interop, runtime_artifacts, lineage, integrity); the markdown body is non-normative by rule. This document lives at `.personaxis/[personas/<slug>/]personaxis.md`; the compiled PERSONA.md / .claude/agents/<slug>.md is generated from it via `personaxis compile` and is not described by this schema. Operational policy lives in policy.yaml; runtime state lives in state.json.",
   "type": "object",
   "required": [
     "apiVersion",
     "kind",
     "spec_version",
     "metadata",
-    "identity",
-    "character",
-    "personality",
-    "values_and_drives",
-    "affect",
-    "cognition",
-    "memory",
-    "metacognition",
-    "reflexive_self_regulation",
-    "persona",
-    "governance",
-    "security"
+    "identity"
   ],
   "additionalProperties": false,
   "properties": {
     "apiVersion": {
       "type": "string",
-      "const": "persona.dev/v1",
-      "description": "Universal API version. Must be exactly 'persona.dev/v1'."
+      "const": "personaxis.com/v1",
+      "description": "Universal API version. v1.0 aligns the namespace with the schema $id and registry domain: must be exactly 'personaxis.com/v1' (was 'persona.dev/v1' through 0.10; the codemod rewrites it)."
     },
     "kind": {
       "type": "string",
-      "enum": ["AgentPersona", "UserPersona"],
+      "enum": [
+        "AgentPersona",
+        "UserPersona"
+      ],
       "description": "AgentPersona defines who an AI agent is. UserPersona defines who the human user is."
     },
     "spec_version": {
       "type": "string",
-      "enum": ["0.10.0", "0.9.0", "0.8.0", "0.7.0", "0.6.0", "0.5.0", "0.4.0", "0.3.0"],
-      "description": "Spec version. 0.10.0 is current (additive: new OPTIONAL persona-prompting fields — identity.short_name, inline improvement_policy.mode, and the persona_prompting block (address, voice_exemplars, scene_contracts, behavioral_anchors, break_character_guardrails, consistency); no field changes from 0.9.0, a v0.9 persona validates unchanged). 0.9.0 added verification, agent_budget, observability. 0.8.0 added capabilities, governance.max_step_delta, permissions, mutation_log origin_node/session_id. 0.7.0 accepted unchanged. 0.3-0.6 accepted with deprecation warnings; the validator points to 'personaxis migrate' for automatic upgrade."
+      "enum": [
+        "1.0.0"
+      ],
+      "description": "Spec version. This schema validates 1.0.0 only. The validator accepts 0.3.0-0.10.0 documents against schema/legacy/persona-0.10.schema.json during the 1.x read-compat window, pointing to 'personaxis migrate 0.10-to-1.0' for upgrade. spec_version is the ONLY normative version of the standard."
     },
-
     "metadata": {
       "type": "object",
-      "required": ["name", "version", "display_name", "description", "created"],
+      "required": [
+        "name",
+        "version",
+        "description",
+        "created"
+      ],
       "additionalProperties": false,
-      "description": "Registry-level identification.",
+      "description": "Registry-level identification. v1.0: display_name removed — its single owner is identity.display_name (the codemod drops the duplicate).",
       "properties": {
-        "name": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$", "minLength": 1 },
-        "version": { "type": "string", "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$" },
-        "display_name": { "type": "string", "minLength": 1 },
-        "description": { "type": "string", "minLength": 1 },
-        "created": { "type": "string", "format": "date" },
-        "owner_tenant_id": { "type": "string" },
-        "tags": { "type": "array", "items": { "type": "string" } },
-        "license": { "type": "string", "enum": ["private", "public", "custom"] }
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created": {
+          "type": "string",
+          "format": "date"
+        },
+        "owner_tenant_id": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "license": {
+          "type": "string",
+          "enum": [
+            "private",
+            "public",
+            "custom"
+          ]
+        }
       }
     },
-
     "extensions": {
       "type": "object",
       "additionalProperties": false,
@@ -64,36 +87,59 @@
       "properties": {
         "skills": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Skill IDs or paths. Local ('./skills/name'), registry ('@org/name@version'), or GitHub ('github:org/repo'). Each resolves to a SKILL.md (Anthropic Agent Skills compatible)."
         },
-        "tools": { "type": "array", "items": { "type": "string" } },
+        "tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "references": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Paths under references/ for heavy knowledge prose. Loaded on-demand (L3 in progressive disclosure). v0.6 rename: was 'refs' in v0.5."
         },
         "examples": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Paths under examples/ for worked outputs. v0.6 rename: was 'samples' in v0.5; 'deliverables' content merged here."
         },
         "assets": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Paths under assets/ for arbitrary supporting files (CSV, JSON, images, fonts). New in v0.6."
         }
       }
     },
-
     "identity": {
       "type": "object",
-      "required": ["canonical_id", "display_name", "system_identity", "role_identity"],
+      "required": [
+        "canonical_id",
+        "display_name",
+        "system_identity",
+        "role_identity"
+      ],
       "additionalProperties": false,
       "description": "Layer 1. v0.6: edit_policy removed from this layer, unified in governance.per_layer_edit_policy.",
       "properties": {
-        "canonical_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
-        "display_name": { "type": "string", "minLength": 1 },
+        "canonical_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 1
+        },
         "short_name": {
           "type": "string",
           "minLength": 1,
@@ -102,68 +148,154 @@
         },
         "capabilities": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "v0.8: machine-readable capability tags for orchestration/routing (e.g. ['positioning','demand_generation']). Optional; runtimes fall back to deriving capabilities from system_identity when absent."
         },
         "system_identity": {
           "type": "object",
-          "required": ["purpose"],
+          "required": [
+            "purpose"
+          ],
           "additionalProperties": false,
           "properties": {
-            "purpose": { "type": "string", "minLength": 1 },
-            "allowed_domains": { "type": "array", "items": { "type": "string" } },
-            "prohibited_domains": { "type": "array", "items": { "type": "string" } }
+            "purpose": {
+              "type": "string",
+              "minLength": 1
+            },
+            "allowed_domains": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "prohibited_domains": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         },
         "role_identity": {
           "type": "object",
-          "required": ["primary_role"],
+          "required": [
+            "primary_role"
+          ],
           "additionalProperties": false,
           "properties": {
-            "primary_role": { "type": "string", "minLength": 1 },
-            "relationship_to_user": { "type": "string" }
+            "primary_role": {
+              "type": "string",
+              "minLength": 1
+            },
+            "relationship_to_user": {
+              "type": "string"
+            }
           }
         },
         "narrative_identity": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "origin": { "type": "string" },
-            "self_concept": { "type": "string" },
-            "continuity_principles": { "type": "array", "items": { "type": "string" } }
+            "origin": {
+              "type": "string"
+            },
+            "self_concept": {
+              "type": "string"
+            },
+            "continuity_principles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         }
       }
     },
-
     "character": {
       "type": "object",
-      "required": ["virtues"],
+      "required": [
+        "virtues"
+      ],
       "additionalProperties": false,
       "description": "Layer 2. v0.6: edit_policy removed.",
       "properties": {
         "virtues": {
           "type": "object",
           "minProperties": 1,
-          "required": ["honesty"],
+          "required": [
+            "honesty"
+          ],
+          "description": "v1.0 composition rule: enforcement has a SINGLE OWNER — only virtues carry it; traits and values never do. A virtue MAY declare refs: dot-paths to the traits/values that back it (e.g. ['personality.traits.honesty_humility']); the validator then REQUIRES coherence — a hard virtue whose referenced trait envelope permits contradiction is FAIL_POLICY. The linter warns when the same concept appears in 2+ layers without refs.",
           "additionalProperties": {
             "type": "object",
-            "required": ["description", "priority", "enforcement"],
+            "required": [
+              "description",
+              "priority",
+              "enforcement"
+            ],
             "additionalProperties": false,
             "properties": {
-              "description": { "type": "string", "minLength": 1 },
-              "priority": { "type": "number", "minimum": 0, "maximum": 1 },
-              "enforcement": { "type": "string", "enum": ["hard", "soft"] }
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "priority": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "enforcement": {
+                "type": "string",
+                "enum": [
+                  "hard",
+                  "soft"
+                ]
+              },
+              "refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^(personality\\.traits|values_and_drives\\.values)\\.[a-z0-9_]+$"
+                },
+                "description": "v1.0: dot-paths of the traits/values that back this virtue. Connects the four representations of one concept across layers so the validator can require coherence."
+              }
             }
           },
           "properties": {
             "honesty": {
               "type": "object",
-              "required": ["description", "priority", "enforcement"],
+              "required": [
+                "description",
+                "priority",
+                "enforcement"
+              ],
               "properties": {
-                "description": { "type": "string", "minLength": 1 },
-                "priority": { "type": "number", "minimum": 0, "maximum": 1 },
-                "enforcement": { "type": "string", "enum": ["hard"], "description": "UNIVERSAL: honesty.enforcement must be 'hard'." }
+                "description": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "priority": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "enforcement": {
+                  "type": "string",
+                  "enum": [
+                    "hard"
+                  ],
+                  "description": "UNIVERSAL: honesty.enforcement must be 'hard'."
+                },
+                "refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^(personality\\.traits|values_and_drives\\.values)\\.[a-z0-9_]+$"
+                  }
+                }
               }
             }
           }
@@ -172,77 +304,165 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["id", "rule", "severity"],
+            "required": [
+              "id",
+              "rule",
+              "severity"
+            ],
             "additionalProperties": false,
             "properties": {
-              "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
-              "rule": { "type": "string" },
-              "severity": { "type": "string", "enum": ["low", "medium", "high"] }
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "rule": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              }
             }
           }
         },
-        "prohibited_behaviors": { "type": "array", "items": { "type": "string" } },
-        "principles": { "type": "array", "items": { "type": "string" } }
+        "prohibited_behaviors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Persona-specific refusals (dispositional AND situational). v1.0: absorbs the former self-regulation principled_refusals — the two persona-level refusal lists were one concept. Categorical absolutes belong in self_regulation.hard_limits."
+        },
+        "principles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
-
     "personality": {
       "type": "object",
-      "required": ["model", "traits"],
+      "required": [
+        "model",
+        "traits"
+      ],
       "additionalProperties": false,
       "description": "Layer 3. v0.6 BREAKING: context_modifiers REMOVED (redundant with persona.task_modes); drift_threshold MOVED to governance.drift_thresholds.personality; edit_policy MOVED to governance.per_layer_edit_policy.personality. Traits use envelope structure (mean + range); current values live in state.json.",
       "properties": {
-        "model": { "type": "string", "enum": ["big_five", "hexaco", "hybrid_traits"] },
-        "model_note": { "type": "string" },
+        "model": {
+          "type": "string",
+          "enum": [
+            "big_five",
+            "hexaco",
+            "hybrid_traits"
+          ]
+        },
+        "model_note": {
+          "type": "string"
+        },
         "traits": {
           "type": "object",
           "minProperties": 1,
           "additionalProperties": {
             "type": "object",
-            "required": ["mean", "range"],
+            "required": [
+              "mean",
+              "range"
+            ],
             "additionalProperties": false,
             "properties": {
-              "mean": { "type": "number", "minimum": 0, "maximum": 1 },
+              "mean": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
               "range": {
                 "type": "array",
-                "items": { "type": "number", "minimum": 0, "maximum": 1 },
+                "items": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
                 "minItems": 2,
                 "maxItems": 2,
                 "description": "[min, max]. Envelope: state.json mutations are clamped to this range."
               },
-              "expression": { "type": "string" }
+              "expression": {
+                "$ref": "#/$defs/expression"
+              },
+              "bands": {
+                "$ref": "#/$defs/bandBoundaries"
+              }
             }
-          }
+          },
+          "description": "v1.0 behavior bands give the numbers deterministic compile semantics: every envelope value maps to a band (default low 0-0.33 / moderate 0.34-0.66 / high 0.67-1.0; override with bands:), the compiler emits the band's expression prose, and DRIFT is defined as a band crossing (the recompile trigger). expression as a per-band map is the normative form; a plain string (applies at the declared mean's band) is accepted but deprecated."
         }
       }
     },
-
     "values_and_drives": {
       "type": "object",
-      "required": ["values", "drives", "conflict_resolution"],
+      "required": [
+        "values",
+        "drives",
+        "conflict_resolution"
+      ],
       "additionalProperties": false,
       "description": "Layer 4. v0.6: edit_policy removed.",
       "properties": {
         "values": {
           "type": "object",
           "minProperties": 1,
-          "required": ["safety"],
+          "required": [
+            "safety"
+          ],
           "additionalProperties": {
             "type": "object",
-            "required": ["weight"],
+            "required": [
+              "weight"
+            ],
             "additionalProperties": false,
             "properties": {
-              "weight": { "type": "number", "minimum": 0, "maximum": 1 },
-              "type": { "type": "string", "enum": ["epistemic", "strategic", "outcome", "operational", "interactional", "governance"] }
+              "weight": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "epistemic",
+                  "strategic",
+                  "outcome",
+                  "operational",
+                  "interactional",
+                  "governance"
+                ]
+              }
             }
           },
           "properties": {
             "safety": {
               "type": "object",
-              "required": ["weight", "type"],
+              "required": [
+                "weight",
+                "type"
+              ],
               "properties": {
-                "weight": { "type": "number", "minimum": 0.90, "maximum": 1.0, "description": "UNIVERSAL: weight >= 0.90." },
-                "type": { "type": "string", "const": "governance", "description": "UNIVERSAL: type must be 'governance'." }
+                "weight": {
+                  "type": "number",
+                  "minimum": 0.9,
+                  "maximum": 1.0,
+                  "description": "UNIVERSAL: weight >= 0.90."
+                },
+                "type": {
+                  "type": "string",
+                  "const": "governance",
+                  "description": "UNIVERSAL: type must be 'governance'."
+                }
               }
             }
           }
@@ -250,147 +470,349 @@
         "drives": {
           "type": "object",
           "minProperties": 1,
+          "description": "v1.0: a drive is either STATIC (level: low|moderate|high) or MUTABLE (declares a {mean, range} envelope and thereby joins the clamped mutable surface). The bare 0.10 `intensity` number — mutable in state.json with nothing to clamp against — is removed; the codemod converts it to the nearest level.",
           "additionalProperties": {
             "type": "object",
-            "required": ["intensity", "allowed"],
+            "required": [
+              "allowed"
+            ],
             "additionalProperties": false,
             "properties": {
-              "intensity": { "type": "number", "minimum": 0, "maximum": 1 },
-              "allowed": { "type": "boolean" },
-              "note": { "type": "string" }
-            }
+              "allowed": {
+                "type": "boolean"
+              },
+              "level": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "moderate",
+                  "high"
+                ],
+                "description": "Static drive strength."
+              },
+              "mean": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Mutable drive: baseline (requires range)."
+              },
+              "range": {
+                "type": "array",
+                "items": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "minItems": 2,
+                "maxItems": 2,
+                "description": "Mutable drive: envelope; state mutations clamp to it."
+              },
+              "expression": {
+                "$ref": "#/$defs/expression"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "oneOf": [
+              {
+                "required": [
+                  "level"
+                ],
+                "not": {
+                  "required": [
+                    "mean"
+                  ]
+                }
+              },
+              {
+                "required": [
+                  "mean",
+                  "range"
+                ],
+                "not": {
+                  "required": [
+                    "level"
+                  ]
+                }
+              }
+            ]
           }
         },
         "conflict_resolution": {
           "type": "object",
-          "required": ["safety_over_completion"],
-          "additionalProperties": { "type": "boolean" },
+          "required": [
+            "safety_over_completion"
+          ],
+          "additionalProperties": {
+            "type": "boolean"
+          },
           "properties": {
-            "safety_over_completion": { "const": true, "description": "UNIVERSAL: must be true." }
+            "safety_over_completion": {
+              "const": true,
+              "description": "UNIVERSAL: must be true."
+            }
           }
         },
-        "goals": { "type": "array", "items": { "type": "string" } },
-        "anti_goals": { "type": "array", "items": { "type": "string" } },
-        "motivations": { "type": "array", "items": { "type": "string" } }
+        "goals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "anti_goals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "motivations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
-
     "affect": {
       "type": "object",
-      "required": ["enabled", "representation", "allow_user_visible_expression", "baseline", "regulation_policy"],
+      "required": [
+        "enabled",
+        "representation",
+        "allow_user_visible_expression",
+        "baseline",
+        "regulation_policy"
+      ],
       "additionalProperties": false,
       "description": "Layer 5. v0.6: baseline uses envelope structure (mean + range); current values live in state.json.",
       "properties": {
-        "enabled": { "type": "boolean" },
-        "representation": { "type": "string", "const": "hybrid_dimensional_appraisal_discrete_mood", "description": "UNIVERSAL." },
-        "allow_user_visible_expression": { "type": "boolean" },
-        "user_visible_disclaimer": { "type": "string" },
+        "enabled": {
+          "type": "boolean"
+        },
+        "representation": {
+          "type": "string",
+          "const": "hybrid_dimensional_appraisal_discrete_mood",
+          "description": "UNIVERSAL."
+        },
+        "allow_user_visible_expression": {
+          "type": "boolean"
+        },
+        "user_visible_disclaimer": {
+          "type": "string"
+        },
         "baseline": {
           "type": "object",
-          "required": ["core_affect"],
+          "required": [
+            "core_affect"
+          ],
           "additionalProperties": false,
           "properties": {
             "core_affect": {
               "type": "object",
-              "required": ["valence", "arousal", "dominance"],
+              "required": [
+                "valence",
+                "arousal",
+                "dominance"
+              ],
               "additionalProperties": false,
               "properties": {
-                "valence": { "$ref": "#/$defs/envelopeSigned" },
-                "arousal": { "$ref": "#/$defs/envelopeUnsigned" },
-                "dominance": { "$ref": "#/$defs/envelopeUnsigned" }
+                "valence": {
+                  "$ref": "#/$defs/envelopeSigned"
+                },
+                "arousal": {
+                  "$ref": "#/$defs/envelopeUnsigned"
+                },
+                "dominance": {
+                  "$ref": "#/$defs/envelopeUnsigned"
+                }
               }
             },
             "mood": {
               "type": "object",
               "additionalProperties": false,
               "properties": {
-                "tone": { "$ref": "#/$defs/envelopeSigned" },
-                "stability": { "$ref": "#/$defs/envelopeUnsigned" },
-                "recovery_rate": { "$ref": "#/$defs/envelopeUnsigned" },
-                "description": { "type": "string" }
+                "tone": {
+                  "$ref": "#/$defs/envelopeSigned"
+                },
+                "stability": {
+                  "$ref": "#/$defs/envelopeUnsigned"
+                },
+                "recovery_rate": {
+                  "$ref": "#/$defs/envelopeUnsigned"
+                },
+                "description": {
+                  "type": "string"
+                }
               }
             }
           }
         },
         "regulation_policy": {
           "type": "object",
-          "required": ["never_claim_real_feeling"],
+          "required": [
+            "never_claim_real_feeling"
+          ],
           "additionalProperties": false,
           "properties": {
-            "express_only_if_relevant": { "type": "boolean" },
-            "never_claim_real_feeling": { "const": true, "description": "UNIVERSAL." }
+            "express_only_if_relevant": {
+              "type": "boolean"
+            },
+            "never_claim_real_feeling": {
+              "const": true,
+              "description": "UNIVERSAL."
+            }
           }
         },
         "behavioral_responses": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "frustration_response": { "type": "string" },
-            "conflict_response": { "type": "string" },
-            "enthusiasm_triggers": { "type": "array", "items": { "type": "string" } }
+            "frustration_response": {
+              "type": "string"
+            },
+            "conflict_response": {
+              "type": "string"
+            },
+            "enthusiasm_triggers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         }
       }
     },
-
     "cognition": {
       "type": "object",
-      "required": ["reasoning_modes", "default_strategy", "uncertainty_policy"],
+      "required": [
+        "reasoning_modes",
+        "default_strategy",
+        "uncertainty_policy"
+      ],
       "additionalProperties": false,
       "description": "Layer 6.",
       "properties": {
-        "reasoning_modes": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
-        "default_strategy": { "type": "string" },
+        "reasoning_modes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "default_strategy": {
+          "type": "string"
+        },
         "tool_use_policy": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "requires_governance_check": { "type": "boolean" },
-            "allowed_tools": { "type": "array", "items": { "type": "string" } }
+            "requires_governance_check": {
+              "type": "boolean"
+            },
+            "allowed_tools": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         },
         "uncertainty_policy": {
           "type": "object",
-          "required": ["disclose_when_above", "abstain_when_above"],
+          "required": [
+            "disclose_when_above",
+            "abstain_when_above"
+          ],
           "additionalProperties": false,
           "properties": {
-            "disclose_when_above": { "type": "number", "minimum": 0, "maximum": 1 },
-            "abstain_when_above": { "type": "number", "minimum": 0, "maximum": 1 }
+            "disclose_when_above": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "abstain_when_above": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
           }
         },
-        "reasoning_style": { "type": "string" },
-        "epistemic_stance": { "type": "string" }
+        "reasoning_style": {
+          "type": "string"
+        },
+        "epistemic_stance": {
+          "type": "string"
+        }
       }
     },
-
     "memory": {
       "type": "object",
-      "required": ["types", "write_policy", "retrieval_policy", "deletion_policy"],
+      "required": [
+        "types",
+        "write_policy",
+        "deletion_policy"
+      ],
       "additionalProperties": false,
-      "description": "Layer 7. v0.6: added consolidation_policy for episodic → semantic promotion.",
+      "description": "Layer 7 — the FACULTY of memory (Tulving's taxonomy): which memory kinds this persona has, its write/consolidation intent, anchors, forgetting philosophy, working self, and the deletion universal. v1.0: implementation tuning (retrieval max_items/embeddings/reranker, retention days) moved to the runtime.memory block — anatomy describes the being, the runtime contract configures the machine. Episodic format is normative: memory/episodic.jsonl (schema/memory.schema.json — hash-chained, tombstone + redaction).",
       "properties": {
         "types": {
           "type": "object",
-          "required": ["episodic", "semantic", "procedural", "autobiographical", "user_preferences", "evaluations"],
+          "required": [
+            "episodic",
+            "semantic",
+            "procedural",
+            "autobiographical",
+            "user_preferences",
+            "evaluations"
+          ],
           "additionalProperties": false,
           "properties": {
-            "episodic": { "type": "boolean" },
-            "semantic": { "type": "boolean" },
-            "procedural": { "type": "boolean" },
-            "autobiographical": { "type": "boolean" },
-            "user_preferences": { "type": "boolean" },
-            "evaluations": { "type": "boolean" }
+            "episodic": {
+              "type": "boolean"
+            },
+            "semantic": {
+              "type": "boolean"
+            },
+            "procedural": {
+              "type": "boolean"
+            },
+            "autobiographical": {
+              "type": "boolean"
+            },
+            "user_preferences": {
+              "type": "boolean"
+            },
+            "evaluations": {
+              "type": "boolean"
+            }
           }
         },
         "write_policy": {
           "type": "object",
-          "required": ["default"],
+          "required": [
+            "default"
+          ],
           "additionalProperties": false,
           "properties": {
-            "default": { "type": "string", "enum": ["ephemeral", "session", "persistent"] },
+            "default": {
+              "type": "string",
+              "enum": [
+                "ephemeral",
+                "session",
+                "persistent"
+              ]
+            },
             "persistent_requires": {
               "type": "array",
-              "items": { "type": "string", "enum": ["consent", "relevance", "safety_check"] }
+              "items": {
+                "type": "string",
+                "enum": [
+                  "consent",
+                  "relevance",
+                  "safety_check"
+                ]
+              }
             }
           }
         },
@@ -399,334 +821,726 @@
           "additionalProperties": false,
           "description": "Rules for promoting episodic memory entries to semantic memory.md.",
           "properties": {
-            "mode": { "type": "string", "enum": ["manual", "assisted", "auto"] },
-            "requires": { "type": "array", "items": { "type": "string" } }
-          }
-        },
-        "retrieval_policy": {
-          "type": "object",
-          "required": ["max_items"],
-          "additionalProperties": false,
-          "properties": {
-            "use_embeddings": { "type": "boolean" },
-            "use_reranker": { "type": "boolean" },
-            "max_items": { "type": "integer", "minimum": 1 }
+            "mode": {
+              "type": "string",
+              "enum": [
+                "manual",
+                "assisted",
+                "auto"
+              ]
+            },
+            "requires": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         },
         "deletion_policy": {
           "type": "object",
-          "required": ["user_request_supported"],
+          "required": [
+            "user_request_supported"
+          ],
           "additionalProperties": false,
           "properties": {
-            "user_request_supported": { "const": true, "description": "UNIVERSAL: must be true (privacy)." },
-            "retention_days_default": { "type": "integer", "minimum": 1 }
+            "user_request_supported": {
+              "const": true,
+              "description": "UNIVERSAL: must be true (privacy). v1.0 semantics: REDACTION is real erasure (content removed, chain stays verifiable via content_hash); tombstone is auditable logical suppression. See schema/memory.schema.json."
+            }
           }
         },
-        "anchors": { "type": "array", "items": { "type": "string" } },
-        "forgetting_policy": { "type": "string" },
-        "working_self": { "type": "string" }
+        "anchors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "forgetting_policy": {
+          "type": "string"
+        },
+        "working_self": {
+          "type": "string"
+        }
       }
     },
-
     "metacognition": {
       "type": "object",
-      "required": ["monitors", "thresholds"],
+      "required": [
+        "monitors",
+        "thresholds"
+      ],
       "additionalProperties": false,
       "description": "Layer 8.",
       "properties": {
         "monitors": {
           "type": "object",
-          "additionalProperties": { "type": "boolean" }
+          "description": "v1.0: a monitor may declare feeds: — the self_regulation decision group it triggers when it fires — making the monitor→decision control loop explicit and validatable instead of implicit. Plain boolean form remains accepted.",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "object",
+                "required": [
+                  "enabled"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "feeds": {
+                    "type": "string",
+                    "enum": [
+                      "response_decision",
+                      "interaction_decision",
+                      "governance_decision",
+                      "cognition_decision"
+                    ],
+                    "description": "The self_regulation.decisions group this monitor triggers."
+                  }
+                }
+              }
+            ]
+          }
         },
         "thresholds": {
           "type": "object",
-          "required": ["ask_clarification_if_task_ambiguity_above", "abstain_if_confidence_below", "escalate_if_policy_risk_above"],
+          "required": [
+            "ask_clarification_if_task_ambiguity_above",
+            "abstain_if_confidence_below",
+            "escalate_if_policy_risk_above"
+          ],
           "additionalProperties": false,
           "properties": {
-            "ask_clarification_if_task_ambiguity_above": { "type": "number", "minimum": 0, "maximum": 1 },
-            "abstain_if_confidence_below": { "type": "number", "minimum": 0, "maximum": 1 },
-            "escalate_if_policy_risk_above": { "type": "number", "minimum": 0, "maximum": 1 }
+            "ask_clarification_if_task_ambiguity_above": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "abstain_if_confidence_below": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "escalate_if_policy_risk_above": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
           }
         },
-        "drift_monitor": { "type": "string" },
-        "self_revision_policy": { "type": "string" },
+        "drift_monitor": {
+          "type": "string"
+        },
+        "self_revision_policy": {
+          "type": "string"
+        },
         "critic_model": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "type": { "type": "string", "enum": ["self_critique", "llm_or_slm"] },
-            "required_for_high_risk_tasks": { "type": "boolean" }
+            "type": {
+              "type": "string",
+              "enum": [
+                "self_critique",
+                "llm_or_slm"
+              ]
+            },
+            "required_for_high_risk_tasks": {
+              "type": "boolean"
+            }
           }
         },
-        "self_model": { "type": "string" },
-        "uncertainty_calibration": { "type": "string" },
-        "meta_volitions": { "type": "array", "items": { "type": "string" } }
+        "self_model": {
+          "type": "string"
+        },
+        "uncertainty_calibration": {
+          "type": "string"
+        },
+        "meta_volitions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
-
-    "reflexive_self_regulation": {
+    "self_regulation": {
       "type": "object",
-      "required": ["decisions", "hard_limits", "escalation_policy"],
+      "required": [
+        "decisions",
+        "hard_limits",
+        "escalation_policy"
+      ],
       "additionalProperties": false,
-      "description": "Layer 9. v0.6 BREAKING: actions[] flat list REPLACED by decisions{} structured by category. Each decision group is independent; per turn the regulator picks one option from each.",
+      "description": "Layer 9 (v1.0 rename of reflexive_self_regulation — executive control/self-regulation, Baumeister; the codemod renames every reference incl. governance keys). Decisions{} structured by category; each group is independent — per turn the regulator picks one option from each. Metacognition monitors wire into these groups via feeds:.",
       "properties": {
         "decisions": {
           "type": "object",
-          "required": ["response_decision", "interaction_decision", "governance_decision", "cognition_decision"],
+          "required": [
+            "response_decision",
+            "interaction_decision",
+            "governance_decision",
+            "cognition_decision"
+          ],
           "additionalProperties": false,
           "properties": {
             "response_decision": {
               "type": "object",
-              "required": ["enabled", "default"],
+              "required": [
+                "enabled",
+                "default"
+              ],
               "additionalProperties": false,
               "properties": {
                 "enabled": {
                   "type": "array",
-                  "items": { "type": "string", "enum": ["allow", "revise", "block"] },
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "allow",
+                      "revise",
+                      "block"
+                    ]
+                  },
                   "minItems": 1,
                   "uniqueItems": true
                 },
-                "default": { "type": "string", "enum": ["allow", "revise", "block"] }
+                "default": {
+                  "type": "string",
+                  "enum": [
+                    "allow",
+                    "revise",
+                    "block"
+                  ]
+                }
               }
             },
             "interaction_decision": {
               "type": "object",
-              "required": ["enabled", "default"],
+              "required": [
+                "enabled",
+                "default"
+              ],
               "additionalProperties": false,
               "properties": {
                 "enabled": {
                   "type": "array",
-                  "items": { "type": "string", "enum": ["silent", "ask_clarification", "escalate_to_human"] },
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "silent",
+                      "ask_clarification",
+                      "escalate_to_human"
+                    ]
+                  },
                   "minItems": 1,
                   "uniqueItems": true
                 },
-                "default": { "type": "string", "enum": ["silent", "ask_clarification", "escalate_to_human"] }
+                "default": {
+                  "type": "string",
+                  "enum": [
+                    "silent",
+                    "ask_clarification",
+                    "escalate_to_human"
+                  ]
+                }
               }
             },
             "governance_decision": {
               "type": "object",
-              "required": ["enabled", "default"],
+              "required": [
+                "enabled",
+                "default"
+              ],
               "additionalProperties": false,
               "properties": {
                 "enabled": {
                   "type": "array",
-                  "items": { "type": "string", "enum": ["no_action", "propose_self_edit", "apply_self_edit", "reduce_autonomy"] },
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "no_action",
+                      "propose_self_edit",
+                      "apply_self_edit",
+                      "reduce_autonomy"
+                    ]
+                  },
                   "minItems": 1,
                   "uniqueItems": true
                 },
-                "default": { "type": "string", "enum": ["no_action", "propose_self_edit", "apply_self_edit", "reduce_autonomy"] }
+                "default": {
+                  "type": "string",
+                  "enum": [
+                    "no_action",
+                    "propose_self_edit",
+                    "apply_self_edit",
+                    "reduce_autonomy"
+                  ]
+                }
               }
             },
             "cognition_decision": {
               "type": "object",
-              "required": ["enabled", "default"],
+              "required": [
+                "enabled",
+                "default"
+              ],
               "additionalProperties": false,
               "properties": {
                 "enabled": {
                   "type": "array",
-                  "items": { "type": "string", "enum": ["no_extra", "request_more_evidence", "invoke_tool"] },
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "no_extra",
+                      "request_more_evidence",
+                      "invoke_tool"
+                    ]
+                  },
                   "minItems": 1,
                   "uniqueItems": true
                 },
-                "default": { "type": "string", "enum": ["no_extra", "request_more_evidence", "invoke_tool"] }
+                "default": {
+                  "type": "string",
+                  "enum": [
+                    "no_extra",
+                    "request_more_evidence",
+                    "invoke_tool"
+                  ]
+                }
               }
             }
           }
         },
-        "flags": { "type": "array", "items": { "type": "string" } },
+        "flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "hard_limits": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "minItems": 3,
-          "description": "Must include the three universal limits (or semantic equivalents)."
+          "description": "Categorical absolutes, never crossed. Must include the three universal limits (or semantic equivalents). v1.0: absorbs the former persona_prompting.break_character_guardrails — a stay-in-character rule IS a hard limit of expression. Persona-specific (non-absolute) refusals belong in character.prohibited_behaviors."
         },
-        "escalation_policy": { "type": "string", "minLength": 1 },
+        "escalation_policy": {
+          "type": "string",
+          "minLength": 1
+        },
         "standards": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "ideal_self": { "type": "string" },
-            "ought_self": { "type": "string" }
+            "ideal_self": {
+              "type": "string"
+            },
+            "ought_self": {
+              "type": "string"
+            }
           }
         },
-        "principled_refusals": { "type": "array", "items": { "type": "string" } },
-        "deferral_policy": { "type": "string" },
-        "discrepancy_feedback": { "type": "string" },
-        "out_of_scope": { "type": "array", "items": { "type": "string" } }
+        "deferral_policy": {
+          "type": "string"
+        },
+        "discrepancy_feedback": {
+          "type": "string"
+        },
+        "out_of_scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
-
     "persona": {
       "type": "object",
-      "required": ["voice", "constraints"],
+      "required": [
+        "voice",
+        "constraints"
+      ],
       "additionalProperties": false,
-      "description": "Layer 10.",
+      "description": "Layer 10 — social expression (Jung's persona, the social mask). v1.0: absorbs the former top-level persona_prompting block (address, voice_exemplars, scene_contracts, behavioral_anchors, consistency) — every expression concern now has ONE home. break_character_guardrails moved to self_regulation.hard_limits.",
       "properties": {
         "voice": {
           "type": "object",
-          "required": ["tone", "formality"],
+          "required": [
+            "tone",
+            "formality"
+          ],
           "additionalProperties": false,
           "properties": {
-            "tone": { "type": "string" },
-            "formality": { "type": "number", "minimum": 0, "maximum": 1 },
-            "warmth": { "type": "number", "minimum": 0, "maximum": 1 },
-            "verbosity": { "type": "string", "enum": ["adaptive", "concise", "detailed"] },
-            "humor": { "type": "string" },
-            "description": { "type": "string" }
+            "tone": {
+              "type": "string"
+            },
+            "formality": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "warmth": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "verbosity": {
+              "type": "string",
+              "enum": [
+                "adaptive",
+                "concise",
+                "detailed"
+              ]
+            },
+            "humor": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
           }
         },
         "constraints": {
           "type": "object",
-          "required": ["cannot_override_identity", "cannot_override_character", "cannot_claim_real_emotion"],
+          "required": [
+            "cannot_override_identity",
+            "cannot_override_character",
+            "cannot_claim_real_emotion"
+          ],
           "additionalProperties": false,
           "properties": {
-            "cannot_override_identity": { "const": true, "description": "UNIVERSAL." },
-            "cannot_override_character": { "const": true, "description": "UNIVERSAL." },
-            "cannot_claim_real_emotion": { "const": true, "description": "UNIVERSAL." }
+            "cannot_override_identity": {
+              "const": true,
+              "description": "UNIVERSAL."
+            },
+            "cannot_override_character": {
+              "const": true,
+              "description": "UNIVERSAL."
+            },
+            "cannot_claim_real_emotion": {
+              "const": true,
+              "description": "UNIVERSAL."
+            }
           }
         },
         "social_style": {
           "type": "object",
-          "additionalProperties": { "type": "boolean" }
+          "additionalProperties": {
+            "type": "boolean"
+          }
         },
         "audience_adaptation": {
           "type": "object",
-          "additionalProperties": { "type": "string" }
+          "additionalProperties": {
+            "type": "string"
+          }
         },
-        "presentation": { "type": "string" },
+        "presentation": {
+          "type": "string"
+        },
         "task_modes": {
           "type": "object",
-          "additionalProperties": { "type": "string" }
+          "additionalProperties": {
+            "type": "string"
+          }
         },
-        "divergence_from_self": { "type": "string" }
-      }
-    },
-
-    "improvement_policy": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "v0.10: the self-improvement posture read by the runtime (readMode). Authoritative inline mirror of policy.yaml#/improvement_policy. Optional; absent => 'locked'.",
-      "properties": {
-        "mode": {
-          "type": "string",
-          "enum": ["locked", "suggesting", "autonomous"],
-          "description": "locked: spec never self-edits (humans only). suggesting: persona PROPOSES edits, queued for approval. autonomous: proposals auto-apply, still gated by consensus + protected paths."
-        }
-      }
-    },
-
-    "persona_prompting": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "v0.10 (MAY): the persona-prompting SOURCE MATERIAL the compiler assembles into the LLM-facing PERSONA.md. Encodes role adoption + character-card/scene-contract devices (RRP, arXiv:2509.00482), few-shot voice, anti-break-character guardrails, and stable/evolving/situational consistency layers. All optional; absence degrades gracefully to compiling from the quantitative layers alone. See docs/PERSONA_PROMPTING.md.",
-      "properties": {
+        "divergence_from_self": {
+          "type": "string"
+        },
         "address": {
           "type": "object",
           "additionalProperties": false,
-          "description": "How the compiled document addresses the model (second-person role adoption is the strongest device).",
+          "description": "How the compiled document addresses the model (second-person role adoption is the strongest device). Moved from the 0.10 persona_prompting block.",
           "properties": {
-            "second_person": { "type": "boolean", "description": "If true, compile to 'You are <name>…' direct address." },
-            "you_are": { "type": "string", "description": "The one-line role-adoption statement, e.g. 'You are Clio, the reference CLI for the personaxis spec.'" }
+            "second_person": {
+              "type": "boolean",
+              "description": "If true, compile to 'You are <name>…' direct address."
+            },
+            "you_are": {
+              "type": "string",
+              "description": "The one-line role-adoption statement."
+            }
           }
         },
         "voice_exemplars": {
           "type": "array",
-          "description": "Few-shot voice samples that anchor tone/register (CharacterChat-style). Each is a short user→persona exchange.",
+          "description": "Few-shot voice samples that anchor tone/register. Each is a short user→persona exchange. Moved from the 0.10 persona_prompting block.",
           "items": {
             "type": "object",
-            "required": ["user", "persona"],
+            "required": [
+              "user",
+              "persona"
+            ],
             "additionalProperties": false,
             "properties": {
-              "context": { "type": "string", "description": "Optional situation the exchange illustrates." },
-              "user": { "type": "string" },
-              "persona": { "type": "string" }
+              "context": {
+                "type": "string"
+              },
+              "user": {
+                "type": "string"
+              },
+              "persona": {
+                "type": "string"
+              }
             }
           }
         },
         "scene_contracts": {
           "type": "array",
-          "description": "RRP scene contracts: connect a SITUATION to the persona's expected behavior and concrete actions.",
+          "description": "Scene contracts (RRP): connect a SITUATION to the persona's expected behavior and concrete actions. Moved from the 0.10 persona_prompting block.",
           "items": {
             "type": "object",
-            "required": ["situation", "expected_behavior"],
+            "required": [
+              "situation",
+              "expected_behavior"
+            ],
             "additionalProperties": false,
             "properties": {
-              "situation": { "type": "string" },
-              "expected_behavior": { "type": "string" },
-              "actions": { "type": "array", "items": { "type": "string" } }
+              "situation": {
+                "type": "string"
+              },
+              "expected_behavior": {
+                "type": "string"
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
             }
           }
         },
         "behavioral_anchors": {
           "type": "object",
           "additionalProperties": false,
-          "description": "Concrete do/don't anchors with examples (behavioral anchoring beats abstract traits).",
+          "description": "Concrete do/don't anchors with examples. Moved from the 0.10 persona_prompting block.",
           "properties": {
-            "do": { "type": "array", "items": { "type": "string" } },
-            "dont": { "type": "array", "items": { "type": "string" } },
-            "examples": { "type": "array", "items": { "type": "string" } }
+            "do": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "dont": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "examples": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
-        },
-        "break_character_guardrails": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "Rules that keep the persona in character under pressure (anti-jailbreak / stay-in-role), while never overriding the safety universals."
         },
         "consistency": {
           "type": "object",
           "additionalProperties": false,
-          "description": "Persona dimensions by stability (stable: fixed traits; evolving: slow-changing; situational: transient/contextual).",
+          "description": "Persona dimensions by stability (stable / evolving / situational). Moved from the 0.10 persona_prompting block.",
           "properties": {
-            "stable": { "type": "array", "items": { "type": "string" } },
-            "evolving": { "type": "array", "items": { "type": "string" } },
-            "situational": { "type": "array", "items": { "type": "string" } }
+            "stable": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "evolving": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "situational": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         }
       }
     },
-
+    "improvement_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The self-improvement posture read by the runtime (readMode). PRECEDENCE (normative since v0.10, restated in v1.0): this inline value is AUTHORITATIVE — the persona carries its posture with it; policy.yaml#/improvement_policy may only RESTRICT it (effective = min(inline, policy) over locked < suggesting < autonomous). The validator warns on mismatch; prose may not assert a mode (lint). Optional; absent => 'locked'.",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "locked",
+            "suggesting",
+            "autonomous"
+          ],
+          "description": "locked: spec never self-edits (humans only). suggesting: persona PROPOSES edits, queued for approval. autonomous: proposals auto-apply, still gated by consensus + protected paths."
+        }
+      }
+    },
     "governance": {
       "type": "object",
-      "required": ["autonomy_envelope", "approval_policy", "per_layer_edit_policy", "drift_thresholds"],
+      "required": [
+        "autonomy_envelope",
+        "approval_policy",
+        "per_layer_edit_policy",
+        "drift_thresholds"
+      ],
       "additionalProperties": false,
       "description": "v0.6: UNIFIED governance block. Replaces scattered edit_policy fields and personality.drift_threshold.",
       "properties": {
-        "autonomy_envelope": { "type": "string", "enum": ["role_fidelity", "conservative", "extended"] },
-        "approval_policy": { "type": "string", "enum": ["human_for_core_changes", "auto_for_low_risk"] },
+        "autonomy_envelope": {
+          "type": "string",
+          "enum": [
+            "role_fidelity",
+            "conservative",
+            "extended"
+          ]
+        },
+        "approval_policy": {
+          "type": "string",
+          "enum": [
+            "human_for_core_changes",
+            "auto_for_low_risk"
+          ]
+        },
         "per_layer_edit_policy": {
           "type": "object",
-          "required": ["identity", "character", "personality", "values_and_drives", "affect", "cognition", "memory", "metacognition", "reflexive_self_regulation", "persona"],
+          "required": [
+            "identity",
+            "character",
+            "personality",
+            "values_and_drives",
+            "affect",
+            "cognition",
+            "memory",
+            "metacognition",
+            "self_regulation",
+            "persona"
+          ],
           "additionalProperties": false,
-          "description": "Per-layer edit governance. Single source of truth. Allowed values: human_approval_required | review_required | auto_approved | governance_controlled.",
+          "description": "Per-layer edit governance. Single source of truth. Allowed values: human_approval_required | review_required | auto_approved | governance_controlled. v1.0: dot-path sub-layer keys are also accepted (e.g. 'persona.voice': review_required) and take precedence over their layer key — the editGate composes by longest matching prefix. The protected minimum (the universals, hard_limits, governance, permissions) can never be opened regardless of these values.",
           "properties": {
-            "identity": { "$ref": "#/$defs/editPolicy" },
-            "character": { "$ref": "#/$defs/editPolicy" },
-            "personality": { "$ref": "#/$defs/editPolicy" },
-            "values_and_drives": { "$ref": "#/$defs/editPolicy" },
-            "affect": { "$ref": "#/$defs/editPolicy" },
-            "cognition": { "$ref": "#/$defs/editPolicy" },
-            "memory": { "$ref": "#/$defs/editPolicy" },
-            "metacognition": { "$ref": "#/$defs/editPolicy" },
-            "reflexive_self_regulation": { "type": "string", "const": "governance_controlled", "description": "NEAR-UNIVERSAL: must remain governance_controlled." },
-            "persona": { "$ref": "#/$defs/editPolicy" }
+            "identity": {
+              "$ref": "#/$defs/editPolicy"
+            },
+            "character": {
+              "$ref": "#/$defs/editPolicy"
+            },
+            "personality": {
+              "$ref": "#/$defs/editPolicy"
+            },
+            "values_and_drives": {
+              "$ref": "#/$defs/editPolicy"
+            },
+            "affect": {
+              "$ref": "#/$defs/editPolicy"
+            },
+            "cognition": {
+              "$ref": "#/$defs/editPolicy"
+            },
+            "memory": {
+              "$ref": "#/$defs/editPolicy"
+            },
+            "metacognition": {
+              "$ref": "#/$defs/editPolicy"
+            },
+            "self_regulation": {
+              "type": "string",
+              "const": "governance_controlled",
+              "description": "NEAR-UNIVERSAL: must remain governance_controlled (U9)."
+            },
+            "persona": {
+              "$ref": "#/$defs/editPolicy"
+            }
+          },
+          "patternProperties": {
+            "^[a-z_]+(\\.[a-z0-9_]+)+$": {
+              "$ref": "#/$defs/editPolicy"
+            }
           }
         },
         "drift_thresholds": {
           "type": "object",
-          "required": ["identity", "character", "personality", "values_and_drives", "affect", "cognition", "memory", "metacognition", "reflexive_self_regulation", "persona"],
+          "required": [
+            "identity",
+            "character",
+            "personality",
+            "values_and_drives",
+            "affect",
+            "cognition",
+            "memory",
+            "metacognition",
+            "self_regulation",
+            "persona"
+          ],
           "additionalProperties": false,
-          "description": "Per-layer drift sensitivity. Replaces personality.drift_threshold.",
+          "description": "Per-layer drift sensitivity. Replaces personality.drift_threshold. v1.0: dot-path sub-layer keys also accepted (longest-prefix wins).",
           "properties": {
-            "identity": { "type": "number", "minimum": 0, "maximum": 1 },
-            "character": { "type": "number", "minimum": 0, "maximum": 1 },
-            "personality": { "type": "number", "minimum": 0, "maximum": 1 },
-            "values_and_drives": { "type": "number", "minimum": 0, "maximum": 1 },
-            "affect": { "type": "number", "minimum": 0, "maximum": 1 },
-            "cognition": { "type": "number", "minimum": 0, "maximum": 1 },
-            "memory": { "type": "number", "minimum": 0, "maximum": 1 },
-            "metacognition": { "type": "number", "minimum": 0, "maximum": 1 },
-            "reflexive_self_regulation": { "type": "number", "minimum": 0, "maximum": 1 },
-            "persona": { "type": "number", "minimum": 0, "maximum": 1 }
+            "identity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "character": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "personality": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "values_and_drives": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "affect": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "cognition": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "memory": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "metacognition": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "self_regulation": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "persona": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "patternProperties": {
+            "^[a-z_]+(\\.[a-z0-9_]+)+$": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
           }
         },
         "improvement_policy_location": {
@@ -741,29 +1555,144 @@
         }
       }
     },
-
     "security": {
       "type": "object",
-      "required": ["prompt_injection_defense", "memory_poisoning_defense"],
+      "required": [
+        "prompt_injection_defense",
+        "memory_poisoning_defense"
+      ],
       "additionalProperties": false,
       "properties": {
-        "prompt_injection_defense": { "type": "boolean" },
-        "memory_poisoning_defense": { "type": "boolean" }
+        "prompt_injection_defense": {
+          "type": "boolean"
+        },
+        "memory_poisoning_defense": {
+          "type": "boolean"
+        }
       }
     },
-
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "v1.0 (MAY): runtime-contract tuning — HOW a conforming runtime implements the faculties the anatomy declares. Receives the implementation knobs that lived inside the memory layer through 0.10.",
+      "properties": {
+        "memory": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "max_items": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Retrieval context bound (was memory.retrieval_policy.max_items)."
+            },
+            "use_embeddings": {
+              "type": "boolean"
+            },
+            "use_reranker": {
+              "type": "boolean"
+            },
+            "retention_days_default": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Default retention window (was memory.deletion_policy.retention_days_default)."
+            }
+          }
+        }
+      }
+    },
+    "interop": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "v1.0 (MAY): declared interop surfaces/targets so hosts can auto-discover how to drive this persona (RFC C6).",
+      "properties": {
+        "surfaces": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "mcp",
+              "http",
+              "hooks",
+              "subagent",
+              "sdk"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Placement targets this persona is compiled for (e.g. claude-code, codex, openclaw, hermes)."
+        }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "v1.0 (MAY): verifiable version lineage for THIS persona version (RFC C1). Self-edit ledgers mint PersonaVersions; this block records the current version's provenance so registries and audits can walk the history.",
+      "properties": {
+        "parent_version": {
+          "type": "string",
+          "description": "metadata.version of the version this one derives from."
+        },
+        "change_summary": {
+          "type": "string"
+        },
+        "approver": {
+          "type": "string",
+          "description": "Who approved the change (human id or governance actor)."
+        },
+        "approved_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "v1.0 (MAY): cryptographic integrity for registry/compliance use (RFC C2). Non-repudiation over the identity document.",
+      "properties": {
+        "algorithm": {
+          "type": "string",
+          "enum": [
+            "ed25519"
+          ]
+        },
+        "public_key": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string",
+          "description": "Signature over the canonical frontmatter minus this block."
+        },
+        "key_ref": {
+          "type": "string",
+          "description": "External key reference (registry key id / DID)."
+        }
+      }
+    },
     "runtime_artifacts": {
       "type": "object",
       "additionalProperties": false,
       "description": "Pointers to sibling runtime files.",
       "properties": {
-        "state_file": { "type": "string" },
-        "policy_file": { "type": "string" },
-        "memory_semantic_file": { "type": "string" },
-        "memory_episodic_dir": { "type": "string" }
+        "state_file": {
+          "type": "string"
+        },
+        "policy_file": {
+          "type": "string"
+        },
+        "memory_semantic_file": {
+          "type": "string"
+        },
+        "memory_episodic_dir": {
+          "type": "string"
+        }
       }
     },
-
     "permissions": {
       "type": "object",
       "additionalProperties": false,
@@ -771,27 +1700,39 @@
       "properties": {
         "sandbox": {
           "type": "string",
-          "enum": ["read-only", "workspace-write", "danger-full-access"],
+          "enum": [
+            "read-only",
+            "workspace-write",
+            "danger-full-access"
+          ],
           "description": "What the persona may read/write/network when executing commands."
         },
         "approval": {
           "type": "string",
-          "enum": ["untrusted", "on-failure", "on-request", "never"],
+          "enum": [
+            "untrusted",
+            "on-failure",
+            "on-request",
+            "never"
+          ],
           "description": "When the persona must ask before a risky action."
         },
         "allow": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Regexes that force-allow a matching command."
         },
         "deny": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Regexes that force-deny a matching command (highest precedence)."
         }
       }
     },
-
     "verification": {
       "type": "object",
       "additionalProperties": false,
@@ -799,81 +1740,174 @@
       "properties": {
         "mode": {
           "type": "string",
-          "enum": ["off", "advisory", "blocking"],
+          "enum": [
+            "off",
+            "advisory",
+            "blocking"
+          ],
           "description": "off: no verification. advisory: run + report but never block. blocking: a failing gate prevents 'finish' and triggers on_fail."
         },
         "quorum": {
           "description": "How many gates must pass: 'all', 'majority', or an integer.",
           "oneOf": [
-            { "type": "string", "enum": ["all", "majority"] },
-            { "type": "integer", "minimum": 1 }
+            {
+              "type": "string",
+              "enum": [
+                "all",
+                "majority"
+              ]
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
           ]
         },
         "on_fail": {
           "type": "string",
-          "enum": ["retry", "skip", "stop"],
+          "enum": [
+            "retry",
+            "skip",
+            "stop"
+          ],
           "description": "Behavior when the quorum is not met under mode=blocking."
         },
-        "max_retries": { "type": "integer", "minimum": 0 },
+        "max_retries": {
+          "type": "integer",
+          "minimum": 0
+        },
         "gates": {
           "type": "array",
           "description": "The objective checks. Each gate has a type and type-specific fields.",
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["type"],
+            "required": [
+              "type"
+            ],
             "properties": {
-              "type": { "type": "string", "enum": ["command", "predicate", "llm_judge", "rubric"] },
-              "name": { "type": "string" },
-              "run": { "type": "string", "description": "command: the shell command to run (pass = exit 0)." },
-              "timeout_ms": { "type": "integer", "minimum": 1 },
-              "kind": { "type": "string", "enum": ["regex", "jsonpath", "contains"], "description": "predicate: how to test the agent output." },
-              "expr": { "type": "string", "description": "predicate: the pattern/path/substring to test." },
-              "criteria": { "type": "string", "description": "llm_judge/rubric: the done/quality criteria in natural language." },
-              "model": { "type": "string", "description": "llm_judge: optional model override (defaults to the configured checker model)." },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "command",
+                  "predicate",
+                  "llm_judge",
+                  "rubric"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "run": {
+                "type": "string",
+                "description": "command: the shell command to run (pass = exit 0)."
+              },
+              "timeout_ms": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "regex",
+                  "jsonpath",
+                  "contains"
+                ],
+                "description": "predicate: how to test the agent output."
+              },
+              "expr": {
+                "type": "string",
+                "description": "predicate: the pattern/path/substring to test."
+              },
+              "criteria": {
+                "type": "string",
+                "description": "llm_judge/rubric: the done/quality criteria in natural language."
+              },
+              "model": {
+                "type": "string",
+                "description": "llm_judge: optional model override (defaults to the configured checker model)."
+              },
               "dimensions": {
                 "type": "array",
                 "description": "rubric: weighted scoring dimensions.",
                 "items": {
                   "type": "object",
                   "additionalProperties": false,
-                  "required": ["name", "weight"],
+                  "required": [
+                    "name",
+                    "weight"
+                  ],
                   "properties": {
-                    "name": { "type": "string" },
-                    "weight": { "type": "number", "minimum": 0, "maximum": 1 },
-                    "criteria": { "type": "string" }
+                    "name": {
+                      "type": "string"
+                    },
+                    "weight": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "criteria": {
+                      "type": "string"
+                    }
                   }
                 }
               },
-              "threshold": { "type": "number", "minimum": 0, "maximum": 1, "description": "rubric: minimum aggregate score to pass." }
+              "threshold": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "rubric: minimum aggregate score to pass."
+              }
             }
           }
         }
       }
     },
-
     "agent_budget": {
       "type": "object",
       "additionalProperties": false,
       "description": "v0.9: first-class stop-conditions and resource caps for the agent loop (anti runaway / Ralph-Wiggum / money-pit). Optional; runtimes apply a conservative default cap when absent. [RUNTIME]",
       "properties": {
-        "max_steps": { "type": "integer", "minimum": 1 },
-        "max_tokens": { "type": "integer", "minimum": 1 },
-        "max_cost_usd": { "type": "number", "minimum": 0 },
-        "max_wall_seconds": { "type": "integer", "minimum": 1 },
+        "max_steps": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_cost_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_wall_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
         "stop_conditions": {
           "type": "array",
-          "items": { "type": "string", "enum": ["goal_met", "tool_denied", "execution_error", "low_confidence", "no_progress"] },
+          "items": {
+            "type": "string",
+            "enum": [
+              "goal_met",
+              "tool_denied",
+              "execution_error",
+              "low_confidence",
+              "no_progress"
+            ]
+          },
           "description": "Conditions that halt the loop before the hard caps."
         },
         "on_exhaust": {
           "type": "string",
-          "enum": ["stop", "summarize_and_stop"],
+          "enum": [
+            "stop",
+            "summarize_and_stop"
+          ],
           "description": "What to do when a cap/condition is hit."
         }
       }
     },
-
     "observability": {
       "type": "object",
       "additionalProperties": false,
@@ -881,52 +1915,181 @@
       "properties": {
         "trace": {
           "type": "string",
-          "enum": ["off", "jsonl", "otlp", "both"],
+          "enum": [
+            "off",
+            "jsonl",
+            "otlp",
+            "both"
+          ],
           "description": "off: none. jsonl: native line-delimited spans. otlp: OpenTelemetry-compatible JSON. both: emit both."
         },
-        "trace_dir": { "type": "string", "description": "Where trace files are written (default ./traces)." },
+        "trace_dir": {
+          "type": "string",
+          "description": "Where trace files are written (default ./traces)."
+        },
         "redact": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Regexes whose matches are redacted from traces (secrets/PII)."
         },
-        "sample_rate": { "type": "number", "minimum": 0, "maximum": 1, "description": "Fraction of spans to record (1.0 = all)." }
+        "sample_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Fraction of spans to record (1.0 = all)."
+        }
       }
     }
   },
-
   "$defs": {
     "envelopeUnsigned": {
       "type": "object",
-      "required": ["mean", "range"],
+      "required": [
+        "mean",
+        "range"
+      ],
       "additionalProperties": false,
       "properties": {
-        "mean": { "type": "number", "minimum": 0, "maximum": 1 },
+        "mean": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
         "range": {
           "type": "array",
-          "items": { "type": "number", "minimum": 0, "maximum": 1 },
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
           "minItems": 2,
           "maxItems": 2
+        },
+        "expression": {
+          "$ref": "#/$defs/expression"
+        },
+        "bands": {
+          "$ref": "#/$defs/bandBoundaries"
         }
       }
     },
     "envelopeSigned": {
       "type": "object",
-      "required": ["mean", "range"],
+      "required": [
+        "mean",
+        "range"
+      ],
       "additionalProperties": false,
       "properties": {
-        "mean": { "type": "number", "minimum": -1, "maximum": 1 },
+        "mean": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
         "range": {
           "type": "array",
-          "items": { "type": "number", "minimum": -1, "maximum": 1 },
+          "items": {
+            "type": "number",
+            "minimum": -1,
+            "maximum": 1
+          },
           "minItems": 2,
           "maxItems": 2
+        },
+        "expression": {
+          "$ref": "#/$defs/expression"
+        },
+        "bands": {
+          "$ref": "#/$defs/bandBoundaries"
+        },
+        "description": {
+          "type": "string"
         }
       }
     },
     "editPolicy": {
       "type": "string",
-      "enum": ["human_approval_required", "review_required", "auto_approved", "governance_controlled"]
+      "enum": [
+        "human_approval_required",
+        "review_required",
+        "auto_approved",
+        "governance_controlled"
+      ]
+    },
+    "expression": {
+      "description": "v1.0 behavior map. Normative form: a per-band map — the compiler deterministically emits the prose of the band the CURRENT value falls in (value→band→prose); a band crossing IS drift and triggers recompile. A plain string (applies at the declared mean's band) is accepted but deprecated.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "low": {
+              "type": "string"
+            },
+            "moderate": {
+              "type": "string"
+            },
+            "high": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "bandBoundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional per-dimension band boundary override. Defaults: low = [min, 0.33], moderate = (0.33, 0.66], high = (0.66, max] (for signed dimensions the defaults scale across [-1,1]: low ≤ -0.33 < moderate ≤ 0.33 < high). low_max must be < moderate_max.",
+      "properties": {
+        "low_max": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "moderate_max": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        }
+      }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "AgentPersona"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "apiVersion",
+          "kind",
+          "spec_version",
+          "metadata",
+          "identity",
+          "character",
+          "personality",
+          "values_and_drives",
+          "affect",
+          "cognition",
+          "memory",
+          "metacognition",
+          "self_regulation",
+          "persona",
+          "governance",
+          "security"
+        ],
+        "description": "AgentPersona (D9): the full 10-layer anatomy is MUST. UserPersona requires only the core (apiVersion, kind, spec_version, metadata, identity); any layer it does declare is validated in shape, and the universal invariants that reference absent blocks do not apply (explicit subset, not a silent bypass)."
+      }
+    }
+  ]
 }

@@ -7,6 +7,62 @@ The spec follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased] — spec v1.0.0 (F2 of the master architecture review; see `cli/ARCHITECTURE_REVIEW.md` §11)
+
+**BREAKING.** First major release. The 10 canonical layers are KEPT as the anatomy of an AI
+Persona; every correction happens INSIDE them. 0.3.0–0.10.0 documents keep validating against the
+frozen `schema/legacy/persona-0.10.schema.json` (read-compat window); migrate with
+`personaxis migrate 0.10-to-1.0` (structural, comment-preserving).
+
+### Changed — schema (`schema/persona.schema.json`, `$id` …/persona/1.0/…)
+- **Layer 9 renamed**: `reflexive_self_regulation` → `self_regulation`.
+- **Single-owner enforcement**: only `character.virtues` carry `enforcement`; a virtue MAY declare
+  `refs:` (dot-paths to backing traits/values) and the validator then REQUIRES coherence — a hard
+  virtue whose referenced trait envelope permits contradiction is FAIL_POLICY.
+- **Two refusal surfaces** (was five): `self_regulation.hard_limits` (absorbs
+  `break_character_guardrails`) + `character.prohibited_behaviors` (absorbs
+  `principled_refusals`).
+- **`persona_prompting` merged into layer 10 `persona`** (`address`, `voice_exemplars`,
+  `scene_contracts`, `behavioral_anchors`, `consistency`); the top-level block is gone.
+- **Drives declare their mutability**: static `level: low|moderate|high` OR a `{mean, range}`
+  envelope that joins the clamped mutable surface. The bare 0.10 `intensity` number — mutable in
+  state.json with nothing to clamp against — is removed.
+- **Memory faculty/knobs split**: `memory` keeps the psychological faculty (types, write/
+  consolidation/deletion policy, anchors, forgetting, working_self); implementation knobs
+  (`max_items`, `use_embeddings`, `use_reranker`, `retention_days_default`) move to the new
+  OPTIONAL `runtime.memory` block.
+- **Monitors wire into decisions**: metacognition monitors accept `true|false` OR
+  `{enabled, feeds: <self_regulation decision>}`.
+- **Traits gain optional `expression` + behavior `bands`** (low/moderate/high boundaries) giving
+  numbers deterministic compile semantics; drift ≡ band crossing.
+- `apiVersion` → `personaxis.com/v1`; `metadata.display_name` dropped (single owner:
+  `identity.display_name`); new OPTIONAL `interop`, `lineage`, `integrity` blocks.
+- `policy.schema.json`: `spec_version` enum now accepts `1.0.0`.
+
+### Changed — normative documents and companion schemas (wave F2.W3)
+- **SPEC.md fully rewritten for v1.0**: the official definition (an AI Persona as a person-model);
+  each layer now declares its psychological construct (McAdams, Peterson & Seligman, Big
+  Five/HEXACO, Schwartz, Russell/Scherer, Kahneman/Simon, Tulving/Conway, Flavell,
+  Baumeister/Carver & Scheier/Higgins, Jung/Goffman), its operational contract and its normative
+  composition rules; three-group document order; §7.2 improvement-policy min-wins precedence;
+  §8.2 memory erasure; §8.3 state contract; §13.1 universals table at v1.0 paths; **§13.2
+  conformance classes C0 Identity / C1 Governed State / C2 Living Runtime**.
+- **memory.schema.json v1.0**: the chain hash commits to `content_hash` (+ `redacted`) — real
+  erasure without a chain break; tombstone + redaction as the two sanctioned deletion forms.
+- **state.schema.json v1.0**: full dot-path keys, mutable surface ≡ envelope fields, state as a
+  replayable checkpoint of `mutation_log`.
+- **persona.schema.json**: full anatomy required only for `kind: AgentPersona` (explicit D9
+  UserPersona subset — surfaced that the UserPersona template had never validated).
+- **Templates at v1.0**: `personaxis_template.md` (three-group banners, refs/bands/feeds
+  examples, prompting material inside `persona`, interop/lineage/integrity stubs),
+  `policy_template.yaml` (min-wins note), `PERSONA_template.md` (v1.0 source paths).
+
+### Changed — golden examples (migrated via the codemod, validate PASS v1.0)
+- `.personaxis/personas/cmo/`, `.personaxis/personas/frontend-expert/`, `.personaxis/` (root
+  maintainer): spec + policy.yaml + state.json (full dot-path keys) migrated; migration reports
+  under each `.personaxis/migrations/`. Compiled documents pending regeneration (F2.W3, after the
+  v1.0 template rewrite).
+
 ## [Unreleased] — integrity sweep (F1 of the master architecture review; see `cli/ARCHITECTURE_REVIEW.md`)
 
 **No spec field changes.** This closes the drift between the spec's own documents, catalogued by

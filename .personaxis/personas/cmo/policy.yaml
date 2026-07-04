@@ -14,7 +14,7 @@
 # WHO DOES NOT READ THIS
 #   - The LLM actor running the persona.
 
-spec_version: "0.10.0"
+spec_version: "1.0.0"
 
 applies_to:
   persona_name: "cmo"

@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://personaxis.com/schemas/state/0.9/state.schema.json",
-  "title": "state.json v0.9",
-  "description": "Mutable runtime state of an AI Persona. Sibling of personaxis.md inside .personaxis/[personas/<slug>/]. Holds current trait/affect/mood values, active context, and the mutation log. Mutations occur via the canonical adjust_persona_state tool, clamped to envelopes declared in personaxis.md. State mutations DO NOT modify personaxis.md or the compiled PERSONA.md/<slug>.md; they are operational, not spec edits.",
+  "$id": "https://personaxis.com/schemas/state/1.0/state.schema.json",
+  "title": "state.json v1.0",
+  "description": "Mutable runtime state of an AI Persona. Sibling of personaxis.md inside .personaxis/[personas/<slug>/]. Holds current trait/affect/mood values, active context, and the mutation log. Mutations occur via the canonical adjust_persona_state tool, clamped to envelopes declared in personaxis.md. State mutations DO NOT modify personaxis.md or the compiled PERSONA.md/<slug>.md; they are operational, not spec edits. v1.0 (D4): the mutable surface is EXACTLY the set of fields that declare a {mean, range} envelope in personaxis.md; values keys are FULL dot-paths into the spec; and state.json is a CHECKPOINT derived from mutation_log — a conforming runtime can rebuild values by replaying the log from the envelope means.",
   "type": "object",
   "required": [
     "schema_version",
@@ -14,8 +14,8 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["0.9.0", "0.8.0", "0.7.0", "0.6.0"],
-      "description": "state.json schema version. 0.9.0 is current (additive: optional agent_session block for agent-loop tracking; no field changes from 0.8.0)."
+      "enum": ["1.0.0", "0.9.0", "0.8.0", "0.7.0", "0.6.0"],
+      "description": "state.json schema version. 1.0.0 is current (values keys are full dot-paths; state is a replayable checkpoint of mutation_log). 0.x accepted during the 1.x read-compat window."
     },
     "persona_id": {
       "type": "string",
@@ -33,7 +33,7 @@
     },
     "values": {
       "type": "object",
-      "description": "Current values for all mutable fields. Keys are dot-notation paths into personaxis.md (e.g., 'traits.openness', 'affect.valence', 'mood.tone', 'drives.complete_task'). Each value is a number that must lie within the envelope (range) declared at the corresponding path in personaxis.md. The runtime clamps any out-of-envelope value at mutation time.",
+      "description": "Current values for all mutable fields. v1.0: keys are FULL dot-notation paths into personaxis.md ('personality.traits.openness', 'affect.baseline.core_affect.valence', 'affect.baseline.mood.tone', 'values_and_drives.drives.complete_task') and the key set is exactly the fields that declare a {mean, range} envelope. The short ≤0.10 forms ('traits.openness', 'affect.valence', 'mood.tone', 'drives.x') are legacy; conforming runtimes accept them as read-aliases during the 1.x window (the CLI's `migrate 0.10-to-1.0` renames them). Each value is a number that must lie within the envelope declared at the corresponding path; the runtime clamps any out-of-envelope value at mutation time.",
       "additionalProperties": {
         "type": "number"
       }

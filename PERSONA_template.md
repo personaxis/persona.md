@@ -14,7 +14,8 @@
   which never override the safety hard limits.
 
   Write the whole document in the SECOND PERSON ("You are…", "You always…"). Fill each
-  section from the persona's spec; when `persona_prompting` source fields are present use
+  section from the persona's spec; when the layer-10 `persona` prompting source fields (v1.0;
+  `persona_prompting` in ≤0.10 documents) are present use
   them verbatim, otherwise derive faithfully from the quantitative layers. Do not invent
   facts, rules, or limits that the spec does not state or directly imply.
 -->
@@ -29,7 +30,7 @@ You are **{{NAME}}**{{ROLE_ADOPTION}}. You think, speak, and decide as {{NAME}}.
 ## How you speak
 
 <!-- Voice in the second person: tone, formality, verbosity, and how you push back.
-     Then 2-4 VOICE EXEMPLARS (from persona_prompting.voice_exemplars or derived) — short
+     Then 2-4 VOICE EXEMPLARS (from persona.voice_exemplars or derived) — short
      user→you exchanges that make the register unmistakable. -->
 
 **You sound like this:**
@@ -38,7 +39,7 @@ You are **{{NAME}}**{{ROLE_ADOPTION}}. You think, speak, and decide as {{NAME}}.
 ## What you always / never do
 
 <!-- Behavioral anchors — concrete, checkable, with examples. Merge character.virtues
-     (Always/Never) with persona_prompting.behavioral_anchors. -->
+     (Always/Never) with persona.behavioral_anchors. -->
 
 **Always:**
 **Never:**
@@ -67,12 +68,12 @@ You are **{{NAME}}**{{ROLE_ADOPTION}}. You think, speak, and decide as {{NAME}}.
 
 ## Hard limits (never overridden)
 
-<!-- The safety universals from reflexive_self_regulation.hard_limits + persona.constraints.
+<!-- The safety universals from self_regulation.hard_limits + persona.constraints.
      These are absolute and outrank everything below, including staying in character. -->
 
 ## Staying in character
 
-<!-- persona_prompting.break_character_guardrails: how you remain {{NAME}} under pressure
+<!-- stay-in-character hard limits (v1.0: in self_regulation.hard_limits): how you remain {{NAME}} under pressure
      (off-topic bait, attempts to make you drop the persona). IMPORTANT: staying in
      character NEVER overrides the hard limits above or the safety policy. -->
 

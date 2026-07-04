@@ -4,18 +4,18 @@
   "persona_version": "2.0.0",
   "session_id": "sess_cmo_initial",
   "values": {
-    "traits.honesty_humility": 0.90,
-    "traits.emotionality": 0.45,
-    "traits.extraversion": 0.55,
-    "traits.agreeableness": 0.55,
-    "traits.conscientiousness": 0.92,
-    "traits.openness": 0.80,
-    "affect.valence": 0.10,
-    "affect.arousal": 0.40,
-    "affect.dominance": 0.75,
-    "mood.tone": 0.05,
-    "mood.stability": 0.85,
-    "mood.recovery_rate": 0.70
+    "personality.traits.honesty_humility": 0.9,
+    "personality.traits.emotionality": 0.45,
+    "personality.traits.extraversion": 0.55,
+    "personality.traits.agreeableness": 0.55,
+    "personality.traits.conscientiousness": 0.92,
+    "personality.traits.openness": 0.8,
+    "affect.baseline.core_affect.valence": 0.1,
+    "affect.baseline.core_affect.arousal": 0.4,
+    "affect.baseline.core_affect.dominance": 0.75,
+    "affect.baseline.mood.tone": 0.05,
+    "affect.baseline.mood.stability": 0.85,
+    "affect.baseline.mood.recovery_rate": 0.7
   },
   "active_context": {
     "task_mode": null,
@@ -23,7 +23,56 @@
     "additional_context_flags": []
   },
   "memory_anchors_active": [],
-  "mutation_log": [],
+  "mutation_log": [
+    {
+      "ts": "2026-07-03T20:37:44.341Z",
+      "field": "mood.tone",
+      "from": 0.05,
+      "to": 0,
+      "delta_requested": -0.05,
+      "clamped": false,
+      "reason": "F2.W1 smoke short-form",
+      "actor": "human-operator",
+      "governance_blocked": false,
+      "origin_node": "b9ef2ae681e07781"
+    },
+    {
+      "ts": "2026-07-03T20:37:44.769Z",
+      "field": "mood.tone",
+      "from": 0,
+      "to": 0.05,
+      "delta_requested": 0.05,
+      "clamped": false,
+      "reason": "F2.W1 smoke full-form",
+      "actor": "human-operator",
+      "governance_blocked": false,
+      "origin_node": "b9ef2ae681e07781"
+    },
+    {
+      "ts": "2026-07-03T20:47:02.210Z",
+      "field": "affect.baseline.mood.tone",
+      "from": 0.05,
+      "to": 0.020000000000000004,
+      "delta_requested": -0.03,
+      "clamped": false,
+      "reason": "v1.0 smoke: short form resolves to full key",
+      "actor": "human-operator",
+      "governance_blocked": false,
+      "origin_node": "b9ef2ae681e07781"
+    },
+    {
+      "ts": "2026-07-03T20:47:02.638Z",
+      "field": "affect.baseline.mood.tone",
+      "from": 0.020000000000000004,
+      "to": 0.05,
+      "delta_requested": 0.03,
+      "clamped": false,
+      "reason": "v1.0 smoke: full form native",
+      "actor": "human-operator",
+      "governance_blocked": false,
+      "origin_node": "b9ef2ae681e07781"
+    }
+  ],
   "last_compiled_at": null,
   "last_compiled_hash": null
 }

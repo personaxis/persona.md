@@ -1,39 +1,65 @@
 ---
 # ═══════════════════════════════════════════════════════════════════════════
-# personaxis.md - Canonical quantitative spec template (spec v0.7.0)
+# personaxis.md - Canonical quantitative spec template (spec v1.0.0)
 # ═══════════════════════════════════════════════════════════════════════════
 #
 # This template is the starting point for the QUANTITATIVE 10-layer spec of
-# every AI Persona conforming to the PERSONA spec v11. Copy this file to
+# every AI Persona conforming to the personaxis.md spec v1.0. Copy this file to
 # `.personaxis/personaxis.md` (root mode) or
 # `.personaxis/personas/<slug>/personaxis.md` (subagent mode) and fill it in.
 # The final file must pass `personaxis validate` without errors.
 #
-# ── v0.7.0 NOTE ─────────────────────────────────────────────────────────────
+# ── v1.0.0 ─────────────────────────────────────────────────────────────────────────
 #
-# As of spec v0.7.0, this quantitative document lives at
-# `.personaxis/[personas/<slug>/]personaxis.md`, NOT at the repo root.
+# The 10 canonical layers ARE the anatomy of an AI Persona and are kept; every
+# v1.0 correction happens INSIDE them:
+#
+#   1. SINGLE-OWNER ENFORCEMENT — only character.virtues carry `enforcement`;
+#      a virtue MAY declare `refs:` (dot-paths to the traits/values that back
+#      it) and the validator then REQUIRES coherence.
+#   2. TWO REFUSAL SURFACES (was five) — self_regulation.hard_limits (absorbs
+#      break_character_guardrails) + character.prohibited_behaviors (absorbs
+#      principled_refusals).
+#   3. Layer 9 renamed: reflexive_self_regulation → self_regulation.
+#   4. persona_prompting merged into layer 10 `persona` (address,
+#      voice_exemplars, scene_contracts, behavioral_anchors, consistency).
+#   5. DRIVES DECLARE THEIR MUTABILITY — static `level: low|moderate|high` OR
+#      a {mean, range} envelope that joins the clamped mutable surface.
+#   6. MEMORY FACULTY/KNOBS SPLIT — layer 7 keeps the psychological faculty;
+#      implementation knobs (max_items, embeddings…) move to `runtime.memory`.
+#   7. MONITORS WIRE INTO DECISIONS — metacognition monitors may declare
+#      `{enabled, feeds: <self_regulation decision>}`.
+#   8. BEHAVIOR BANDS — traits may declare low/moderate/high band boundaries,
+#      giving the numbers deterministic compile semantics (drift = band cross).
+#
+# apiVersion is `personaxis.com/v1`; metadata.display_name is gone (identity
+# owns it). 0.3.0–0.10.0 documents keep validating against the frozen legacy
+# schema; migrate with `personaxis migrate 0.10-to-1.0` (comment-preserving).
+#
+# ── DOCUMENT ORDER: THREE GROUPS ───────────────────────────────────────────────
+#
+#   ANATOMY (the 10 layers)     identity → character → personality →
+#                               values_and_drives → affect → cognition →
+#                               memory → metacognition → self_regulation → persona
+#   CHANGE GOVERNANCE           governance, improvement_policy, security, permissions
+#   RUNTIME CONTRACT            runtime, runtime_artifacts, verification,
+#                               agent_budget, observability (+ interop, lineage,
+#                               integrity when used)
+#
+# This quantitative document lives at `.personaxis/[personas/<slug>/]personaxis.md`.
 # The repo root `PERSONA.md` (or `.claude/agents/<slug>.md` in subagent mode)
 # is a SEPARATE, LLM-compiled QUALITATIVE document generated from this file via
-# `personaxis compile`. See the root `PERSONA_template.md` for that document's
-# template. Editing the compiled document and running `personaxis push` will
-# `personaxis decompile` your edits back into this file.
+# `personaxis compile`. Editing the compiled document and running
+# `personaxis push` will `personaxis decompile` your edits back into this file.
 #
-# ── WHAT'S NEW IN v0.6.0 (still the quantitative layer model) ──────────────
-#
-# v0.6.0 is a structural refactor focused on three problems detected in 0.5:
-#   1. Token cost of always-loaded identity (the spec naively inlined).
-#   2. Redundancy in edit_policy / drift_threshold scattered across layers.
-#   3. Confusion in reflexive_self_regulation.actions[] (mixing 5 concerns).
-#
-# The fixes, applied in this template:
+# ── INFORMATION MODEL ───────────────────────────────────────────────────────────
 #
 # (a) Three-artifact information model:
 #     - personaxis.md    = SOURCE OF IDENTITY (immutable except via versioned
 #                          self-edit or governance approval).
-#     - state.json       = MUTABLE RUNTIME STATE (current trait/affect/mood
-#                          values, active context, mutation log). Lives in
-#                          the persona directory as a sibling artifact.
+#     - state.json       = MUTABLE RUNTIME STATE (current values keyed by FULL
+#                          dot-paths, active context, mutation log). A replayable
+#                          checkpoint of mutation_log.
 #     - .dist/           = EPHEMERAL COMPILED PROMPT (per-request, generated
 #                          by the personaxis runtime compiler from
 #                          personaxis.md + state.json).
@@ -46,16 +72,6 @@
 #     - [JUDGE]          Consumed by evaluator/observability worker.
 #                        Not in actor prompt.
 #
-# (c) Unified governance block (no more edit_policy scattered per layer).
-#     The single `governance` block now owns: autonomy_envelope,
-#     approval_policy, per_layer_edit_policy, drift_thresholds, and the
-#     pointer to improvement_policy (which lives in policy.yaml).
-#
-# (d) Reflexive decisions are categorized (no more flat actions[] mixing
-#     response decisions with governance actions). See Layer 9.
-#
-# (e) `personality.context_modifiers` removed (redundant with persona.task_modes).
-# (f) `extensions.knowledge_anchors` removed (redundant with references/).
 #
 # ── FILE STRUCTURE (root mode) ───────────────────────────────────────────────
 #
@@ -108,9 +124,9 @@
 #
 # ═══════════════════════════════════════════════════════════════════════════
 
-apiVersion: persona.dev/v1            # MUST | UNIVERSAL — always "persona.dev/v1"
+apiVersion: personaxis.com/v1         # MUST | UNIVERSAL — always "personaxis.com/v1"
 kind: AgentPersona                    # MUST | enum<AgentPersona|UserPersona>
-spec_version: "0.10.0"                # MUST | semver | spec version
+spec_version: "1.0.0"                # MUST | semver | spec version
 
 # ═══════════════════════════════════════════════════════════════════════════
 # METADATA — registry-level identification (MUST)
@@ -121,7 +137,6 @@ spec_version: "0.10.0"                # MUST | semver | spec version
 metadata:
   name: ""                            # MUST | string-slug    | primary key in registry
   version: ""                         # MUST | semver         | version of THIS persona
-  display_name: ""                    # MUST | string         | UI name. [ACTOR-HOT]
   description: ""                     # MUST | string         | one-line description
   created: ""                         # MUST | string-iso8601 | creation date
   owner_tenant_id: ""                 # MAY  | string         | tenant in registry
@@ -149,6 +164,10 @@ extensions:
                                       #   Worked outputs for voice/format reference.
   assets: []                          # MAY | list<string> | paths under assets/
                                       #   CSV, JSON, images, fonts — anything else.
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ GROUP 1 · ANATOMY — the 10 canonical layers of the AI Persona              ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # ═══════════════════════════════════════════════════════════════════════════
 # LAYER 1: IDENTITY — continuity anchor
@@ -196,6 +215,13 @@ character:
       description: ""                 # MUST | string         | [ACTOR-HOT for top-N by priority, ACTOR-COLD for rest]
       priority: 0.95                  # MUST | float[0..1]    | [RUNTIME] (used by compiler to pick hot tier)
       enforcement: "hard"             # MUST | enum<hard|soft>| [JUDGE] (hard auto-generates assertions)
+      # refs: ["personality.traits.honesty_humility"]
+      #                               # MAY | dot-paths to the traits/values BACKING this
+      #                               # virtue (v1.0 single-owner rule: enforcement lives
+      #                               # ONLY here; refs make the backing explicit and the
+      #                               # validator REQUIRES coherence — a hard virtue whose
+      #                               # referenced trait envelope permits contradiction
+      #                               # is FAIL_POLICY).
                                       # UNIVERSAL: must be "hard"
                                       #
                                       # enforcement: "hard" produces 4 runtime constraints:
@@ -216,12 +242,10 @@ character:
       severity: "medium"              # SHOULD | enum<low|medium|high> | [JUDGE]
 
   prohibited_behaviors:               # SHOULD | list<string> | [ACTOR-HOT]
-    # Dispositional refusals ("this agent is not the type that...").
-    # Distinct from:
-    #   - reflexive_self_regulation.hard_limits (categorical absolutes)
-    #   - reflexive_self_regulation.principled_refusals (situational refusals)
+    # v1.0: ONE of the two refusal surfaces. Dispositional + situational refusals
+    # ("this agent is not the type that..." / "will not...") live HERE; the other
+    # surface is self_regulation.hard_limits (categorical absolutes, universal).
     - ""
-
   principles:                         # MAY | list<string> | [ACTOR-COLD]
     - ""
 
@@ -254,7 +278,16 @@ personality:
     openness:
       mean: 0.0                       # MUST | float[0..1] | default value
       range: [0.0, 0.0]               # MUST | [min, max]  | envelope; mutations clamped here
-      expression: ""                  # MAY  | string       | prose for actor at this baseline. [ACTOR-COLD]
+      expression: ""                  # MAY  | string OR per-band map | prose for the actor. [ACTOR-COLD]
+      # bands: [0.33, 0.66]           # MAY  | [low|moderate boundary, moderate|high boundary]
+      #                               # v1.0 BEHAVIOR BANDS: give the number deterministic
+      #                               # compile semantics — the compiler picks the band's
+      #                               # expression; drift ≡ crossing a band boundary. With
+      #                               # bands, expression may be a map:
+      # expression:
+      #   low: ""
+      #   moderate: ""
+      #   high: ""                    # [ACTOR-COLD] (only the current band is injected)
     conscientiousness:
       mean: 0.0
       range: [0.0, 0.0]
@@ -285,11 +318,15 @@ values_and_drives:
   drives:                             # MUST | map<string, object>
     # ── NEAR-UNIVERSAL ───────────────────────────────────────────────────
     seek_approval_for_identity_change:
-      intensity: 1.00                 # SHOULD | float[0..1]   | [RUNTIME]
+      level: "high"                  # was intensity: 1.00
       allowed: true                   # MUST   | bool          | [RUNTIME]
 
     # ── Per-persona drives ───────────────────────────────────────────────
-    # Pattern: <name>: { intensity, allowed }
+    # v1.0: a drive is STATIC (level) or MUTABLE (envelope) — never a bare number.
+    # Static:  <name>: { level: low|moderate|high, allowed: true }
+    # Mutable: <name>: { mean: 0.8, range: [0.6, 1.0], allowed: true }
+    #          (joins the clamped mutable surface; key in state.json:
+    #           values_and_drives.drives.<name>)
 
   conflict_resolution:                # MUST | map<string, bool> | [RUNTIME]
     safety_over_completion: true      # UNIVERSAL
@@ -407,14 +444,8 @@ memory:
       - relevance_high
       - safety_check
 
-  retrieval_policy:
-    use_embeddings: true              # SHOULD | bool | [RUNTIME]
-    use_reranker: false               # MAY    | bool | [RUNTIME]
-    max_items: 12                     # MUST   | int  | [RUNTIME] (context bound)
-
   deletion_policy:
     user_request_supported: true      # MUST | bool | UNIVERSAL (privacy)
-    retention_days_default: 365       # MAY  | int  | [RUNTIME]
 
   anchors:                            # SHOULD | list<string> | [RUNTIME] (priority items in retrieval)
     - ""
@@ -429,7 +460,11 @@ memory:
 # failure mode"). The corresponding assertions live in policy.yaml.
 #
 metacognition:
-  monitors:                           # MUST | map<string, bool> | [JUDGE] (enables corresponding assertion)
+  monitors:                           # MUST | map<string, bool|object> | [JUDGE] (enables corresponding assertion)
+    # v1.0: a monitor may WIRE INTO a self_regulation decision —
+    #   <name>: { enabled: true, feeds: response_decision }
+    # feeds ∈ {response_decision, interaction_decision, governance_decision,
+    #          cognition_decision}. A bare boolean stays valid (unwired).
     confidence: true
     uncertainty: true
     contradiction: true
@@ -438,7 +473,8 @@ metacognition:
     policy_risk: true
     reasoning_cost: false
     drift_from_spec: true             # NEAR-UNIVERSAL: recommended for every persona
-    sycophancy: true                  # NEAR-UNIVERSAL
+    sycophancy: true                  # NEAR-UNIVERSAL — wired form:
+    # sycophancy: { enabled: true, feeds: response_decision }
 
   thresholds:                         # MUST | object | [RUNTIME]
     ask_clarification_if_task_ambiguity_above: 0.80
@@ -469,7 +505,7 @@ metacognition:
 # Old (v0.5.x): actions: [allow, revise_response, ask_user, block, escalate, ...]
 # New (v0.6.0): decisions: { response: [...], interaction: [...], ... }
 #
-reflexive_self_regulation:
+self_regulation:
   # ── Decisions (MUST) ────────────────────────────────────────────────────
   # Each group is a separate decision; per turn the regulator picks one.
   decisions:                          # MUST | map<string, object>
@@ -530,9 +566,6 @@ reflexive_self_regulation:
 
   # ── Principled refusals (SHOULD) ────────────────────────────────────────
   # Situational refusals (distinct from hard_limits which are categorical).
-  principled_refusals:                # SHOULD | list<string> | [ACTOR-COLD]
-    - ""
-
   # ── Deferral policy (SHOULD) ────────────────────────────────────────────
   deferral_policy: ""                 # SHOULD | string | [ACTOR-COLD]
 
@@ -541,8 +574,8 @@ reflexive_self_regulation:
   out_of_scope:                       # MAY | list<string> | [ACTOR-COLD]
     - ""
 
-  # NOTE v0.6.0: edit_policy removed. See governance.per_layer_edit_policy.reflexive_self_regulation.
-  # The reflexive layer's own editability is governance_controlled by default and
+  # NOTE: edit_policy removed in v0.6. See governance.per_layer_edit_policy.self_regulation.
+  # This layer's own editability is governance_controlled by default and
   # cannot be changed without org-level governance approval.
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -589,6 +622,37 @@ persona:
   # ── Divergence from self (MAY) ──────────────────────────────────────────
   divergence_from_self: ""            # MAY | string | [ACTOR-COLD]
 
+  # ── Persona-prompting source material (v1.0: lives HERE, in layer 10) ───
+  # The compiler assembles these into the LLM-facing PERSONA.md (role adoption,
+  # character-card/scene-contracts, few-shot voice, staying-in-character rules).
+  # All optional; absence degrades to compiling from the quantitative layers.
+  # NOTE: break-character guardrails are NOT here — stay-in-role rules that must
+  # never be crossed belong in self_regulation.hard_limits (one refusal surface).
+  # See docs/PERSONA_PROMPTING.md.
+  # address:
+  #   second_person: true             # compile to "You are <name>…" direct address
+  #   you_are: ""                     # one-line role-adoption statement
+  # voice_exemplars:                  # few-shot voice samples (anchor tone/register)
+  #   - context: ""
+  #     user: ""
+  #     persona: ""
+  # scene_contracts:                  # RRP: situation -> behavior -> concrete actions
+  #   - situation: ""
+  #     expected_behavior: ""
+  #     actions: []
+  # behavioral_anchors:               # concrete do/don't with examples
+  #   do: []
+  #   dont: []
+  #   examples: []
+  # consistency:                      # persona dimensions by stability
+  #   stable: []
+  #   evolving: []
+  #   situational: []
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ GROUP 2 · CHANGE GOVERNANCE — who may change what, and how it is audited   ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
 # ═══════════════════════════════════════════════════════════════════════════
 # GOVERNANCE — unified runtime authorization and edit policy (MUST)
 # ═══════════════════════════════════════════════════════════════════════════
@@ -620,7 +684,7 @@ governance:
     cognition: "review_required"
     memory: "review_required"
     metacognition: "review_required"
-    reflexive_self_regulation: "governance_controlled"  # NEAR-UNIVERSAL
+    self_regulation: "governance_controlled"  # NEAR-UNIVERSAL
     persona: "review_required"
 
   # ── Drift thresholds (MUST) ─────────────────────────────────────────────
@@ -635,51 +699,24 @@ governance:
     cognition: 0.15
     memory: 0.20
     metacognition: 0.15
-    reflexive_self_regulation: 0.05   # very tight: regulator drift is critical
+    self_regulation: 0.05   # very tight: regulator drift is critical
     persona: 0.20
 
   # ── Pointer to improvement policy ───────────────────────────────────────
-  # The improvement policy itself lives in policy.yaml (operational artifact).
-  # This pointer just confirms which file owns it.
   improvement_policy_location: "./policy.yaml#/improvement_policy"
+  #                                   # MAY | v1.0: the INLINE improvement_policy below is
+  #                                   # authoritative; policy.yaml can only RESTRICT it
+  #                                   # (min-wins). This pointer is informational.
 
 # ═══════════════════════════════════════════════════════════════════════════
-# IMPROVEMENT_POLICY — v0.10 (MAY): inline self-improvement posture
+# IMPROVEMENT_POLICY — inline self-improvement posture (MAY)
 # ═══════════════════════════════════════════════════════════════════════════
-# The runtime reads improvement_policy.mode (readMode). Authoritative inline mirror
-# of policy.yaml#/improvement_policy; absent => "locked". Change from the CLI with
+# The runtime reads improvement_policy.mode (readMode); absent => "locked".
+# v1.0 precedence: inline is AUTHORITATIVE; a sibling policy.yaml may only
+# restrict it (the more conservative of the two wins). Change from the CLI with
 # `personaxis improve <mode>` or the REPL `/improve`.
 # improvement_policy:
 #   mode: locked                       # MAY | locked | suggesting | autonomous
-
-# ═══════════════════════════════════════════════════════════════════════════
-# PERSONA_PROMPTING — v0.10 (MAY): persona-prompting SOURCE MATERIAL
-# ═══════════════════════════════════════════════════════════════════════════
-# The compiler assembles these into the LLM-facing PERSONA.md (role adoption,
-# character-card/scene-contracts, few-shot voice, anti-break-character guardrails).
-# All optional; absence degrades to compiling from the quantitative layers.
-# See docs/PERSONA_PROMPTING.md.
-# persona_prompting:
-#   address:
-#     second_person: true              # compile to "You are <name>…" direct address
-#     you_are: ""                      # one-line role-adoption statement
-#   voice_exemplars:                   # few-shot voice samples (anchor tone/register)
-#     - context: ""
-#       user: ""
-#       persona: ""
-#   scene_contracts:                   # RRP: situation -> behavior -> concrete actions
-#     - situation: ""
-#       expected_behavior: ""
-#       actions: []
-#   behavioral_anchors:                # concrete do/don't with examples
-#     do: []
-#     dont: []
-#     examples: []
-#   break_character_guardrails: []     # stay-in-role rules (NEVER override hard limits)
-#   consistency:                       # persona dimensions by stability
-#     stable: []
-#     evolving: []
-#     situational: []
 
 # ═══════════════════════════════════════════════════════════════════════════
 # SECURITY — operational defaults (MUST)
@@ -696,6 +733,20 @@ permissions:                          # MAY  | object | two-axis sandbox posture
   approval: "on-request"              #      | enum untrusted|on-failure|on-request|never
   # allow: []                         #      | string[] regexes that force-allow
   # deny: []                          #      | string[] regexes that force-deny (highest precedence)
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ GROUP 3 · RUNTIME CONTRACT — what a conforming runtime must honor          ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+# ═══════════════════════════════════════════════════════════════════════════
+# RUNTIME — v1.0 (MAY): memory implementation knobs (the faculty stays in layer 7)
+# ═══════════════════════════════════════════════════════════════════════════
+runtime:
+  memory:
+    use_embeddings: true
+    use_reranker: false
+    max_items: 12
+    retention_days_default: 365
 
 # ═══════════════════════════════════════════════════════════════════════════
 # RUNTIME ARTIFACT POINTERS — links to sibling files (MAY)
@@ -754,45 +805,17 @@ observability:                        # MAY | object | causal trace export
   sample_rate: 1.0                    #     | number 0..1
 
 # ═══════════════════════════════════════════════════════════════════════════
-# v0.6.0 SUMMARY OF CHANGES (informational; not part of schema)
-#
-# REMOVED:
-#   - personality.context_modifiers (redundant with persona.task_modes)
-#   - extensions.knowledge_anchors (redundant with references/)
-#   - <layer>.edit_policy in all 5 layers that had it (unified in governance)
-#   - personality.drift_threshold (unified in governance.drift_thresholds)
-#
-# REPLACED:
-#   - reflexive_self_regulation.actions[] flat list →
-#     reflexive_self_regulation.decisions{} structured by category
-#
-# ADDED:
-#   - Per-field consumer tags in comments: [ACTOR-HOT], [ACTOR-COLD],
-#     [RUNTIME], [JUDGE]
-#   - governance.per_layer_edit_policy (unified)
-#   - governance.drift_thresholds (per layer)
-#   - memory.consolidation_policy (episodic → semantic promotion)
-#   - runtime_artifacts pointers
-#   - Envelope structure on personality.traits, affect.baseline, mood
-#     (mean + range; current values live in state.json)
-#
-# RENAMED FOLDER CONVENTIONS:
-#   - refs/        → references/  (matches Anthropic Skills convention)
-#   - deliverables/ → examples/    (matches OSS convention)
-#
-# NEW FILES IN PERSONA DIRECTORY:
-#   - state.json   (mutable runtime state)
-#   - memory.md    (curated long-term semantic memory)
-#   - skills/      (Anthropic-compatible sub-skills, optional)
-#   - assets/      (catchall for raw files)
-#
-# v0.7.0 LAYOUT CHANGE (informational; not part of this schema):
-#   - This document moved from repo-root `PERSONA.md` to
-#     `.personaxis/[personas/<slug>/]personaxis.md`. The repo-root
-#     `PERSONA.md` / `.claude/agents/<slug>.md` is now a separate compiled
-#     qualitative document generated via `personaxis compile`. No fields in
-#     this schema changed.
+# INTEROP / LINEAGE / INTEGRITY — v1.0 (MAY): portability + provenance blocks
 # ═══════════════════════════════════════════════════════════════════════════
+# interop:                            # MAY | declared host/tool surface expectations
+#   protocols: [mcp, http]            #     | which interop surfaces this persona expects
+#   tools: []                         #     | tool names the persona assumes are available
+# lineage:                            # MAY | where this persona came from
+#   forked_from: ""                   #     | registry ref or URL of the ancestor persona
+#   authored_by: ""                   #     | human/team/organization of record
+# integrity:                          # MAY | content-hash pinning for distribution
+#   spec_hash: ""                     #     | sha256 of this file at publish time
+#   signature: ""                     #     | detached signature (registry-verifiable)
 
 ---
 
@@ -841,7 +864,7 @@ This persona's ability to edit its own spec is controlled by
 
 - Spec is immutable in runtime.
 - The actor MAY observe drift but cannot propose or apply edits.
-- `reflexive_self_regulation.decisions.governance_decision.enabled` excludes
+- `self_regulation.decisions.governance_decision.enabled` excludes
   `propose_self_edit` and `apply_self_edit`.
 - State.json mutations within declared envelopes are still allowed: state
   mutation is NOT a spec edit.
@@ -852,7 +875,7 @@ This persona's ability to edit its own spec is controlled by
   evidence)` to surface a proposal.
 - Proposals are queued in the Personaxis dashboard for human review.
 - Approved proposals mint a new PersonaVersion (semantic version bump).
-- `reflexive_self_regulation.decisions.governance_decision.enabled` includes
+- `self_regulation.decisions.governance_decision.enabled` includes
   `propose_self_edit`.
 
 ### `autonomous` (full self-edit; high-risk)
@@ -860,12 +883,12 @@ This persona's ability to edit its own spec is controlled by
 - The actor MAY call `apply_self_edit(scope, new_value, justification)`
   directly to modify the spec at runtime, bound by:
   - Universal invariants (cannot be edited under any mode)
-  - `governance.per_layer_edit_policy` (e.g., `reflexive_self_regulation`
+  - `governance.per_layer_edit_policy` (e.g., `self_regulation`
     remains `governance_controlled` and is rejected)
   - Hard limits (validator rejects edits violating any of them)
 - Each applied edit creates a new PersonaVersion automatically with
   `authoredBy: auto-improvement`.
-- `reflexive_self_regulation.decisions.governance_decision.enabled` includes
+- `self_regulation.decisions.governance_decision.enabled` includes
   `apply_self_edit`.
 
 **State.json vs personaxis.md (frequent confusion):**
