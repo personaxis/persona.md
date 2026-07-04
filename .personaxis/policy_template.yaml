@@ -34,7 +34,7 @@
 #     The assertions[] array in this file is for assertions you write by hand,
 #     on top of the auto-derived ones.
 
-spec_version: "0.7.0"
+spec_version: "1.0.0"
 
 applies_to:
   persona_name: ""                  # MUST: must match metadata.name in personaxis.md
@@ -42,6 +42,9 @@ applies_to:
 
 # ─── Improvement policy (MUST) ─────────────────────────────────────────────
 # Mutation governance: controls whether the persona can edit its own spec.
+# v1.0 PRECEDENCE: the INLINE improvement_policy in personaxis.md is
+# authoritative; this file can only RESTRICT it (the more conservative of the
+# two wins). If personaxis.md declares no inline block, this file governs.
 # Three modes are supported, with strictly increasing autonomy.
 #
 #   locked     (default; safest)
@@ -51,7 +54,7 @@ applies_to:
 #              or applies spec changes. Suitable for compliance-sensitive
 #              deployments (healthcare, legal, finance, regulated industries).
 #
-#              The reflexive layer's governance_decision excludes both
+#              self_regulation's governance_decision excludes both
 #              propose_self_edit and apply_self_edit.
 #
 #   suggesting (assisted improvement)
@@ -63,7 +66,7 @@ applies_to:
 #              personaxis.md and PERSONA.md / <slug>.md in sync.
 #              Suitable for active development and internal tools.
 #
-#              The reflexive layer's governance_decision includes
+#              self_regulation's governance_decision includes
 #              propose_self_edit but excludes apply_self_edit.
 #
 #   autonomous (full self-edit; high-risk)
@@ -73,14 +76,14 @@ applies_to:
 #              and triggers `personaxis compile` to refresh the compiled
 #              document. Bound by:
 #                - Universal invariants (always blocked, in every mode)
-#                - governance.per_layer_edit_policy (e.g., reflexive layer
+#                - governance.per_layer_edit_policy (e.g., self_regulation
 #                  remains governance_controlled; always rejected)
 #                - hard_limits (validator rejects edits violating any)
 #                - autonomous_scope_allowlist/blocklist below
 #              ONLY for sandbox / R&D / no-prod. Requires explicit org-level
 #              opt-in.
 #
-#              The reflexive layer's governance_decision includes both
+#              self_regulation's governance_decision includes both
 #              propose_self_edit and apply_self_edit.
 #
 # IMPORTANT: state.json mutations (adjust_persona_state tool calls) work

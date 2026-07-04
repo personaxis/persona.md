@@ -1,11 +1,11 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://personaxis.com/schemas/memory/0.8/memory.schema.json",
-  "title": "episodic memory entry v0.8",
-  "description": "Schema for one entry in a persona's append-only episodic memory log (memory/episodic.jsonl, one JSON object per line). v0.8 elevates the runtime memory-governance guarantees into the spec: every entry carries a provenance source and forms a tamper-evident hash chain (prev_hash -> hash). Deletion is tombstone semantics (a superseding entry is appended; the log is never rewritten), so removals remain auditable. This makes governed, poisoning-resistant memory portable across conforming runtimes, not specific to one implementation.",
+  "$id": "https://personaxis.com/schemas/memory/1.0/memory.schema.json",
+  "title": "episodic memory entry v1.0",
+  "description": "Schema for one entry in a persona's append-only episodic memory log (memory/episodic.jsonl, one JSON object per line). Every entry carries a provenance source and forms a tamper-evident hash chain (prev_hash -> hash). v1.0 (D6): the chain hash commits to content_hash — NOT to the content bytes — so an entry's content can be REDACTED (real erasure, right-to-be-forgotten) while the chain stays verifiable end-to-end. Deletion has two sanctioned forms: tombstone (a superseding entry is appended; bytes retained, hidden from retrieval) and redaction (the only sanctioned rewrite of a prior line: content is replaced by '[redacted]', redacted: true is set, content_hash is retained, and a tombstone-format audit record is appended). Legacy (≤0.10) entries hash over the content directly and appear without content_hash; conforming runtimes verify each entry per its own format and re-anchor legacy logs before redacting.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["ts", "content", "source", "tags", "prev_hash", "hash"],
+  "required": ["ts", "content", "source", "tags", "content_hash", "prev_hash", "hash"],
   "properties": {
     "ts": {
       "type": "string",
@@ -14,7 +14,7 @@
     },
     "content": {
       "type": "string",
-      "description": "The remembered content."
+      "description": "The remembered content. After redaction this is the literal marker '[redacted]' and redacted is true."
     },
     "source": {
       "type": "string",
@@ -26,6 +26,15 @@
       "items": { "type": "string" },
       "description": "Free-form tags. Reserved: 'tombstone' (a deletion record; its 'target:<hash>' tag names the superseded entry) and 'injection-flagged' (written under a detected prompt injection)."
     },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 of content at write time. The chain hash commits to this, enabling erasure: redaction removes the content bytes but retains content_hash, so the chain still verifies. When redacted is not true, conforming verifiers ALSO check sha256(content) === content_hash."
+    },
+    "redacted": {
+      "type": "boolean",
+      "description": "True when content was erased by a sanctioned redaction. Verifiers skip the content-matches-content_hash check for redacted entries."
+    },
     "prev_hash": {
       "type": "string",
       "description": "Hash of the previous entry in the chain; empty string for the first entry. Lineage / tamper-evidence."
@@ -33,7 +42,7 @@
     "hash": {
       "type": "string",
       "pattern": "^[0-9a-f]{64}$",
-      "description": "sha256 over {ts, content, source, tags, prev_hash}. Any rewrite of a prior line breaks the chain and is detectable."
+      "description": "sha256 over {ts, content_hash, source, tags, prev_hash}. Any rewrite of a prior line other than a sanctioned redaction breaks the chain and is detectable."
     }
   }
 }
