@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://personaxis.com/schemas/persona/1.0/persona.schema.json",
   "title": "personaxis.md v1.0",
-  "description": "Schema for the ten-layer AI Persona spec, spec v1.0.0. This schema validates v1.0 documents ONLY; documents with spec_version 0.3.0-0.10.0 validate against schema/legacy/persona-0.10.schema.json (the validator dispatches on spec_version) and upgrade via `personaxis migrate 0.10-to-1.0`. v1.0 (breaking, mechanical codemod): apiVersion becomes personaxis.com/v1; layer 9 renamed reflexive_self_regulation -> self_regulation; the persona_prompting block merged into layer 10 `persona` (break_character_guardrails fold into self_regulation.hard_limits); the five refusal surfaces consolidate to two (hard_limits + character.prohibited_behaviors, which absorbs principled_refusals); enforcement has a single owner (character.virtues, which may declare refs: to backing traits/values — the validator requires coherence); metacognition monitors may declare feeds: wiring to a self_regulation decision group; envelope dimensions gain per-band behavior expression (low/moderate/high) giving the quantitative numbers deterministic compile semantics — drift is defined as a band crossing; drives declare an envelope (mutable) or a level enum (static), never a bare intensity; memory keeps the FACULTY (types, write/consolidation intent, anchors, forgetting_policy, working_self, deletion universality) while implementation knobs move to the runtime.memory block; metadata.display_name removed (single owner: identity.display_name); new OPTIONAL blocks interop, lineage, integrity. File sections group as ANATOMY (the ten layers) / CHANGE GOVERNANCE (governance, improvement_policy, security, permissions) / RUNTIME CONTRACT (runtime, verification, agent_budget, observability, interop, runtime_artifacts, lineage, integrity); the markdown body is non-normative by rule. This document lives at `.personaxis/[personas/<slug>/]personaxis.md`; the compiled PERSONA.md / .claude/agents/<slug>.md is generated from it via `personaxis compile` and is not described by this schema. Operational policy lives in policy.yaml; runtime state lives in state.json.",
+  "description": "Schema for the ten-layer AI Persona spec, spec v1.x (validates 1.0.0 and the additive 1.1.0); documents with spec_version 0.3.0-0.10.0 validate against schema/legacy/persona-0.10.schema.json (the validator dispatches on spec_version) and upgrade via `personaxis migrate 0.10-to-1.0`. v1.0 (breaking, mechanical codemod): apiVersion becomes personaxis.com/v1; layer 9 renamed reflexive_self_regulation -> self_regulation; the persona_prompting block merged into layer 10 `persona` (break_character_guardrails fold into self_regulation.hard_limits); the five refusal surfaces consolidate to two (hard_limits + character.prohibited_behaviors, which absorbs principled_refusals); enforcement has a single owner (character.virtues, which may declare refs: to backing traits/values — the validator requires coherence); metacognition monitors may declare feeds: wiring to a self_regulation decision group; envelope dimensions gain per-band behavior expression (low/moderate/high) giving the quantitative numbers deterministic compile semantics — drift is defined as a band crossing; drives declare an envelope (mutable) or a level enum (static), never a bare intensity; memory keeps the FACULTY (types, write/consolidation intent, anchors, forgetting_policy, working_self, deletion universality) while implementation knobs move to the runtime.memory block; metadata.display_name removed (single owner: identity.display_name); new OPTIONAL blocks interop, lineage, integrity. File sections group as ANATOMY (the ten layers) / CHANGE GOVERNANCE (governance, improvement_policy, security, permissions) / RUNTIME CONTRACT (runtime, verification, agent_budget, observability, interop, runtime_artifacts, lineage, integrity); the markdown body is non-normative by rule. This document lives at `.personaxis/[personas/<slug>/]personaxis.md`; the compiled PERSONA.md / .claude/agents/<slug>.md is generated from it via `personaxis compile` and is not described by this schema. Operational policy lives in policy.yaml; runtime state lives in state.json.",
   "type": "object",
   "required": [
     "apiVersion",
@@ -29,9 +29,10 @@
     "spec_version": {
       "type": "string",
       "enum": [
-        "1.0.0"
+        "1.0.0",
+        "1.1.0"
       ],
-      "description": "Spec version. This schema validates 1.0.0 only. The validator accepts 0.3.0-0.10.0 documents against schema/legacy/persona-0.10.schema.json during the 1.x read-compat window, pointing to 'personaxis migrate 0.10-to-1.0' for upgrade. spec_version is the ONLY normative version of the standard."
+      "description": "Spec version. This schema validates 1.0.0 and 1.1.0 (1.1 is ADDITIVE: optional envelope half_life for homeostatic return-to-baseline, the normative 'Mathematical semantics' section — drift metric, arbitration order, evidence-cost bound — and the optional mutation_log hash chain in state.json; every 1.0.0 document is a valid 1.1.0 document, no codemod). The validator accepts 0.3.0-0.10.0 documents against schema/legacy/persona-0.10.schema.json during the 1.x read-compat window, pointing to 'personaxis migrate 0.10-to-1.0' for upgrade. spec_version is the ONLY normative version of the standard."
     },
     "metadata": {
       "type": "object",
@@ -396,10 +397,13 @@
               },
               "bands": {
                 "$ref": "#/$defs/bandBoundaries"
+              },
+              "half_life": {
+                "$ref": "#/$defs/halfLife"
               }
             }
           },
-          "description": "v1.0 behavior bands give the numbers deterministic compile semantics: every envelope value maps to a band (default low 0-0.33 / moderate 0.34-0.66 / high 0.67-1.0; override with bands:), the compiler emits the band's expression prose, and DRIFT is defined as a band crossing (the recompile trigger). expression as a per-band map is the normative form; a plain string (applies at the declared mean's band) is accepted but deprecated."
+          "description": "v1.0 behavior bands give the numbers deterministic compile semantics: every envelope value maps to a band (default low 0-0.33 / moderate 0.34-0.66 / high 0.67-1.0; override with bands:), the compiler emits the band's expression prose, and DRIFT is defined as a band crossing (the recompile trigger). expression as a per-band map is the normative form; a plain string (applies at the declared mean's band) is accepted but deprecated. v1.1: optional half_life adds homeostatic return-to-baseline."
         }
       }
     },
@@ -509,6 +513,9 @@
               },
               "expression": {
                 "$ref": "#/$defs/expression"
+              },
+              "half_life": {
+                "$ref": "#/$defs/halfLife"
               },
               "note": {
                 "type": "string"
@@ -1972,6 +1979,9 @@
         },
         "bands": {
           "$ref": "#/$defs/bandBoundaries"
+        },
+        "half_life": {
+          "$ref": "#/$defs/halfLife"
         }
       }
     },
@@ -2003,6 +2013,9 @@
         },
         "bands": {
           "$ref": "#/$defs/bandBoundaries"
+        },
+        "half_life": {
+          "$ref": "#/$defs/halfLife"
         },
         "description": {
           "type": "string"
@@ -2041,6 +2054,11 @@
           }
         }
       ]
+    },
+    "halfLife": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "spec v1.1 (MAY): homeostatic half-life in TURNS — absent stimulus, the deviation from `mean` halves every half_life ticks (decay rate λ = 1 − 2^(−1/half_life), applied before each tick's admitted deltas, audited as actor runtime-decay). Denotational consequence (Mathematical semantics, T6): under bounded per-step pressure δ_max the standing deviation is bounded by δ_max/λ — input-to-state stability from two declared numbers. Omit for no decay (v1.0 behavior)."
     },
     "bandBoundaries": {
       "type": "object",

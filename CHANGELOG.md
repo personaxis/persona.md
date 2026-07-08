@@ -7,6 +7,29 @@ The spec follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased] — spec v1.1.0 (ADDITIVE; F6.3 of the proven-core program, see `cli/docs/MATH_CORE.md`)
+
+Every 1.0.0 document is a valid 1.1.0 document — **no codemod**.
+
+### Added
+- **`half_life` (MAY)** on every envelope dimension (traits, core_affect, mood, envelope
+  drives): homeostatic return-to-baseline — the deviation from `mean` halves every
+  `half_life` turns absent stimulus (λ = 1 − 2^(−1/half_life); audited as `runtime-decay`).
+  Denotational guarantee (§15, T6): standing drift under bounded pressure ≤ `max_step_delta/λ`.
+- **SPEC.md §15 "Mathematical semantics" (normative)**: the state box and invariance (T1),
+  the `u` denotation of every envelope value, drift as a metric whose level sets are the
+  bands, the evidence-cost bound (T3: a band crossing costs ≥⌈dist/max_step_delta⌉ audited
+  entries), homeostasis (T6), and the value-arbitration total order (governance ≻ weight ≻
+  name) under which **U7 is derivable from U6**.
+- **state.schema.json**: optional `prev_hash`/`hash` per mutation_log entry — the audit trail
+  hash-chains like episodic memory (tamper-evident; legacy prefix tolerated; trimming
+  runtimes must re-anchor).
+
+### Fixed
+- **Erratum:** `bands` is the schema's `{low_max, moderate_max}` OBJECT ($defs/bandBoundaries);
+  SPEC.md §0/§L3 and the template briefly showed an unimplementable `[b1, b2]` array form.
+  Defaults documented: 0.33/0.66 unsigned; −0.33/+0.33 signed.
+
 ## [Unreleased] — spec v1.0.0 (F2 of the master architecture review; see `cli/ARCHITECTURE_REVIEW.md` §11)
 
 **BREAKING.** First major release. The 10 canonical layers are KEPT as the anatomy of an AI
