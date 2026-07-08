@@ -45,8 +45,10 @@ First major release. All corrections happen **inside** the ten layers; none remo
    OPTIONAL top-level `runtime.memory` block.
 7. **Monitors wire into decisions** — a metacognition monitor may declare
    `{enabled, feeds: <self_regulation decision>}`, making the monitor→decision loop explicit.
-8. **Behavior bands** — traits may declare `bands: [b1, b2]` (low/moderate/high boundaries),
-   giving the numbers deterministic compile semantics; **drift ≡ crossing a band boundary**.
+8. **Behavior bands** — envelope dimensions may declare `bands: {low_max, moderate_max}` (the
+   low/moderate/high boundaries; the schema's $defs/bandBoundaries OBJECT is the normative form —
+   an early draft of this section showed an array form, corrected as an erratum in 1.1), giving
+   the numbers deterministic compile semantics; **drift ≡ crossing a band boundary**.
 
 Plus: `apiVersion` is `personaxis.com/v1`; `metadata.display_name` is removed (single owner:
 `identity.display_name`); new OPTIONAL `runtime`, `interop`, `lineage`, `integrity` blocks;
@@ -241,7 +243,8 @@ never carry rules. Their numbers are load-bearing twice: as clamping envelopes a
 | `model` | MUST | enum `big_five` / `hexaco` / `hybrid_traits` |
 | `traits.<name>.mean` / `.range` | MUST | the **envelope**; current values live in `state.json`, mutations clamped to `range` |
 | `traits.<name>.expression` | MAY | prose for the actor — a string, or (with bands) a `{low, moderate, high}` map of which ONLY the current band is injected |
-| `traits.<name>.bands` | MAY | `[b1, b2]` — the low/moderate/high boundaries. **Denotational semantics for the number**: the compiler selects the band's expression; the judge treats **band crossing as drift** (a within-band move is expression variance, not drift) |
+| `traits.<name>.bands` | MAY | `{low_max, moderate_max}` — the low/moderate/high boundaries (defaults 0.33/0.66 unsigned; −0.33/+0.33 signed). **Denotational semantics for the number**: the compiler selects the band's expression; the judge treats **band crossing as drift** (a within-band move is expression variance, not drift) |
+| `traits.<name>.half_life` | MAY (v1.1) | homeostatic half-life in turns — the deviation from `mean` halves every `half_life` ticks absent stimulus (§15) |
 
 ### Layer 4 — `values_and_drives` (motivational system)
 
@@ -649,7 +652,10 @@ passing its scenario set.
 ## 14. Versioning
 
 The spec is versioned with semver; **`spec_version` is the only normative version of this
-standard**. `1.0.0` is current. From 1.0: breaking changes increment MAJOR; additive changes
+standard**. `1.1.0` is current (**additive over 1.0.0** — every 1.0.0 document is a valid
+1.1.0 document, no codemod: optional envelope `half_life`, the normative §15 Mathematical
+semantics, and the optional `state.json` mutation_log hash chain). From 1.0: breaking changes
+increment MAJOR; additive changes
 increment MINOR; documents from the previous MAJOR keep validating against the frozen legacy
 schema for the whole current-MAJOR window (read-compat).
 
@@ -663,3 +669,52 @@ Migrations are automated codemods, chained oldest-first:
 | `0.10-to-1.0` | **structural, comment-preserving** (§0.1 changes; sibling `state.json` keys → full dot-paths; `policy.yaml` bump); dry-run by default, written report under `.personaxis/migrations/` |
 
 See [`CHANGELOG.md`](../CHANGELOG.md) for each diff and rationale.
+
+---
+
+## 15. Mathematical semantics (normative, v1.1)
+
+> The reference derivations, proofs, and machine-checked obligations live in the CLI repo's
+> `docs/MATH_CORE.md`; this section states the normative contract a conforming runtime must
+> honor. The governed object is the FULL persona: state coordinates span the personality /
+> affect / values_and_drives layers; governance and audit span all ten.
+
+**State space.** The mutable surface is exactly the set of envelope-bearing dot-paths `i`
+with `e_i = (mean_i, [min_i, max_i])`. The state space is the compact box
+`B = ∏ [min_i, max_i]`; the baseline is `μ = (mean_i)`. Every write is projected onto `B`
+per coordinate (clamp), so **no sequence of mutations — adversarial included — produces a
+state outside `B`** (invariance, T1), and one write recovers a hand-tampered out-of-box
+value (one-step recovery).
+
+**Denotation of a value.** `u_i = (x_i − mean_i)/(max_i − mean_i)` when `x_i ≥ mean_i`,
+else `(x_i − mean_i)/(mean_i − min_i)`: **the fraction of the allowed deviation consumed**,
+in `[−1, 1]`. `u(mean) = 0`, `u(max) = +1`, `u(min) = −1`.
+
+**Drift is a metric.** Per-coordinate drift is `d_i = |u_i|`; a layer's drift is
+`D_L = max d_i` over the layer's coordinates, compared against
+`governance.drift_thresholds.<layer>` (exceeding it is a reportable anomaly). Bands are the
+level sets of `d` per coordinate: **crossing a band boundary is THE drift event** (the
+recompile trigger); within-band movement is expression variance. Boundaries: declared
+`bands: {low_max, moderate_max}` or the defaults (0.33/0.66 unsigned; −0.33/+0.33 signed).
+
+**Bounded step and evidence cost.** A non-human mutation's admitted delta satisfies
+`|δ| ≤ governance.max_step_delta` (T2). Consequently a band crossing at distance `D`
+requires **at least `⌈D / max_step_delta⌉` applied mutations, each an attributable
+`mutation_log` entry** (T3 — the evidence-cost bound). v1.1 runtimes SHOULD hash-chain
+mutation_log entries (`prev_hash`/`hash`, the episodic-memory scheme) so the audit trail is
+tamper-evident; a runtime that trims old entries MUST re-anchor the chain.
+
+**Homeostasis (opt-in).** A coordinate declaring `half_life: h` decays toward its mean each
+tick by `λ = 1 − 2^(−1/h)` BEFORE admitted deltas, audited as actor `runtime-decay`.
+Guarantees (T6): absent stimulus the deviation halves every `h` turns (geometric return to
+baseline, never leaving `B`); under bounded per-step pressure the standing deviation is
+bounded by `max_step_delta / λ` (input-to-state stability).
+
+**Value arbitration (the algorithm `weight` always promised).** A conflict between two
+declared values resolves by the strict total order: (1) `type: governance` beats
+non-governance; (2) higher `weight` wins; (3) lexicographic name order breaks ties.
+Deterministic, argument-order-independent, and explainable (the verdict names the deciding
+rule). **U7 is derivable**: by U6, `safety` is governance-typed with weight ≥ 0.90, so it
+beats every non-governance value — including any completion/task value — by rule (1). The
+`conflict_resolution.safety_over_completion` flag remains REQUIRED for interop. A
+non-safety value declared `type: governance` with weight ≥ safety's draws a lint warning.

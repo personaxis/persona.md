@@ -120,6 +120,14 @@
           "session_id": {
             "type": "string",
             "description": "v0.8: id of the runtime session that produced this mutation, for traceability."
+          },
+          "prev_hash": {
+            "type": "string",
+            "description": "spec v1.1 (T3 forensic): hash of the previous chained entry ('' for the first). Same scheme as memory/episodic.jsonl — the audit trail is tamper-evident, not merely append-only by convention. Entries written by pre-1.1 runtimes carry no hash; verification tolerates a legacy PREFIX only. A runtime that trims old entries MUST re-anchor the chain (recompute from the new head), like migrateMemoryChain."
+          },
+          "hash": {
+            "type": "string",
+            "description": "spec v1.1: sha256 over {ts, field, from, to, delta_requested, clamped, reason, actor, governance_blocked, prev_hash}."
           }
         }
       }

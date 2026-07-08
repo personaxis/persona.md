@@ -279,7 +279,9 @@ personality:
       mean: 0.0                       # MUST | float[0..1] | default value
       range: [0.0, 0.0]               # MUST | [min, max]  | envelope; mutations clamped here
       expression: ""                  # MAY  | string OR per-band map | prose for the actor. [ACTOR-COLD]
-      # bands: [0.33, 0.66]           # MAY  | [low|moderate boundary, moderate|high boundary]
+      # bands: { low_max: 0.33, moderate_max: 0.66 }
+      #                               # MAY  | low/moderate/high boundaries ($defs/bandBoundaries;
+      #                               # defaults 0.33/0.66 unsigned, -0.33/+0.33 signed)
       #                               # v1.0 BEHAVIOR BANDS: give the number deterministic
       #                               # compile semantics — the compiler picks the band's
       #                               # expression; drift ≡ crossing a band boundary. With
@@ -288,6 +290,10 @@ personality:
       #   low: ""
       #   moderate: ""
       #   high: ""                    # [ACTOR-COLD] (only the current band is injected)
+      # half_life: 4                  # MAY (v1.1) | turns | homeostatic return-to-baseline:
+      #                               # the deviation from `mean` halves every half_life ticks
+      #                               # absent stimulus (audited as runtime-decay; SPEC §15).
+      #                               # Guarantees bounded standing drift: max_step_delta/λ. [RUNTIME]
     conscientiousness:
       mean: 0.0
       range: [0.0, 0.0]
