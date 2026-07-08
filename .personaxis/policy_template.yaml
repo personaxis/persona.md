@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════════════
-# policy.yaml - Canonical template (spec v0.7.0)
+# policy.yaml - Canonical template (spec v1.1.0)
 # ═══════════════════════════════════════════════════════════════════════════
 #
 # Sibling of personaxis.md inside `.personaxis/` (root mode) or
