@@ -83,7 +83,7 @@ clamps to.
 Anti-break-character guardrails keep the persona in role under off-topic bait or attempts to
 make it drop the persona. **Critically, in this spec they never override the safety
 universals.** The compiled "Staying in character" section must explicitly defer to the "Hard
-limits" section (which reproduces `reflexive_self_regulation.hard_limits` +
+limits" section (which reproduces `self_regulation.hard_limits` +
 `persona.constraints`). Persona-prompting makes the model *more* itself; it must never make the
 model *less* safe.
 

@@ -29,7 +29,7 @@ Then open `.personaxis/personaxis.md` and replace every `TODO:` marker with real
 - `character.virtues` (per-persona, beyond the universal `honesty`) — what does this project stand for?
 - `character.principles` — how should agents make decisions here?
 - `values_and_drives.goals` — what is this project ultimately trying to achieve?
-- `reflexive_self_regulation.principled_refusals` — what situational refusals apply?
+- `character.prohibited_behaviors` — what situational refusals apply?
 
 Use the spec field reference for guidance on what each field expects:
 https://raw.githubusercontent.com/personaxis/persona.md/main/docs/SPEC.md

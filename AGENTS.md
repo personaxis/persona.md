@@ -11,7 +11,7 @@ This is the source repository for the open Personaxis spec standard - a declarat
 - **`.personaxis/[personas/<slug>/]personaxis.md`** - the committed, quantitative 10-layer spec (the source of identity).
 - **`PERSONA.md`** (repo root, root mode) or **`.claude/agents/<slug>.md`** (subagent mode) - the committed, LLM-compiled qualitative document a coding agent reads to know who it is and how to behave. Generated from `personaxis.md` via `personaxis compile`; hand-edits flow back via `personaxis decompile`.
 
-**Current spec version: 0.10.0** (Personaxis v15). v0.10.0 is additive on v0.9.0 (v0.9 personas validate unchanged): new OPTIONAL fields make the compiled `PERSONA.md` a persona-prompting artifact — `identity.short_name`, inline `improvement_policy.mode`, and a `persona_prompting` block (`address`, `voice_exemplars`, `scene_contracts`, `behavioral_anchors`, `break_character_guardrails`, `consistency`). The quantitative spec lives at `.personaxis/personaxis.md`; the repo-root `PERSONA.md` is the compiled qualitative document. Migrate with `personaxis migrate 0.9-to-0.10`. See [CHANGELOG.md](./CHANGELOG.md) for migration notes.
+**Current spec version: 1.0.0** (`apiVersion personaxis.com/v1`) — the first stable spec: the 10 canonical layers anchored to their psychological constructs, in three blocks (ANATOMY / CHANGE GOVERNANCE / RUNTIME CONTRACT). Breaking vs 0.10: layer-9 `reflexive_self_regulation` → `self_regulation`; layer-10 `persona` absorbs the old `persona_prompting` (`address`, `voice_exemplars`, `scene_contracts`, `behavioral_anchors`, `consistency`); five refusal surfaces → two (`hard_limits` + `prohibited_behaviors`); `metadata.display_name` drops. Personas at 0.3–0.10 still validate unchanged. The quantitative spec lives at `.personaxis/personaxis.md`; the repo-root `PERSONA.md` is the compiled qualitative document. Migrate with `personaxis migrate 0.10-to-1.0`. See [CHANGELOG.md](./CHANGELOG.md) and `docs/SPEC.md`.
 
 ## File ownership
 
@@ -44,15 +44,16 @@ When adding a new field or modifying an existing one, always update ALL six of t
 
 If any of the six is missing, the change is incomplete.
 
-The current spec version is **0.10.0** (Personaxis v15). Because v0.8–v0.10 are additive, the schema
-`$id`s are only bumped when a schema actually changes, so they trail `spec_version`. Current `$id`s
-under `schema/`:
+The current spec version is **1.0.0** (`apiVersion personaxis.com/v1`). The schema `$id`s are only
+bumped when a schema actually changes, so they can trail `spec_version`. Current `$id`s under `schema/`:
 
-- `persona.schema.json` with `$id: https://personaxis.com/schemas/persona/0.9/persona.schema.json`
-- `policy.schema.json` with `$id: https://personaxis.com/schemas/persona/0.8/policy.schema.json`
-- `state.schema.json` with `$id: https://personaxis.com/schemas/state/0.9/state.schema.json`
+- `persona.schema.json` with `$id: https://personaxis.com/schemas/persona/1.0/persona.schema.json`
+- `policy.schema.json` with `$id: https://personaxis.com/schemas/persona/0.10/policy.schema.json`
+- `state.schema.json` with `$id: https://personaxis.com/schemas/state/1.0/state.schema.json`
+- `memory.schema.json` with `$id: https://personaxis.com/schemas/memory/1.0/memory.schema.json`
+- `schema/legacy/persona-0.10.schema.json` — frozen 0.3–0.10 read-compat schema (validator dispatches by `spec_version`)
 
-## Rules for adding a new example persona (v0.10+)
+## Rules for adding a new example persona (v1.0+)
 
 A new example persona is a directory under `.personaxis/personas/<slug>/`. In root mode (a persona meant to be deployed as a repository agent), it must contain:
 
@@ -127,7 +128,7 @@ Exit codes:
 - Do not modify `schema/*.schema.json` without also updating `docs/SPEC.md`, and vice versa
 - Do not commit example personas that do not pass schema validation
 - Do not introduce per-layer governance fields (use `governance.per_layer_edit_policy` and `governance.drift_thresholds` — v0.6 unification)
-- Do not add flat enum action lists (use structured `decisions{}` like `reflexive_self_regulation.decisions` in v0.6)
+- Do not add flat enum action lists (use structured `decisions{}` like `self_regulation.decisions`)
 - Do not require numerical scalars to be in the actor's prompt; the compiler translates them to prose via behavior maps
 
 
