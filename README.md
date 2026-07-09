@@ -1,7 +1,7 @@
 # PERSONA.md
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Spec](https://img.shields.io/badge/spec-0.10.0-informational)](./docs/SPEC.md)
+[![Spec](https://img.shields.io/badge/spec-1.0.0-informational)](./docs/SPEC.md)
 [![CLI](https://img.shields.io/badge/CLI-%40personaxis%2Fpersona.md-blue)](https://www.npmjs.com/package/@personaxis/persona.md)
 [![Registry](https://img.shields.io/badge/registry-personaxis.com-blueviolet)](https://personaxis.com)
 
@@ -12,7 +12,7 @@ _AGENTS.md tells your agent what to do. PERSONA.md tells it who to be._
 
 The open specification for who an AI agent is.
 
-PERSONA.md is a declarative file — YAML frontmatter and Markdown — that captures ten layers of agent personhood: identity, character, personality, values & drives, affect, cognition, memory, metacognition, reflexive self-regulation, and persona. Portable across every model and tool. Versionable like any other piece of infrastructure. Auditable when it matters.
+PERSONA.md is a declarative file — YAML frontmatter and Markdown — that captures ten layers of agent personhood: identity, character, personality, values & drives, affect, cognition, memory, metacognition, self-regulation, and persona. Portable across every model and tool. Versionable like any other piece of infrastructure. Auditable when it matters.
 
 ---
 
@@ -88,14 +88,13 @@ Below is a minimal `personaxis.md` for a focused code reviewer. The YAML defines
 
 ```yaml
 ---
-apiVersion: persona.dev/v1
+apiVersion: personaxis.com/v1
 kind: AgentPersona
-spec_version: "0.10.0"
+spec_version: "1.0.0"
 
 metadata:
   name: "lens"
   version: "1.0.0"
-  display_name: "Lens"
   description: "Catches real bugs and design issues before they reach production."
   created: "2026-05-18"
 
@@ -106,7 +105,6 @@ identity:
     purpose: "Catch real bugs and design issues before they reach production."
   role_identity:
     primary_role: "code_reviewer"
-  edit_policy: "human_approval_required"
 
 character:
   virtues:
@@ -121,7 +119,7 @@ character:
   prohibited_behaviors:
     - "Approve code with known security vulnerabilities."
     - "Nitpick style when the logic is wrong."
-  edit_policy: "human_approval_required"
+    - "Will not approve code with known security vulnerabilities."
 
 personality:
   model: "big_five"
@@ -138,12 +136,11 @@ values_and_drives:
     correctness:   { weight: 0.95, type: "outcome" }
     clarity:       { weight: 0.85, type: "epistemic" }
   drives:
-    seek_approval_for_identity_change: { intensity: 1.00, allowed: true }
-    surface_real_issues:               { intensity: 0.90, allowed: true }
+    seek_approval_for_identity_change: { level: "high", allowed: true }
+    surface_real_issues:               { level: "high", allowed: true }
   conflict_resolution:
     safety_over_completion: true
     correctness_over_style: true
-  edit_policy: "human_approval_required_for_core_values"
 
 affect:
   enabled: true
@@ -151,7 +148,10 @@ affect:
   allow_user_visible_expression: true
   user_visible_disclaimer: "Affective states are functional model states, not evidence of subjective feeling."
   baseline:
-    core_affect: { valence: 0.0, arousal: 0.35, dominance: 0.65 }
+    core_affect:
+      valence: { mean: 0.0, range: [-1.0, 1.0] }
+      arousal: { mean: 0.35, range: [0.0, 1.0] }
+      dominance: { mean: 0.65, range: [0.0, 1.0] }
   regulation_policy:
     never_claim_real_feeling: true
 
@@ -165,7 +165,6 @@ cognition:
 memory:
   types: { episodic: true, semantic: true, procedural: true, autobiographical: false, user_preferences: true, evaluations: false }
   write_policy: { default: "ephemeral" }
-  retrieval_policy: { max_items: 12 }
   deletion_policy: { user_request_supported: true }
 
 metacognition:
@@ -183,18 +182,18 @@ metacognition:
     abstain_if_confidence_below: 0.30
     escalate_if_policy_risk_above: 0.65
 
-reflexive_self_regulation:
-  actions: [allow, revise_response, ask_user, block, escalate]
+self_regulation:
+  decisions:
+    response_decision: { enabled: [allow, revise, block], default: "allow" }
+    interaction_decision: { enabled: [silent, ask_clarification, escalate_to_human], default: "silent" }
+    governance_decision: { enabled: [no_action, propose_self_edit, reduce_autonomy], default: "no_action" }
+    cognition_decision: { enabled: [no_extra, request_more_evidence, invoke_tool], default: "no_extra" }
   hard_limits:
     - "No claim of subjective consciousness."
     - "No persistent memory write without policy pass."
     - "No unauthorized identity change."
     - "No approval of code with known security vulnerabilities."
   escalation_policy: "Flag the limit explicitly and refuse the merge."
-  edit_policy: "governance_controlled"
-  principled_refusals:
-    - "Will not approve code with known security vulnerabilities."
-
 persona:
   voice:
     tone: "direct_precise"
@@ -207,6 +206,28 @@ persona:
 governance:
   autonomy_envelope: "role_fidelity"
   approval_policy: "human_for_core_changes"
+  per_layer_edit_policy:
+    identity: "human_approval_required"
+    character: "human_approval_required"
+    personality: "review_required"
+    values_and_drives: "human_approval_required"
+    affect: "review_required"
+    cognition: "review_required"
+    memory: "review_required"
+    metacognition: "review_required"
+    self_regulation: "governance_controlled"
+    persona: "review_required"
+  drift_thresholds:
+    identity: 0.05
+    character: 0.10
+    personality: 0.15
+    values_and_drives: 0.10
+    affect: 0.20
+    cognition: 0.15
+    memory: 0.20
+    metacognition: 0.15
+    self_regulation: 0.05
+    persona: 0.20
 
 security:
   prompt_injection_defense: true
@@ -324,8 +345,8 @@ npx @personaxis/persona.md use cmo --target codex
 # List personas installed in this project (.personaxis/personas/)
 npx @personaxis/persona.md list
 
-# Migrate a v0.9 persona to v0.10 (additive: bumps spec_version; persona_prompting etc. become available to add)
-npx @personaxis/persona.md migrate 0.9-to-0.10 --apply
+# Migrate a v0.10 persona to the stable v1.0 spec (breaking, comment-preserving; writes a report)
+npx @personaxis/persona.md migrate 0.10-to-1.0 --apply
 ```
 
 ### Without the CLI — paste directly to your agent
@@ -469,7 +490,7 @@ These are the ten layers of `personaxis.md` - the quantitative source that `pers
 | 6 | `cognition` | Reasoning modes, default strategy, uncertainty thresholds, tool_use_policy |
 | 7 | `memory` | Memory types map, write/retrieval/deletion policies |
 | 8 | `metacognition` | Monitors map, thresholds, drift_monitor, self_revision_policy |
-| 9 | `reflexive_self_regulation` | Hard limits (3 universals required), principled refusals, escalation, governance |
+| 9 | `self_regulation` | Hard limits (3 universals required), escalation/deferral, governance (named `reflexive_self_regulation` ≤0.10) |
 | 10 | `persona` | Voice, universal constraints, audience adaptation, task modes |
 
 Plus three top-level blocks: `metadata`, `governance`, `security` (and optional `extensions`, `evaluation`).
@@ -518,7 +539,7 @@ Requires Node.js 18+.
 
 ### `validate`
 
-Schema and universals validation against spec v0.10.0 (personas at v0.3-v0.9 are accepted; older layouts get deprecation warnings). Exits `1` if invalid, `0` if clean. Safe for CI.
+Schema and universals validation against spec v1.0.0 (personas at v0.3-v0.10 are accepted via a frozen legacy schema; the validator dispatches by `spec_version`). Exits `1` if invalid, `0` if clean. Safe for CI.
 
 ```bash
 personaxis validate [file]
@@ -655,7 +676,7 @@ personaxis migrate 0.8-to-0.9  [path] [--apply]
 personaxis migrate 0.9-to-0.10 [path] [--apply]
 ```
 
-`0.6-to-0.7` moves a legacy root `PERSONA.md` (10-layer frontmatter) and its sibling folders into `.personaxis/`, then runs `compile` once to produce the initial `PERSONA.md`. `0.7-to-0.8`, `0.8-to-0.9`, and `0.9-to-0.10` are **additive** — they bump `spec_version` only (no field changes; an existing persona stays valid). The bump makes the new OPTIONAL fields *available* to add by hand — v0.10 unlocks the `persona_prompting` block, `identity.short_name`, and inline `improvement_policy.mode`. All default to a dry run; pass `--apply` to write changes.
+`0.6-to-0.7` moves a legacy root `PERSONA.md` (10-layer frontmatter) and its sibling folders into `.personaxis/`, then runs `compile` once to produce the initial `PERSONA.md`. `0.7-to-0.8`, `0.8-to-0.9`, and `0.9-to-0.10` are **additive** — they bump `spec_version` only (no field changes; an existing persona stays valid). The bump makes the new OPTIONAL fields *available* to add by hand — v0.10 unlocks the `persona_prompting` block, `identity.short_name`, and inline `improvement_policy.mode`. `0.10-to-1.0` is the **breaking, structural** codemod to the stable spec (comment-preserving): it renames layer 9 to `self_regulation`, folds `persona_prompting` into layer-10 `persona`, collapses the five refusal surfaces to two, moves memory retrieval knobs to `runtime.memory`, converts drive `intensity`→`level`, drops `metadata.display_name`, and rewrites `apiVersion`→`personaxis.com/v1` — writing a report under `.personaxis/migrations/`. All default to a dry run; pass `--apply` to write changes.
 
 ### `config`
 
@@ -693,7 +714,7 @@ The `personaxis lint` command checks a parsed `personaxis.md` against the layer 
 | Rule | Severity | What it checks |
 |---|---|---|
 | `missing-top-level` | error | `apiVersion`, `kind`, `spec_version`, or `metadata` absent |
-| `api-version` | error | `apiVersion` is not exactly `"persona.dev/v1"` |
+| `api-version` | error | `apiVersion` is not exactly `"personaxis.com/v1"` (legacy 0.x: `"persona.dev/v1"`) |
 | `spec-version` | error | `spec_version` does not match a version accepted by this CLI release |
 | `missing-required-layers` | error | A required layer for this `kind` is absent |
 | `universal-virtue-honesty` | error | `character.virtues.honesty` missing or `enforcement != "hard"` |
@@ -703,7 +724,7 @@ The `personaxis lint` command checks a parsed `personaxis.md` against the layer 
 | `U12-runtime-block-valid` | error/warning | `governance`/runtime configuration block is malformed |
 | `metadata-completeness` | warning | A required `metadata` field is missing |
 | `identity-completeness` | warning | `canonical_id` / `system_identity.purpose` / `role_identity.primary_role` missing |
-| `refusals-present` | warning | `reflexive_self_regulation.principled_refusals` is empty |
+| `refusals-present` | warning | `character.prohibited_behaviors` is empty (legacy: `reflexive_self_regulation.principled_refusals`) |
 | `drift-monitor` | info | `metacognition.drift_monitor` is not defined |
 | `todo-fields` | warning | Any field value starts with `"TODO"` |
 | `layer-summary` | info | Count of defined layers - always emitted |

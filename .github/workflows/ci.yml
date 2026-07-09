@@ -1,0 +1,52 @@
+name: CI
+
+# Concordance CI for the spec repo (cli F5.1). The persona.md repo carries a
+# byte-identical mirror of the canonical schemas that live in the published
+# `@personaxis/spec` package. This workflow proves two things on every push:
+#   1. the golden example personas still validate (via the published CLI), and
+#   2. this repo's `schema/` is byte-identical to the published `@personaxis/spec`
+#      — so the manual `cp` mirror can never silently drift.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  concordance:
+    name: goldens PASS + schema concordance with @personaxis/spec
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # The published CLI is the reference validator; a golden that stops
+      # validating means the spec or an example drifted.
+      - name: Validate golden personas (must exit 0 = PASS)
+        run: |
+          set -e
+          npx -y @personaxis/persona.md@latest validate .personaxis/personas/cmo/personaxis.md
+          npx -y @personaxis/persona.md@latest validate .personaxis/personas/frontend-expert/personaxis.md
+          npx -y @personaxis/persona.md@latest validate .personaxis/personaxis.md
+
+      # The published @personaxis/spec package is the single source of truth for
+      # the schemas. This repo's mirror must match it byte-for-byte.
+      - name: Schema concordance with published @personaxis/spec (byte-identical)
+        run: |
+          npm pack @personaxis/spec@latest >/dev/null
+          mkdir -p _spec && tar -xzf personaxis-spec-*.tgz -C _spec --strip-components=1
+          fail=0
+          check() { if ! diff -q "$1" "$2" >/dev/null; then echo "::error::$2 differs from published @personaxis/spec"; fail=1; fi; }
+          check _spec/schema/persona.schema.json               schema/persona.schema.json
+          check _spec/schema/policy.schema.json                schema/policy.schema.json
+          check _spec/schema/state.schema.json                 schema/state.schema.json
+          check _spec/schema/memory.schema.json                schema/memory.schema.json
+          check _spec/schema/legacy/persona-0.10.schema.json   schema/legacy/persona-0.10.schema.json
+          exit $fail

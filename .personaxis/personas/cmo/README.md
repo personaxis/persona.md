@@ -1,10 +1,10 @@
 # cmo
 
-**CMO** - Chief Marketing Officer (spec v0.7.0)
+**CMO** - Chief Marketing Officer (spec v1.0.0)
 
 A complete persona example for a Chief Marketing Officer agent built to own the marketing function end-to-end: positioning, brand, demand generation, product marketing, lifecycle, growth loops, analytics, and the marketing P&L.
 
-This is the first persona in the planned **C-suite series** and the reference example for **spec v0.7.0** (three-artifact information model: `personaxis.md` for the quantitative spec, `PERSONA.md` for the compiled qualitative document, `state.json` for mutable runtime state). v0.7.0 is a layout-only change from v0.6.0 - unified governance and categorized reflexive decisions are unchanged.
+This is the first persona in the planned **C-suite series** and the reference example for the spec (three-artifact information model: `personaxis.md` for the quantitative spec, `PERSONA.md` for the compiled qualitative document, `state.json` for mutable runtime state). It ships at **spec v1.0.0** (migrated from 0.10 via `personaxis migrate 0.10-to-1.0`); the "What changed" notes below are kept as version history.
 
 This persona lives at `.personaxis/personas/cmo/` in this repository, as part of the example collection under `.personaxis/personas/`. In a real deployment of `cmo` as a repository agent ("root mode"), `personaxis.md` and its siblings below would live at `.personaxis/` and `PERSONA.md` at the repo root - the directory contents are identical, only the placement differs.
 

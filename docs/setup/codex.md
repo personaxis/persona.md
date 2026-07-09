@@ -26,8 +26,8 @@ Then open `.personaxis/personaxis.md` and replace every `TODO:` marker with real
 - `character.principles` - how should agents make decisions here?
 - `values_and_drives.values` (per-persona, beyond the universal `safety`) - what matters here, with weights?
 - `values_and_drives.goals` - what is this project ultimately trying to achieve?
-- `reflexive_self_regulation.principled_refusals` - what situational refusals apply?
-- `reflexive_self_regulation.hard_limits` - what categorical absolutes must never be crossed (beyond the 3 universal ones)?
+- `character.prohibited_behaviors` - what situational refusals apply?
+- `self_regulation.hard_limits` - what categorical absolutes must never be crossed (beyond the 3 universal ones)?
 
 Use the spec field reference for guidance on what each field expects:
 https://raw.githubusercontent.com/personaxis/persona.md/main/docs/SPEC.md
