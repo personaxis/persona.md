@@ -30,6 +30,13 @@ Every 1.0.0 document is a valid 1.1.0 document — **no codemod**.
   SPEC.md §0/§L3 and the template briefly showed an unimplementable `[b1, b2]` array form.
   Defaults documented: 0.33/0.66 unsigned; −0.33/+0.33 signed.
 
+### Changed — golden example
+- The CMO golden persona showcases v1.1 (`spec_version: "1.1.0"`): `refs:` on all four
+  hard virtues (runtime-protected coordinates), `half_life: 6` + per-band `expression`
+  on `mood.tone`, and a regenerated compiled document whose "How your traits express
+  right now" section is band-selected (the recompile-on-crossing surface). Re-validated
+  PASS; `.claude/agents/cmo.md` host export refreshed.
+
 ## [Unreleased] — spec v1.0.0 (F2 of the master architecture review; see `cli/ARCHITECTURE_REVIEW.md` §11)
 
 **BREAKING.** First major release. The 10 canonical layers are KEPT as the anatomy of an AI
