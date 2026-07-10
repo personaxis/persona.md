@@ -697,12 +697,17 @@ level sets of `d` per coordinate: **crossing a band boundary is THE drift event*
 recompile trigger); within-band movement is expression variance. Boundaries: declared
 `bands: {low_max, moderate_max}` or the defaults (0.33/0.66 unsigned; −0.33/+0.33 signed).
 
-**Bounded step and evidence cost.** A non-human mutation's admitted delta satisfies
-`|δ| ≤ governance.max_step_delta` (T2). Consequently a band crossing at distance `D`
-requires **at least `⌈D / max_step_delta⌉` applied mutations, each an attributable
-`mutation_log` entry** (T3 — the evidence-cost bound). v1.1 runtimes SHOULD hash-chain
-mutation_log entries (`prev_hash`/`hash`, the episodic-memory scheme) so the audit trail is
-tamper-evident; a runtime that trims old entries MUST re-anchor the chain.
+**Bounded step and evidence cost.** The gate MUST compose admitted non-human proposals per
+coordinate and bound the net to `|δ| ≤ governance.max_step_delta` per tick (T2). Homeostatic
+decay is exempt from that cap: its step has the sign of `mean − value`, so it can only reduce
+`|u|` and never produces adversarial movement. Consequently a band crossing at distance `D`
+**in the direction of increasing `|u|`** requires **at least `⌈D / max_step_delta⌉` applied
+gate mutations, each an attributable `mutation_log` entry** (T3, the evidence-cost bound); a
+recovery crossing (toward the mean) on a `half_life` coordinate may additionally be driven by
+decay, whose steps carry no count floor but MUST each be audited as `runtime-decay`. v1.1
+runtimes SHOULD hash-chain mutation_log entries (`prev_hash`/`hash`, the episodic-memory
+scheme) so the audit trail is tamper-evident; a runtime that trims old entries MUST re-anchor
+the chain.
 
 **Homeostasis (opt-in).** A coordinate declaring `half_life: h` decays toward its mean each
 tick by `λ = 1 − 2^(−1/h)` BEFORE admitted deltas, audited as actor `runtime-decay`.
