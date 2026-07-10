@@ -1,10 +1,10 @@
 {
   "spec_version": "1.1.0",
   "compiledPath": ".personaxis/personas/cmo/PERSONA.md",
-  "personaxisMdHash": "eeab230eed70b9d4c5d214dd70651b18ea1e83b7e2fdd81f75b324a5727d07b7",
-  "compiledMdHash": "1c069fd77a630cc44c6abe3403c3cf82bde8060bad63d6434a6f6543a4c3487a",
+  "personaxisMdHash": "91f567b54977d4aaaa8750e44951d244a434f3381549a37cc86c319fe6f5bb3e",
+  "compiledMdHash": "836e9d055b6af9432df0a107ce91befab1274392dd98c7854b7b52523cbd2581",
   "lastOp": "compile",
   "model": "manual",
   "source": "cli-local",
-  "timestamp": "2026-07-09T00:36:51.473Z"
+  "timestamp": "2026-07-10T02:08:37.700Z"
 }
