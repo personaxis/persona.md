@@ -294,9 +294,18 @@ personality:
       #                               # the deviation from `mean` halves every half_life ticks
       #                               # absent stimulus (audited as runtime-decay; SPEC §15).
       #                               # Guarantees bounded standing drift: max_step_delta/λ. [RUNTIME]
-    conscientiousness:
-      mean: 0.0
-      range: [0.0, 0.0]
+    conscientiousness:                # CANONICAL LOAD-BEARING EXAMPLE (FASE 7): the full
+      mean: 0.0                       # trio — per-band expression + bands + half_life —
+      range: [0.0, 0.0]               # makes this number provably non-decorative (σ > 0,
+      expression:                     # check with `personaxis jacobian`).
+        low: ""                       # MAY | how the persona ACTS in the low band
+        moderate: ""                  # MAY | ... in the moderate band
+        high: ""                      # MAY | ... in the high band  [ACTOR-COLD]
+      bands: { low_max: 0.33, moderate_max: 0.66 }
+      #                               # MAY | declare explicitly when the envelope is narrow
+      #                               # or signed (defaults may leave it inside ONE band:
+      #                               # then no crossing is ever possible)
+      half_life: 4                    # MAY (v1.1) | homeostatic return-to-baseline (T6)
     extraversion:
       mean: 0.0
       range: [0.0, 0.0]
