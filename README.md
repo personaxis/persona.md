@@ -1,7 +1,7 @@
 # PERSONA.md
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Spec](https://img.shields.io/badge/spec-1.0.0-informational)](./docs/SPEC.md)
+[![Spec](https://img.shields.io/badge/spec-1.1.0-informational)](./docs/SPEC.md)
 [![CLI](https://img.shields.io/badge/CLI-%40personaxis%2Fpersona.md-blue)](https://www.npmjs.com/package/@personaxis/persona.md)
 [![Registry](https://img.shields.io/badge/registry-personaxis.com-blueviolet)](https://personaxis.com)
 

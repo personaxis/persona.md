@@ -1,6 +1,6 @@
 # personaxis.md Specification
 
-**Version:** 1.0.0
+**Version:** 1.1.0 (additive over 1.0.0; every 1.0.0 document is a valid 1.1.0 document, no codemod)
 **Status:** Current
 **License:** MIT
 
