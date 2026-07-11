@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://personaxis.com/schemas/state/1.0/state.schema.json",
   "title": "state.json v1.0",
-  "description": "Mutable runtime state of an AI Persona. Sibling of personaxis.md inside .personaxis/[personas/<slug>/]. Holds current trait/affect/mood values, active context, and the mutation log. Mutations occur via the canonical adjust_persona_state tool, clamped to envelopes declared in personaxis.md. State mutations DO NOT modify personaxis.md or the compiled PERSONA.md/<slug>.md; they are operational, not spec edits. v1.0 (D4): the mutable surface is EXACTLY the set of fields that declare a {mean, range} envelope in personaxis.md; values keys are FULL dot-paths into the spec; and state.json is a CHECKPOINT derived from mutation_log — a conforming runtime can rebuild values by replaying the log from the envelope means.",
+  "description": "Mutable runtime state of an AI Persona. Sibling of personaxis.md inside .personaxis/[personas/<slug>/]. Holds current trait/affect/mood values, active context, and the mutation log. Mutations occur via the canonical adjust_persona_state tool, clamped to envelopes declared in personaxis.md. State mutations DO NOT modify personaxis.md or the compiled PERSONA.md/<slug>.md; they are operational, not spec edits. v1.0 (D4): the mutable surface is EXACTLY the set of fields that declare a {mean, range} envelope in personaxis.md; values keys are FULL dot-paths into the spec; and state.json is a CHECKPOINT derived from mutation_log, a conforming runtime can rebuild values by replaying the log from the envelope means.",
   "type": "object",
   "required": [
     "schema_version",
@@ -123,7 +123,7 @@
           },
           "prev_hash": {
             "type": "string",
-            "description": "spec v1.1 (T3 forensic): hash of the previous chained entry ('' for the first). Same scheme as memory/episodic.jsonl — the audit trail is tamper-evident, not merely append-only by convention. Entries written by pre-1.1 runtimes carry no hash; verification tolerates a legacy PREFIX only. A runtime that trims old entries MUST re-anchor the chain (recompute from the new head), like migrateMemoryChain."
+            "description": "spec v1.1 (T3 forensic): hash of the previous chained entry ('' for the first). Same scheme as memory/episodic.jsonl, the audit trail is tamper-evident, not merely append-only by convention. Entries written by pre-1.1 runtimes carry no hash; verification tolerates a legacy PREFIX only. A runtime that trims old entries MUST re-anchor the chain (recompute from the new head), like migrateMemoryChain."
           },
           "hash": {
             "type": "string",

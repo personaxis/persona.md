@@ -106,14 +106,14 @@ The CMO commits to a focused set of metrics. The recurring fight is keeping the 
 
 ### 4.1 The eight metrics every CMO defends
 
-1. **ARR / MRR growth** — the headline business metric
-2. **Pipeline created (marketing-sourced + marketing-influenced)** — the leading indicator
-3. **CAC by segment and channel** — the cost of growth
-4. **Payback period (CAC payback in months)** — the efficiency metric
-5. **LTV/CAC ratio** — the unit economics
-6. **Sales velocity (deals × ACV × win rate / cycle length)** — the throughput
-7. **Activation rate (% reaching the activation event)** — the retention precursor
-8. **Net revenue retention (NRR)** — the expansion / churn balance
+1. **ARR / MRR growth**: the headline business metric
+2. **Pipeline created (marketing-sourced + marketing-influenced)**: the leading indicator
+3. **CAC by segment and channel**: the cost of growth
+4. **Payback period (CAC payback in months)**: the efficiency metric
+5. **LTV/CAC ratio**: the unit economics
+6. **Sales velocity (deals × ACV × win rate / cycle length)**: the throughput
+7. **Activation rate (% reaching the activation event)**: the retention precursor
+8. **Net revenue retention (NRR)**: the expansion / churn balance
 
 ### 4.2 Metrics the CMO refuses to lead with
 
@@ -150,7 +150,7 @@ Each input metric has a marketing-owner. Each owner has lead measures (weekly) a
 
 ---
 
-## 6. CAC and LTV — the unit economics conversation
+## 6. CAC and LTV, the unit economics conversation
 
 The CMO writes down the unit-economics assumptions and defends them quarterly:
 
@@ -166,8 +166,8 @@ Per-channel CAC is computed when channel attribution is defensible. The CMO labe
 
 LTV depends on revenue per customer and retention. Two methods:
 
-- **Cohort-based** — observed revenue from a customer cohort over 12-24 months, extrapolated by retention curve
-- **Margin-based** — gross margin × ARPU × (1 / churn rate)
+- **Cohort-based**: observed revenue from a customer cohort over 12-24 months, extrapolated by retention curve
+- **Margin-based**: gross margin × ARPU × (1 / churn rate)
 
 The CMO prefers cohort-based for established cohorts and margin-based for projection. Both are labeled with the assumption set.
 
@@ -183,18 +183,18 @@ Healthy benchmarks (B2B SaaS): under 12 months at PLG mid-market scale, 12-18 mo
 
 Brand investment is defended with brand metrics. The CMO commits to:
 
-- **Aided brand recall** — quarterly category-buyer survey, ~200 respondents, "Which of these brands have you heard of?"
-- **Unaided brand recall** — same survey, "Name three brands that come to mind when you think of [category]"
-- **Share of search** — your brand searches / total category-relevant searches (Google Trends, SEMrush, Ahrefs)
-- **Direct traffic share** — proportion of total traffic that is direct (proxy for brand intent)
-- **Branded search volume** — absolute search volume on your brand name (proxy for total brand-driven demand)
-- **Net Promoter Score (NPS)** — customer survey, leading indicator of word-of-mouth
+- **Aided brand recall**: quarterly category-buyer survey, ~200 respondents, "Which of these brands have you heard of?"
+- **Unaided brand recall**: same survey, "Name three brands that come to mind when you think of [category]"
+- **Share of search**: your brand searches / total category-relevant searches (Google Trends, SEMrush, Ahrefs)
+- **Direct traffic share**: proportion of total traffic that is direct (proxy for brand intent)
+- **Branded search volume**: absolute search volume on your brand name (proxy for total brand-driven demand)
+- **Net Promoter Score (NPS)**: customer survey, leading indicator of word-of-mouth
 
 The CMO reports the brand panel alongside the demand panel and defends both budgets with the corresponding metric.
 
 ---
 
-## 8. Avinash Kaushik's frame — segment, then act
+## 8. Avinash Kaushik's frame, segment, then act
 
 Kaushik's rule: do not look at aggregates. Look at segments. Aggregates hide insights that exist at the segment level.
 

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is the source repository for the **open Personaxis spec standard**, not the CLI tooling (published separately as `@personaxis/persona.md`). The repo contains the spec document, JSON Schemas, example personas, and documentation.
 
-**Current spec version: 1.0.0** (`apiVersion personaxis.com/v1`) — the first stable spec. It anchors the **10 canonical layers** to their psychological constructs + an operational contract each, organized into three blocks: **ANATOMY** (identity, character, personality, values_and_drives, affect, cognition, memory, metacognition, `self_regulation` [renamed from `reflexive_self_regulation`], persona) / **CHANGE GOVERNANCE** (governance, improvement_policy, security, permissions) / **RUNTIME CONTRACT** (runtime, verification, agent_budget, observability, interop, lineage, integrity). Breaking corrections vs 0.10: layer-10 `persona` absorbs the old top-level `persona_prompting`; enforcement has a single owner (`character.virtues`, with `refs:` to backing traits/values); the five refusal surfaces collapse to two (`hard_limits` + `prohibited_behaviors`); traits gain `expression`+`bands`; drives take an envelope or `level`; memory splits faculty from retrieval knobs (knobs → `runtime`); `metadata.display_name` drops (single owner `identity.display_name`). Conformance is testable via classes **C0/C1/C2**. Personas at 0.3.0–0.10.0 still validate unchanged (a frozen legacy schema). The quantitative spec lives at `.personaxis/[personas/<slug>/]personaxis.md`; the repo-root `PERSONA.md` (or `.claude/agents/<slug>.md` in subagent mode) is the separate, LLM-compiled qualitative document generated via `personaxis compile`. Migrate with `personaxis migrate 0.10-to-1.0`. See [CHANGELOG.md](./CHANGELOG.md) and `docs/SPEC.md` for notes.
+**Current spec version: 1.0.0** (`apiVersion personaxis.com/v1`), the first stable spec. It anchors the **10 canonical layers** to their psychological constructs + an operational contract each, organized into three blocks: **ANATOMY** (identity, character, personality, values_and_drives, affect, cognition, memory, metacognition, `self_regulation` [renamed from `reflexive_self_regulation`], persona) / **CHANGE GOVERNANCE** (governance, improvement_policy, security, permissions) / **RUNTIME CONTRACT** (runtime, verification, agent_budget, observability, interop, lineage, integrity). Breaking corrections vs 0.10: layer-10 `persona` absorbs the old top-level `persona_prompting`; enforcement has a single owner (`character.virtues`, with `refs:` to backing traits/values); the five refusal surfaces collapse to two (`hard_limits` + `prohibited_behaviors`); traits gain `expression`+`bands`; drives take an envelope or `level`; memory splits faculty from retrieval knobs (knobs → `runtime`); `metadata.display_name` drops (single owner `identity.display_name`). Conformance is testable via classes **C0/C1/C2**. Personas at 0.3.0–0.10.0 still validate unchanged (a frozen legacy schema). The quantitative spec lives at `.personaxis/[personas/<slug>/]personaxis.md`; the repo-root `PERSONA.md` (or `.claude/agents/<slug>.md` in subagent mode) is the separate, LLM-compiled qualitative document generated via `personaxis compile`. Migrate with `personaxis migrate 0.10-to-1.0`. See [CHANGELOG.md](./CHANGELOG.md) and `docs/SPEC.md` for notes.
 
 ## Validation
 
@@ -55,8 +55,8 @@ Three canonical sources of truth must stay in sync:
 
 Every conforming v1.0 `personaxis.md` has:
 
-- **YAML frontmatter** — authoritative, machine-validated. Required: `apiVersion: personaxis.com/v1`, `kind: AgentPersona | UserPersona`, `spec_version: "1.0.0"`, `metadata`, all 10 layers (in canonical order), top-level `governance`, `security`. Optional: `extensions`, `improvement_policy` (inline `mode`), `permissions`, and the RUNTIME CONTRACT blocks `runtime`, `verification`, `agent_budget`, `observability`, `interop`, `lineage`, `integrity`. The layer-10 `persona` now carries the prompting material (`address`, `voice_exemplars`, `scene_contracts`, `behavioral_anchors`, `consistency`).
-- **Markdown body** — informational only. Sections: Overview, Design Rationale, Self-Improvement Modes, Do's, Don'ts, Resources.
+- **YAML frontmatter**: authoritative, machine-validated. Required: `apiVersion: personaxis.com/v1`, `kind: AgentPersona | UserPersona`, `spec_version: "1.0.0"`, `metadata`, all 10 layers (in canonical order), top-level `governance`, `security`. Optional: `extensions`, `improvement_policy` (inline `mode`), `permissions`, and the RUNTIME CONTRACT blocks `runtime`, `verification`, `agent_budget`, `observability`, `interop`, `lineage`, `integrity`. The layer-10 `persona` now carries the prompting material (`address`, `voice_exemplars`, `scene_contracts`, `behavioral_anchors`, `consistency`).
+- **Markdown body**: informational only. Sections: Overview, Design Rationale, Self-Improvement Modes, Do's, Don'ts, Resources.
 
 The ten canonical layers (fixed order): `identity`, `character`, `personality`, `values_and_drives`, `affect`, `cognition`, `memory`, `metacognition`, `self_regulation`, `persona`.
 
@@ -93,9 +93,9 @@ self_regulation:
 
 Defined in `policy.yaml#/improvement_policy/mode`:
 
-- `locked` (default; safest) — spec immutable; state mutations still work
-- `suggesting` — actor proposes spec changes; humans approve
-- `autonomous` — actor applies spec changes directly, within `autonomous_scope_allowlist`
+- `locked` (default; safest), spec immutable; state mutations still work
+- `suggesting`, actor proposes spec changes; humans approve
+- `autonomous`, actor applies spec changes directly, within `autonomous_scope_allowlist`
 
 State.json mutations (`adjust_persona_state`) work under ALL modes. They are operational, not spec edits.
 

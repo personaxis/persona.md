@@ -6,7 +6,7 @@ Growth funnels are the entry point. Growth loops are the durable model. The CMO 
 
 ---
 
-## 1. AARRR — the diagnostic funnel
+## 1. AARRR, the diagnostic funnel
 
 Dave McClure's "Pirate Metrics" framework names five stages every business has to instrument:
 
@@ -77,25 +77,25 @@ Loop (compounds)
 
 Reforge's research (Balfour, Casey Winters) classifies loops into four families:
 
-**Content loops** — users produce content, content attracts new users via search or social. Examples: Pinterest pins, Stack Overflow answers, Notion templates, GitHub repos.
+**Content loops**: users produce content, content attracts new users via search or social. Examples: Pinterest pins, Stack Overflow answers, Notion templates, GitHub repos.
 
-**Viral loops** — users invite other users. Sub-types:
-- *Word-of-mouth* (Slack, Zoom — invitation is functional)
-- *Network invitation* (Dropbox referral credit — invitation is incentivized)
-- *Viral content* (Loom video shared with non-users — invitation is incidental)
+**Viral loops**: users invite other users. Sub-types:
+- *Word-of-mouth* (Slack, Zoom, invitation is functional)
+- *Network invitation* (Dropbox referral credit, invitation is incentivized)
+- *Viral content* (Loom video shared with non-users, invitation is incidental)
 
-**Paid loops** — revenue from existing users funds acquisition of new users. Compounds only when LTV > CAC and payback is faster than runway pressure.
+**Paid loops**: revenue from existing users funds acquisition of new users. Compounds only when LTV > CAC and payback is faster than runway pressure.
 
-**Sales loops** — customer success generates references and case studies, which generate enterprise pipeline. Compounds only when the success motion is reliable.
+**Sales loops**: customer success generates references and case studies, which generate enterprise pipeline. Compounds only when the success motion is reliable.
 
 ### 2.2 Anatomy of a loop
 
 Every loop has the same four elements:
 
-1. **Input** — what brings the user in (channel, search, invite, ad)
-2. **Action** — what the user does (sign up, create content, invite, buy)
-3. **Output** — what the user produces (content, invitation, referral, revenue)
-4. **Re-input** — how the output produces new input
+1. **Input**: what brings the user in (channel, search, invite, ad)
+2. **Action**: what the user does (sign up, create content, invite, buy)
+3. **Output**: what the user produces (content, invitation, referral, revenue)
+4. **Re-input**: how the output produces new input
 
 A loop is healthy when each step has a measured conversion rate and the loop's *compounding rate* (output per user × conversion of output to new user) is > 1 over a meaningful time window.
 
@@ -132,22 +132,22 @@ The CMO does not chase loops that the motion will not support. A consumer-style 
 
 ---
 
-## 4. Building the first loop — sequencing
+## 4. Building the first loop, sequencing
 
 The CMO sequences loop work in three phases:
 
-### Phase 1 — Instrument the funnel (weeks 1–4)
+### Phase 1, Instrument the funnel (weeks 1–4)
 - AARRR dashboard live
 - Activation event defined and measured
 - Retention curve plotted by weekly cohort
 - One source of truth for ARR, ARPU, CAC, LTV, payback
 
-### Phase 2 — Diagnose the constraint (weeks 5–8)
+### Phase 2, Diagnose the constraint (weeks 5–8)
 - Where is the funnel leaking the most relative to benchmark?
 - Is retention shaped right? If not, stop scaling acquisition.
 - What loop, if working, would compound the company's distribution?
 
-### Phase 3 — Build the loop (weeks 9–24)
+### Phase 3, Build the loop (weeks 9–24)
 - Pick one loop. Build it end-to-end. Instrument A and C separately.
 - Ship the v1 with a hypothesis, a lead measure, a lag measure, and kill criteria
 - Review weekly. Iterate the lowest-converting step

@@ -15,7 +15,7 @@ I am going to give you the narrative as I would write it for the CEO keynote fir
 
 ### The keynote narrative (CEO voice, ~7 minutes spoken)
 
-**Open — the worldview**
+**Open, the worldview**
 
 > "Six months ago, the head of compliance at one of our customers told me something that stuck. She said: 'My regulator does not care that I monitored the transactions. They care that I can prove I was monitoring when something happened.'
 >
@@ -27,7 +27,7 @@ I am going to give you the narrative as I would write it for the CEO keynote fir
 >
 > Both options share the same gap. Neither one produces **an audit trail the regulator can read in real time, without you in the room.**"
 
-**Middle — the shift**
+**Middle, the shift**
 
 > "What changed in 2025 and 2026 is that the regulators changed. PSD3 is coming. The FCA's continuous-monitoring guidance shipped in Q4. The MAS published their version in March. Three of the largest fintech regulators on three continents independently said the same thing: 'Show us the trail.'
 >
@@ -35,7 +35,7 @@ I am going to give you the narrative as I would write it for the CEO keynote fir
 >
 > And it cannot be retrofitted into a quarterly process. It is a different operating model."
 
-**Middle — introducing the capability**
+**Middle, introducing the capability**
 
 > "Continuous Audit Trail is the foundation of that operating model. From the moment a monitored event occurs, it is logged. The log is immutable. The log is timestamped against a verifiable clock. The log is shareable, in regulator-readable format, with a single link.
 >
@@ -43,13 +43,13 @@ I am going to give you the narrative as I would write it for the CEO keynote fir
 >
 > This is what continuous compliance was always supposed to look like."
 
-**Middle — proof**
+**Middle, proof**
 
 > "We worked with [Customer A], [Customer B], and [Customer C] for the last four months to test exactly this. Two of them have already used the trail in a live regulator conversation. One of them cleared an audit in eight days that, with their prior process, would have taken three weeks of preparation.
 >
 > The third said something I want you to hear directly. [Read the quote, attributed.]"
 
-**Close — the worldview, returned**
+**Close, the worldview, returned**
 
 > "Compliance is not a quarterly cost. It is a continuous capability. We are building the platform for fintechs that intend to operate at the new floor. Continuous Audit Trail is available today. If you are at a fintech that knows the regulator is coming, talk to us. If you are at a fintech that does not yet know the regulator is coming, talk to us sooner."
 
@@ -73,7 +73,7 @@ I am going to give you the narrative as I would write it for the CEO keynote fir
 
 Each surface inherits the narrative. None of them recapitulate it; each takes a slice.
 
-#### Surface 1 — Homepage hero (replaced for launch week)
+#### Surface 1, Homepage hero (replaced for launch week)
 
 ```
 Continuous Audit Trail.
@@ -85,7 +85,7 @@ Built for fintechs preparing for PSD3 and beyond.
 [Watch the keynote ›]    [See a sample audit trail ›]
 ```
 
-#### Surface 2 — Dedicated launch landing page
+#### Surface 2, Dedicated launch landing page
 
 Sections, in order:
 1. The customer quote (the same one from the keynote close)
@@ -99,13 +99,13 @@ Sections, in order:
 
 The page is not a brochure. It is the artifact the buyer sends to their VP of Risk to justify the conversation.
 
-#### Surface 3 — Customer email (existing customers)
+#### Surface 3, Customer email (existing customers)
 
 Subject: Continuous Audit Trail is live, and what it means for your next audit.
 
 Opens with the worldview ("Your regulator already expects this. We made it the new default.") and closes with a one-sentence path to enable it for their account. No demo gate.
 
-#### Surface 4 — Prospect sequence (5-email cadence)
+#### Surface 4, Prospect sequence (5-email cadence)
 
 Email 1: The shift (regulatory change, no product mention)
 Email 2: The cost of the old model (3 numbers from public data + 1 from a customer)
@@ -115,7 +115,7 @@ Email 5: Invitation to a Continuous Audit Trail walkthrough
 
 The sequence ships only to ICP-fit accounts. We do not blast.
 
-#### Surface 5 — Sales enablement
+#### Surface 5, Sales enablement
 
 - Updated pitch deck reflecting the new narrative (CEO and CMO co-author)
 - Battlecard refresh for the legacy platform competitor (PSD3 angle)
@@ -126,17 +126,17 @@ The sequence ships only to ICP-fit accounts. We do not blast.
 
 Sales certification by week of launch -1. No AE pitches the new feature without certification.
 
-#### Surface 6 — PR and analyst
+#### Surface 6, PR and analyst
 
 Three analyst pre-briefings, NDA signed: Gartner regulatory practice, IDC Financial Insights, Forrester compliance lead. Briefings happen at launch -3 weeks. Goal: be cited in the next quarterly research wave.
 
 Press: an exclusive to one fintech-trade publication (likely Sifted or Fintech Futures, lead time matters), embargoed for launch day. No press release sprayed broadly. The launch is a customer narrative, not a press release.
 
-#### Surface 7 — Community and field
+#### Surface 7, Community and field
 
 CEO does a series of small-format dinners in London, NYC, Singapore (the three regulatory hubs that match the named shifts). 8 customers + 8 prospects per dinner, no sales pitch, narrative-first conversation. Three dinners across launch + 30. Each dinner produces 3-5 named-account engagements and 1-2 case-study leads for the next launch.
 
-#### Surface 8 — In-product
+#### Surface 8, In-product
 
 Customers see a single in-product callout on first sign-in: a banner that says "Continuous Audit Trail is live. See your trail ›." Click leads to their own trail, not a marketing page. The strongest demonstration of the feature is the customer using it.
 

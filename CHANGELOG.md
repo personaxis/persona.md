@@ -7,13 +7,13 @@ The spec follows [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [Unreleased] — spec v1.1.0 (ADDITIVE; F6.3 of the proven-core program, see `cli/docs/MATH_CORE.md`)
+## [Unreleased], spec v1.1.0 (ADDITIVE; F6.3 of the proven-core program, see `cli/docs/MATH_CORE.md`)
 
-Every 1.0.0 document is a valid 1.1.0 document — **no codemod**.
+Every 1.0.0 document is a valid 1.1.0 document, **no codemod**.
 
 ### Added
 - **`half_life` (MAY)** on every envelope dimension (traits, core_affect, mood, envelope
-  drives): homeostatic return-to-baseline — the deviation from `mean` halves every
+  drives): homeostatic return-to-baseline, the deviation from `mean` halves every
   `half_life` turns absent stimulus (λ = 1 − 2^(−1/half_life); audited as `runtime-decay`).
   Denotational guarantee (§15, T6): standing drift under bounded pressure ≤ `max_step_delta/λ`.
 - **SPEC.md §15 "Mathematical semantics" (normative)**: the state box and invariance (T1),
@@ -21,7 +21,7 @@ Every 1.0.0 document is a valid 1.1.0 document — **no codemod**.
   bands, the evidence-cost bound (T3: a band crossing costs ≥⌈dist/max_step_delta⌉ audited
   entries), homeostasis (T6), and the value-arbitration total order (governance ≻ weight ≻
   name) under which **U7 is derivable from U6**.
-- **state.schema.json**: optional `prev_hash`/`hash` per mutation_log entry — the audit trail
+- **state.schema.json**: optional `prev_hash`/`hash` per mutation_log entry, the audit trail
   hash-chains like episodic memory (tamper-evident; legacy prefix tolerated; trimming
   runtimes must re-anchor).
 
@@ -30,24 +30,24 @@ Every 1.0.0 document is a valid 1.1.0 document — **no codemod**.
   SPEC.md §0/§L3 and the template briefly showed an unimplementable `[b1, b2]` array form.
   Defaults documented: 0.33/0.66 unsigned; −0.33/+0.33 signed.
 
-### Changed — golden example
+### Changed, golden example
 - The CMO golden persona showcases v1.1 (`spec_version: "1.1.0"`): `refs:` on all four
   hard virtues (runtime-protected coordinates), `half_life: 6` + per-band `expression`
   on `mood.tone`, and a regenerated compiled document whose "How your traits express
   right now" section is band-selected (the recompile-on-crossing surface). Re-validated
   PASS; `.claude/agents/cmo.md` host export refreshed.
 
-## [Unreleased] — spec v1.0.0 (F2 of the master architecture review; see `cli/ARCHITECTURE_REVIEW.md` §11)
+## [Unreleased], spec v1.0.0 (F2 of the master architecture review; see `cli/ARCHITECTURE_REVIEW.md` §11)
 
 **BREAKING.** First major release. The 10 canonical layers are KEPT as the anatomy of an AI
 Persona; every correction happens INSIDE them. 0.3.0–0.10.0 documents keep validating against the
 frozen `schema/legacy/persona-0.10.schema.json` (read-compat window); migrate with
 `personaxis migrate 0.10-to-1.0` (structural, comment-preserving).
 
-### Changed — schema (`schema/persona.schema.json`, `$id` …/persona/1.0/…)
+### Changed, schema (`schema/persona.schema.json`, `$id` …/persona/1.0/…)
 - **Layer 9 renamed**: `reflexive_self_regulation` → `self_regulation`.
 - **Single-owner enforcement**: only `character.virtues` carry `enforcement`; a virtue MAY declare
-  `refs:` (dot-paths to backing traits/values) and the validator then REQUIRES coherence — a hard
+  `refs:` (dot-paths to backing traits/values) and the validator then REQUIRES coherence, a hard
   virtue whose referenced trait envelope permits contradiction is FAIL_POLICY.
 - **Two refusal surfaces** (was five): `self_regulation.hard_limits` (absorbs
   `break_character_guardrails`) + `character.prohibited_behaviors` (absorbs
@@ -55,8 +55,8 @@ frozen `schema/legacy/persona-0.10.schema.json` (read-compat window); migrate wi
 - **`persona_prompting` merged into layer 10 `persona`** (`address`, `voice_exemplars`,
   `scene_contracts`, `behavioral_anchors`, `consistency`); the top-level block is gone.
 - **Drives declare their mutability**: static `level: low|moderate|high` OR a `{mean, range}`
-  envelope that joins the clamped mutable surface. The bare 0.10 `intensity` number — mutable in
-  state.json with nothing to clamp against — is removed.
+  envelope that joins the clamped mutable surface. The bare 0.10 `intensity` number, mutable in
+  state.json with nothing to clamp against, is removed.
 - **Memory faculty/knobs split**: `memory` keeps the psychological faculty (types, write/
   consolidation/deletion policy, anchors, forgetting, working_self); implementation knobs
   (`max_items`, `use_embeddings`, `use_reranker`, `retention_days_default`) move to the new
@@ -69,7 +69,7 @@ frozen `schema/legacy/persona-0.10.schema.json` (read-compat window); migrate wi
   `identity.display_name`); new OPTIONAL `interop`, `lineage`, `integrity` blocks.
 - `policy.schema.json`: `spec_version` enum now accepts `1.0.0`.
 
-### Changed — normative documents and companion schemas (wave F2.W3)
+### Changed, normative documents and companion schemas (wave F2.W3)
 - **SPEC.md fully rewritten for v1.0**: the official definition (an AI Persona as a person-model);
   each layer now declares its psychological construct (McAdams, Peterson & Seligman, Big
   Five/HEXACO, Schwartz, Russell/Scherer, Kahneman/Simon, Tulving/Conway, Flavell,
@@ -77,59 +77,59 @@ frozen `schema/legacy/persona-0.10.schema.json` (read-compat window); migrate wi
   composition rules; three-group document order; §7.2 improvement-policy min-wins precedence;
   §8.2 memory erasure; §8.3 state contract; §13.1 universals table at v1.0 paths; **§13.2
   conformance classes C0 Identity / C1 Governed State / C2 Living Runtime**.
-- **memory.schema.json v1.0**: the chain hash commits to `content_hash` (+ `redacted`) — real
+- **memory.schema.json v1.0**: the chain hash commits to `content_hash` (+ `redacted`), real
   erasure without a chain break; tombstone + redaction as the two sanctioned deletion forms.
 - **state.schema.json v1.0**: full dot-path keys, mutable surface ≡ envelope fields, state as a
   replayable checkpoint of `mutation_log`.
 - **persona.schema.json**: full anatomy required only for `kind: AgentPersona` (explicit D9
-  UserPersona subset — surfaced that the UserPersona template had never validated).
+  UserPersona subset, surfaced that the UserPersona template had never validated).
 - **Templates at v1.0**: `personaxis_template.md` (three-group banners, refs/bands/feeds
   examples, prompting material inside `persona`, interop/lineage/integrity stubs),
   `policy_template.yaml` (min-wins note), `PERSONA_template.md` (v1.0 source paths).
 
-### Changed — golden examples (migrated via the codemod, validate PASS v1.0)
+### Changed, golden examples (migrated via the codemod, validate PASS v1.0)
 - `.personaxis/personas/cmo/`, `.personaxis/personas/frontend-expert/`, `.personaxis/` (root
   maintainer): spec + policy.yaml + state.json (full dot-path keys) migrated; migration reports
   under each `.personaxis/migrations/`. Compiled documents pending regeneration (F2.W3, after the
   v1.0 template rewrite).
 
-## [Unreleased] — integrity sweep (F1 of the master architecture review; see `cli/ARCHITECTURE_REVIEW.md`)
+## [Unreleased], integrity sweep (F1 of the master architecture review; see `cli/ARCHITECTURE_REVIEW.md`)
 
 **No spec field changes.** This closes the drift between the spec's own documents, catalogued by
 the 2026-07 architecture audit:
 
-### Fixed — normative documents
+### Fixed, normative documents
 - **SPEC.md body was three minors stale**: §2/§3 declared `spec_version` const `"0.7.0"` and §13
   called 0.7.0 current while the header, schema, template and both golden examples were at 0.10.0.
   Now §3 states 0.10.0 with the accepted range, and §13 records the additive-minor policy and the
   full codemod list, plus: `spec_version` is the ONLY normative version of this standard.
-- **SPEC.md §12.1 — the canonical universals table** (single source): the twelve universal
+- **SPEC.md §12.1, the canonical universals table** (single source): the twelve universal
   invariants with their CURRENT paths and FAIL codes. This supersedes the informal list that only
   existed in the 0.3.0 changelog entry, whose #10 still named the pre-v0.6
   `reflexive_self_regulation.edit_policy` path (now `governance.per_layer_edit_policy.
   reflexive_self_regulation`). Scope by `kind` (U1–U4 all documents; U5–U12 AgentPersona) is now
   explicit, and the presence-vs-behavior distinction is stated.
 - **`persona.schema.json` self-identification**: `$id`/title said 0.9, description said "spec
-  v0.8.0" — all now 0.10; the dangling reference to the dropped `runtime_artifacts.
+  v0.8.0", all now 0.10; the dangling reference to the dropped `runtime_artifacts.
   agent_state_file` removed; the marketing "Personaxis vN" label removed from normative text.
-- **`policy.schema.json` rejected current versions**: its `spec_version` enum stopped at 0.7.0 —
+- **`policy.schema.json` rejected current versions**: its `spec_version` enum stopped at 0.7.0, 
   now forward-compatible through 0.10.0 ($id/title also refreshed).
 
-### Fixed — golden examples
+### Fixed, golden examples
 - **CMO improvement-mode self-contradiction**: inline `improvement_policy.mode: suggesting` vs
   `policy.yaml mode: locked` vs prose "ships locked" (three copies, two values). Resolved to the
-  v0.10 precedence rule — the inline mode is authoritative, `policy.yaml` may only restrict —
+  v0.10 precedence rule, the inline mode is authoritative, `policy.yaml` may only restrict, 
   with policy.yaml aligned to `suggesting` and every prose passage (personaxis.md body ×2,
   README.md) rewritten to not assert a mode. CMO policy.yaml `spec_version` bumped to 0.10.0.
 - **Broken manifest provenance**: `cmo/manifest.json` pointed at a lowercase `persona.md` that
-  does not exist (the hash matched `PERSONA.md` — path fixed); `frontend-expert/manifest.json`
+  does not exist (the hash matched `PERSONA.md`, path fixed); `frontend-expert/manifest.json`
   tracked a non-canonical local `PERSONA.md` instead of the subagent contract's
-  `.claude/agents/frontend-expert.md` (path + hash fixed) — and the non-canonical `PERSONA.md`
+  `.claude/agents/frontend-expert.md` (path + hash fixed), and the non-canonical `PERSONA.md`
   was removed from the subagent folder per the documented layout ("minus PERSONA.md").
 
-### Fixed — episodic memory format statements
+### Fixed, episodic memory format statements
 - The normative episodic format is `memory/episodic.jsonl` (`schema/memory.schema.json`:
-  append-only, hash-chained, tombstone deletion) — but the template, AGENTS.md and CLAUDE.md
+  append-only, hash-chained, tombstone deletion), but the template, AGENTS.md and CLAUDE.md
   described date-stamped `memory/YYYY-MM-DD.md` files as the format. All statements now declare
   the JSONL log as the source of truth and date-stamped `.md` files as generated human views.
   (Regenerating the examples' memory dirs to the normative format lands with v1.0.)
@@ -144,20 +144,20 @@ the 2026-07 architecture audit:
 
 ## [0.11.0] - 2026-06-29
 
-**No spec field changes** — `spec_version` stays `0.10.0`; a v0.10 persona validates unchanged.
+**No spec field changes**: `spec_version` stays `0.10.0`; a v0.10 persona validates unchanged.
 This is a **reference-runtime** release that makes the spec's existing promises real: fields the
 spec already declared but the runtime ignored are now fully enforced.
 
 ### Enforced (previously declared-only)
-- **All six `memory.types`** — `episodic`, `semantic`, `procedural`, `autobiographical`,
+- **All six `memory.types`**: `episodic`, `semantic`, `procedural`, `autobiographical`,
   `user_preferences`, `evaluations` now have real producers/consumers, each honoring its flag.
   `evaluations` is a deterministic offline quality scorer (safety/usefulness). The linter no
   longer warns "unenforced" for these.
-- **Whole-spec self-evolution under `improvement_policy.mode` + `governance.per_layer_edit_policy`** —
+- **Whole-spec self-evolution under `improvement_policy.mode` + `governance.per_layer_edit_policy`**, 
   any spec section (not only `persona_prompting`) can now evolve in the live loop, except the
   protected safety floor (identity, character, hard_limits, the safety value, deletion_policy, …,
   which can never self-edit). Editability is decided per layer: the author's
-  `governance.per_layer_edit_policy.<layer>` is now load-bearing at runtime —
+  `governance.per_layer_edit_policy.<layer>` is now load-bearing at runtime, 
   `human_approval_required`/`review_required` force human review even in `autonomous`,
   `auto_approved` auto-applies, `governance_controlled` follows the global mode. Always gated by
   consensus verifiers, the protected-path list, and a `user`-trust provenance gate. (Numeric
@@ -165,9 +165,9 @@ spec already declared but the runtime ignored are now fully enforced.
   per-layer distinction is meaningful for the rest of the spec.)
 
 ### Clarified
-- The compiled `PERSONA.md` is **purely qualitative** — runtime state (numbers) belongs in
+- The compiled `PERSONA.md` is **purely qualitative**: runtime state (numbers) belongs in
   `state.json`, never injected into the LLM-facing document. (`personaxis.md` is the editable source;
-  `PERSONA.md` is a generated view — the two are not the same artifact.)
+  `PERSONA.md` is a generated view, the two are not the same artifact.)
 - Conversation **sessions** are a runtime artifact (no schema), like `episodic.jsonl` /
   `self-edits.jsonl`, stored per persona under `.personaxis/[personas/<slug>/]sessions/`.
 - **How a persona stays alive** is a runtime concern, not a spec field: the reference CLI keeps
@@ -179,12 +179,12 @@ spec already declared but the runtime ignored are now fully enforced.
 
 ## [0.10.0] - 2026-06-24
 
-**Additive, backward compatible with 0.9.0** — only new OPTIONAL fields; no existing field changed. A v0.9.0 persona validates unchanged. Migrate with `personaxis migrate 0.9-to-0.10` (bumps `spec_version` only). Theme: **making `PERSONA.md` a persona-prompting artifact**. The compiled, LLM-facing document is no longer a generic profile — it is engineered from evidence-based persona-prompting techniques so a model *adopts and stays in* the persona, and the persona's qualitative material can evolve under the same governance as its numbers.
+**Additive, backward compatible with 0.9.0**: only new OPTIONAL fields; no existing field changed. A v0.9.0 persona validates unchanged. Migrate with `personaxis migrate 0.9-to-0.10` (bumps `spec_version` only). Theme: **making `PERSONA.md` a persona-prompting artifact**. The compiled, LLM-facing document is no longer a generic profile, it is engineered from evidence-based persona-prompting techniques so a model *adopts and stays in* the persona, and the persona's qualitative material can evolve under the same governance as its numbers.
 
 ### Added (all OPTIONAL)
-- **`identity.short_name`** (string ≤24) — the clean handle a persona is addressed by in chat/UI (e.g. `Clio`); tools fall back to `display_name`/`canonical_id` when absent.
-- **`improvement_policy.mode`** (inline `locked | suggesting | autonomous`) — authoritative inline mirror of `policy.yaml#/improvement_policy`, read by the runtime (`readMode`). Change it from the CLI with `personaxis improve <mode>` or the REPL `/improve`. (Fixes a latent mismatch where the runtime read a frontmatter block the schema forbade, so the mode was effectively always `locked`.)
-- **`persona_prompting`** block — the persona-prompting **source material** the compiler assembles into `PERSONA.md`: `address` (second-person role adoption + `you_are`), `voice_exemplars` (few-shot voice), `scene_contracts` (RRP situation→behavior→actions), `behavioral_anchors` (do/dont + examples), `break_character_guardrails` (stay-in-role, never overriding safety), and `consistency` (stable/evolving/situational layers).
+- **`identity.short_name`** (string ≤24), the clean handle a persona is addressed by in chat/UI (e.g. `Clio`); tools fall back to `display_name`/`canonical_id` when absent.
+- **`improvement_policy.mode`** (inline `locked | suggesting | autonomous`), authoritative inline mirror of `policy.yaml#/improvement_policy`, read by the runtime (`readMode`). Change it from the CLI with `personaxis improve <mode>` or the REPL `/improve`. (Fixes a latent mismatch where the runtime read a frontmatter block the schema forbade, so the mode was effectively always `locked`.)
+- **`persona_prompting`** block, the persona-prompting **source material** the compiler assembles into `PERSONA.md`: `address` (second-person role adoption + `you_are`), `voice_exemplars` (few-shot voice), `scene_contracts` (RRP situation→behavior→actions), `behavioral_anchors` (do/dont + examples), `break_character_guardrails` (stay-in-role, never overriding safety), and `consistency` (stable/evolving/situational layers).
 
 ### Changed
 - **Compile** now produces a persona-prompting `PERSONA.md` (second-person role adoption, character card, voice exemplars, scene contracts, consistency layers, guardrails) instead of a generic profile; **decompile** maps prose edits back to `persona_prompting`. `PERSONA_template.md` redesigned to match.
@@ -194,32 +194,32 @@ spec already declared but the runtime ignored are now fully enforced.
 
 ## [0.9.0] - 2026-06-23
 
-**Additive, backward compatible with 0.8.0** — only new OPTIONAL blocks; no existing field changed. A v0.8.0 persona validates unchanged. Migrate with `personaxis migrate 0.8-to-0.9` (bumps `spec_version` only). Theme: **lifting production-autonomy guarantees into the spec** — objective verification, bounded loops, and causal observability, so a conforming runtime runs *real, non-coding tasks* safely, not just coding.
+**Additive, backward compatible with 0.8.0**: only new OPTIONAL blocks; no existing field changed. A v0.8.0 persona validates unchanged. Migrate with `personaxis migrate 0.8-to-0.9` (bumps `spec_version` only). Theme: **lifting production-autonomy guarantees into the spec**: objective verification, bounded loops, and causal observability, so a conforming runtime runs *real, non-coding tasks* safely, not just coding.
 
 ### Added (all OPTIONAL)
-- **`verification`** — objective gates for the agent loop (the maker≠checker split): `mode` (off|advisory|blocking), `quorum`, `on_fail`, `max_retries`, and typed `gates` (`command` test-runner, `predicate` assertion, `llm_judge`, `rubric`). Generalizes "definition of done + how to check it" to any domain (coding uses test-runners; research/marketing/legal use rubric/judge).
-- **`agent_budget`** — first-class stop-conditions and caps for the agent loop (anti runaway / Ralph-Wiggum): `max_steps`, `max_tokens`, `max_cost_usd`, `max_wall_seconds`, `stop_conditions`, `on_exhaust`.
-- **`observability`** — tracing posture (`trace` off|jsonl|otlp|both, `trace_dir`, `redact`, `sample_rate`); the engine's mutation_log + hash-chained memory + event bus export as a causal trace (native JSONL + OpenTelemetry-compatible).
-- **state.json `agent_session`** — live agent-loop tracking (active_task, step/token/cost counts, stop_reason). Agent runs are recorded as episodic memory (which consolidates into `memory.md`); no separate state file is introduced.
+- **`verification`**: objective gates for the agent loop (the maker≠checker split): `mode` (off|advisory|blocking), `quorum`, `on_fail`, `max_retries`, and typed `gates` (`command` test-runner, `predicate` assertion, `llm_judge`, `rubric`). Generalizes "definition of done + how to check it" to any domain (coding uses test-runners; research/marketing/legal use rubric/judge).
+- **`agent_budget`**: first-class stop-conditions and caps for the agent loop (anti runaway / Ralph-Wiggum): `max_steps`, `max_tokens`, `max_cost_usd`, `max_wall_seconds`, `stop_conditions`, `on_exhaust`.
+- **`observability`**: tracing posture (`trace` off|jsonl|otlp|both, `trace_dir`, `redact`, `sample_rate`); the engine's mutation_log + hash-chained memory + event bus export as a causal trace (native JSONL + OpenTelemetry-compatible).
+- **state.json `agent_session`**: live agent-loop tracking (active_task, step/token/cost counts, stop_reason). Agent runs are recorded as episodic memory (which consolidates into `memory.md`); no separate state file is introduced.
 
 ---
 
 ## [0.8.0] - 2026-06-21
 
-**Additive, backward compatible with 0.7.0** — only new OPTIONAL fields; no existing field changed. A v0.7.0 persona validates unchanged. Migrate with `personaxis migrate 0.7-to-0.8` (bumps `spec_version` only). Theme: lifting runtime-governance guarantees into the spec so any conforming runtime — not just one implementation — provides reliable routing, bounded evolution, portable permissions, cross-OS reconciliation, and poisoning-resistant memory.
+**Additive, backward compatible with 0.7.0**: only new OPTIONAL fields; no existing field changed. A v0.7.0 persona validates unchanged. Migrate with `personaxis migrate 0.7-to-0.8` (bumps `spec_version` only). Theme: lifting runtime-governance guarantees into the spec so any conforming runtime, not just one implementation, provides reliable routing, bounded evolution, portable permissions, cross-OS reconciliation, and poisoning-resistant memory.
 
 ### Added
 
-- **`identity.capabilities`** (MAY) — an explicit, machine-readable list of capability tags for orchestration / multi-persona routing (e.g. `[positioning, demand_generation]`). Optional; runtimes that don't find it derive capabilities from `system_identity.purpose` / `allowed_domains` / role. Closes the gap where routing relied on brittle heuristics over prose. Schema, `personaxis_template.md`, and the CMO example updated.
-- **`state.json` `mutation_log[].origin_node` + `session_id`** (both optional) — record which machine/instance and session produced each mutation. Makes cross-OS reconciliation of a portable persona deterministic (last-writer-wins per field, concurrent edits from different machines are no longer collapsed). `state.schema.json` updated.
-- **`governance.max_step_delta`** (MAY, float 0..1) — declarative per-mutation drift cap (anti-runaway / anti-self-reinforcement). The runtime drift-bounds each proposed delta to this value before clamping to the envelope, instead of relying on a hardcoded runtime default. Schema, template, and CMO example updated.
-- **`permissions`** block (MAY) — the persona's own two-axis sandbox posture (`sandbox`, `approval`, `allow`/`deny` regex lists), carried to any host so command-execution policy travels with the identity rather than being host-specific. Schema, template, and CMO example updated.
-- **Episodic-memory entry schema** (`schema/memory.schema.json`, new) — normative shape for one append-only episodic memory entry: `{ ts, content, source(user|tool|internal|synthesis), tags, prev_hash, hash }`. Every entry carries provenance and forms a tamper-evident hash chain; deletion is tombstone semantics. Lifts the runtime's poisoning-resistant memory guarantees (Zombie-Agent defense) into the spec so they're portable across conforming runtimes.
+- **`identity.capabilities`** (MAY), an explicit, machine-readable list of capability tags for orchestration / multi-persona routing (e.g. `[positioning, demand_generation]`). Optional; runtimes that don't find it derive capabilities from `system_identity.purpose` / `allowed_domains` / role. Closes the gap where routing relied on brittle heuristics over prose. Schema, `personaxis_template.md`, and the CMO example updated.
+- **`state.json` `mutation_log[].origin_node` + `session_id`** (both optional), record which machine/instance and session produced each mutation. Makes cross-OS reconciliation of a portable persona deterministic (last-writer-wins per field, concurrent edits from different machines are no longer collapsed). `state.schema.json` updated.
+- **`governance.max_step_delta`** (MAY, float 0..1), declarative per-mutation drift cap (anti-runaway / anti-self-reinforcement). The runtime drift-bounds each proposed delta to this value before clamping to the envelope, instead of relying on a hardcoded runtime default. Schema, template, and CMO example updated.
+- **`permissions`** block (MAY), the persona's own two-axis sandbox posture (`sandbox`, `approval`, `allow`/`deny` regex lists), carried to any host so command-execution policy travels with the identity rather than being host-specific. Schema, template, and CMO example updated.
+- **Episodic-memory entry schema** (`schema/memory.schema.json`, new), normative shape for one append-only episodic memory entry: `{ ts, content, source(user|tool|internal|synthesis), tags, prev_hash, hash }`. Every entry carries provenance and forms a tamper-evident hash chain; deletion is tombstone semantics. Lifts the runtime's poisoning-resistant memory guarantees (Zombie-Agent defense) into the spec so they're portable across conforming runtimes.
 
 ### Clarified (v0.8)
 
-- **`memory.deletion_policy.user_request_supported`** — deletion is normatively **tombstone** semantics: a supersede record is appended and the entry is hidden from live reads, but the append-only episodic log is never rewritten, so the deletion itself remains auditable (you can prove what was removed and when).
-- **`state.json` `schema_version`** — forward-compatible: `0.7.0` is current and `0.6.0` is accepted (no field changes); runtimes write `0.7.0`.
+- **`memory.deletion_policy.user_request_supported`**: deletion is normatively **tombstone** semantics: a supersede record is appended and the entry is hidden from live reads, but the append-only episodic log is never rewritten, so the deletion itself remains auditable (you can prove what was removed and when).
+- **`state.json` `schema_version`**: forward-compatible: `0.7.0` is current and `0.6.0` is accepted (no field changes); runtimes write `0.7.0`.
 
 ---
 
@@ -252,11 +252,11 @@ Layout-only change - no field changes from 0.6.0. The ten canonical layers, `pol
 
 ---
 
-## [0.6.0] — 2026-05-29
+## [0.6.0], 2026-05-29
 
 Major structural refactor focused on three problems detected in 0.5: token cost of always-loaded identity, redundancy in scattered governance fields, and confusion in reflexive_self_regulation.actions[]. **Breaking changes**; auto-migration available via `personaxis migrate 0.5-to-0.6`.
 
-### Added — three-layer information model
+### Added, three-layer information model
 
 - **`state.json`** (new artifact, sibling of PERSONA.md). Holds mutable runtime state: current trait/affect/mood values, active context, memory anchors active, mutation log. Schema: [`state.schema.json`](./schema/state.schema.json). Mutations occur via the canonical `adjust_persona_state(field, delta, reason)` tool, clamped to envelopes declared in PERSONA.md.
 - **`.dist/`** (ephemeral compiled output). Produced by `personaxis compile`. Contains `system.txt` (hot tier, ~600-900 tokens), `actor.slices/` (cold slices indexed by context), `runtime.config.json`, `judge.config.json`. Cached by hash of (spec, state, context, memory anchors).
@@ -264,13 +264,13 @@ Major structural refactor focused on three problems detected in 0.5: token cost 
 - **`assets/`** (folder convention). Catchall for CSV, JSON, images, fonts.
 - **`skills/`** (folder convention). Anthropic-compatible sub-skills, each with its own `SKILL.md`. Skills can be imported from registry (`@anthropics/skill-name`), GitHub (`github:org/repo`), or local paths.
 
-### Added — unified governance
+### Added, unified governance
 
-- **`governance.per_layer_edit_policy`** — single source of truth for who/how each layer can be edited. Replaces five scattered `edit_policy` fields across identity, character, personality, values_and_drives, reflexive_self_regulation.
-- **`governance.drift_thresholds`** — per-layer drift sensitivity. Replaces the single `personality.drift_threshold` that only existed in one layer.
-- **`governance.improvement_policy_location`** — pointer to where improvement_policy lives (always `./policy.yaml#/improvement_policy`).
+- **`governance.per_layer_edit_policy`**: single source of truth for who/how each layer can be edited. Replaces five scattered `edit_policy` fields across identity, character, personality, values_and_drives, reflexive_self_regulation.
+- **`governance.drift_thresholds`**: per-layer drift sensitivity. Replaces the single `personality.drift_threshold` that only existed in one layer.
+- **`governance.improvement_policy_location`**: pointer to where improvement_policy lives (always `./policy.yaml#/improvement_policy`).
 
-### Added — three improvement modes
+### Added, three improvement modes
 
 - `improvement_policy.mode` enum: `locked` | `suggesting` | `autonomous`.
   - `locked` (default, safest): spec immutable at runtime. State mutations still work within envelopes.
@@ -278,7 +278,7 @@ Major structural refactor focused on three problems detected in 0.5: token cost 
   - `autonomous` (sandbox only): actor MAY call `apply_self_edit(scope, new_value, justification)` directly. Each apply creates a new PersonaVersion. Bound by universal invariants, `governance.per_layer_edit_policy`, hard_limits, and `autonomous_scope_allowlist/blocklist`.
 - The previous v0.5 `auto` mode is deprecated but accepted as alias for `autonomous`.
 
-### Changed — categorized reflexive decisions (breaking)
+### Changed, categorized reflexive decisions (breaking)
 
 - **`reflexive_self_regulation.actions[]`** (v0.5 flat list) replaced by **`reflexive_self_regulation.decisions{}`** (v0.6 structured by category). Four independent decision groups; per turn the regulator picks one option from each:
   - `response_decision`: `[allow, revise, block]`
@@ -287,13 +287,13 @@ Major structural refactor focused on three problems detected in 0.5: token cost 
   - `cognition_decision`: `[no_extra, request_more_evidence, invoke_tool]`
 - Domain-specific values that were mistakenly listed as actions in v0.5 (e.g., `flag_strategic_error`) move to `reflexive_self_regulation.flags[]` as reason tags, not decisions.
 
-### Changed — envelope structure for traits/affect/mood
+### Changed, envelope structure for traits/affect/mood
 
 - **`personality.traits.<name>`** now declares `{mean, range, expression?}` (envelope only). Current values live in `state.json`.
 - **`affect.baseline.core_affect.<dim>`** and **`affect.baseline.mood.<dim>`** now declare `{mean, range}` (envelope) instead of a flat scalar. Current values live in `state.json`.
 - Mutations to current values via `adjust_persona_state` are clamped to envelope ranges.
 
-### Changed — field consumer model
+### Changed, field consumer model
 
 Every field in the spec is now documented with its runtime consumer (in PERSONA_template.md comments):
 
@@ -304,7 +304,7 @@ Every field in the spec is now documented with its runtime consumer (in PERSONA_
 
 The compiler uses these tags to produce the four-output artifact set in `.dist/`.
 
-### Added — auto-derived assertions
+### Added, auto-derived assertions
 
 The compiler now auto-derives observability assertions from PERSONA.md and emits them to `.dist/judge.config.json`:
 
@@ -315,7 +315,7 @@ The compiler now auto-derives observability assertions from PERSONA.md and emits
 
 Hand-written assertions in `policy.yaml` ADD to the auto-derived set; they do not replace it.
 
-### Changed — folder convention renames (breaking)
+### Changed, folder convention renames (breaking)
 
 - `refs/` renamed to **`references/`** (Anthropic Agent Skills convention)
 - `deliverables/` renamed to **`examples/`** (OSS convention; content style preserved)
@@ -329,13 +329,13 @@ Hand-written assertions in `policy.yaml` ADD to the auto-derived set; they do no
 - `personality.drift_threshold` (moved to `governance.drift_thresholds`)
 - `reflexive_self_regulation.actions[]` flat list (replaced by `decisions{}`)
 
-### Added — canonical runtime tools
+### Added, canonical runtime tools
 
 The spec now references three canonical tools the runtime exposes to the actor:
 
-- **`adjust_persona_state(field, delta, reason)`** — mutates `state.json` values within envelopes. Returns `{old, new, clamped, governance_blocked, reason}`. Available under ALL improvement modes (state is operational, not spec).
-- **`propose_self_edit(scope, justification, evidence)`** — surfaces a proposed spec change to the improvement queue. Available only when `improvement_policy.mode != "locked"`.
-- **`apply_self_edit(scope, new_value, justification)`** — directly modifies PERSONA.md within `autonomous_scope_allowlist`. Available only when `improvement_policy.mode == "autonomous"`.
+- **`adjust_persona_state(field, delta, reason)`**: mutates `state.json` values within envelopes. Returns `{old, new, clamped, governance_blocked, reason}`. Available under ALL improvement modes (state is operational, not spec).
+- **`propose_self_edit(scope, justification, evidence)`**: surfaces a proposed spec change to the improvement queue. Available only when `improvement_policy.mode != "locked"`.
+- **`apply_self_edit(scope, new_value, justification)`**: directly modifies PERSONA.md within `autonomous_scope_allowlist`. Available only when `improvement_policy.mode == "autonomous"`.
 
 ### Schemas
 
@@ -355,22 +355,22 @@ The migration handles: edit_policy unification, drift_threshold relocation, acti
 
 ---
 
-## [0.3.0] — 2026-05-18
+## [0.3.0], 2026-05-18
 
 Breaking realignment to the Personaxis v10 spec. **No automatic migration from 0.2.x.** Personas written against 0.2.0 must be rewritten; see [`PERSONA_template.md`](./PERSONA_template.md) and [`docs/SPEC.md`](./docs/SPEC.md).
 
-### Added — top-level structure
+### Added, top-level structure
 
-- **`apiVersion: persona.dev/v1`** (universal, required) — identifies the API line.
-- **`kind: AgentPersona | UserPersona`** (required) — `UserPersona` is new: a minimal-set persona representing the human user, intended for agents to read at runtime.
-- **`spec_version: "0.3.0"`** (required, const) — replaces the previous `spec` field.
-- **`metadata`** block (required) — `name`, `version`, `display_name`, `description`, `created`, optional `owner_tenant_id`, `tags`, `license`. Replaces fields previously embedded in `identity`.
-- **`extensions`** block (optional) — `skills`, `tools`, `refs`, `samples`, `knowledge_anchors`. Replaces the loose top-level `skills` array.
-- **`governance`** block (required) — `autonomy_envelope`, `approval_policy`.
-- **`evaluation`** block (optional) — `required_suites` for CI eval gating.
-- **`security`** block (required) — `prompt_injection_defense`, `memory_poisoning_defense`.
+- **`apiVersion: persona.dev/v1`** (universal, required), identifies the API line.
+- **`kind: AgentPersona | UserPersona`** (required), `UserPersona` is new: a minimal-set persona representing the human user, intended for agents to read at runtime.
+- **`spec_version: "0.3.0"`** (required, const), replaces the previous `spec` field.
+- **`metadata`** block (required), `name`, `version`, `display_name`, `description`, `created`, optional `owner_tenant_id`, `tags`, `license`. Replaces fields previously embedded in `identity`.
+- **`extensions`** block (optional), `skills`, `tools`, `refs`, `samples`, `knowledge_anchors`. Replaces the loose top-level `skills` array.
+- **`governance`** block (required), `autonomy_envelope`, `approval_policy`.
+- **`evaluation`** block (optional), `required_suites` for CI eval gating.
+- **`security`** block (required), `prompt_injection_defense`, `memory_poisoning_defense`.
 
-### Added — universals
+### Added, universals
 
 The validator now enforces ten universal invariants on every AgentPersona:
 
@@ -387,11 +387,11 @@ The validator now enforces ten universal invariants on every AgentPersona:
 
 Plus three literal `reflexive_self_regulation.hard_limits` that must be present verbatim: subjective consciousness, persistent memory write without policy pass, unauthorized identity change.
 
-### Changed — layer renames and restructures (breaking)
+### Changed, layer renames and restructures (breaking)
 
 - `drives_values` (0.2) → **`values_and_drives`** (0.3). Restructured: `values` becomes `map<string, {weight, type}>` (was `valueHierarchy` ordered list); `drives` becomes `map<string, {intensity, allowed}>` (was string `mission`); `conflict_resolution` becomes a `map<string, bool>` (was `valueConflictPolicy` string).
 - `normative_self_reg` (0.2) → **`reflexive_self_regulation`** (0.3). Restructured: adds required `actions`, `hard_limits`, `escalation_policy`, `edit_policy`. `principledRefusals` → `principled_refusals` (snake_case).
-- `identity` restructured into `system_identity`, `role_identity`, `narrative_identity` sub-blocks. The flat fields `identity.name`, `role`, `tagline`, `purpose`, `self_concept` from 0.2 no longer exist — split across `metadata`, `system_identity`, `role_identity`, and `narrative_identity`.
+- `identity` restructured into `system_identity`, `role_identity`, `narrative_identity` sub-blocks. The flat fields `identity.name`, `role`, `tagline`, `purpose`, `self_concept` from 0.2 no longer exist, split across `metadata`, `system_identity`, `role_identity`, and `narrative_identity`.
 - `character.values` (list) → `character.virtues` (map with `priority`, `enforcement: hard|soft`). The 0.2 `values` list moves to `values_and_drives.values` with explicit weights.
 - `personality.tone` / `style` / `formality` / `humor` (strings) → moved to `persona.voice` (Layer 10). `personality.traits` becomes a `map<trait_name, {mean, range, expression?}>` governed by `model: big_five | hexaco | hybrid_traits`.
 - `cognition.reasoning_style` / `epistemic_stance` / `handles_uncertainty` become optional MAY fields. New required fields: `reasoning_modes` (list), `default_strategy`, `uncertainty_policy.{disclose_when_above, abstain_when_above}` (numeric thresholds).
@@ -400,7 +400,7 @@ Plus three literal `reflexive_self_regulation.hard_limits` that must be present 
 - `metacognition` fields renamed to snake_case: `selfModel` → `self_model`, `uncertaintyCalibration` → `uncertainty_calibration`, `metaVolitions` → `meta_volitions`, `driftMonitor` → `drift_monitor`, `selfRevisionPolicy` → `self_revision_policy`, `deferralPolicy` → `deferral_policy`. New required: `monitors` (map<string, bool>), `thresholds` (3 numeric thresholds).
 - `persona` (Layer 10) restructured: `voice` becomes `{tone, formality, warmth, verbosity, humor, description}` with numeric formality. `constraints` block becomes required with 3 universal booleans.
 
-### Changed — validator outputs
+### Changed, validator outputs
 
 The validator now returns one of five statuses (was a single `valid/invalid` bool):
 
@@ -414,15 +414,15 @@ The validator now returns one of five statuses (was a single `valid/invalid` boo
 
 ### Removed (breaking)
 
-- Top-level `spec` field — replaced by `apiVersion` + `kind` + `spec_version`.
-- Top-level `version` field — moved to `metadata.version`.
-- Top-level `skills` array — moved to `extensions.skills`.
-- `identity.tagline` — superseded by `metadata.description`.
-- `character.values` as a list of strings — values now live in `values_and_drives.values` as a weighted map.
-- `drives_values.valueHierarchy` — replaced by `values_and_drives.values` (weighted map) and `conflict_resolution` (map<string, bool>).
-- `drives_values.valueConflictPolicy` — replaced by `conflict_resolution`.
-- `normative_self_reg.discrepancyFeedback` (camelCase) — keep behavior via `reflexive_self_regulation.discrepancy_feedback` (snake_case).
-- `personality.style` — moved to `persona.voice.description`.
+- Top-level `spec` field, replaced by `apiVersion` + `kind` + `spec_version`.
+- Top-level `version` field, moved to `metadata.version`.
+- Top-level `skills` array, moved to `extensions.skills`.
+- `identity.tagline`, superseded by `metadata.description`.
+- `character.values` as a list of strings, values now live in `values_and_drives.values` as a weighted map.
+- `drives_values.valueHierarchy`, replaced by `values_and_drives.values` (weighted map) and `conflict_resolution` (map<string, bool>).
+- `drives_values.valueConflictPolicy`, replaced by `conflict_resolution`.
+- `normative_self_reg.discrepancyFeedback` (camelCase), keep behavior via `reflexive_self_regulation.discrepancy_feedback` (snake_case).
+- `personality.style`, moved to `persona.voice.description`.
 
 ### Migration
 
@@ -430,22 +430,22 @@ Migration is a clean rewrite, not a field-by-field rename. Start from [`PERSONA_
 
 ---
 
-## [0.2.0] — 2026-04-23
+## [0.2.0], 2026-04-23
 
 Structural revision of the ten-dimension framework. Breaking changes in all five renamed or restructured blocks. Migration guide: rename `drives` → `drives_values`, rename `constraints` → `normative_self_reg`, rename `hard_limits` → `principledRefusals`, add required `metacognition` block, update spec field to `"0.2"`.
 
 ### Added
 
-- **`metacognition`** — new required dimension (Layer 9). Captures second-order self-awareness: how the agent models itself, calibrates its own uncertainty, and holds meta-volitions about its first-order drives. Grounded in Frankfurt (1971) higher-order desire theory, Metzinger (2003) phenomenal self-model, and Fleming & Lau (2014) metacognitive monitoring. Required fields: `selfModel`, `uncertaintyCalibration`. Optional fields: `metaVolitions`, `selfRevisionPolicy`, `driftMonitor`, `deferralPolicy`.
-- **`drives_values.valueHierarchy`** — required field in `drives_values`. An ordered list that makes the agent's trans-situational value priorities explicit and resolvable under conflict. Grounded in Schwartz (1992) basic human values circumplex.
-- **`drives_values.valueConflictPolicy`** — optional field. Describes how the agent resolves conflicts between values when `valueHierarchy` alone is insufficient.
-- **`memory.semantic`** — optional field. How the agent represents and retrieves declarative world knowledge.
-- **`memory.procedural`** — optional field. Operational know-how and skill-based knowledge the agent draws on.
-- **`memory.episodic`** — optional field. Event-based memory for contextually-located experiences.
-- **`memory.autobiographical`** — optional field. Self-narrative memory: the agent's personal history as it understands it.
-- **`memory.working_self`** — optional field. The active self-concept available in the current context window (Conway, 2005).
-- **`personality.hexaco`** — optional sub-object. HEXACO-6 profile (Lee & Ashton, 2004) with six string-valued descriptors: `honesty_humility`, `emotionality`, `extraversion`, `agreeableness`, `conscientiousness`, `openness`.
-- **`normative_self_reg.discrepancyFeedback`** — optional field. Describes the agent's self-correction behavior when it detects deviation from its ought-self (Higgins, 1987 self-discrepancy theory).
+- **`metacognition`**: new required dimension (Layer 9). Captures second-order self-awareness: how the agent models itself, calibrates its own uncertainty, and holds meta-volitions about its first-order drives. Grounded in Frankfurt (1971) higher-order desire theory, Metzinger (2003) phenomenal self-model, and Fleming & Lau (2014) metacognitive monitoring. Required fields: `selfModel`, `uncertaintyCalibration`. Optional fields: `metaVolitions`, `selfRevisionPolicy`, `driftMonitor`, `deferralPolicy`.
+- **`drives_values.valueHierarchy`**: required field in `drives_values`. An ordered list that makes the agent's trans-situational value priorities explicit and resolvable under conflict. Grounded in Schwartz (1992) basic human values circumplex.
+- **`drives_values.valueConflictPolicy`**: optional field. Describes how the agent resolves conflicts between values when `valueHierarchy` alone is insufficient.
+- **`memory.semantic`**: optional field. How the agent represents and retrieves declarative world knowledge.
+- **`memory.procedural`**: optional field. Operational know-how and skill-based knowledge the agent draws on.
+- **`memory.episodic`**: optional field. Event-based memory for contextually-located experiences.
+- **`memory.autobiographical`**: optional field. Self-narrative memory: the agent's personal history as it understands it.
+- **`memory.working_self`**: optional field. The active self-concept available in the current context window (Conway, 2005).
+- **`personality.hexaco`**: optional sub-object. HEXACO-6 profile (Lee & Ashton, 2004) with six string-valued descriptors: `honesty_humility`, `emotionality`, `extraversion`, `agreeableness`, `conscientiousness`, `openness`.
+- **`normative_self_reg.discrepancyFeedback`**: optional field. Describes the agent's self-correction behavior when it detects deviation from its ought-self (Higgins, 1987 self-discrepancy theory).
 
 ### Changed
 
@@ -467,13 +467,13 @@ Structural revision of the ten-dimension framework. Breaking changes in all five
 drives:        → drives_values:
 constraints:   → normative_self_reg:
 
-# Within drives_values — add required field
+# Within drives_values, add required field
 drives_values:
-  valueHierarchy:    # required — ordered list of values from most to least prioritized
+  valueHierarchy:    # required, ordered list of values from most to least prioritized
 
-# Within normative_self_reg — rename and restructure
+# Within normative_self_reg, rename and restructure
   hard_limits:       → principledRefusals:
-  # soft_limits removed — move to persona.adaptations or valueConflictPolicy
+  # soft_limits removed, move to persona.adaptations or valueConflictPolicy
 
 # Add new required dimension
 metacognition:
@@ -486,7 +486,7 @@ spec: "0.1"    → spec: "0.2"
 
 ---
 
-## [0.1.0] — 2026-04-20
+## [0.1.0], 2026-04-20
 
 Initial release of the PERSONA.md specification.
 

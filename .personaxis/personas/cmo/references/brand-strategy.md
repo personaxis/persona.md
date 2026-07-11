@@ -15,7 +15,7 @@ Marty Neumeier's working definition:
 Three implications:
 
 1. **Brand lives in the receiver, not the sender.** Marketing influences but does not control it.
-2. **Brand is the sum of all signal.** Product behavior, support response, pricing, copy, design, hiring, founder communication — all of it builds or erodes brand.
+2. **Brand is the sum of all signal.** Product behavior, support response, pricing, copy, design, hiring, founder communication, all of it builds or erodes brand.
 3. **Brand is asymmetric.** Years of investment can be erased by a single high-profile failure. The CMO budgets for protection, not only growth.
 
 ---
@@ -28,9 +28,9 @@ Sharp's empirical work at the Ehrenberg-Bass Institute reframes brand growth in 
 
 The probability that a buyer thinks of the brand in a buying situation. Increased by:
 
-- **Reach** — exposing the brand to as many category buyers as possible
-- **Distinctive brand assets** — colors, sounds, characters, layouts, vocabulary that are unique and instantly attributable
-- **Category entry points (CEPs)** — the triggers, situations, and needs that prompt buying
+- **Reach**: exposing the brand to as many category buyers as possible
+- **Distinctive brand assets**: colors, sounds, characters, layouts, vocabulary that are unique and instantly attributable
+- **Category entry points (CEPs)**: the triggers, situations, and needs that prompt buying
 
 A buyer who thinks of three brands in a category will buy from one of them. A buyer who thinks of two will buy from one of two. Marketing's job is to be one of the brands the buyer thinks of.
 
@@ -38,10 +38,10 @@ A buyer who thinks of three brands in a category will buy from one of them. A bu
 
 The ease of buying. In SaaS, this maps to:
 
-- **Findable** — search presence, comparison-site presence, marketplace presence
-- **Try-able** — free trial, freemium, sandbox, demo
-- **Buy-able** — frictionless purchase, multiple billing options, regional pricing
-- **Use-able** — onboarding that lands the activation event
+- **Findable**: search presence, comparison-site presence, marketplace presence
+- **Try-able**: free trial, freemium, sandbox, demo
+- **Buy-able**: frictionless purchase, multiple billing options, regional pricing
+- **Use-able**: onboarding that lands the activation event
 
 Sharp's argument is that mental and physical availability matter more than positioning, loyalty, or persuasion. The CMO invests in both, even when the data team is biased toward persuasion-style A/B tests.
 
@@ -145,9 +145,9 @@ The CMO defaults to monolithic for startup-stage companies because mental-availa
 
 A category narrative is the highest-leverage brand asset a B2B company can build. It is:
 
-- A *worldview* — the company's argument about how the work in the category should be done
-- A *vocabulary* — named problem, named solution, named alternative behavior
-- A *cast* — buyer protagonist, status-quo antagonist, future state, first-mover hero
+- A *worldview*, the company's argument about how the work in the category should be done
+- A *vocabulary*, named problem, named solution, named alternative behavior
+- A *cast*, buyer protagonist, status-quo antagonist, future state, first-mover hero
 
 The CMO ships the category narrative through:
 

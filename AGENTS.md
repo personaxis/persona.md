@@ -11,7 +11,7 @@ This is the source repository for the open Personaxis spec standard - a declarat
 - **`.personaxis/[personas/<slug>/]personaxis.md`** - the committed, quantitative 10-layer spec (the source of identity).
 - **`PERSONA.md`** (repo root, root mode) or **`.claude/agents/<slug>.md`** (subagent mode) - the committed, LLM-compiled qualitative document a coding agent reads to know who it is and how to behave. Generated from `personaxis.md` via `personaxis compile`; hand-edits flow back via `personaxis decompile`.
 
-**Current spec version: 1.0.0** (`apiVersion personaxis.com/v1`) — the first stable spec: the 10 canonical layers anchored to their psychological constructs, in three blocks (ANATOMY / CHANGE GOVERNANCE / RUNTIME CONTRACT). Breaking vs 0.10: layer-9 `reflexive_self_regulation` → `self_regulation`; layer-10 `persona` absorbs the old `persona_prompting` (`address`, `voice_exemplars`, `scene_contracts`, `behavioral_anchors`, `consistency`); five refusal surfaces → two (`hard_limits` + `prohibited_behaviors`); `metadata.display_name` drops. Personas at 0.3–0.10 still validate unchanged. The quantitative spec lives at `.personaxis/personaxis.md`; the repo-root `PERSONA.md` is the compiled qualitative document. Migrate with `personaxis migrate 0.10-to-1.0`. See [CHANGELOG.md](./CHANGELOG.md) and `docs/SPEC.md`.
+**Current spec version: 1.0.0** (`apiVersion personaxis.com/v1`), the first stable spec: the 10 canonical layers anchored to their psychological constructs, in three blocks (ANATOMY / CHANGE GOVERNANCE / RUNTIME CONTRACT). Breaking vs 0.10: layer-9 `reflexive_self_regulation` → `self_regulation`; layer-10 `persona` absorbs the old `persona_prompting` (`address`, `voice_exemplars`, `scene_contracts`, `behavioral_anchors`, `consistency`); five refusal surfaces → two (`hard_limits` + `prohibited_behaviors`); `metadata.display_name` drops. Personas at 0.3–0.10 still validate unchanged. The quantitative spec lives at `.personaxis/personaxis.md`; the repo-root `PERSONA.md` is the compiled qualitative document. Migrate with `personaxis migrate 0.10-to-1.0`. See [CHANGELOG.md](./CHANGELOG.md) and `docs/SPEC.md`.
 
 ## File ownership
 
@@ -51,7 +51,7 @@ bumped when a schema actually changes, so they can trail `spec_version`. Current
 - `policy.schema.json` with `$id: https://personaxis.com/schemas/persona/0.10/policy.schema.json`
 - `state.schema.json` with `$id: https://personaxis.com/schemas/state/1.0/state.schema.json`
 - `memory.schema.json` with `$id: https://personaxis.com/schemas/memory/1.0/memory.schema.json`
-- `schema/legacy/persona-0.10.schema.json` — frozen 0.3–0.10 read-compat schema (validator dispatches by `spec_version`)
+- `schema/legacy/persona-0.10.schema.json`, frozen 0.3–0.10 read-compat schema (validator dispatches by `spec_version`)
 
 ## Rules for adding a new example persona (v1.0+)
 
@@ -62,7 +62,7 @@ A new example persona is a directory under `.personaxis/personas/<slug>/`. In ro
 - `policy.yaml` - observability + improvement_policy mode
 - `state.json` - initial mutable state (current values seeded from `personaxis.md` envelope means)
 - `memory.md` - long-term curated memory (can be skeleton with stable principles)
-- `memory/` - episodic memory directory: `episodic.jsonl` (append-only, hash-chained — normative format in `schema/memory.schema.json`; can be empty initially). Date-stamped `.md` files are generated views, not sources.
+- `memory/` - episodic memory directory: `episodic.jsonl` (append-only, hash-chained, normative format in `schema/memory.schema.json`; can be empty initially). Date-stamped `.md` files are generated views, not sources.
 - `references/` - heavy framework prose (at least one file)
 - `examples/` - worked outputs (markdown samples or HTML deliverables)
 - `skills/` - Anthropic-compatible sub-skills (optional)
@@ -127,7 +127,7 @@ Exit codes:
 - Do not make required fields optional or optional fields required without a version bump
 - Do not modify `schema/*.schema.json` without also updating `docs/SPEC.md`, and vice versa
 - Do not commit example personas that do not pass schema validation
-- Do not introduce per-layer governance fields (use `governance.per_layer_edit_policy` and `governance.drift_thresholds` — v0.6 unification)
+- Do not introduce per-layer governance fields (use `governance.per_layer_edit_policy` and `governance.drift_thresholds`, v0.6 unification)
 - Do not add flat enum action lists (use structured `decisions{}` like `self_regulation.decisions`)
 - Do not require numerical scalars to be in the actor's prompt; the compiler translates them to prose via behavior maps
 

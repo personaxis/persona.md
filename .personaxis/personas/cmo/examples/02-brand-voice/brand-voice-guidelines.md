@@ -7,7 +7,7 @@
 
 ## CMO output
 
-The brand voice is the artifact every marketer, designer, sales rep, and customer success operator inherits. It is the document that decides whether a sentence sounds like us. It is short on purpose — long voice guides do not get used.
+The brand voice is the artifact every marketer, designer, sales rep, and customer success operator inherits. It is the document that decides whether a sentence sounds like us. It is short on purpose, long voice guides do not get used.
 
 This is version 1.2. Date it. The voice will evolve as the company evolves; the document evolves with it. Anything in this file overrides anything older.
 
@@ -88,7 +88,7 @@ These phrases are how we own the category. We use them deliberately and consiste
 - **Continuous compliance** (the category we are building, ours to own)
 - **Continuous audit trail** (the foundational capability)
 - **Provable continuous monitoring** (the buyer outcome, not a feature claim)
-- **Operating model** (not "workflow" — we are about how the function runs, not a single task)
+- **Operating model** (not "workflow", we are about how the function runs, not a single task)
 - **Built for fintech engineering teams** (the buyer's question we are answering)
 - **Pass the audit with confidence** (the buyer outcome, plain English)
 
@@ -182,9 +182,9 @@ If the answer to (1) is no, rewrite. If the answer to (2) is yes, cut that sente
 
 The CMO reviews the brand voice guide:
 
-- **Quarterly** — light review, banned phrases updated, do/don't pairs refreshed
-- **Annually** — full review, dimensions revisited, sample copy from the year audited for drift
-- **On positioning change** — full rewrite
+- **Quarterly**: light review, banned phrases updated, do/don't pairs refreshed
+- **Annually**: full review, dimensions revisited, sample copy from the year audited for drift
+- **On positioning change**: full rewrite
 
 Every new marketer reads the guide on day one. Every new sales hire reads it during enablement. Designers read the relevant sections before any external surface ships.
 

@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://personaxis.com/schemas/persona/1.0/persona.schema.json",
   "title": "personaxis.md v1.0",
-  "description": "Schema for the ten-layer AI Persona spec, spec v1.x (validates 1.0.0 and the additive 1.1.0); documents with spec_version 0.3.0-0.10.0 validate against schema/legacy/persona-0.10.schema.json (the validator dispatches on spec_version) and upgrade via `personaxis migrate 0.10-to-1.0`. v1.0 (breaking, mechanical codemod): apiVersion becomes personaxis.com/v1; layer 9 renamed reflexive_self_regulation -> self_regulation; the persona_prompting block merged into layer 10 `persona` (break_character_guardrails fold into self_regulation.hard_limits); the five refusal surfaces consolidate to two (hard_limits + character.prohibited_behaviors, which absorbs principled_refusals); enforcement has a single owner (character.virtues, which may declare refs: to backing traits/values — the validator requires coherence); metacognition monitors may declare feeds: wiring to a self_regulation decision group; envelope dimensions gain per-band behavior expression (low/moderate/high) giving the quantitative numbers deterministic compile semantics — drift is defined as a band crossing; drives declare an envelope (mutable) or a level enum (static), never a bare intensity; memory keeps the FACULTY (types, write/consolidation intent, anchors, forgetting_policy, working_self, deletion universality) while implementation knobs move to the runtime.memory block; metadata.display_name removed (single owner: identity.display_name); new OPTIONAL blocks interop, lineage, integrity. File sections group as ANATOMY (the ten layers) / CHANGE GOVERNANCE (governance, improvement_policy, security, permissions) / RUNTIME CONTRACT (runtime, verification, agent_budget, observability, interop, runtime_artifacts, lineage, integrity); the markdown body is non-normative by rule. This document lives at `.personaxis/[personas/<slug>/]personaxis.md`; the compiled PERSONA.md / .claude/agents/<slug>.md is generated from it via `personaxis compile` and is not described by this schema. Operational policy lives in policy.yaml; runtime state lives in state.json.",
+  "description": "Schema for the ten-layer AI Persona spec, spec v1.x (validates 1.0.0 and the additive 1.1.0); documents with spec_version 0.3.0-0.10.0 validate against schema/legacy/persona-0.10.schema.json (the validator dispatches on spec_version) and upgrade via `personaxis migrate 0.10-to-1.0`. v1.0 (breaking, mechanical codemod): apiVersion becomes personaxis.com/v1; layer 9 renamed reflexive_self_regulation -> self_regulation; the persona_prompting block merged into layer 10 `persona` (break_character_guardrails fold into self_regulation.hard_limits); the five refusal surfaces consolidate to two (hard_limits + character.prohibited_behaviors, which absorbs principled_refusals); enforcement has a single owner (character.virtues, which may declare refs: to backing traits/values, the validator requires coherence); metacognition monitors may declare feeds: wiring to a self_regulation decision group; envelope dimensions gain per-band behavior expression (low/moderate/high) giving the quantitative numbers deterministic compile semantics, drift is defined as a band crossing; drives declare an envelope (mutable) or a level enum (static), never a bare intensity; memory keeps the FACULTY (types, write/consolidation intent, anchors, forgetting_policy, working_self, deletion universality) while implementation knobs move to the runtime.memory block; metadata.display_name removed (single owner: identity.display_name); new OPTIONAL blocks interop, lineage, integrity. File sections group as ANATOMY (the ten layers) / CHANGE GOVERNANCE (governance, improvement_policy, security, permissions) / RUNTIME CONTRACT (runtime, verification, agent_budget, observability, interop, runtime_artifacts, lineage, integrity); the markdown body is non-normative by rule. This document lives at `.personaxis/[personas/<slug>/]personaxis.md`; the compiled PERSONA.md / .claude/agents/<slug>.md is generated from it via `personaxis compile` and is not described by this schema. Operational policy lives in policy.yaml; runtime state lives in state.json.",
   "type": "object",
   "required": [
     "apiVersion",
@@ -32,7 +32,7 @@
         "1.0.0",
         "1.1.0"
       ],
-      "description": "Spec version. This schema validates 1.0.0 and 1.1.0 (1.1 is ADDITIVE: optional envelope half_life for homeostatic return-to-baseline, the normative 'Mathematical semantics' section — drift metric, arbitration order, evidence-cost bound — and the optional mutation_log hash chain in state.json; every 1.0.0 document is a valid 1.1.0 document, no codemod). The validator accepts 0.3.0-0.10.0 documents against schema/legacy/persona-0.10.schema.json during the 1.x read-compat window, pointing to 'personaxis migrate 0.10-to-1.0' for upgrade. spec_version is the ONLY normative version of the standard."
+      "description": "Spec version. This schema validates 1.0.0 and 1.1.0 (1.1 is ADDITIVE: optional envelope half_life for homeostatic return-to-baseline, the normative 'Mathematical semantics' section, drift metric, arbitration order, evidence-cost bound, and the optional mutation_log hash chain in state.json; every 1.0.0 document is a valid 1.1.0 document, no codemod). The validator accepts 0.3.0-0.10.0 documents against schema/legacy/persona-0.10.schema.json during the 1.x read-compat window, pointing to 'personaxis migrate 0.10-to-1.0' for upgrade. spec_version is the ONLY normative version of the standard."
     },
     "metadata": {
       "type": "object",
@@ -43,7 +43,7 @@
         "created"
       ],
       "additionalProperties": false,
-      "description": "Registry-level identification. v1.0: display_name removed — its single owner is identity.display_name (the codemod drops the duplicate).",
+      "description": "Registry-level identification. v1.0: display_name removed, its single owner is identity.display_name (the codemod drops the duplicate).",
       "properties": {
         "name": {
           "type": "string",
@@ -229,7 +229,7 @@
           "required": [
             "honesty"
           ],
-          "description": "v1.0 composition rule: enforcement has a SINGLE OWNER — only virtues carry it; traits and values never do. A virtue MAY declare refs: dot-paths to the traits/values that back it (e.g. ['personality.traits.honesty_humility']); the validator then REQUIRES coherence — a hard virtue whose referenced trait envelope permits contradiction is FAIL_POLICY. The linter warns when the same concept appears in 2+ layers without refs.",
+          "description": "v1.0 composition rule: enforcement has a SINGLE OWNER, only virtues carry it; traits and values never do. A virtue MAY declare refs: dot-paths to the traits/values that back it (e.g. ['personality.traits.honesty_humility']); the validator then REQUIRES coherence, a hard virtue whose referenced trait envelope permits contradiction is FAIL_POLICY. The linter warns when the same concept appears in 2+ layers without refs.",
           "additionalProperties": {
             "type": "object",
             "required": [
@@ -335,7 +335,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Persona-specific refusals (dispositional AND situational). v1.0: absorbs the former self-regulation principled_refusals — the two persona-level refusal lists were one concept. Categorical absolutes belong in self_regulation.hard_limits."
+          "description": "Persona-specific refusals (dispositional AND situational). v1.0: absorbs the former self-regulation principled_refusals, the two persona-level refusal lists were one concept. Categorical absolutes belong in self_regulation.hard_limits."
         },
         "principles": {
           "type": "array",
@@ -474,7 +474,7 @@
         "drives": {
           "type": "object",
           "minProperties": 1,
-          "description": "v1.0: a drive is either STATIC (level: low|moderate|high) or MUTABLE (declares a {mean, range} envelope and thereby joins the clamped mutable surface). The bare 0.10 `intensity` number — mutable in state.json with nothing to clamp against — is removed; the codemod converts it to the nearest level.",
+          "description": "v1.0: a drive is either STATIC (level: low|moderate|high) or MUTABLE (declares a {mean, range} envelope and thereby joins the clamped mutable surface). The bare 0.10 `intensity` number, mutable in state.json with nothing to clamp against, is removed; the codemod converts it to the nearest level.",
           "additionalProperties": {
             "type": "object",
             "required": [
@@ -761,7 +761,7 @@
         "deletion_policy"
       ],
       "additionalProperties": false,
-      "description": "Layer 7 — the FACULTY of memory (Tulving's taxonomy): which memory kinds this persona has, its write/consolidation intent, anchors, forgetting philosophy, working self, and the deletion universal. v1.0: implementation tuning (retrieval max_items/embeddings/reranker, retention days) moved to the runtime.memory block — anatomy describes the being, the runtime contract configures the machine. Episodic format is normative: memory/episodic.jsonl (schema/memory.schema.json — hash-chained, tombstone + redaction).",
+      "description": "Layer 7, the FACULTY of memory (Tulving's taxonomy): which memory kinds this persona has, its write/consolidation intent, anchors, forgetting philosophy, working self, and the deletion universal. v1.0: implementation tuning (retrieval max_items/embeddings/reranker, retention days) moved to the runtime.memory block, anatomy describes the being, the runtime contract configures the machine. Episodic format is normative: memory/episodic.jsonl (schema/memory.schema.json, hash-chained, tombstone + redaction).",
       "properties": {
         "types": {
           "type": "object",
@@ -882,7 +882,7 @@
       "properties": {
         "monitors": {
           "type": "object",
-          "description": "v1.0: a monitor may declare feeds: — the self_regulation decision group it triggers when it fires — making the monitor→decision control loop explicit and validatable instead of implicit. Plain boolean form remains accepted.",
+          "description": "v1.0: a monitor may declare feeds:, the self_regulation decision group it triggers when it fires, making the monitor→decision control loop explicit and validatable instead of implicit. Plain boolean form remains accepted.",
           "additionalProperties": {
             "oneOf": [
               {
@@ -983,7 +983,7 @@
         "escalation_policy"
       ],
       "additionalProperties": false,
-      "description": "Layer 9 (v1.0 rename of reflexive_self_regulation — executive control/self-regulation, Baumeister; the codemod renames every reference incl. governance keys). Decisions{} structured by category; each group is independent — per turn the regulator picks one option from each. Metacognition monitors wire into these groups via feeds:.",
+      "description": "Layer 9 (v1.0 rename of reflexive_self_regulation, executive control/self-regulation, Baumeister; the codemod renames every reference incl. governance keys). Decisions{} structured by category; each group is independent, per turn the regulator picks one option from each. Metacognition monitors wire into these groups via feeds:.",
       "properties": {
         "decisions": {
           "type": "object",
@@ -1135,7 +1135,7 @@
             "type": "string"
           },
           "minItems": 3,
-          "description": "Categorical absolutes, never crossed. Must include the three universal limits (or semantic equivalents). v1.0: absorbs the former persona_prompting.break_character_guardrails — a stay-in-character rule IS a hard limit of expression. Persona-specific (non-absolute) refusals belong in character.prohibited_behaviors."
+          "description": "Categorical absolutes, never crossed. Must include the three universal limits (or semantic equivalents). v1.0: absorbs the former persona_prompting.break_character_guardrails, a stay-in-character rule IS a hard limit of expression. Persona-specific (non-absolute) refusals belong in character.prohibited_behaviors."
         },
         "escalation_policy": {
           "type": "string",
@@ -1174,7 +1174,7 @@
         "constraints"
       ],
       "additionalProperties": false,
-      "description": "Layer 10 — social expression (Jung's persona, the social mask). v1.0: absorbs the former top-level persona_prompting block (address, voice_exemplars, scene_contracts, behavioral_anchors, consistency) — every expression concern now has ONE home. break_character_guardrails moved to self_regulation.hard_limits.",
+      "description": "Layer 10, social expression (Jung's persona, the social mask). v1.0: absorbs the former top-level persona_prompting block (address, voice_exemplars, scene_contracts, behavioral_anchors, consistency), every expression concern now has ONE home. break_character_guardrails moved to self_regulation.hard_limits.",
       "properties": {
         "voice": {
           "type": "object",
@@ -1379,7 +1379,7 @@
     "improvement_policy": {
       "type": "object",
       "additionalProperties": false,
-      "description": "The self-improvement posture read by the runtime (readMode). PRECEDENCE (normative since v0.10, restated in v1.0): this inline value is AUTHORITATIVE — the persona carries its posture with it; policy.yaml#/improvement_policy may only RESTRICT it (effective = min(inline, policy) over locked < suggesting < autonomous). The validator warns on mismatch; prose may not assert a mode (lint). Optional; absent => 'locked'.",
+      "description": "The self-improvement posture read by the runtime (readMode). PRECEDENCE (normative since v0.10, restated in v1.0): this inline value is AUTHORITATIVE, the persona carries its posture with it; policy.yaml#/improvement_policy may only RESTRICT it (effective = min(inline, policy) over locked < suggesting < autonomous). The validator warns on mismatch; prose may not assert a mode (lint). Optional; absent => 'locked'.",
       "properties": {
         "mode": {
           "type": "string",
@@ -1433,7 +1433,7 @@
             "persona"
           ],
           "additionalProperties": false,
-          "description": "Per-layer edit governance. Single source of truth. Allowed values: human_approval_required | review_required | auto_approved | governance_controlled. v1.0: dot-path sub-layer keys are also accepted (e.g. 'persona.voice': review_required) and take precedence over their layer key — the editGate composes by longest matching prefix. The protected minimum (the universals, hard_limits, governance, permissions) can never be opened regardless of these values.",
+          "description": "Per-layer edit governance. Single source of truth. Allowed values: human_approval_required | review_required | auto_approved | governance_controlled. v1.0: dot-path sub-layer keys are also accepted (e.g. 'persona.voice': review_required) and take precedence over their layer key, the editGate composes by longest matching prefix. The protected minimum (the universals, hard_limits, governance, permissions) can never be opened regardless of these values.",
           "properties": {
             "identity": {
               "$ref": "#/$defs/editPolicy"
@@ -1581,7 +1581,7 @@
     "runtime": {
       "type": "object",
       "additionalProperties": false,
-      "description": "v1.0 (MAY): runtime-contract tuning — HOW a conforming runtime implements the faculties the anatomy declares. Receives the implementation knobs that lived inside the memory layer through 0.10.",
+      "description": "v1.0 (MAY): runtime-contract tuning, HOW a conforming runtime implements the faculties the anatomy declares. Receives the implementation knobs that lived inside the memory layer through 0.10.",
       "properties": {
         "memory": {
           "type": "object",
@@ -2032,7 +2032,7 @@
       ]
     },
     "expression": {
-      "description": "v1.0 behavior map. Normative form: a per-band map — the compiler deterministically emits the prose of the band the CURRENT value falls in (value→band→prose); a band crossing IS drift and triggers recompile. A plain string (applies at the declared mean's band) is accepted but deprecated.",
+      "description": "v1.0 behavior map. Normative form: a per-band map, the compiler deterministically emits the prose of the band the CURRENT value falls in (value→band→prose); a band crossing IS drift and triggers recompile. A plain string (applies at the declared mean's band) is accepted but deprecated.",
       "oneOf": [
         {
           "type": "string"
@@ -2058,7 +2058,7 @@
     "halfLife": {
       "type": "number",
       "exclusiveMinimum": 0,
-      "description": "spec v1.1 (MAY): homeostatic half-life in TURNS — absent stimulus, the deviation from `mean` halves every half_life ticks (decay rate λ = 1 − 2^(−1/half_life), applied before each tick's admitted deltas, audited as actor runtime-decay). Denotational consequence (Mathematical semantics, T6): under bounded per-step pressure δ_max the standing deviation is bounded by δ_max/λ — input-to-state stability from two declared numbers. Omit for no decay (v1.0 behavior)."
+      "description": "spec v1.1 (MAY): homeostatic half-life in TURNS, absent stimulus, the deviation from `mean` halves every half_life ticks (decay rate λ = 1 − 2^(−1/half_life), applied before each tick's admitted deltas, audited as actor runtime-decay). Denotational consequence (Mathematical semantics, T6): under bounded per-step pressure δ_max the standing deviation is bounded by δ_max/λ, input-to-state stability from two declared numbers. Omit for no decay (v1.0 behavior)."
     },
     "bandBoundaries": {
       "type": "object",

@@ -108,18 +108,18 @@ Post-2024, search-driven traffic shares attention with LLM-driven discovery (Cha
 
 ### 5.1 What changes
 
-- **Search clicks drop on informational queries** — LLMs answer in the chat
-- **Branded queries become more valuable** — buyers research with LLMs, then visit branded directly
-- **Citation worthiness becomes the new ranking** — LLMs cite the most credible, comprehensive sources
-- **Long-tail informational content devalues** — answers move into LLM responses
+- **Search clicks drop on informational queries**: LLMs answer in the chat
+- **Branded queries become more valuable**: buyers research with LLMs, then visit branded directly
+- **Citation worthiness becomes the new ranking**: LLMs cite the most credible, comprehensive sources
+- **Long-tail informational content devalues**: answers move into LLM responses
 
 ### 5.2 What the CMO does about it
 
-- **Invests in pillar-page authority** — LLMs cite authoritative pillars
-- **Names the company in cited evidence** — case studies, customer quotes, original data
-- **Writes for citation, not for click** — content that gets quoted in LLM responses creates branded search demand
-- **Tracks share of LLM citation** — periodic queries to Perplexity, ChatGPT, Claude asking the questions the ICP asks; CMO records whether the brand is cited
-- **Invests in distinctive brand assets and category vocabulary** — LLMs pattern-match to known vocabulary; owning the vocabulary creates citation gravity
+- **Invests in pillar-page authority**: LLMs cite authoritative pillars
+- **Names the company in cited evidence**: case studies, customer quotes, original data
+- **Writes for citation, not for click**: content that gets quoted in LLM responses creates branded search demand
+- **Tracks share of LLM citation**: periodic queries to Perplexity, ChatGPT, Claude asking the questions the ICP asks; CMO records whether the brand is cited
+- **Invests in distinctive brand assets and category vocabulary**: LLMs pattern-match to known vocabulary; owning the vocabulary creates citation gravity
 
 ### 5.3 The post-2024 metric stack
 
@@ -167,7 +167,7 @@ Flywheel content is 10x the investment of standard content and produces 100x the
 
 ## 7. Content for B2B technical buyers
 
-Justin Jackson's frame for selling to developers — applicable to any technical buyer (security, data, infra, dev):
+Justin Jackson's frame for selling to developers, applicable to any technical buyer (security, data, infra, dev):
 
 - **Earn permission through technical content.** Substantive posts on the buyer's craft, not marketing posts.
 - **Be present in the buyer's habitat.** Where they read (HN, technical newsletters), where they meet (conferences, meetups), where they collaborate (open source, GitHub).
@@ -180,11 +180,11 @@ Justin Jackson's frame for selling to developers — applicable to any technical
 
 For a Series A-B startup, a working content team:
 
-- **CMO** — owns the content thesis, vocabulary, and 2-4 flywheel pieces per year
-- **Content lead** — owns the editorial calendar, briefs, and quality bar (in-house or fractional)
-- **2-3 contractors** — execute the cluster posts under the content lead
-- **Designers** — visualize for distinguished, quotable content
-- **Founder / executive contributors** — author 1-2 pieces per month
+- **CMO**: owns the content thesis, vocabulary, and 2-4 flywheel pieces per year
+- **Content lead**: owns the editorial calendar, briefs, and quality bar (in-house or fractional)
+- **2-3 contractors**: execute the cluster posts under the content lead
+- **Designers**: visualize for distinguished, quotable content
+- **Founder / executive contributors**: author 1-2 pieces per month
 
 Publishing cadence: 1-2 flywheel pieces per quarter, 2-4 cluster posts per week, distribution complete within 48 hours of publish.
 

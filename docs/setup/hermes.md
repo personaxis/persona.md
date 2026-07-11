@@ -1,12 +1,12 @@
 # Setting up PERSONA.md with Hermes (Nous Research)
 
 > **Live target.** Hermes is one of the four focus hosts (with Claude Code, Codex, and OpenClaw).
-> Hermes reads `SOUL.md` as the FIRST section of its system prompt — from `~/.hermes/SOUL.md` or a
+> Hermes reads `SOUL.md` as the FIRST section of its system prompt, from `~/.hermes/SOUL.md` or a
 > per-profile `SOUL.md`. `personaxis compile --platform hermes` generates it.
 
 Follow these steps exactly. Do not skip any step.
 
-## Step 1 — Create + fill in the spec
+## Step 1, Create + fill in the spec
 
 Same as the other hosts:
 
@@ -16,7 +16,7 @@ npx @personaxis/persona.md init          # choose "Project baseline"
 npx @personaxis/persona.md validate
 ```
 
-## Step 2 — Configure the model once
+## Step 2, Configure the model once
 
 ```bash
 personaxis config set --global local.endpoint <openai-compatible-url>
@@ -24,10 +24,10 @@ personaxis config set --global local.model    <model-name>
 personaxis config set --global local.apiKeyEnv <ENV_VAR_WITH_YOUR_KEY>
 ```
 
-The key is read from the named env var (or your deploy's secret manager in production) — never written
+The key is read from the named env var (or your deploy's secret manager in production), never written
 to a file. See the CLI's `docs/configuration.md`.
 
-## Step 3 — Compile to SOUL.md
+## Step 3, Compile to SOUL.md
 
 ```bash
 npx @personaxis/persona.md compile --root --platform hermes
@@ -37,7 +37,7 @@ This writes `.hermes/SOUL.md`. Point your Hermes profile at it, or copy it to `~
 (Hermes loads that as the agent identity; each Hermes **profile** can carry its own `SOUL.md`,
 `config.yaml`, and `.env`). Sub-personas compile to `.hermes/agents/<slug>/SOUL.md`.
 
-## Step 4 — Keep it alive (optional)
+## Step 4, Keep it alive (optional)
 
 To evolve the persona from each turn on **your own model**, run one governed tick per turn and let it
 recompile `SOUL.md` on drift:
@@ -54,6 +54,6 @@ per-host hook installers beyond Claude Code are on the roadmap.
 
 - SOUL.md is injected verbatim as identity; keep it focused. Re-run `compile --platform hermes` after
   any change to `.personaxis/personaxis.md`.
-- Hermes also supports MCP servers per profile — you can additionally expose the persona on-demand via
+- Hermes also supports MCP servers per profile, you can additionally expose the persona on-demand via
   `personaxis-mcp` (see the CLI's `docs/integrations/claude-code.md` for the tool list; the same server
   works for any MCP host).

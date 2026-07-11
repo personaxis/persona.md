@@ -75,10 +75,10 @@ npx @personaxis/persona.md hooks install --host codex          # project (.codex
 npx @personaxis/persona.md hooks install --host codex --global # user (~/.codex/hooks.json)
 ```
 
-This runs `personaxis observe --stdin` at the end of every turn — one governed tick on **your** model,
+This runs `personaxis observe --stdin` at the end of every turn, one governed tick on **your** model,
 recompiling on drift, with no Codex tokens spent. You can additionally keep the persona alive through:
 
-- **Subagent:** `.codex/agents/<slug>.toml` (Step 5) — Codex adopts the persona as a custom agent.
+- **Subagent:** `.codex/agents/<slug>.toml` (Step 5), Codex adopts the persona as a custom agent.
 - **On-demand tools:** register the `personaxis-mcp` MCP server, or run `personaxis serve` for an HTTP boundary, so Codex can read/adjust the persona and run a governed `observe` tick when it chooses to.
 
 Either way, configure the model once (endpoint, model, and the env var holding the key):

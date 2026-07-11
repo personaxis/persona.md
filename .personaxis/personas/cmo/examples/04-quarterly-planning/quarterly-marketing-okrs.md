@@ -22,7 +22,7 @@ Those are the operating numbers. The OKRs I would write to drive them:
 
 ---
 
-### Objective 1 — Make Continuous Compliance the category vocabulary buyers default to.
+### Objective 1, Make Continuous Compliance the category vocabulary buyers default to.
 
 **Why this is an O, not a KR:** Two quarters out, the demand engine compounds when the buyer says "continuous compliance" before we do. That requires a category-vocabulary investment with a 6-12 month payoff curve. If we win it, every channel gets cheaper. If we lose it, we are paying a premium on every click forever.
 
@@ -37,7 +37,7 @@ Those are the operating numbers. The OKRs I would write to drive them:
 
 ---
 
-### Objective 2 — Build a demand engine that sources $5.0M in qualified opportunity per quarter.
+### Objective 2, Build a demand engine that sources $5.0M in qualified opportunity per quarter.
 
 **Why this is an O:** This is the operational machine that converts the category investment into pipeline. The KRs are the throughput numbers sales needs to hit the $10M plan.
 
@@ -63,7 +63,7 @@ Those are the operating numbers. The OKRs I would write to drive them:
 
 ---
 
-### Objective 3 — Open the enterprise tier without compromising the mid-market motion.
+### Objective 3, Open the enterprise tier without compromising the mid-market motion.
 
 **Why this is an O:** Enterprise tier launches alongside Continuous Audit Trail in week 4 of Q3. The tier opens a new ACV band ($90K-180K) and a different buyer (CRO + VP Risk vs. Head of Compliance). Getting this wrong burns the launch and confuses the mid-market base.
 
@@ -78,7 +78,7 @@ Those are the operating numbers. The OKRs I would write to drive them:
 
 ---
 
-### Objective 4 — Hire and onboard the PMM lead.
+### Objective 4, Hire and onboard the PMM lead.
 
 **Why this is an O:** Marketing is at the team size where the CMO can no longer also run PMM. Without a dedicated PMM, launch quality degrades and sales enablement stops being maintained. This is a Q3 priority because the impact lands in Q4.
 
@@ -92,7 +92,7 @@ Those are the operating numbers. The OKRs I would write to drive them:
 
 ---
 
-## Budget for Q3 — what each line buys
+## Budget for Q3, what each line buys
 
 Total marketing spend for Q3: $1.45M
 
@@ -124,7 +124,7 @@ Total marketing spend for Q3: $1.45M
 
 **Risk: Enterprise-tier launch creates buyer confusion in mid-market.** Mitigation: KR3.3 guardrail; pricing-page and homepage tested with 8 current customers before launch; sales certification before launch day.
 
-**Risk: Category vocabulary is not landing yet — KR1.1 (aided recall) misses badly.** Mitigation: KR is at confidence 5 because it is genuinely uncertain; even partial movement (28%) is acceptable and would not invalidate the strategy.
+**Risk: Category vocabulary is not landing yet, KR1.1 (aided recall) misses badly.** Mitigation: KR is at confidence 5 because it is genuinely uncertain; even partial movement (28%) is acceptable and would not invalidate the strategy.
 
 **Risk: Sales-marketing alignment on lead handoff degrades.** Mitigation: weekly pipeline review with CRO already in place; SLA on hand-off response time tracked.
 

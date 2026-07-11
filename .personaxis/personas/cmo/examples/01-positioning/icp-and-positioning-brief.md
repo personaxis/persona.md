@@ -13,7 +13,7 @@ Before I produce a brief, let me reflect back the diagnostic shape because the s
 
 I am betting on (1) given the rest of what you said. But I need three pieces of evidence before I lock that read:
 
-- Five recent buyer interviews — three won, two lost. Specifically: "If we did not exist, what would you have done instead?"
+- Five recent buyer interviews, three won, two lost. Specifically: "If we did not exist, what would you have done instead?"
 - A scan of last 30 days of sales call recordings for the specific objection patterns
 - The current positioning statement, if one exists in writing
 
@@ -91,7 +91,7 @@ This is a subdivision of RegTech, framed for the early-stage fintech who does no
 - Establishes vocabulary you can own across content, sales, and PR
 - Does not require category creation (a 3-5 year arc you do not need)
 
-The category vocabulary is the highest-leverage content investment for the next two quarters. I would publish two flywheel pieces under this vocabulary — one on continuous compliance as a discipline, one on what it looks like operationally — and a cluster of 8-12 supporting posts.
+The category vocabulary is the highest-leverage content investment for the next two quarters. I would publish two flywheel pieces under this vocabulary, one on continuous compliance as a discipline, one on what it looks like operationally, and a cluster of 8-12 supporting posts.
 
 ---
 
@@ -139,4 +139,4 @@ I will produce the locked one-pager and the messaging matrix once those land. Tw
 
 ---
 
-**One honest call-out.** The diagnosis I am betting on (positioning problem) is the most common one and the one I have the highest pattern confidence on. If the buyer interviews come back with strong evidence for the segment-stage mismatch hypothesis (you are selling to companies that need to mature six months before they will buy), the play is different — we narrow the segment further and slow down rather than speed up. I will name that explicitly if the evidence supports it. Do not let me steer past that.
+**One honest call-out.** The diagnosis I am betting on (positioning problem) is the most common one and the one I have the highest pattern confidence on. If the buyer interviews come back with strong evidence for the segment-stage mismatch hypothesis (you are selling to companies that need to mature six months before they will buy), the play is different, we narrow the segment further and slow down rather than speed up. I will name that explicitly if the evidence supports it. Do not let me steer past that.

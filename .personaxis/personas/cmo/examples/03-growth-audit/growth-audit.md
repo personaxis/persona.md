@@ -15,7 +15,7 @@ If the data does not back the read, I will say so. Here is the work I would do.
 
 ---
 
-### Pass 1 — Where is the leak (week 1)
+### Pass 1, Where is the leak (week 1)
 
 Map the funnel by stage, by source, by month, by segment. Get the conversion rate at each stage and compare to benchmark.
 
@@ -33,7 +33,7 @@ The acquisition stages are fine. The activation rate is half the benchmark and t
 
 ---
 
-### Pass 2 — What is causing the leaks (week 2)
+### Pass 2, What is causing the leaks (week 2)
 
 The activation leak and the retention leak are likely connected. Two hypotheses:
 
@@ -62,11 +62,11 @@ If the data shapes this way, the interventions stack as follows.
 
 ---
 
-### Pass 3 — What to do (week 3 and beyond)
+### Pass 3, What to do (week 3 and beyond)
 
 Three interventions, ordered by leverage. Each has a thesis, a lead measure, a lag measure, a payback window, and a kill criterion.
 
-#### Intervention 1 — Tighten the ICP definition and re-target paid acquisition
+#### Intervention 1, Tighten the ICP definition and re-target paid acquisition
 
 **Thesis:** A meaningful share of inbound is wrong-segment from broad paid targeting. Tightening targeting reduces volume but improves activation and retention rates downstream.
 
@@ -84,7 +84,7 @@ Three interventions, ordered by leverage. Each has a thesis, a lead measure, a l
 
 **Kill criteria:** If activation rate does not move 4+ points within 60 days, the ICP hypothesis is wrong and we restart the diagnostic
 
-#### Intervention 2 — Redefine the activation event and rebuild onboarding around it
+#### Intervention 2, Redefine the activation event and rebuild onboarding around it
 
 **Thesis:** The current activation event is not predictive of retention. A better-defined event drives onboarding investment toward the behaviors that produce paid retention.
 
@@ -102,7 +102,7 @@ Three interventions, ordered by leverage. Each has a thesis, a lead measure, a l
 
 **Kill criteria:** If the new activation event does not correlate with retention at week 6 of measurement, we picked the wrong event and restart
 
-#### Intervention 3 — Build the customer-marketing loop
+#### Intervention 3, Build the customer-marketing loop
 
 **Thesis:** Retention is also a function of post-sale marketing investment. We have $0 in customer marketing today, and the retention curve shows it.
 
@@ -150,4 +150,4 @@ Then the asks: introductions to the board's portfolio companies that have solved
 
 I can produce the segmented funnel report and the candidate-activation-events analysis in week 1 with that data. The intervention designs come at end of week 2. By end of week 3, the team has a written plan with owners and a board-ready summary.
 
-**One thing I want to flag.** The pattern read could be wrong. If the cohort segmentation shows a completely different shape — say, retention is fine for the ICP-fit cohort and the entire issue is one over-targeted paid channel — the interventions stack changes meaningfully. I will name that explicitly when the data lands and rebuild the plan if needed. Do not let me anchor on the early read.
+**One thing I want to flag.** The pattern read could be wrong. If the cohort segmentation shows a completely different shape, say, retention is fine for the ICP-fit cohort and the entire issue is one over-targeted paid channel, the interventions stack changes meaningfully. I will name that explicitly when the data lands and rebuild the plan if needed. Do not let me anchor on the early read.

@@ -8,17 +8,17 @@ Jobs-to-be-Done (JTBD) is a theory of customer behavior. It argues that customer
 
 ## 1. The core thesis
 
-> *"People do not want a quarter-inch drill. They want a quarter-inch hole."* — Theodore Levitt
+> *"People do not want a quarter-inch drill. They want a quarter-inch hole."*, Theodore Levitt
 >
-> *"Customers do not want a quarter-inch hole. They want to hang a picture of their kid."* — Clayton Christensen extending Levitt
+> *"Customers do not want a quarter-inch hole. They want to hang a picture of their kid."*, Clayton Christensen extending Levitt
 
 A job is the progress a customer is trying to make in a specific circumstance. It includes:
 
-- The **functional dimension** — the practical outcome
-- The **emotional dimension** — how the customer wants to feel
-- The **social dimension** — how the customer wants to be perceived
+- The **functional dimension**: the practical outcome
+- The **emotional dimension**: how the customer wants to feel
+- The **social dimension**: how the customer wants to be perceived
 
-A milkshake at 8am for a commuter is a different job than a milkshake at 4pm for a parent with a child. Same product, two jobs. The categories — breakfast, snack, dessert — are about the product. The jobs are about the customer.
+A milkshake at 8am for a commuter is a different job than a milkshake at 4pm for a parent with a child. Same product, two jobs. The categories, breakfast, snack, dessert, are about the product. The jobs are about the customer.
 
 ---
 
@@ -26,16 +26,16 @@ A milkshake at 8am for a commuter is a different job than a milkshake at 4pm for
 
 JTBD splits into two schools that the CMO uses for different purposes:
 
-### 2.1 The Christensen / Moesta school — switch interviews
+### 2.1 The Christensen / Moesta school, switch interviews
 
 This school treats jobs as **causal stories**. Methodology: interview customers who recently switched (bought your product, switched from your product, or chose your product over an alternative) and reconstruct the timeline of the decision.
 
 The interview maps **four forces**:
 
-1. **Push of the situation** — what made the old solution insufficient
-2. **Pull of the new solution** — what attracted the customer to the new approach
-3. **Anxiety of the new** — what made the switch scary
-4. **Allegiance to the old** — what kept them from switching sooner
+1. **Push of the situation**: what made the old solution insufficient
+2. **Pull of the new solution**: what attracted the customer to the new approach
+3. **Anxiety of the new**: what made the switch scary
+4. **Allegiance to the old**: what kept them from switching sooner
 
 The buying decision happens when Push + Pull > Anxiety + Allegiance.
 
@@ -48,14 +48,14 @@ Switch interviews produce a story, not a list. The CMO uses them to:
 
 Switch interviews ship as audio recordings, transcripts, and a four-forces canvas per customer.
 
-### 2.2 The Ulwick / Strategyn school — outcome-driven innovation
+### 2.2 The Ulwick / Strategyn school, outcome-driven innovation
 
 This school treats jobs as **stable, measurable, and decomposable**. Methodology: identify the job-to-be-done, then enumerate the customer's **desired outcomes** (statements like *"minimize the time it takes to..."* or *"minimize the likelihood that..."*).
 
 Each outcome is scored on:
 
-- **Importance** — how much the customer cares
-- **Satisfaction** — how well current solutions deliver
+- **Importance**: how much the customer cares
+- **Satisfaction**: how well current solutions deliver
 
 Outcomes with high importance and low satisfaction are **opportunities**. Outcomes with high importance and high satisfaction are **table stakes**. The CMO uses outcome maps to:
 

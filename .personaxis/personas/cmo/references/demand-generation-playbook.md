@@ -8,7 +8,7 @@ Demand generation is the function that turns positioning, brand, and product int
 
 ## 1. The 95-5 rule
 
-At any given moment, ~95% of B2B category buyers are not in-market. They are not searching. They are not comparing. They will be in-market on a future trigger — a new hire, a contract renewal, a missed audit, a strategic priority shift.
+At any given moment, ~95% of B2B category buyers are not in-market. They are not searching. They are not comparing. They will be in-market on a future trigger, a new hire, a contract renewal, a missed audit, a strategic priority shift.
 
 This produces two distinct marketing jobs:
 
@@ -21,7 +21,7 @@ A demand engine that only does capture wins the share of a fixed in-market pool 
 
 ---
 
-## 2. The Chris Walker reframe — dark social and intent
+## 2. The Chris Walker reframe, dark social and intent
 
 Chris Walker's argument: B2B buyers do their research in places marketing cannot measure (Slack DMs, peer conversations, podcasts, LinkedIn feed, executive newsletters). They arrive at the website "ready to buy," and the form fill is credited to the last-click channel.
 
@@ -36,34 +36,34 @@ The CMO commits to investing in demand creation despite imperfect attribution. R
 
 ---
 
-## 3. The demand engine — five layers
+## 3. The demand engine, five layers
 
 The CMO builds the demand engine in layers, each with distinct mechanics:
 
-### Layer 1 — Foundation (always-on)
+### Layer 1, Foundation (always-on)
 - Website and pricing page that ship the positioning
 - Owned content (blog, podcast, newsletter) that ships the category narrative
 - SEO presence on the top 20 buyer-intent queries
 - Branded search and direct traffic baseline
 
-### Layer 2 — Reach (brand-building)
+### Layer 2, Reach (brand-building)
 - Content distribution to the 95% via the channels they actually consume
 - Thought leadership from the CEO, CMO, and key operators
 - Sponsored content where the ICP gathers (podcasts, newsletters, communities)
 - Earned media (PR, analyst coverage, customer-led)
 
-### Layer 3 — Intent (capture)
+### Layer 3, Intent (capture)
 - Paid search on commercial-intent queries
 - Comparison-site presence (G2, Capterra)
 - Retargeting against engaged accounts
 - Sales-development outreach to in-market accounts
 
-### Layer 4 — Account (ABM for high-ACV)
+### Layer 4, Account (ABM for high-ACV)
 - Target account list of ~150 named accounts per AE
 - Coordinated outbound + paid + content + events against the list
 - 1:1 personalization for the top 25-50
 
-### Layer 5 — Lifecycle (post-conversion)
+### Layer 5, Lifecycle (post-conversion)
 - Onboarding sequences that drive activation
 - Expansion sequences that drive upsell
 - Renewal sequences that drive retention
@@ -81,10 +81,10 @@ For B2B with ACV > $25K, Account-Based Marketing (ABM) is the dominant demand di
 
 Vajre's *ABM is B2B*: **Target, Engage, Activate, Measure.**
 
-- **Target** — define the named-accounts list with sales. Tier 1 (1:1, ~50 accounts), Tier 2 (1:few, ~200), Tier 3 (1:many, ~1000).
-- **Engage** — multi-channel coordinated touches: paid (display, LinkedIn, programmatic), content (custom landing pages, gated assets), outbound (sequenced email + LinkedIn), events (executive dinners, intimate roundtables).
-- **Activate** — sales-and-marketing alignment on entry triggers, hand-off SLAs, and intent thresholds.
-- **Measure** — pipeline contribution by account-tier, engagement-to-pipeline conversion, deal velocity by account-status.
+- **Target**: define the named-accounts list with sales. Tier 1 (1:1, ~50 accounts), Tier 2 (1:few, ~200), Tier 3 (1:many, ~1000).
+- **Engage**: multi-channel coordinated touches: paid (display, LinkedIn, programmatic), content (custom landing pages, gated assets), outbound (sequenced email + LinkedIn), events (executive dinners, intimate roundtables).
+- **Activate**: sales-and-marketing alignment on entry triggers, hand-off SLAs, and intent thresholds.
+- **Measure**: pipeline contribution by account-tier, engagement-to-pipeline conversion, deal velocity by account-status.
 
 ### 4.2 The shared scorecard
 
