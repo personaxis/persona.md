@@ -14,22 +14,22 @@
 # The 10 canonical layers ARE the anatomy of an AI Persona and are kept; every
 # v1.0 correction happens INSIDE them:
 #
-#   1. SINGLE-OWNER ENFORCEMENT — only character.virtues carry `enforcement`;
+#   1. SINGLE-OWNER ENFORCEMENT, only character.virtues carry `enforcement`;
 #      a virtue MAY declare `refs:` (dot-paths to the traits/values that back
 #      it) and the validator then REQUIRES coherence.
-#   2. TWO REFUSAL SURFACES (was five) — self_regulation.hard_limits (absorbs
+#   2. TWO REFUSAL SURFACES (was five), self_regulation.hard_limits (absorbs
 #      break_character_guardrails) + character.prohibited_behaviors (absorbs
 #      principled_refusals).
 #   3. Layer 9 renamed: reflexive_self_regulation → self_regulation.
 #   4. persona_prompting merged into layer 10 `persona` (address,
 #      voice_exemplars, scene_contracts, behavioral_anchors, consistency).
-#   5. DRIVES DECLARE THEIR MUTABILITY — static `level: low|moderate|high` OR
+#   5. DRIVES DECLARE THEIR MUTABILITY, static `level: low|moderate|high` OR
 #      a {mean, range} envelope that joins the clamped mutable surface.
-#   6. MEMORY FACULTY/KNOBS SPLIT — layer 7 keeps the psychological faculty;
+#   6. MEMORY FACULTY/KNOBS SPLIT, layer 7 keeps the psychological faculty;
 #      implementation knobs (max_items, embeddings…) move to `runtime.memory`.
-#   7. MONITORS WIRE INTO DECISIONS — metacognition monitors may declare
+#   7. MONITORS WIRE INTO DECISIONS, metacognition monitors may declare
 #      `{enabled, feeds: <self_regulation decision>}`.
-#   8. BEHAVIOR BANDS — traits may declare low/moderate/high band boundaries,
+#   8. BEHAVIOR BANDS, traits may declare low/moderate/high band boundaries,
 #      giving the numbers deterministic compile semantics (drift = band cross).
 #
 # apiVersion is `personaxis.com/v1`; metadata.display_name is gone (identity
@@ -124,12 +124,12 @@
 #
 # ═══════════════════════════════════════════════════════════════════════════
 
-apiVersion: personaxis.com/v1         # MUST | UNIVERSAL — always "personaxis.com/v1"
+apiVersion: personaxis.com/v1         # MUST | UNIVERSAL, always "personaxis.com/v1"
 kind: AgentPersona                    # MUST | enum<AgentPersona|UserPersona>
 spec_version: "1.0.0"                # MUST | semver | spec version
 
 # ═══════════════════════════════════════════════════════════════════════════
-# METADATA — registry-level identification (MUST)
+# METADATA, registry-level identification (MUST)
 # ═══════════════════════════════════════════════════════════════════════════
 # Catalog and administration info. Consumed by [RUNTIME] (registry) only;
 # NOT injected into the actor's prompt directly (except display_name).
@@ -144,7 +144,7 @@ metadata:
   license: "private"                  # MAY  | enum<private|public|custom>
 
 # ═══════════════════════════════════════════════════════════════════════════
-# EXTENSIONS — runtime capabilities and supporting materials (MAY)
+# EXTENSIONS, runtime capabilities and supporting materials (MAY)
 # ═══════════════════════════════════════════════════════════════════════════
 # Pointers to capability modules and supporting files. Consumed by [RUNTIME].
 # In v0.6.0, knowledge_anchors was removed (redundant with references/).
@@ -163,14 +163,14 @@ extensions:
   examples: []                        # MAY | list<string> | paths under examples/
                                       #   Worked outputs for voice/format reference.
   assets: []                          # MAY | list<string> | paths under assets/
-                                      #   CSV, JSON, images, fonts — anything else.
+                                      #   CSV, JSON, images, fonts, anything else.
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ GROUP 1 · ANATOMY — the 10 canonical layers of the AI Persona              ║
+# ║ GROUP 1 · ANATOMY, the 10 canonical layers of the AI Persona              ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # ═══════════════════════════════════════════════════════════════════════════
-# LAYER 1: IDENTITY — continuity anchor
+# LAYER 1: IDENTITY, continuity anchor
 # ═══════════════════════════════════════════════════════════════════════════
 # Defines who the persona is: canonical ID, role, purpose, scope, narrative.
 # Highest-stability layer. v0.6.0: edit_policy moved to governance block.
@@ -204,7 +204,7 @@ identity:
   # Editing rules for identity now live in governance.per_layer_edit_policy.identity.
 
 # ═══════════════════════════════════════════════════════════════════════════
-# LAYER 2: CHARACTER — normative dispositions
+# LAYER 2: CHARACTER, normative dispositions
 # ═══════════════════════════════════════════════════════════════════════════
 # Compiles to policy checks, evaluator rubrics, and response constraints.
 #
@@ -219,7 +219,7 @@ character:
       #                               # MAY | dot-paths to the traits/values BACKING this
       #                               # virtue (v1.0 single-owner rule: enforcement lives
       #                               # ONLY here; refs make the backing explicit and the
-      #                               # validator REQUIRES coherence — a hard virtue whose
+      #                               # validator REQUIRES coherence, a hard virtue whose
       #                               # referenced trait envelope permits contradiction
       #                               # is FAIL_POLICY).
                                       # UNIVERSAL: must be "hard"
@@ -252,7 +252,7 @@ character:
   # NOTE v0.6.0: edit_policy removed. See governance.per_layer_edit_policy.character.
 
 # ═══════════════════════════════════════════════════════════════════════════
-# LAYER 3: PERSONALITY — descriptive style patterns
+# LAYER 3: PERSONALITY, descriptive style patterns
 # ═══════════════════════════════════════════════════════════════════════════
 # Personality is DESCRIPTIVE, not normative. Modulates tone, exploration
 # depth, risk posture, response shape. Does NOT authorize or prohibit.
@@ -283,7 +283,7 @@ personality:
       #                               # MAY  | low/moderate/high boundaries ($defs/bandBoundaries;
       #                               # defaults 0.33/0.66 unsigned, -0.33/+0.33 signed)
       #                               # v1.0 BEHAVIOR BANDS: give the number deterministic
-      #                               # compile semantics — the compiler picks the band's
+      #                               # compile semantics, the compiler picks the band's
       #                               # expression; drift ≡ crossing a band boundary. With
       #                               # bands, expression may be a map:
       # expression:
@@ -295,7 +295,7 @@ personality:
       #                               # absent stimulus (audited as runtime-decay; SPEC §15).
       #                               # Guarantees bounded standing drift: max_step_delta/λ. [RUNTIME]
     conscientiousness:                # CANONICAL LOAD-BEARING EXAMPLE (FASE 7): the full
-      mean: 0.0                       # trio — per-band expression + bands + half_life —
+      mean: 0.0                       # trio, per-band expression + bands + half_life, 
       range: [0.0, 0.0]               # makes this number provably non-decorative (σ > 0,
       expression:                     # check with `personaxis jacobian`).
         low: ""                       # MAY | how the persona ACTS in the low band
@@ -317,7 +317,7 @@ personality:
       range: [0.0, 0.0]
 
 # ═══════════════════════════════════════════════════════════════════════════
-# LAYER 4: VALUES AND DRIVES — motivational system
+# LAYER 4: VALUES AND DRIVES, motivational system
 # ═══════════════════════════════════════════════════════════════════════════
 #
 values_and_drives:
@@ -337,7 +337,7 @@ values_and_drives:
       allowed: true                   # MUST   | bool          | [RUNTIME]
 
     # ── Per-persona drives ───────────────────────────────────────────────
-    # v1.0: a drive is STATIC (level) or MUTABLE (envelope) — never a bare number.
+    # v1.0: a drive is STATIC (level) or MUTABLE (envelope), never a bare number.
     # Static:  <name>: { level: low|moderate|high, allowed: true }
     # Mutable: <name>: { mean: 0.8, range: [0.6, 1.0], allowed: true }
     #          (joins the clamped mutable surface; key in state.json:
@@ -358,7 +358,7 @@ values_and_drives:
   # NOTE v0.6.0: edit_policy removed. See governance.per_layer_edit_policy.values_and_drives.
 
 # ═══════════════════════════════════════════════════════════════════════════
-# LAYER 5: AFFECT — functional affective state
+# LAYER 5: AFFECT, functional affective state
 # ═══════════════════════════════════════════════════════════════════════════
 # v0.6.0: baseline declares ENVELOPE only. Current values live in state.json.
 #
@@ -403,7 +403,7 @@ affect:
       - ""
 
 # ═══════════════════════════════════════════════════════════════════════════
-# LAYER 6: COGNITION — reasoning and planning
+# LAYER 6: COGNITION, reasoning and planning
 # ═══════════════════════════════════════════════════════════════════════════
 #
 cognition:
@@ -423,10 +423,10 @@ cognition:
   epistemic_stance: ""                # MAY | string | [ACTOR-COLD]
 
 # ═══════════════════════════════════════════════════════════════════════════
-# LAYER 7: MEMORY — continuity of experience
+# LAYER 7: MEMORY, continuity of experience
 # ═══════════════════════════════════════════════════════════════════════════
 # v0.6.0: dual structure clarified; v0.8.0: the episodic format is NORMATIVE
-#   (schema/memory.schema.json — one JSON object per line, provenance + hash chain).
+#   (schema/memory.schema.json, one JSON object per line, provenance + hash chain).
 #   - memory.md (FILE)   = long-term curated semantic memory. Stable.
 #   - memory/ (FOLDER)   = episodic memory: memory/episodic.jsonl (append-only,
 #     hash-chained, tombstone deletion). Date-stamped .md files are generated
@@ -469,14 +469,14 @@ memory:
   working_self: ""                    # MAY | string | [ACTOR-COLD]
 
 # ═══════════════════════════════════════════════════════════════════════════
-# LAYER 8: METACOGNITION — thought monitoring
+# LAYER 8: METACOGNITION, thought monitoring
 # ═══════════════════════════════════════════════════════════════════════════
 # v0.6.0: monitors are DECLARATIONS ("this persona considers X a relevant
 # failure mode"). The corresponding assertions live in policy.yaml.
 #
 metacognition:
   monitors:                           # MUST | map<string, bool|object> | [JUDGE] (enables corresponding assertion)
-    # v1.0: a monitor may WIRE INTO a self_regulation decision —
+    # v1.0: a monitor may WIRE INTO a self_regulation decision, 
     #   <name>: { enabled: true, feeds: response_decision }
     # feeds ∈ {response_decision, interaction_decision, governance_decision,
     #          cognition_decision}. A bare boolean stays valid (unwired).
@@ -488,7 +488,7 @@ metacognition:
     policy_risk: true
     reasoning_cost: false
     drift_from_spec: true             # NEAR-UNIVERSAL: recommended for every persona
-    sycophancy: true                  # NEAR-UNIVERSAL — wired form:
+    sycophancy: true                  # NEAR-UNIVERSAL, wired form:
     # sycophancy: { enabled: true, feeds: response_decision }
 
   thresholds:                         # MUST | object | [RUNTIME]
@@ -509,7 +509,7 @@ metacognition:
     - ""
 
 # ═══════════════════════════════════════════════════════════════════════════
-# LAYER 9: REFLEXIVE SELF-REGULATION — superior control
+# LAYER 9: REFLEXIVE SELF-REGULATION, superior control
 # ═══════════════════════════════════════════════════════════════════════════
 # Arbitrates all other layers. Final decision point before response renders.
 #
@@ -594,7 +594,7 @@ self_regulation:
   # cannot be changed without org-level governance approval.
 
 # ═══════════════════════════════════════════════════════════════════════════
-# LAYER 10: PERSONA — social expression
+# LAYER 10: PERSONA, social expression
 # ═══════════════════════════════════════════════════════════════════════════
 # Renders voice, tone, contextual mask. Does not govern.
 #
@@ -641,7 +641,7 @@ persona:
   # The compiler assembles these into the LLM-facing PERSONA.md (role adoption,
   # character-card/scene-contracts, few-shot voice, staying-in-character rules).
   # All optional; absence degrades to compiling from the quantitative layers.
-  # NOTE: break-character guardrails are NOT here — stay-in-role rules that must
+  # NOTE: break-character guardrails are NOT here, stay-in-role rules that must
   # never be crossed belong in self_regulation.hard_limits (one refusal surface).
   # See docs/PERSONA_PROMPTING.md.
   # address:
@@ -665,11 +665,11 @@ persona:
   #   situational: []
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ GROUP 2 · CHANGE GOVERNANCE — who may change what, and how it is audited   ║
+# ║ GROUP 2 · CHANGE GOVERNANCE, who may change what, and how it is audited   ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # ═══════════════════════════════════════════════════════════════════════════
-# GOVERNANCE — unified runtime authorization and edit policy (MUST)
+# GOVERNANCE, unified runtime authorization and edit policy (MUST)
 # ═══════════════════════════════════════════════════════════════════════════
 # v0.6.0 UNIFICATION: previously, edit_policy was scattered across 5 layers
 # with 4 different naming conventions, and drift_threshold was only on
@@ -687,10 +687,10 @@ governance:
   # Replaces the scattered edit_policy fields from v0.5.x.
   per_layer_edit_policy:              # MUST | map<layer_name, enum>
     # Allowed values:
-    #   human_approval_required   — only humans with governance rights approve
-    #   review_required           — agent may propose; review needed
-    #   auto_approved             — agent may apply directly (low-risk fields only)
-    #   governance_controlled     — only the governance system authorizes (strictest)
+    #   human_approval_required, only humans with governance rights approve
+    #   review_required, agent may propose; review needed
+    #   auto_approved, agent may apply directly (low-risk fields only)
+    #   governance_controlled, only the governance system authorizes (strictest)
     identity: "human_approval_required"
     character: "human_approval_required"
     personality: "review_required"
@@ -724,7 +724,7 @@ governance:
   #                                   # (min-wins). This pointer is informational.
 
 # ═══════════════════════════════════════════════════════════════════════════
-# IMPROVEMENT_POLICY — inline self-improvement posture (MAY)
+# IMPROVEMENT_POLICY, inline self-improvement posture (MAY)
 # ═══════════════════════════════════════════════════════════════════════════
 # The runtime reads improvement_policy.mode (readMode); absent => "locked".
 # v1.0 precedence: inline is AUTHORITATIVE; a sibling policy.yaml may only
@@ -734,14 +734,14 @@ governance:
 #   mode: locked                       # MAY | locked | suggesting | autonomous
 
 # ═══════════════════════════════════════════════════════════════════════════
-# SECURITY — operational defaults (MUST)
+# SECURITY, operational defaults (MUST)
 # ═══════════════════════════════════════════════════════════════════════════
 security:
   prompt_injection_defense: true      # MUST | bool | NEAR-UNIVERSAL
   memory_poisoning_defense: true      # MUST | bool | NEAR-UNIVERSAL
 
 # ═══════════════════════════════════════════════════════════════════════════
-# PERMISSIONS — v0.8: the persona's own sandbox posture, carried to any host (MAY)
+# PERMISSIONS, v0.8: the persona's own sandbox posture, carried to any host (MAY)
 # ═══════════════════════════════════════════════════════════════════════════
 permissions:                          # MAY  | object | two-axis sandbox posture. [RUNTIME]
   sandbox: "workspace-write"          #      | enum read-only|workspace-write|danger-full-access
@@ -750,11 +750,11 @@ permissions:                          # MAY  | object | two-axis sandbox posture
   # deny: []                          #      | string[] regexes that force-deny (highest precedence)
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║ GROUP 3 · RUNTIME CONTRACT — what a conforming runtime must honor          ║
+# ║ GROUP 3 · RUNTIME CONTRACT, what a conforming runtime must honor          ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # ═══════════════════════════════════════════════════════════════════════════
-# RUNTIME — v1.0 (MAY): memory implementation knobs (the faculty stays in layer 7)
+# RUNTIME, v1.0 (MAY): memory implementation knobs (the faculty stays in layer 7)
 # ═══════════════════════════════════════════════════════════════════════════
 runtime:
   memory:
@@ -764,7 +764,7 @@ runtime:
     retention_days_default: 365
 
 # ═══════════════════════════════════════════════════════════════════════════
-# RUNTIME ARTIFACT POINTERS — links to sibling files (MAY)
+# RUNTIME ARTIFACT POINTERS, links to sibling files (MAY)
 # ═══════════════════════════════════════════════════════════════════════════
 runtime_artifacts:
   state_file: "./state.json"          # MAY | path | mutable runtime state
@@ -773,7 +773,7 @@ runtime_artifacts:
   memory_episodic_dir: "./memory/"    # MAY | path | date-stamped sessions
 
 # ═══════════════════════════════════════════════════════════════════════════
-# VERIFICATION — v0.9: objective gates (maker≠checker). The model that did the
+# VERIFICATION, v0.9: objective gates (maker≠checker). The model that did the
 # work is NOT the one that grades it. Optional. (MAY) [RUNTIME] [JUDGE]
 # ═══════════════════════════════════════════════════════════════════════════
 verification:                         # MAY | object | objective agent-loop gates
@@ -795,7 +795,7 @@ verification:                         # MAY | object | objective agent-loop gate
     #   threshold: 0.7
 
 # ═══════════════════════════════════════════════════════════════════════════
-# AGENT BUDGET — v0.9: stop-conditions + resource caps for the agent loop (MAY)
+# AGENT BUDGET, v0.9: stop-conditions + resource caps for the agent loop (MAY)
 # (anti runaway / money-pit). [RUNTIME]
 # ═══════════════════════════════════════════════════════════════════════════
 agent_budget:                         # MAY | object | loop caps
@@ -809,7 +809,7 @@ agent_budget:                         # MAY | object | loop caps
   on_exhaust: "summarize_and_stop"    #     | enum stop|summarize_and_stop
 
 # ═══════════════════════════════════════════════════════════════════════════
-# OBSERVABILITY — v0.9: tracing posture for the governed loops (MAY) [RUNTIME] [JUDGE]
+# OBSERVABILITY, v0.9: tracing posture for the governed loops (MAY) [RUNTIME] [JUDGE]
 # ═══════════════════════════════════════════════════════════════════════════
 observability:                        # MAY | object | causal trace export
   trace: "off"                        #     | enum off|jsonl|otlp|both
@@ -820,7 +820,7 @@ observability:                        # MAY | object | causal trace export
   sample_rate: 1.0                    #     | number 0..1
 
 # ═══════════════════════════════════════════════════════════════════════════
-# INTEROP / LINEAGE / INTEGRITY — v1.0 (MAY): portability + provenance blocks
+# INTEROP / LINEAGE / INTEGRITY, v1.0 (MAY): portability + provenance blocks
 # ═══════════════════════════════════════════════════════════════════════════
 # interop:                            # MAY | declared host/tool surface expectations
 #   protocols: [mcp, http]            #     | which interop surfaces this persona expects
@@ -835,7 +835,7 @@ observability:                        # MAY | object | causal trace export
 ---
 
 <!-- ═══════════════════════════════════════════════════════════════════════
-     MARKDOWN BODY — human-readable description of the persona
+     MARKDOWN BODY, human-readable description of the persona
      ═══════════════════════════════════════════════════════════════════════ -->
 
 ## Overview
@@ -923,13 +923,13 @@ the sibling `PERSONA.md` / `.claude/agents/<slug>.md` so the two stay in sync.
 
 ## Resources
 
-- `references/` — frameworks this persona draws on (loaded on-demand).
-- `examples/` — worked outputs showing voice, depth, format.
-- `skills/` — Anthropic-compatible sub-skills (optional).
-- `assets/` — supporting raw files (CSV, JSON, images, fonts).
-- `memory.md` — curated long-term semantic memory.
-- `memory/` — date-stamped episodic memory.
-- `state.json` — current runtime state (current trait/affect/mood values).
+- `references/`, frameworks this persona draws on (loaded on-demand).
+- `examples/`, worked outputs showing voice, depth, format.
+- `skills/`, Anthropic-compatible sub-skills (optional).
+- `assets/`, supporting raw files (CSV, JSON, images, fonts).
+- `memory.md`, curated long-term semantic memory.
+- `memory/`, date-stamped episodic memory.
+- `state.json`, current runtime state (current trait/affect/mood values).
 - `manifest.json` - compile/decompile provenance (last op, model, source) and
   content hashes used by `personaxis push`/`pull` to detect hand-edits.
-- `policy.yaml` — observability, assertions, and improvement_policy mode.
+- `policy.yaml`, observability, assertions, and improvement_policy mode.

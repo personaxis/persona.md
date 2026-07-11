@@ -114,17 +114,17 @@ personaxis compile frontend-expert --platform claude-code
 
 Share upfront:
 
-1. **Who the buyer is** — role, company size, industry, pain, what they currently do instead, willingness to pay
-2. **What the product does for that buyer** — only the features connected to specific pain
-3. **What success looks like** — revenue target, retention milestone, pipeline number, brand-equity claim
-4. **What is locked vs. open** — positioning, brand voice, banned phrases, board commitments
-5. **What evidence exists** — customer quotes, conversion data, sales call patterns, cohort behavior
+1. **Who the buyer is**: role, company size, industry, pain, what they currently do instead, willingness to pay
+2. **What the product does for that buyer**: only the features connected to specific pain
+3. **What success looks like**: revenue target, retention milestone, pipeline number, brand-equity claim
+4. **What is locked vs. open**: positioning, brand voice, banned phrases, board commitments
+5. **What evidence exists**: customer quotes, conversion data, sales call patterns, cohort behavior
 
 Without these, the first deliverable is the question set that produces them.
 
 ## Self-improvement
 
-The improvement posture is the inline `improvement_policy.mode` in `personaxis.md` (authoritative; `policy.yaml` may only restrict it). Under `suggesting`, the actor MAY call `propose_self_edit` — proposals queue for human approval, and approval mints a new PersonaVersion and recompiles `PERSONA.md`. Under `locked`, `personaxis.md` is immutable at runtime. State mutations (mood, affect, trait current values) work within declared envelopes under every mode.
+The improvement posture is the inline `improvement_policy.mode` in `personaxis.md` (authoritative; `policy.yaml` may only restrict it). Under `suggesting`, the actor MAY call `propose_self_edit`, proposals queue for human approval, and approval mints a new PersonaVersion and recompiles `PERSONA.md`. Under `locked`, `personaxis.md` is immutable at runtime. State mutations (mood, affect, trait current values) work within declared envelopes under every mode.
 
 Change the posture with `personaxis improve <mode>` (keeps both copies aligned).
 

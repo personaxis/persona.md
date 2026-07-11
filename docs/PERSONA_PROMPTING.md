@@ -1,4 +1,4 @@
-# Persona Prompting — the methodology behind `PERSONA.md`
+# Persona Prompting, the methodology behind `PERSONA.md`
 
 > Why the spec is shaped the way it is, and the research it draws on.
 
@@ -6,7 +6,7 @@ The personaxis spec exists to make one thing reliable: getting a language model 
 and stay in** a precisely defined persona, and to let that persona **evolve under
 governance** instead of drifting at random. The quantitative spec
 (`.personaxis/personaxis.md`) is the *source of truth*; the compiled **`PERSONA.md`** is
-the *LLM-facing artifact* — the document a host agent reads ahead of every turn. `PERSONA.md`
+the *LLM-facing artifact*, the document a host agent reads ahead of every turn. `PERSONA.md`
 is therefore not a profile or a data dump. It is a **persona-prompting artifact**, engineered
 from the techniques below.
 
@@ -24,9 +24,9 @@ persona in the third person ("This persona is…"). This is **role prompting / r
 the most load-bearing device we use, and the reason every section of `PERSONA.md` is written
 as **"You are…", "You always…", "You think…"**.
 
-- Role prompting overview and guidance: [Learn Prompting — Role Prompting](https://learnprompting.org/docs/advanced/zero_shot/role_prompting), [WaterCrawl — Role Prompting](https://watercrawl.dev/blog/Role-Prompting).
-- A 47-paper review identifies two primary dimensions of persona prompts — **role adoption**
-  and **demographic priming** — and shows wide variation in how prompts are constructed, which
+- Role prompting overview and guidance: [Learn Prompting, Role Prompting](https://learnprompting.org/docs/advanced/zero_shot/role_prompting), [WaterCrawl, Role Prompting](https://watercrawl.dev/blog/Role-Prompting).
+- A 47-paper review identifies two primary dimensions of persona prompts, **role adoption**
+  and **demographic priming**: and shows wide variation in how prompts are constructed, which
   is exactly the variation a *spec* removes. See *The Prompt Makes the Person(a)* ([arXiv:2507.16076](https://arxiv.org/abs/2507.16076)).
 
 **In the spec:** `persona_prompting.address.second_person` + `address.you_are`, and
@@ -54,9 +54,9 @@ section.
 
 Persona consistency degrades over long, multi-turn interactions. Two devices counter this:
 
-1. **Few-shot voice exemplars** — a handful of `user → persona` exchanges that pin the register
+1. **Few-shot voice exemplars**: a handful of `user → persona` exchanges that pin the register
    far more concretely than adjectives like "terse" or "warm".
-2. **Memory-driven role-play** — retrieving persona-relevant memory each turn keeps the
+2. **Memory-driven role-play**: retrieving persona-relevant memory each turn keeps the
    character coherent. **CharacterChat** combines behavior presets, a persona bank, and dynamic
    per-turn memory retrieval; *Memory-Driven Role-Playing* studies persona-knowledge
    utilization directly ([arXiv:2603.19313](https://arxiv.org/abs/2603.19313)).
@@ -72,13 +72,13 @@ the runtime's append-only hash-chained episodic memory + `memory.md` semantic co
 Persona attributes are not all equally mutable. The literature distinguishes **stable**
 characteristics (e.g. core values), **slowly evolving** ones (e.g. emphasis, tone), and
 **transient/situational** ones (e.g. emotional state). Separating these tells the model what is
-fixed and what may shift — and tells the *runtime* what it is allowed to change.
+fixed and what may shift, and tells the *runtime* what it is allowed to change.
 
 **In the spec:** `persona_prompting.consistency` (`stable` / `evolving` / `situational`),
 backed quantitatively by the affect/personality **envelopes** (mean ± range) the runtime
 clamps to.
 
-## 5. Staying in character — without overriding safety
+## 5. Staying in character, without overriding safety
 
 Anti-break-character guardrails keep the persona in role under off-topic bait or attempts to
 make it drop the persona. **Critically, in this spec they never override the safety
@@ -112,14 +112,14 @@ that the persona-prompting material is **governed and self-improvable**:
 
 - `improvement_policy.mode` = `locked` | `suggesting` | `autonomous` decides whether the spec may
   evolve itself (change it from the CLI with `personaxis improve <mode>` or `/improve`).
-- Proposed self-edits — **quantitative** (envelope/number dot-paths) and **qualitative** (voice,
-  scene contracts, anchors) — go through an **append-only hash-chained ledger**, a **quorum of
+- Proposed self-edits, **quantitative** (envelope/number dot-paths) and **qualitative** (voice,
+  scene contracts, anchors), go through an **append-only hash-chained ledger**, a **quorum of
   independent verifiers (consensus)**, and **protected paths** (identity, character, values,
   reflexive self-regulation can never be self-edited). Every applied edit is **reversible** and
   triggers a **recompile** of `PERSONA.md`.
 
 So the persona adopts a role (sections 1–2), stays consistent (3–4), stays safe (5), is
-measurable (6) — and improves itself within hard governance, which is the whole thesis of the
+measurable (6), and improves itself within hard governance, which is the whole thesis of the
 spec.
 
 ---
@@ -141,11 +141,11 @@ spec.
 
 ## References
 
-- *Talk Less, Call Right: Enhancing Role-Play LLM Agents with Automatic Prompt Optimization and Role Prompting* — [arXiv:2509.00482](https://arxiv.org/abs/2509.00482)
-- *The Prompt Makes the Person(a): A Systematic Evaluation of Sociodemographic Persona Prompting for LLMs* — [arXiv:2507.16076](https://arxiv.org/abs/2507.16076)
-- *Memory-Driven Role-Playing: Evaluation and Enhancement of Persona Knowledge Utilization in LLMs* — [arXiv:2603.19313](https://arxiv.org/abs/2603.19313)
-- *Personalization of Large Language Models: A Survey* — [arXiv:2411.00027](https://arxiv.org/abs/2411.00027)
-- *Beyond Single-Turn: A Survey on Multi-Turn Interactions with Large Language Models* — [arXiv:2504.04717](https://arxiv.org/abs/2504.04717)
-- Learn Prompting — Role Prompting: <https://learnprompting.org/docs/advanced/zero_shot/role_prompting>
-- WaterCrawl — Role Prompting: <https://watercrawl.dev/blog/Role-Prompting>
-- CharacterChat (behavior presets + dynamic memory + persona bank) — role-play consistency over long conversations.
+- *Talk Less, Call Right: Enhancing Role-Play LLM Agents with Automatic Prompt Optimization and Role Prompting*, [arXiv:2509.00482](https://arxiv.org/abs/2509.00482)
+- *The Prompt Makes the Person(a): A Systematic Evaluation of Sociodemographic Persona Prompting for LLMs*, [arXiv:2507.16076](https://arxiv.org/abs/2507.16076)
+- *Memory-Driven Role-Playing: Evaluation and Enhancement of Persona Knowledge Utilization in LLMs*, [arXiv:2603.19313](https://arxiv.org/abs/2603.19313)
+- *Personalization of Large Language Models: A Survey*, [arXiv:2411.00027](https://arxiv.org/abs/2411.00027)
+- *Beyond Single-Turn: A Survey on Multi-Turn Interactions with Large Language Models*, [arXiv:2504.04717](https://arxiv.org/abs/2504.04717)
+- Learn Prompting, Role Prompting: <https://learnprompting.org/docs/advanced/zero_shot/role_prompting>
+- WaterCrawl, Role Prompting: <https://watercrawl.dev/blog/Role-Prompting>
+- CharacterChat (behavior presets + dynamic memory + persona bank), role-play consistency over long conversations.

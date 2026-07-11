@@ -6,7 +6,7 @@ Pricing is positioning expressed in numbers. The CMO does not own the final pric
 
 ---
 
-## 1. The Ramanujam thesis — design the product around the price
+## 1. The Ramanujam thesis, design the product around the price
 
 Most companies build the product, then guess the price. Ramanujam's argument: the price should be designed alongside the product, anchored in customer willingness-to-pay (WTP) research done before engineering ships the feature set.
 
@@ -14,10 +14,10 @@ Most companies build the product, then guess the price. Ramanujam's argument: th
 
 Ramanujam classifies four failure modes:
 
-- **Feature shocks** — products with features no one wants, priced as if everyone does
-- **Minivations** — products priced too low, leaving margin on the table
-- **Hidden gems** — features customers would pay separately for, bundled into the base tier
-- **Undeads** — products that no segment wants enough to pay for, kept alive by hope
+- **Feature shocks**: products with features no one wants, priced as if everyone does
+- **Minivations**: products priced too low, leaving margin on the table
+- **Hidden gems**: features customers would pay separately for, bundled into the base tier
+- **Undeads**: products that no segment wants enough to pay for, kept alive by hope
 
 The CMO's diagnostic question: *"For each feature, what would the buyer pay if we charged separately for it?"* If the answer is "nothing," the feature does not warrant the engineering cost. If the answer is "more than the current package," the package is mispriced.
 
@@ -97,17 +97,17 @@ Required elements:
 - **Tier names that reinforce positioning**, not generic ("Free, Pro, Enterprise" is acceptable; "Bronze, Silver, Gold" is not)
 - **One sentence per tier describing the buyer**, not the features ("For teams running their first compliance program")
 - **Feature list per tier**, ordered by importance, not alphabetically
-- **Value anchors** — the alternative the buyer is comparing against ($X consultant hour, $Y manual process)
+- **Value anchors**: the alternative the buyer is comparing against ($X consultant hour, $Y manual process)
 - **Clear CTA per tier**, matching the actual sales motion (self-serve, demo, contact sales)
 - **An FAQ that addresses the four sales objections** the team hears most often
 - **Social proof** specific to each tier (a logo from each tier's segment)
 
 What the CMO removes from the pricing page:
 
-- Pricing toggles with three different billing cadences (monthly/annual/biannual) — confuses choice
-- "Contact sales" on every tier — eliminates self-serve as an option
-- Feature parity tables that exceed 30 rows — buyer fatigue
-- Crossed-out "regular" prices — undermines premium positioning
+- Pricing toggles with three different billing cadences (monthly/annual/biannual), confuses choice
+- "Contact sales" on every tier, eliminates self-serve as an option
+- Feature parity tables that exceed 30 rows, buyer fatigue
+- Crossed-out "regular" prices, undermines premium positioning
 
 ---
 
@@ -123,7 +123,7 @@ The CMO reviews discounting trends monthly. Rising average discount is a positio
 
 ---
 
-## 6. Repricing — when and how
+## 6. Repricing, when and how
 
 Repricing is rare and intentional. The CMO treats it as a quarterly-scoped initiative.
 

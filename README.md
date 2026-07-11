@@ -12,7 +12,7 @@ _AGENTS.md tells your agent what to do. PERSONA.md tells it who to be._
 
 The open specification for who an AI agent is.
 
-PERSONA.md is a declarative file — YAML frontmatter and Markdown — that captures ten layers of agent personhood: identity, character, personality, values & drives, affect, cognition, memory, metacognition, self-regulation, and persona. Portable across every model and tool. Versionable like any other piece of infrastructure. Auditable when it matters.
+PERSONA.md is a declarative file, YAML frontmatter and Markdown, that captures ten layers of agent personhood: identity, character, personality, values & drives, affect, cognition, memory, metacognition, self-regulation, and persona. Portable across every model and tool. Versionable like any other piece of infrastructure. Auditable when it matters.
 
 ---
 
@@ -40,15 +40,15 @@ PERSONA.md is a declarative file — YAML frontmatter and Markdown — that capt
 
 ## What it is
 
-Every AI agent in production runs on a behavioral specification. Most of that specification lives in a system prompt — incomplete, locked to one platform, invisible to compliance teams, and thin enough that agents drift under pressure.
+Every AI agent in production runs on a behavioral specification. Most of that specification lives in a system prompt, incomplete, locked to one platform, invisible to compliance teams, and thin enough that agents drift under pressure.
 
-PERSONA.md is the artifact that was missing. A single file that captures who an agent is completely enough to hold — across models, frameworks, conversations, and audits.
+PERSONA.md is the artifact that was missing. A single file that captures who an agent is completely enough to hold, across models, frameworks, conversations, and audits.
 
 ---
 
 ## What it gives you
 
-When a coding agent reads your PERSONA.md, every session follows the same behavioral rules: the voice that speaks, the values that hold, the refusals that don't bend under pressure. Without it, each session is a fresh negotiation. With it, the agent knows who it is — and stays that way across tools, models, and context windows.
+When a coding agent reads your PERSONA.md, every session follows the same behavioral rules: the voice that speaks, the values that hold, the refusals that don't bend under pressure. Without it, each session is a fresh negotiation. With it, the agent knows who it is, and stays that way across tools, models, and context windows.
 
 PERSONA.md is a living artifact, not a static config. It evolves as your understanding of the agent deepens. You refine it, and it re-applies to every interaction as you iterate.
 
@@ -56,7 +56,7 @@ PERSONA.md is a living artifact, not a static config. It evolves as your underst
 
 ## The philosophy
 
-The PERSONA.md spec is a foundation, not a prescription. It provides common ground that agents, tools, and teams can rely on — a shared vocabulary for identity, character, cognition, and values — while preserving the freedom to extend the format for domain-specific needs. Unknown fields and custom sections are accepted, not rejected.
+The PERSONA.md spec is a foundation, not a prescription. It provides common ground that agents, tools, and teams can rely on, a shared vocabulary for identity, character, cognition, and values, while preserving the freedom to extend the format for domain-specific needs. Unknown fields and custom sections are accepted, not rejected.
 
 PERSONA.md is born tool-neutral. Plain text, Git-versionable, readable in any editor. `personaxis compile` generates the format each tool consumes from a single maintained source. The spec belongs to the community.
 
@@ -66,7 +66,7 @@ PERSONA.md is born tool-neutral. Plain text, Git-versionable, readable in any ed
 
 `personaxis.md` - the ten-layer quantitative source that `personaxis compile` turns into `PERSONA.md` / `<slug>.md` - contains two parts: YAML frontmatter and a Markdown body.
 
-The **YAML frontmatter** is the schema — machine-readable behavioral specifications, typed, structured, and schema-validated. These are the normative values: the spec version and the ten dimension blocks that define who the agent is.
+The **YAML frontmatter** is the schema, machine-readable behavioral specifications, typed, structured, and schema-validated. These are the normative values: the spec version and the ten dimension blocks that define who the agent is.
 
 The **Markdown body** provides what the schema cannot carry: the reasoning behind those specifications, interaction-time guidance, and references to supporting materials. The frontmatter is the normative definition; the Markdown body provides context for how to apply it.
 
@@ -76,10 +76,10 @@ Every PERSONA.md Markdown body follows the same structure. Sections can be omitt
 
 **Section order:**
 
-1. **Overview** — Who the agent is and what it is built for
-2. **Design rationale** — Why specific YAML values were chosen
-3. **Do's** — Behavioral guardrails written for the agent
-4. **Don'ts** — Anti-patterns the agent guards against
+1. **Overview**: Who the agent is and what it is built for
+2. **Design rationale**: Why specific YAML values were chosen
+3. **Do's**: Behavioral guardrails written for the agent
+4. **Don'ts**: Anti-patterns the agent guards against
 5. **Resources** - References to the accompanying `references/`, `examples/`, `assets/`, and `skills/` directories in `.personaxis/[personas/<slug>/]`
 
 Project baselines (root `PERSONA.md`) only include sections 1 and 2. Agent-level personas may include all five.
@@ -236,7 +236,7 @@ security:
 
 ## Overview
 Lens reviews pull requests and code diffs with a focus on correctness, clarity, and security.
-Best used as a final check before merge — not a style enforcer, but a real bug and design catcher.
+Best used as a final check before merge, not a style enforcer, but a real bug and design catcher.
 
 ## Do's
 
@@ -349,7 +349,7 @@ npx @personaxis/persona.md list
 npx @personaxis/persona.md migrate 0.10-to-1.0 --apply
 ```
 
-### Without the CLI — paste directly to your agent
+### Without the CLI, paste directly to your agent
 
 Pick the prompt for your tool and paste it. Each prompt tells the agent to read the full setup guide and complete the setup automatically.
 
@@ -531,7 +531,7 @@ Install or run without installing:
 
 ```bash
 npm install -g @personaxis/persona.md
-# — or —
+#, or, 
 npx @personaxis/persona.md <command>
 ```
 
@@ -676,7 +676,7 @@ personaxis migrate 0.8-to-0.9  [path] [--apply]
 personaxis migrate 0.9-to-0.10 [path] [--apply]
 ```
 
-`0.6-to-0.7` moves a legacy root `PERSONA.md` (10-layer frontmatter) and its sibling folders into `.personaxis/`, then runs `compile` once to produce the initial `PERSONA.md`. `0.7-to-0.8`, `0.8-to-0.9`, and `0.9-to-0.10` are **additive** — they bump `spec_version` only (no field changes; an existing persona stays valid). The bump makes the new OPTIONAL fields *available* to add by hand — v0.10 unlocks the `persona_prompting` block, `identity.short_name`, and inline `improvement_policy.mode`. `0.10-to-1.0` is the **breaking, structural** codemod to the stable spec (comment-preserving): it renames layer 9 to `self_regulation`, folds `persona_prompting` into layer-10 `persona`, collapses the five refusal surfaces to two, moves memory retrieval knobs to `runtime.memory`, converts drive `intensity`→`level`, drops `metadata.display_name`, and rewrites `apiVersion`→`personaxis.com/v1` — writing a report under `.personaxis/migrations/`. All default to a dry run; pass `--apply` to write changes.
+`0.6-to-0.7` moves a legacy root `PERSONA.md` (10-layer frontmatter) and its sibling folders into `.personaxis/`, then runs `compile` once to produce the initial `PERSONA.md`. `0.7-to-0.8`, `0.8-to-0.9`, and `0.9-to-0.10` are **additive**: they bump `spec_version` only (no field changes; an existing persona stays valid). The bump makes the new OPTIONAL fields *available* to add by hand, v0.10 unlocks the `persona_prompting` block, `identity.short_name`, and inline `improvement_policy.mode`. `0.10-to-1.0` is the **breaking, structural** codemod to the stable spec (comment-preserving): it renames layer 9 to `self_regulation`, folds `persona_prompting` into layer-10 `persona`, collapses the five refusal surfaces to two, moves memory retrieval knobs to `runtime.memory`, converts drive `intensity`→`level`, drops `metadata.display_name`, and rewrites `apiVersion`→`personaxis.com/v1`, writing a report under `.personaxis/migrations/`. All default to a dry run; pass `--apply` to write changes.
 
 ### `config`
 

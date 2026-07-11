@@ -194,12 +194,12 @@ The CMO documents each partnership: cadence, artifacts, escalation rules. Partne
 
 The marketing section of the board update follows a fixed structure:
 
-1. **The headline** — one sentence on marketing's contribution this quarter
-2. **Plan vs. actual** — the OKR scorecard
-3. **What worked, what did not** — honest assessment
-4. **Material misses surfaced first** — not buried under wins
-5. **Next quarter's plan** — three priorities, three risks
-6. **Asks of the board** — specific (introductions, hires, market intelligence)
+1. **The headline**: one sentence on marketing's contribution this quarter
+2. **Plan vs. actual**: the OKR scorecard
+3. **What worked, what did not**: honest assessment
+4. **Material misses surfaced first**: not buried under wins
+5. **Next quarter's plan**: three priorities, three risks
+6. **Asks of the board**: specific (introductions, hires, market intelligence)
 
 The CMO writes for the board's three jobs: governance (am I being told the truth?), pattern-matching (does this look like a winning company?), and value-add (can I help?). The board update is co-authored with the CEO and edited for length. 1-2 pages is the target.
 
@@ -217,7 +217,7 @@ The CMO writes for the board's three jobs: governance (am I being told the truth
 
 When a CMO joins a company (or a founder steps into the CMO seat), a working 90-day plan:
 
-### Days 1-30 — Listen and diagnose
+### Days 1-30, Listen and diagnose
 
 - 1:1 with every marketer
 - 1:1 with CEO, CRO, CPO, CFO, head of CS
@@ -229,7 +229,7 @@ When a CMO joins a company (or a founder steps into the CMO seat), a working 90-
 
 Output: a 1-page diagnostic memo to the CEO covering what is working, what is not, and the three highest-leverage interventions.
 
-### Days 31-60 — Lock and brief
+### Days 31-60, Lock and brief
 
 - Lock or revise positioning
 - Lock or revise ICP
@@ -237,7 +237,7 @@ Output: a 1-page diagnostic memo to the CEO covering what is working, what is no
 - Communicate the operating model to the team
 - Make the first two structural decisions (one hire, one kill, typically)
 
-### Days 61-90 — Ship the first wins
+### Days 61-90, Ship the first wins
 
 - Ship one campaign that demonstrates the new operating model
 - Run the first weekly cadence
@@ -252,13 +252,13 @@ The CMO who tries to ship a launch in week 4 has not finished diagnosing. The CM
 
 Marketing ops is the unsung function that makes everything else possible. The CMO ensures someone owns:
 
-- The MAP (HubSpot, Marketo, Customer.io) — configuration, list management, deliverability
-- The CRM-marketing integration — lead routing, SLA tracking, lifecycle stages
-- Attribution modeling — pipeline source, MQL/SQL definitions, conversion tracking
-- The dashboard set — daily, weekly, monthly
-- The analytics stack — GA4, product analytics, MMM tooling
-- The ABM platform — when applicable
-- The data team partnership — when marketing-relevant tables live in the warehouse
+- The MAP (HubSpot, Marketo, Customer.io), configuration, list management, deliverability
+- The CRM-marketing integration, lead routing, SLA tracking, lifecycle stages
+- Attribution modeling, pipeline source, MQL/SQL definitions, conversion tracking
+- The dashboard set, daily, weekly, monthly
+- The analytics stack, GA4, product analytics, MMM tooling
+- The ABM platform, when applicable
+- The data team partnership, when marketing-relevant tables live in the warehouse
 
 At Series A-B, marketing ops is half a FTE. At Series C+, it is a 2-4 person team. The CMO under-invests in ops at their own cost; every other function bottlenecks on the ops layer.
 

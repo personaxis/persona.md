@@ -1,6 +1,6 @@
 # Contributing to PERSONA.md
 
-PERSONA.md is an open specification. Contributions are welcome — from typo fixes to new field proposals.
+PERSONA.md is an open specification. Contributions are welcome, from typo fixes to new field proposals.
 
 ## Types of contributions
 
@@ -21,7 +21,7 @@ PERSONA.md is an open specification. Contributions are welcome — from typo fix
 
 ## Versioning
 
-The spec follows semantic versioning. During `0.x`, minor version bumps may include breaking changes — these are documented clearly in CHANGELOG.md. After `1.0`, semver applies normally.
+The spec follows semantic versioning. During `0.x`, minor version bumps may include breaking changes, these are documented clearly in CHANGELOG.md. After `1.0`, semver applies normally.
 
 Breaking changes: removing a required field, changing a field type, removing an allowed enum value.
 

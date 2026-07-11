@@ -14,11 +14,11 @@ Dunford reframes positioning from a noun ("the position we hold in the market") 
 
 What would the customer do if your product did not exist? This is the real competition, not the companies in your category. Buyers compare against:
 
-- **The status quo** — they keep doing it manually
-- **A DIY workflow** — spreadsheets, scripts, internal tooling
-- **A different category** — e.g., a CDP buyer often considers a data warehouse instead
-- **A point solution stack** — three tools stitched together
-- **A direct competitor** — usually the least common alternative early
+- **The status quo**: they keep doing it manually
+- **A DIY workflow**: spreadsheets, scripts, internal tooling
+- **A different category**: e.g., a CDP buyer often considers a data warehouse instead
+- **A point solution stack**: three tools stitched together
+- **A direct competitor**: usually the least common alternative early
 
 The CMO interviews three to five recent buyers (won and lost) with one question: *"If we did not exist, what would you have done?"* The answers are the competitive set. Everything else follows from understanding that frame.
 
@@ -44,8 +44,8 @@ Who cares most about that value? The segment is defined by:
 - Industry / vertical
 - Company size (employees, revenue, funding stage)
 - Role (the economic buyer, the user, the influencer)
-- Trigger (the event that creates urgency — new hire, audit, churn spike, raise)
-- Watering hole (where they cluster — communities, conferences, publications, peers)
+- Trigger (the event that creates urgency, new hire, audit, churn spike, raise)
+- Watering hole (where they cluster, communities, conferences, publications, peers)
 
 A segment of "B2B SaaS" is not a segment. A segment of "VP Compliance at Series A–B fintech operating under PSD2 with 20–150 employees who just failed an audit" is a segment. The narrower the better at this stage. Expansion is a downstream decision.
 
@@ -84,11 +84,11 @@ The CMO defaults to the cheapest viable strategy. Category design is a five-year
 
 Categories are introduced through a written point-of-view, not a tagline. The POV argues:
 
-1. **The problem** — a named, articulated, currently mis-framed problem
-2. **The shift** — what changed in the world to make the old approach insufficient
-3. **The category** — the new frame that makes the problem solvable
-4. **The future** — what work looks like when the category is dominant
-5. **The first mover** — who is leading the category and why
+1. **The problem**: a named, articulated, currently mis-framed problem
+2. **The shift**: what changed in the world to make the old approach insufficient
+3. **The category**: the new frame that makes the problem solvable
+4. **The future**: what work looks like when the category is dominant
+5. **The first mover**: who is leading the category and why
 
 The POV ships as a manifesto, a long-form essay, a keynote, and a recurring narrative across all surfaces. It is the most-quoted piece of content the company produces.
 
@@ -125,15 +125,15 @@ If three or more are present, the CMO pauses tactical work and runs a positionin
 
 ## 4. The positioning sprint (one-week format)
 
-Day 1 — **Evidence gathering.** Five recent buyer interviews (won and lost). Three sales calls reviewed. Two retention interviews. Map competitive alternatives.
+Day 1, **Evidence gathering.** Five recent buyer interviews (won and lost). Three sales calls reviewed. Two retention interviews. Map competitive alternatives.
 
-Day 2 — **Attributes and value mapping.** For each competitor and alternative, list what they do and what they do not. For each unique attribute the company holds, run the *so what* drill until it lands on a buyer outcome.
+Day 2, **Attributes and value mapping.** For each competitor and alternative, list what they do and what they do not. For each unique attribute the company holds, run the *so what* drill until it lands on a buyer outcome.
 
-Day 3 — **Segment selection.** Score three candidate segments on: size, growth, urgency, willingness to pay, watering hole accessibility, alignment with the unique value. Pick one. Name the trigger event.
+Day 3, **Segment selection.** Score three candidate segments on: size, growth, urgency, willingness to pay, watering hole accessibility, alignment with the unique value. Pick one. Name the trigger event.
 
-Day 4 — **Category choice.** Decide existing-category, subdivision, or design. Write the one-paragraph category frame. Test it against the elevator pitch: *"We are X for Y, so they can Z, unlike A who do B."*
+Day 4, **Category choice.** Decide existing-category, subdivision, or design. Write the one-paragraph category frame. Test it against the elevator pitch: *"We are X for Y, so they can Z, unlike A who do B."*
 
-Day 5 — **Lock and brief.** Write the locked positioning statement. Write the one-pager: ICP, alternatives, value claims, category, category vocabulary, three claims that ladder to it. Brief sales, product, and customer success. Schedule the 30-day check.
+Day 5, **Lock and brief.** Write the locked positioning statement. Write the one-pager: ICP, alternatives, value claims, category, category vocabulary, three claims that ladder to it. Brief sales, product, and customer success. Schedule the 30-day check.
 
 The locked positioning is the input to copy, demand, brand, sales enablement, and pricing for the next quarter.
 

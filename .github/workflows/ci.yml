@@ -5,7 +5,7 @@ name: CI
 # `@personaxis/spec` package. This workflow proves two things on every push:
 #   1. the golden example personas still validate (via the published CLI), and
 #   2. this repo's `schema/` is byte-identical to the published `@personaxis/spec`
-#      — so the manual `cp` mirror can never silently drift.
+#, so the manual `cp` mirror can never silently drift.
 
 on:
   push:

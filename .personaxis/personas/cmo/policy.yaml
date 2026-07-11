@@ -34,7 +34,7 @@ applies_to:
 # PRECEDENCE (v0.10): the inline improvement_policy.mode in personaxis.md is the
 # authoritative posture the persona carries with it; this file may only RESTRICT it
 # (effective mode = the more restrictive of the two, over locked < suggesting < autonomous).
-# Keep the two aligned — the validator warns on a mismatch.
+# Keep the two aligned, the validator warns on a mismatch.
 improvement_policy:
   mode: suggesting
 
