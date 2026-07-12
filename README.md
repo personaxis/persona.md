@@ -335,12 +335,11 @@ npx @personaxis/persona.md spec --rules           # spec + lint rules table
 npx @personaxis/persona.md spec --rules-only      # lint rules only
 npx @personaxis/persona.md spec --format json     # machine-readable
 
-# List available persona templates
-npx @personaxis/persona.md templates
+# Create a persona (Genesis: valid-by-construction, provenance per number)
+npx @personaxis/persona.md create dev-buddy --from-prompt "A blunt senior code reviewer."
 
-# Scaffold a persona from a template
-npx @personaxis/persona.md use cmo --target claude-code
-npx @personaxis/persona.md use cmo --target codex
+# List / print authoring templates
+npx @personaxis/persona.md template list
 
 # List personas installed in this project (.personaxis/personas/)
 npx @personaxis/persona.md list
@@ -539,7 +538,7 @@ Requires Node.js 18+.
 
 ### `validate`
 
-Schema and universals validation against spec v1.0.0 (personas at v0.3-v0.10 are accepted via a frozen legacy schema; the validator dispatches by `spec_version`). Exits `1` if invalid, `0` if clean. Safe for CI.
+Schema and universals validation against the current spec, v1.1.0 (additive over v1.0.0, so 1.0.0 personas validate unchanged; personas at v0.3-v0.10 are accepted via a frozen legacy schema, the validator dispatches by `spec_version`). Exits `1` if invalid, `0` if clean. Safe for CI.
 
 ```bash
 personaxis validate [file]
@@ -654,15 +653,16 @@ personaxis init --agent  # named agent persona
 personaxis init --user   # user persona
 ```
 
-### `use`
+### `create`
 
-Scaffold a persona from a built-in template in one step - no wizard.
+Genesis: build a valid-by-construction persona from an interview, a natural-language brief, your repo, a character card / system prompt, or transcripts. Always validated; every number carries provenance.
 
 ```bash
-personaxis use <template> [--name <name>] [--target claude-code|codex]
+personaxis create [slug]                       # psychometric interview
+personaxis create <slug> --from-prompt "..."   # from a natural-language brief
+personaxis create <slug> --from-project        # infer from your repo
+personaxis create <slug> --from-import <file>  # upgrade a character card (V2/V3) or system prompt
 ```
-
-Run `personaxis templates` to see available options.
 
 ### `migrate`
 
@@ -674,6 +674,7 @@ personaxis migrate 0.6-to-0.7  [path] [--apply] [--provider <name>]
 personaxis migrate 0.7-to-0.8  [path] [--apply]
 personaxis migrate 0.8-to-0.9  [path] [--apply]
 personaxis migrate 0.9-to-0.10 [path] [--apply]
+personaxis migrate 0.10-to-1.0 [path] [--apply]
 ```
 
 `0.6-to-0.7` moves a legacy root `PERSONA.md` (10-layer frontmatter) and its sibling folders into `.personaxis/`, then runs `compile` once to produce the initial `PERSONA.md`. `0.7-to-0.8`, `0.8-to-0.9`, and `0.9-to-0.10` are **additive**: they bump `spec_version` only (no field changes; an existing persona stays valid). The bump makes the new OPTIONAL fields *available* to add by hand, v0.10 unlocks the `persona_prompting` block, `identity.short_name`, and inline `improvement_policy.mode`. `0.10-to-1.0` is the **breaking, structural** codemod to the stable spec (comment-preserving): it renames layer 9 to `self_regulation`, folds `persona_prompting` into layer-10 `persona`, collapses the five refusal surfaces to two, moves memory retrieval knobs to `runtime.memory`, converts drive `intensity`→`level`, drops `metadata.display_name`, and rewrites `apiVersion`→`personaxis.com/v1`, writing a report under `.personaxis/migrations/`. All default to a dry run; pass `--apply` to write changes.
@@ -697,12 +698,14 @@ List personas installed in this project (`.personaxis/personas/`).
 personaxis list
 ```
 
-### `templates`
+### `template`
 
-List built-in templates available for `personaxis use`.
+Manage pedagogical authoring templates (commented `personaxis.md` / `PERSONA.md` scaffolds).
 
 ```bash
-personaxis templates
+personaxis template list           # list available templates
+personaxis template show <name>    # print a template to stdout
+personaxis template get <name>     # download a template to author
 ```
 
 ---
