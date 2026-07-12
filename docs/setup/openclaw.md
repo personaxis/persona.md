@@ -11,7 +11,7 @@ Follow these steps exactly. Do not skip any step.
 Run this at the project root:
 
 ```bash
-npx @personaxis/persona.md init
+npx personaxis init
 ```
 
 Select **"Project baseline"** when prompted. Enter the project name.
@@ -39,7 +39,7 @@ Do not leave any field as a TODO. If you are uncertain about a value, make a rea
 ## Step 3, Validate
 
 ```bash
-npx @personaxis/persona.md validate
+npx personaxis validate
 ```
 
 Fix any errors before continuing.
@@ -47,7 +47,7 @@ Fix any errors before continuing.
 ## Step 4, Compile to SOUL.md
 
 ```bash
-npx @personaxis/persona.md compile --root --platform openclaw
+npx personaxis compile --root --platform openclaw
 ```
 
 This generates `SOUL.md` at the workspace root from your `.personaxis/personaxis.md`. OpenClaw reads
@@ -61,7 +61,7 @@ To evolve the persona from each turn on **your own model** (not OpenClaw's), ins
 hook so `personaxis observe` runs one governed tick and recompiles `SOUL.md` on drift:
 
 ```bash
-npx @personaxis/persona.md hooks install --host claude-code
+npx personaxis hooks install --host claude-code
 ```
 
 > Native OpenClaw hooks are on the roadmap; today the Claude-Code Stop hook covers the common local
@@ -78,7 +78,7 @@ After completing steps 1–4, give the user a brief summary:
 Then run:
 
 ```bash
-npx @personaxis/persona.md templates
+npx personaxis templates
 ```
 
 Show the user the output. Ask whether they want a role-specific agent persona, for example, a dedicated marketing agent, a code reviewer, or a legal assistant.
@@ -86,8 +86,8 @@ Show the user the output. Ask whether they want a role-specific agent persona, f
 If the user says yes, help them choose from the list and run:
 
 ```bash
-npx @personaxis/persona.md use <template-name>
-npx @personaxis/persona.md compile <slug> --platform openclaw
+npx personaxis use <template-name>
+npx personaxis compile <slug> --platform openclaw
 ```
 
 This creates the persona in `.personaxis/personas/<slug>/` and compiles it to

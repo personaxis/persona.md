@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Spec](https://img.shields.io/badge/spec-1.1.0-informational)](./docs/SPEC.md)
-[![CLI](https://img.shields.io/badge/CLI-%40personaxis%2Fpersona.md-blue)](https://www.npmjs.com/package/@personaxis/persona.md)
+[![CLI](https://img.shields.io/badge/CLI-personaxis-blue)](https://www.npmjs.com/package/personaxis)
 [![Registry](https://img.shields.io/badge/registry-personaxis.com-blueviolet)](https://personaxis.com)
 
 _AGENTS.md tells your agent what to do. PERSONA.md tells it who to be._
@@ -283,69 +283,69 @@ Author `personaxis.md` directly in any editor. Every section is standard YAML fr
 
 ```bash
 # Create a project-level behavioral baseline (.personaxis/personaxis.md + root PERSONA.md)
-npx @personaxis/persona.md init
+npx personaxis init
 
 # - or - create a named agent persona (.personaxis/personas/<slug>/personaxis.md)
-npx @personaxis/persona.md init --agent
+npx personaxis init --agent
 
 # Schema + universals validation - exits 1 if invalid, 0 if clean
-npx @personaxis/persona.md validate
-npx @personaxis/persona.md validate frontend-expert   # a named persona, by slug
-npx @personaxis/persona.md validate --all             # root + every persona in .personaxis/personas/
+npx personaxis validate
+npx personaxis validate frontend-expert   # a named persona, by slug
+npx personaxis validate --all             # root + every persona in .personaxis/personas/
 
 # Semantic lint - structured findings
-npx @personaxis/persona.md lint
-npx @personaxis/persona.md lint frontend-expert
-npx @personaxis/persona.md lint --format json   # machine-readable output
+npx personaxis lint
+npx personaxis lint frontend-expert
+npx personaxis lint --format json   # machine-readable output
 
 # Compile personaxis.md -> PERSONA.md / <slug>.md
-npx @personaxis/persona.md compile --root                              # .personaxis/personaxis.md -> PERSONA.md
-npx @personaxis/persona.md compile frontend-expert --platform claude-code  # -> .claude/agents/frontend-expert.md
-npx @personaxis/persona.md compile frontend-expert --platform codex        # -> Codex subagent convention
+npx personaxis compile --root                              # .personaxis/personaxis.md -> PERSONA.md
+npx personaxis compile frontend-expert --platform claude-code  # -> .claude/agents/frontend-expert.md
+npx personaxis compile frontend-expert --platform codex        # -> Codex subagent convention
 
 # Propose personaxis.md updates from a hand-edited PERSONA.md / <slug>.md
-npx @personaxis/persona.md decompile --root
-npx @personaxis/persona.md decompile frontend-expert
+npx personaxis decompile --root
+npx personaxis decompile frontend-expert
 
 # Inspect and materialize extensions.skills entries
-npx @personaxis/persona.md skills list --root
-npx @personaxis/persona.md skills pull <name> --root   # github: entries only
+npx personaxis skills list --root
+npx personaxis skills pull <name> --root   # github: entries only
 
 # Push/pull a persona version to and from the Personaxis registry
-npx @personaxis/persona.md push --root
-npx @personaxis/persona.md push frontend-expert
-npx @personaxis/persona.md pull <slug>
+npx personaxis push --root
+npx personaxis push frontend-expert
+npx personaxis pull <slug>
 
 # Seed and mutate runtime state (clamped to envelopes declared in personaxis.md)
-npx @personaxis/persona.md state init
-npx @personaxis/persona.md state mutate --field mood.tone --delta -0.10 --reason "less playful"
-npx @personaxis/persona.md state show
+npx personaxis state init
+npx personaxis state mutate --field mood.tone --delta -0.10 --reason "less playful"
+npx personaxis state show
 
 # Export frontmatter as JSON (for tooling and CI)
-npx @personaxis/persona.md export --format json
-npx @personaxis/persona.md export --format json > persona.json
+npx personaxis export --format json
+npx personaxis export --format json > persona.json
 
 # Compare two versions - reports added, removed, and modified fields
-npx @personaxis/persona.md diff PERSONA.md PERSONA-v2.md
-npx @personaxis/persona.md diff PERSONA.md PERSONA-v2.md --format json
+npx personaxis diff PERSONA.md PERSONA-v2.md
+npx personaxis diff PERSONA.md PERSONA-v2.md --format json
 
 # Output the spec - useful for injecting into agent prompts
-npx @personaxis/persona.md spec
-npx @personaxis/persona.md spec --rules           # spec + lint rules table
-npx @personaxis/persona.md spec --rules-only      # lint rules only
-npx @personaxis/persona.md spec --format json     # machine-readable
+npx personaxis spec
+npx personaxis spec --rules           # spec + lint rules table
+npx personaxis spec --rules-only      # lint rules only
+npx personaxis spec --format json     # machine-readable
 
 # Create a persona (Genesis: valid-by-construction, provenance per number)
-npx @personaxis/persona.md create dev-buddy --from-prompt "A blunt senior code reviewer."
+npx personaxis create dev-buddy --from-prompt "A blunt senior code reviewer."
 
 # List / print authoring templates
-npx @personaxis/persona.md template list
+npx personaxis template list
 
 # List personas installed in this project (.personaxis/personas/)
-npx @personaxis/persona.md list
+npx personaxis list
 
 # Migrate a v0.10 persona to the stable v1.0 spec (breaking, comment-preserving; writes a report)
-npx @personaxis/persona.md migrate 0.10-to-1.0 --apply
+npx personaxis migrate 0.10-to-1.0 --apply
 ```
 
 ### Without the CLI, paste directly to your agent
@@ -529,9 +529,9 @@ See [docs/SPEC.md](./docs/SPEC.md) for the full normative specification: require
 Install or run without installing:
 
 ```bash
-npm install -g @personaxis/persona.md
+npm install -g personaxis
 #, or, 
-npx @personaxis/persona.md <command>
+npx personaxis <command>
 ```
 
 Requires Node.js 18+.
@@ -742,7 +742,7 @@ Validator outputs (from `personaxis validate`):
 | `FAIL_POLICY` | 2 | A universal policy invariant violated. |
 | `FAIL_CONCEPTUAL` | 3 | Prohibited claim or wrong universal constant. |
 
-Run `npx @personaxis/persona.md spec --rules` to see the rules table without installing.
+Run `npx personaxis spec --rules` to see the rules table without installing.
 
 ---
 
@@ -751,7 +751,7 @@ Run `npx @personaxis/persona.md spec --rules` to see the rules table without ins
 The linter is available as a TypeScript/JavaScript library:
 
 ```typescript
-import { lint } from '@personaxis/persona.md/linter';
+import { lint } from 'personaxis/linter';
 
 const report = lint(markdownString);
 
