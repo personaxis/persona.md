@@ -32,9 +32,10 @@ jobs:
       - name: Validate golden personas (must exit 0 = PASS)
         run: |
           set -e
-          npx -y @personaxis/persona.md@latest validate .personaxis/personas/cmo/personaxis.md
-          npx -y @personaxis/persona.md@latest validate .personaxis/personas/frontend-expert/personaxis.md
-          npx -y @personaxis/persona.md@latest validate .personaxis/personaxis.md
+          # The package ships two bins (personaxis, personaxis-scan), so npx needs -p to pick one.
+          npx -y -p @personaxis/persona.md@latest personaxis validate .personaxis/personas/cmo/personaxis.md
+          npx -y -p @personaxis/persona.md@latest personaxis validate .personaxis/personas/frontend-expert/personaxis.md
+          npx -y -p @personaxis/persona.md@latest personaxis validate .personaxis/personaxis.md
 
       # The published @personaxis/spec package is the single source of truth for
       # the schemas. This repo's mirror must match it byte-for-byte.
