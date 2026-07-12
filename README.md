@@ -751,7 +751,7 @@ Run `npx @personaxis/persona.md spec --rules` to see the rules table without ins
 The linter is available as a TypeScript/JavaScript library:
 
 ```typescript
-import { lint } from 'personaxis/linter';
+import { lint } from '@personaxis/persona.md/linter';
 
 const report = lint(markdownString);
 
