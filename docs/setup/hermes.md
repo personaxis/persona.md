@@ -11,9 +11,9 @@ Follow these steps exactly. Do not skip any step.
 Same as the other hosts:
 
 ```bash
-npx @personaxis/persona.md init          # choose "Project baseline"
+npx personaxis init          # choose "Project baseline"
 # fill in every TODO in .personaxis/personaxis.md from the project (see docs/setup/openclaw.md Step 2)
-npx @personaxis/persona.md validate
+npx personaxis validate
 ```
 
 ## Step 2, Configure the model once
@@ -30,7 +30,7 @@ to a file. See the CLI's `docs/configuration.md`.
 ## Step 3, Compile to SOUL.md
 
 ```bash
-npx @personaxis/persona.md compile --root --platform hermes
+npx personaxis compile --root --platform hermes
 ```
 
 This writes `.hermes/SOUL.md`. Point your Hermes profile at it, or copy it to `~/.hermes/SOUL.md`

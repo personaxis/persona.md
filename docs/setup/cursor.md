@@ -9,7 +9,7 @@ Follow these steps exactly. Do not skip any step.
 Run this at the project root:
 
 ```bash
-npx @personaxis/persona.md init
+npx personaxis init
 ```
 
 Select **"Project baseline"** when prompted. Enter the project name.
@@ -37,7 +37,7 @@ Do not leave any field as a TODO. If you are uncertain about a value, make a rea
 ## Step 3, Validate
 
 ```bash
-npx @personaxis/persona.md validate
+npx personaxis validate
 ```
 
 Fix any errors before continuing.
@@ -45,7 +45,7 @@ Fix any errors before continuing.
 ## Step 4, Compile to Cursor rules
 
 ```bash
-npx @personaxis/persona.md compile --root --target cursor
+npx personaxis compile --root --target cursor
 ```
 
 This creates `.cursor/rules/persona.mdc` with `alwaysApply: true`, generated from `.personaxis/personaxis.md`. Cursor loads it into every conversation in this project automatically.
@@ -61,7 +61,7 @@ After completing steps 1–4, give the user a brief summary:
 Then run:
 
 ```bash
-npx @personaxis/persona.md templates
+npx personaxis templates
 ```
 
 Show the user the output. Ask whether they want to add a role-specific agent persona, for example, a dedicated marketing agent, a code reviewer, or a legal assistant.
@@ -69,7 +69,7 @@ Show the user the output. Ask whether they want to add a role-specific agent per
 If the user says yes, help them choose from the list and run:
 
 ```bash
-npx @personaxis/persona.md use <template-name> --target cursor
+npx personaxis use <template-name> --target cursor
 ```
 
 This creates the persona in `.personaxis/personas/<slug>/` and compiles a separate `.cursor/rules/<slug>.mdc` for that agent.

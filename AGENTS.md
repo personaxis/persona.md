@@ -105,10 +105,10 @@ Breaking changes require:
 Use the official CLI:
 
 ```bash
-npx @personaxis/persona.md validate <path-to-personaxis.md>
-npx @personaxis/persona.md compile <path-to-personaxis.md>      # personaxis.md -> PERSONA.md / <slug>.md
-npx @personaxis/persona.md decompile <path-to-PERSONA.md>       # PERSONA.md / <slug>.md -> personaxis.md proposal
-npx @personaxis/persona.md state mutate <path-to-state.json> --field X --delta Y
+npx personaxis validate <path-to-personaxis.md>
+npx personaxis compile <path-to-personaxis.md>      # personaxis.md -> PERSONA.md / <slug>.md
+npx personaxis decompile <path-to-PERSONA.md>       # PERSONA.md / <slug>.md -> personaxis.md proposal
+npx personaxis state mutate <path-to-state.json> --field X --delta Y
 ```
 
 Exit codes:

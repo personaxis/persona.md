@@ -7,7 +7,7 @@ Follow these steps exactly. Do not skip any step.
 Run this at the project root:
 
 ```bash
-npx @personaxis/persona.md init
+npx personaxis init
 ```
 
 Select **"Project baseline"** when prompted. Enter the project name.
@@ -37,7 +37,7 @@ Do not leave any field as a TODO. If you are uncertain about a value, make a rea
 ## Step 3 - Validate
 
 ```bash
-npx @personaxis/persona.md validate
+npx personaxis validate
 ```
 
 Fix any errors before continuing.
@@ -45,7 +45,7 @@ Fix any errors before continuing.
 ## Step 4 - Compile and wire into Codex
 
 ```bash
-npx @personaxis/persona.md compile --root
+npx personaxis compile --root
 ```
 
 This produces the repo-root `PERSONA.md` - a compiled, qualitative document generated from `.personaxis/personaxis.md` (see [`PERSONA_template.md`](../../PERSONA_template.md) for its section contract) - and adds a managed PERSONA.md section to `AGENTS.md` (creating it if it does not exist). Codex reads `AGENTS.md` as project instructions, so the section tells Codex to read the live root `PERSONA.md` and apply it as the behavioral baseline.
@@ -64,15 +64,15 @@ Read your own @PERSONA.md too if one was provided to you.
 
 Re-running the command replaces this section instead of duplicating it. Existing human-authored `AGENTS.md` content is preserved.
 
-If you hand-edit `PERSONA.md` directly, run `npx @personaxis/persona.md push --root` (or `decompile --root` to preview) before the next compile - this folds your edits back into `.personaxis/personaxis.md` so the two stay consistent.
+If you hand-edit `PERSONA.md` directly, run `npx personaxis push --root` (or `decompile --root` to preview) before the next compile - this folds your edits back into `.personaxis/personaxis.md` so the two stay consistent.
 
 ## Step 4b - Keep it alive (per-turn learning)
 
 Codex has a **`Stop` hook** (like Claude Code), so per-turn learning is one command:
 
 ```bash
-npx @personaxis/persona.md hooks install --host codex          # project (.codex/hooks.json)
-npx @personaxis/persona.md hooks install --host codex --global # user (~/.codex/hooks.json)
+npx personaxis hooks install --host codex          # project (.codex/hooks.json)
+npx personaxis hooks install --host codex --global # user (~/.codex/hooks.json)
 ```
 
 This runs `personaxis observe --stdin` at the end of every turn, one governed tick on **your** model,
@@ -84,9 +84,9 @@ recompiling on drift, with no Codex tokens spent. You can additionally keep the 
 Either way, configure the model once (endpoint, model, and the env var holding the key):
 
 ```bash
-npx @personaxis/persona.md config set --global local.endpoint https://api.your-provider.com/v1
-npx @personaxis/persona.md config set --global local.model    your-model-name
-npx @personaxis/persona.md config set --global local.apiKeyEnv YOUR_API_KEY_ENV_VAR
+npx personaxis config set --global local.endpoint https://api.your-provider.com/v1
+npx personaxis config set --global local.model    your-model-name
+npx personaxis config set --global local.apiKeyEnv YOUR_API_KEY_ENV_VAR
 ```
 
 See the CLI configuration concept for the full precedence rules: https://github.com/personaxis/cli/blob/main/docs/configuration.md
@@ -102,7 +102,7 @@ After completing steps 1-4, give the user a brief summary:
 Then run:
 
 ```bash
-npx @personaxis/persona.md templates
+npx personaxis templates
 ```
 
 Show the user the output. Ask whether they want to add a role-specific agent persona for this project - for example, a dedicated marketing agent, a code reviewer, or a legal assistant.
@@ -110,7 +110,7 @@ Show the user the output. Ask whether they want to add a role-specific agent per
 If the user says yes, help them choose from the list and run:
 
 ```bash
-npx @personaxis/persona.md use <template-name> --target codex
+npx personaxis use <template-name> --target codex
 ```
 
 This creates the source persona package in `.personaxis/personas/<slug>/` (`personaxis.md`, `policy.yaml`, `state.json`, `memory.md`, `memory/`, `references/`, `examples/`, `skills/`, `assets/`, `manifest.json`) and compiles it to `.codex/agents/<slug>.toml`. The `.codex/agents/<slug>.toml` file follows the Codex custom-agent format: a TOML file with `name`, `description`, and `developer_instructions` (the compiled persona instructions). Local skills declared in `extensions.skills` are materialized to `.agents/skills/<name>/` by `personaxis compile`.

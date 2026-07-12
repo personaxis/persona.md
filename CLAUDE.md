@@ -4,19 +4,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-This is the source repository for the **open Personaxis spec standard**, not the CLI tooling (published separately as `@personaxis/persona.md`). The repo contains the spec document, JSON Schemas, example personas, and documentation.
+This is the source repository for the **open Personaxis spec standard**, not the CLI tooling (published separately as `personaxis`). The repo contains the spec document, JSON Schemas, example personas, and documentation.
 
 **Current spec version: 1.0.0** (`apiVersion personaxis.com/v1`), the first stable spec. It anchors the **10 canonical layers** to their psychological constructs + an operational contract each, organized into three blocks: **ANATOMY** (identity, character, personality, values_and_drives, affect, cognition, memory, metacognition, `self_regulation` [renamed from `reflexive_self_regulation`], persona) / **CHANGE GOVERNANCE** (governance, improvement_policy, security, permissions) / **RUNTIME CONTRACT** (runtime, verification, agent_budget, observability, interop, lineage, integrity). Breaking corrections vs 0.10: layer-10 `persona` absorbs the old top-level `persona_prompting`; enforcement has a single owner (`character.virtues`, with `refs:` to backing traits/values); the five refusal surfaces collapse to two (`hard_limits` + `prohibited_behaviors`); traits gain `expression`+`bands`; drives take an envelope or `level`; memory splits faculty from retrieval knobs (knobs → `runtime`); `metadata.display_name` drops (single owner `identity.display_name`). Conformance is testable via classes **C0/C1/C2**. Personas at 0.3.0–0.10.0 still validate unchanged (a frozen legacy schema). The quantitative spec lives at `.personaxis/[personas/<slug>/]personaxis.md`; the repo-root `PERSONA.md` (or `.claude/agents/<slug>.md` in subagent mode) is the separate, LLM-compiled qualitative document generated via `personaxis compile`. Migrate with `personaxis migrate 0.10-to-1.0`. See [CHANGELOG.md](./CHANGELOG.md) and `docs/SPEC.md` for notes.
 
 ## Validation
 
 ```bash
-npx @personaxis/persona.md validate [file]                    # personaxis.md + universals (defaults to .personaxis/personaxis.md)
-npx @personaxis/persona.md validate <slug>                    # named persona (.personaxis/personas/<slug>/personaxis.md)
-npx @personaxis/persona.md compile [--root | <slug>]          # personaxis.md -> PERSONA.md / <slug>.md
-npx @personaxis/persona.md decompile [--root | <slug>]        # PERSONA.md / <slug>.md -> personaxis.md proposal
-npx @personaxis/persona.md state mutate [-f <path>] --field X --delta Y
-npx @personaxis/persona.md migrate 0.10-to-1.0 [--apply]     # breaking codemod to the stable spec (comment-preserving)
+npx personaxis validate [file]                    # personaxis.md + universals (defaults to .personaxis/personaxis.md)
+npx personaxis validate <slug>                    # named persona (.personaxis/personas/<slug>/personaxis.md)
+npx personaxis compile [--root | <slug>]          # personaxis.md -> PERSONA.md / <slug>.md
+npx personaxis decompile [--root | <slug>]        # PERSONA.md / <slug>.md -> personaxis.md proposal
+npx personaxis state mutate [-f <path>] --field X --delta Y
+npx personaxis migrate 0.10-to-1.0 [--apply]     # breaking codemod to the stable spec (comment-preserving)
 ```
 
 Exit codes: PASS / PASS_WITH_WARNINGS / FAIL_SCHEMA / FAIL_POLICY / FAIL_CONCEPTUAL.

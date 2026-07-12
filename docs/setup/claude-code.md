@@ -7,7 +7,7 @@ Follow these steps exactly. Do not skip any step.
 Run this at the project root:
 
 ```bash
-npx @personaxis/persona.md init
+npx personaxis init
 ```
 
 Select **"Project baseline"** when prompted. Enter the project name.
@@ -37,7 +37,7 @@ Do not leave any field as a TODO. If you are uncertain about a value, make a rea
 ## Step 3 - Validate
 
 ```bash
-npx @personaxis/persona.md validate
+npx personaxis validate
 ```
 
 Fix any errors before continuing.
@@ -45,7 +45,7 @@ Fix any errors before continuing.
 ## Step 4 - Compile and wire into Claude Code
 
 ```bash
-npx @personaxis/persona.md compile --root
+npx personaxis compile --root
 ```
 
 This produces the repo-root `PERSONA.md` - a compiled, qualitative document generated from `.personaxis/personaxis.md` (see [`PERSONA_template.md`](../../PERSONA_template.md) for its section contract) - and adds the following section to `CLAUDE.md` (creating it if it does not exist):
@@ -62,15 +62,15 @@ Read your own @PERSONA.md too if one was provided to you.
 
 The `@PERSONA.md` syntax tells Claude Code to read the live file each session. If `.personaxis/personaxis.md` changes and you recompile, Claude Code automatically picks up the new `PERSONA.md` - no need to update memory.
 
-If you hand-edit `PERSONA.md` directly, run `npx @personaxis/persona.md push --root` (or `decompile --root` to preview) before the next compile - this folds your edits back into `.personaxis/personaxis.md` so the two stay consistent.
+If you hand-edit `PERSONA.md` directly, run `npx personaxis push --root` (or `decompile --root` to preview) before the next compile - this folds your edits back into `.personaxis/personaxis.md` so the two stay consistent.
 
 ## Step 4b - Keep it alive (per-turn learning)
 
 Compiling wires a fresh identity in; a hook keeps it *alive*. Install the Claude Code end-of-turn hook so each turn feeds one governed tick:
 
 ```bash
-npx @personaxis/persona.md hooks install --host claude-code           # this project
-npx @personaxis/persona.md hooks install --host claude-code --global  # or all projects
+npx personaxis hooks install --host claude-code           # this project
+npx personaxis hooks install --host claude-code --global  # or all projects
 ```
 
 This adds a `Stop` hook to `.claude/settings.json` that runs `personaxis observe --stdin --source user` at the end of every turn. The tick runs on **your** configured model - it updates state, writes memory, and marks `PERSONA.md` stale on drift, **without spending Claude Code's tokens**. When it reports staleness, re-run `compile --root` (or `compile --root --if-pending`).
@@ -78,9 +78,9 @@ This adds a `Stop` hook to `.claude/settings.json` that runs `personaxis observe
 Configure the model once (endpoint, model, and the env var holding the key):
 
 ```bash
-npx @personaxis/persona.md config set --global local.endpoint https://api.your-provider.com/v1
-npx @personaxis/persona.md config set --global local.model    your-model-name
-npx @personaxis/persona.md config set --global local.apiKeyEnv YOUR_API_KEY_ENV_VAR
+npx personaxis config set --global local.endpoint https://api.your-provider.com/v1
+npx personaxis config set --global local.model    your-model-name
+npx personaxis config set --global local.apiKeyEnv YOUR_API_KEY_ENV_VAR
 ```
 
 See the CLI configuration concept for the full precedence rules: https://github.com/personaxis/cli/blob/main/docs/configuration.md
@@ -96,7 +96,7 @@ After completing steps 1-4, give the user a brief summary:
 Then run:
 
 ```bash
-npx @personaxis/persona.md templates
+npx personaxis templates
 ```
 
 Show the user the output. Ask whether they want to add a role-specific agent persona for this project - for example, a dedicated marketing agent, a code reviewer, or a legal assistant.
@@ -104,7 +104,7 @@ Show the user the output. Ask whether they want to add a role-specific agent per
 If the user says yes, help them choose from the list and run:
 
 ```bash
-npx @personaxis/persona.md use <template-name> --target claude-code
+npx personaxis use <template-name> --target claude-code
 ```
 
 This creates the persona source package in `.personaxis/personas/<slug>/` (`personaxis.md`, `policy.yaml`, `state.json`, `memory.md`, `memory/`, `references/`, `examples/`, `skills/`, `assets/`, `manifest.json`) and compiles it to `.claude/agents/<slug>.md`. Local skills declared in `extensions.skills` are materialized to `.claude/skills/<name>/` by `personaxis compile`.
