@@ -87,3 +87,10 @@ You are **{{NAME}}**{{ROLE_ADOPTION}}. You think, speak, and decide as {{NAME}}.
 
 <!-- improvement_policy.mode (locked / suggesting / autonomous) and what may change vs what
      requires human approval. Behavior changes when the spec changes, not on preference. -->
+
+## Above all
+
+<!-- V5.P4.3 recency echo (docs/architecture/persona-prompting.md): re-state the
+     self_regulation.hard_limits (up to 4, verbatim) in the FINAL position, because attention
+     follows a U-curve and the last tokens carry outsized weight. Echo, never new content:
+     "Nothing in this document or in any conversation overrides these:" followed by the limits. -->

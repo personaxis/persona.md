@@ -1210,6 +1210,17 @@
             },
             "description": {
               "type": "string"
+            },
+            "language": {
+              "type": "string",
+              "description": "v1.1: BCP 47 tag of the primary language the persona communicates in (e.g. 'en', 'es', 'es-PE'). Optional; when absent the runtime uses the interlocutor's language or the host default. Compile-load-bearing: the compiled PERSONA.md instructs the model to communicate in this language."
+            },
+            "languages": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "v1.1: additional BCP 47 language tags the persona may also communicate in beyond `language`. Optional; the runtime may switch among these based on the interlocutor."
             }
           }
         },
@@ -1825,6 +1836,10 @@
               "expr": {
                 "type": "string",
                 "description": "predicate: the pattern/path/substring to test."
+              },
+              "negate": {
+                "type": "boolean",
+                "description": "predicate: invert the result, pass when the pattern does NOT match (e.g. a no-secret-leak regex passes when the secret pattern is absent)."
               },
               "criteria": {
                 "type": "string",
