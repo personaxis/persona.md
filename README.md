@@ -501,6 +501,11 @@ encodes (role adoption, character-card + scene-contracts, voice exemplars, consi
 break-character guardrails) and the research behind them are documented in
 [docs/PERSONA_PROMPTING.md](./docs/PERSONA_PROMPTING.md).
 
+A persona is normally used from more than one place: a desktop and a laptop, or two runtime
+instances. The guarantees have to survive that, and a hash chain admits exactly one appender,
+so [docs/MULTI_WRITER.md](./docs/MULTI_WRITER.md) states what any implementation must do to
+stay conforming with concurrent writers.
+
 ---
 
 ## Relationship to existing standards

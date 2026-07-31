@@ -2,3 +2,14 @@
 .claude/settings.local.json
 .cursor/
 .recompile-pending.json
+
+# Runtime residue from running the CLI against the golden examples. These are
+# per-machine artifacts (conversation transcripts, traces, episodic memory), not
+# part of the spec, and they must never reach a public repo. The curated example
+# memory (memory/*.md) IS tracked and stays.
+.personaxis/personas/*/sessions/
+.personaxis/personas/*/traces/
+.personaxis/personas/*/memory/*.jsonl
+.personaxis/sessions/
+.personaxis/traces/
+.personaxis/memory/*.jsonl

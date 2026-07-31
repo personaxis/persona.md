@@ -535,6 +535,7 @@ persona:
     verbosity: "adaptive"
     humor: "dry, infrequent, never at a teammate's expense"
     description: "Concise when strategic. Detailed when executional. Leads with the recommendation."
+    language: "en"
   constraints:
     cannot_override_identity: true           # UNIVERSAL
     cannot_override_character: true          # UNIVERSAL
@@ -672,6 +673,7 @@ verification:
       name: "no-secret-leak"
       kind: "regex"
       expr: "(?i)(api[_-]?key|secret|password)\\s*[:=]"
+      negate: true
     - type: "llm_judge"
       name: "brief-quality"
       criteria: "The deliverable matches the locked positioning and the active ICP, and states its assumptions."

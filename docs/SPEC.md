@@ -400,6 +400,8 @@ citations: [PERSONA_PROMPTING.md](./PERSONA_PROMPTING.md).
 | `voice.warmth` | SHOULD | float 0..1 |
 | `voice.verbosity` | SHOULD | enum `adaptive` / `concise` / `detailed` |
 | `voice.humor` / `voice.description` | MAY | prose |
+| `voice.language` | SHOULD | BCP 47 tag (e.g. `en`, `es`, `es-PE`); compile-load-bearing, the compiled doc instructs the model to reply in it |
+| `voice.languages` | MAY | array of BCP 47 tags the persona may also reply in, per interlocutor |
 | `constraints.cannot_override_identity` | MUST | **Universal U10:** `true` |
 | `constraints.cannot_override_character` | MUST | **Universal U10:** `true` |
 | `constraints.cannot_claim_real_emotion` | MUST | **Universal U4:** `true` |
@@ -473,8 +475,18 @@ minors: any knob that tunes an implementation without changing who the persona i
 ### 8.2 Episodic memory, normative format with real erasure
 
 Normative schema: [`schema/memory.schema.json`](../schema/memory.schema.json). One JSON object
-per line in `memory/episodic.jsonl`; every entry carries `source` provenance and forms a
-tamper-evident chain (`prev_hash` → `hash`).
+per line; every entry carries `source` provenance and forms a tamper-evident chain
+(`prev_hash` → `hash`).
+
+**One chain per WRITER (v1.1 clarification).** A hash chain admits exactly one appender: two
+writers produce links that do not follow from each other, and the integrity check correctly
+reports tampering while being unable to say which side is right. A persona used from more
+than one machine therefore keeps one log per device, `memory/episodic.<deviceId>.jsonl`,
+each an independent chain starting at `""`. Retrieval reads the union in time order;
+verification runs per log, and a break identifies WHICH log and at which entry. Implementations
+that only ever write from one place MAY use a single `memory/episodic.jsonl`, which the
+reference implementation still reads. The full requirements for concurrent writers, and why
+a single chain cannot satisfy them, are in [MULTI_WRITER.md](./MULTI_WRITER.md).
 
 **v1.0 (erasure):** the chain hash commits to `content_hash`, NOT to the content bytes, so an
 entry's content can be **redacted** (right-to-erasure) while the chain stays verifiable

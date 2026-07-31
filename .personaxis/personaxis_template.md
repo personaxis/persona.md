@@ -607,6 +607,8 @@ persona:
     verbosity: "adaptive"             # SHOULD | enum           | [ACTOR-COLD]
     humor: ""                         # MAY    | string         | [ACTOR-COLD]
     description: ""                   # MAY    | string         | [ACTOR-COLD]
+    language: ""                      # SHOULD | BCP47 tag      | [ACTOR-COLD] primary language the persona speaks (e.g. "en", "es", "es-PE"); compiled doc instructs the model to reply in it
+    # languages: ["en", "es"]         # MAY    | array<BCP47>   | [ACTOR-COLD] additional languages it may switch to per interlocutor
 
   # ── Constraints (MUST) ──────────────────────────────────────────────────
   constraints:                        # MUST | map<string, bool> | UNIVERSAL invariants

@@ -12,6 +12,13 @@ The spec follows [Semantic Versioning](https://semver.org/).
 Every 1.0.0 document is a valid 1.1.0 document, **no codemod**.
 
 ### Added
+- **`verification.gates[].negate` (MAY, predicate)**: invert a predicate gate, pass when the
+  pattern does NOT match (e.g. a `no-secret-leak` regex passes when the secret pattern is absent).
+  Optional and additive.
+- **`persona.voice.language` (SHOULD) + `persona.voice.languages` (MAY)**: declare the BCP 47
+  language(s) the persona communicates in. Compile-load-bearing: the compiled PERSONA.md instructs
+  the model to reply in `language`, and may switch among `languages` per interlocutor. Optional and
+  additive; every existing 1.0.0/1.1.0 document validates unchanged.
 - **`half_life` (MAY)** on every envelope dimension (traits, core_affect, mood, envelope
   drives): homeostatic return-to-baseline, the deviation from `mean` halves every
   `half_life` turns absent stimulus (λ = 1 − 2^(−1/half_life); audited as `runtime-decay`).
@@ -25,7 +32,22 @@ Every 1.0.0 document is a valid 1.1.0 document, **no codemod**.
   hash-chains like episodic memory (tamper-evident; legacy prefix tolerated; trimming
   runtimes must re-anchor).
 
+### Added, normative companion
+- **docs/MULTI_WRITER.md**: what any implementation MUST do when a persona is written from more than one place (R1 one chain per writer · R2 verification per chain, localising · R3 read the union · R4 total order + clamp at every step · R5 a failed chain does not contribute · R6 derived state is reconstructible · R7 the spec document is not a log). Refines C1/C2 for the concurrent case. No schema change.
+- **docs/MULTI_WRITER.md §3**: locking is explicitly NOT required. R1-R6 exist so that concurrent writers need no mutual exclusion; an implementation MAY offer a lease so an operator can serialise deliberately, MUST NOT require one for conformance, and MUST NOT treat a persona as unreadable because a lock is held elsewhere.
+
+### Clarified
+- **§8.2: one episodic chain per WRITER.** A hash chain admits exactly one appender, so a
+  persona used from more than one machine keeps `memory/episodic.<deviceId>.jsonl` per
+  device, each an independent chain; retrieval reads the union, verification runs per log and
+  identifies which one broke. Single-writer implementations MAY keep one
+  `memory/episodic.jsonl`, which the reference implementation still reads. No schema change:
+  the entry format is untouched, this names the file layout the guarantee requires.
+
 ### Fixed
+- **`policy.schema.json` accepts `spec_version: "1.1.0"`.** The enum stopped at 1.0.0, so a
+  `policy.yaml` aligned with its 1.1.0 persona failed FAIL_SCHEMA for no reason. Additive
+  only: policy.yaml has had no field changes since 0.6.0, and 1.1.0 added none.
 - **Erratum:** `bands` is the schema's `{low_max, moderate_max}` OBJECT ($defs/bandBoundaries);
   SPEC.md §0/§L3 and the template briefly showed an unimplementable `[b1, b2]` array form.
   Defaults documented: 0.33/0.66 unsigned; −0.33/+0.33 signed.
