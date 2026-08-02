@@ -686,9 +686,10 @@ See [`CHANGELOG.md`](../CHANGELOG.md) for each diff and rationale.
 
 ## 15. Mathematical semantics (normative, v1.1)
 
-> The reference derivations, proofs, and machine-checked obligations live in the CLI repo's
-> `research/MATH_CORE.md`; this section states the normative contract a conforming runtime must
-> honor. The governed object is the FULL persona: state coordinates span the personality /
+> The reference derivations and proofs are published separately as a research report; the
+> machine-checked obligations ship with the implementation, as property tests over theorems
+> T1-T6. This section states the normative contract a conforming runtime must honor, which is
+> the part an implementer needs and the only part that is binding. The governed object is the FULL persona: state coordinates span the personality /
 > affect / values_and_drives layers; governance and audit span all ten.
 
 **State space.** The mutable surface is exactly the set of envelope-bearing dot-paths `i`
