@@ -173,7 +173,7 @@
           },
           "definition": {
             "type": "object",
-            "description": "Type-specific configuration. Schema by type is documented in docs/personaxis-docs/architecture/observability-model.mdx.",
+            "description": "Type-specific configuration, shaped by `type`: `regex` takes a pattern and the field it is matched against; `llm_judge` takes the rubric the judge is given; `semantic` and `activation_projection` are reserved and evaluate as a no-op pass.",
             "additionalProperties": true
           },
           "severity": {
