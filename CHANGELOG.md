@@ -37,6 +37,16 @@ Every 1.0.0 document is a valid 1.1.0 document, **no codemod**.
 - **docs/MULTI_WRITER.md §3**: locking is explicitly NOT required. R1-R6 exist so that concurrent writers need no mutual exclusion; an implementation MAY offer a lease so an operator can serialise deliberately, MUST NOT require one for conformance, and MUST NOT treat a persona as unreadable because a lock is held elsewhere.
 
 ### Clarified
+- **§7.2 and `policy.schema.json`: `locked` is the kill-switch.** The schema described `locked` as
+  "state.json mutations within envelopes are still allowed", which no runtime did: the reference
+  implementation stops every change the persona proposes, state included, and C1 already gates state
+  by the mode. §7.2 now states what each mode lets move, and the schema descriptions say the same.
+  No validation changes.
+- **`policy.yaml`: `approved_by` and `last_approval_at` are required only for `autonomous`.** They
+  were required for `suggesting` too, where no spec edit applies without a person, so the only way to
+  create a living persona without inventing a sign-off was to leave it `locked`. Relaxation only:
+  every policy.yaml that validated still validates. The default when nothing is declared is still
+  `locked`.
 - **§8.2: one episodic chain per WRITER.** A hash chain admits exactly one appender, so a
   persona used from more than one machine keeps `memory/episodic.<deviceId>.jsonl` per
   device, each an independent chain; retrieval reads the union, verification runs per log and

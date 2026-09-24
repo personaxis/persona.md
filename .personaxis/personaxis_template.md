@@ -728,7 +728,9 @@ governance:
 # ═══════════════════════════════════════════════════════════════════════════
 # IMPROVEMENT_POLICY, inline self-improvement posture (MAY)
 # ═══════════════════════════════════════════════════════════════════════════
-# The runtime reads improvement_policy.mode (readMode); absent => "locked".
+# The runtime reads improvement_policy.mode (readMode); absent => "locked",
+# which is the kill-switch: nothing the persona proposes applies, state included.
+# A living persona declares "suggesting".
 # v1.0 precedence: inline is AUTHORITATIVE; a sibling policy.yaml may only
 # restrict it (the more conservative of the two wins). Change from the CLI with
 # `personaxis improve <mode>` or the REPL `/improve`.
@@ -877,17 +879,19 @@ observability:                        # MAY | object | causal trace export
 This persona's ability to edit its own spec is controlled by
 `policy.yaml#/improvement_policy/mode`. Three modes are supported:
 
-### `locked` (default; safest)
+### `locked` (the kill-switch; the mode when none is declared)
 
-- Spec is immutable in runtime.
-- The actor MAY observe drift but cannot propose or apply edits.
+- Spec is immutable in runtime, and so is state: nothing the actor proposes
+  applies, not even a change inside the envelopes.
+- Only a person's own mutations and homeostasis (`half_life`) move the state.
+- For an incident or an audit. A regulated deployment narrows the envelopes and
+  keeps the persona alive instead.
 - `self_regulation.decisions.governance_decision.enabled` excludes
   `propose_self_edit` and `apply_self_edit`.
-- State.json mutations within declared envelopes are still allowed: state
-  mutation is NOT a spec edit.
 
-### `suggesting` (assisted improvement)
+### `suggesting` (the persona is alive)
 
+- State changes apply inside the declared envelopes and the drift thresholds.
 - The actor MAY call the canonical tool `propose_self_edit(scope, justification,
   evidence)` to surface a proposal.
 - Proposals are queued in the Personaxis dashboard for human review.
@@ -916,8 +920,8 @@ This persona's ability to edit its own spec is controlled by
 | `propose_self_edit(virtues.honesty.enforcement, "soft")` | proposes change to `personaxis.md` | `improvement_policy.mode` + per-layer edit policy + universals |
 | `apply_self_edit(persona.voice.warmth_mean, 0.6)` | directly modifies `personaxis.md` | `improvement_policy.mode: autonomous` + per-layer edit policy + universals |
 
-**Important:** state.json mutations happen regardless of improvement_policy.mode
-(state is operational, not spec). Spec edits require improvement_policy >= suggesting.
+**Important:** state changes apply under `suggesting` and `autonomous` and stop
+under `locked`. Spec edits require improvement_policy >= suggesting.
 Whenever this file changes (by any of the above), `personaxis push` recompiles
 the sibling `PERSONA.md` / `.claude/agents/<slug>.md` so the two stay in sync.
 

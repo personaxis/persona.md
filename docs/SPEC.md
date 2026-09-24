@@ -452,6 +452,17 @@ the more conservative wins (`locked` < `suggesting` < `autonomous`, lowest wins)
 block is absent, policy.yaml governs; when both are absent, the mode is `locked`. This ends the
 0.x ambiguity of two files claiming the same knob.
 
+**What each mode lets move (normative, clarified in 1.1.0):**
+
+| Mode | State (inside the envelopes) | Spec (`personaxis.md`) |
+|---|---|---|
+| `locked` | does not move on anything the persona proposes; only a person's own mutations and homeostasis (`half_life`) move it | immutable |
+| `suggesting` | moves, clamped and drift-bounded (§8.3) | edits are proposed and queued for a person |
+| `autonomous` | moves, clamped and drift-bounded (§8.3) | edits apply, bounded by the universals, `per_layer_edit_policy` and the hard limits; requires `approved_by` and `last_approval_at` |
+
+`locked` is the kill-switch, for an incident or an audit. A deployment that needs tighter behaviour
+narrows the envelopes and keeps the persona alive; that is what the envelopes are for.
+
 Change the mode with `personaxis improve <mode>` (CLI) or `/improve` (REPL).
 
 ---

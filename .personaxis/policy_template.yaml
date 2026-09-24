@@ -47,18 +47,19 @@ applies_to:
 # two wins). If personaxis.md declares no inline block, this file governs.
 # Three modes are supported, with strictly increasing autonomy.
 #
-#   locked     (default; safest)
-#              personaxis.md is immutable in runtime. State.json mutations within
-#              declared envelopes are STILL allowed (state is operational,
-#              not spec). Personaxis detects drift and alerts; never proposes
-#              or applies spec changes. Suitable for compliance-sensitive
-#              deployments (healthcare, legal, finance, regulated industries).
+#   locked     (the kill-switch; the mode when none is declared)
+#              Nothing the persona or its model proposes applies: neither an
+#              edit to personaxis.md nor a change to its state. Only a person's
+#              own mutations and homeostasis (half_life) move the state. For an
+#              incident or an audit, temporarily. A regulated deployment does not
+#              need it: it narrows the envelopes and keeps the persona alive.
 #
 #              self_regulation's governance_decision excludes both
 #              propose_self_edit and apply_self_edit.
 #
-#   suggesting (assisted improvement)
-#              The actor MAY call propose_self_edit(scope, justification,
+#   suggesting (the persona is alive; what new personas are born with)
+#              State changes apply inside the declared envelopes and the drift
+#              thresholds. For its spec, the actor MAY call propose_self_edit(scope, justification,
 #              evidence) to surface a proposed spec change. Proposals are
 #              queued in the Personaxis dashboard. Human reviewers approve
 #              or reject. Approved proposals mint a new PersonaVersion, which
@@ -86,19 +87,16 @@ applies_to:
 #              self_regulation's governance_decision includes both
 #              propose_self_edit and apply_self_edit.
 #
-# IMPORTANT: state.json mutations (adjust_persona_state tool calls) work
-# under ALL three modes. State is operational, not spec. Editing the persona's
-# trait CURRENT VALUE (e.g., humor 0.4 -> 0.3) is not the same as editing the
-# persona's IDENTITY (e.g., adding a new virtue). The first is always allowed
-# within envelopes; the second is gated by improvement_policy.mode.
+# IMPORTANT: editing the persona's trait CURRENT VALUE (e.g., humor 0.4 -> 0.3)
+# is not the same as editing the persona's IDENTITY (e.g., adding a new virtue).
+# The first moves inside the envelopes under suggesting and autonomous, and
+# stops under locked; the second is gated by improvement_policy.mode.
 improvement_policy:
-  mode: locked
-  # Required when mode != "locked":
+  mode: suggesting
+  # Required when mode == "autonomous":
   # approved_by: "user:cuid_xxx"
   # last_approval_at: "2026-05-29T12:00:00Z"
   # approval_expires_at: "2026-08-29T12:00:00Z"
-
-  # Required when mode == "autonomous":
   # autonomous_scope_allowlist:        # paths the actor MAY auto-edit
   #   - "persona.voice.warmth"
   #   - "persona.task_modes.*"
