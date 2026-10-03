@@ -116,7 +116,7 @@ improvement_policy:
 #   byok   - user's own API key (Anthropic/OpenAI/etc.)
 #   agent  - delegate to the active coding agent's own model (Claude Code, Codex)
 #   remote - Personaxis-hosted models (SaaS, paid plan)
-# Configure via `personaxis config set provider <local|byok|agent|remote>`.
+# Configure via `personaxis config set provider <local|byok|agent>`.
 # provider: agent
 
 # ─── Runtime constraints (MAY) ─────────────────────────────────────────────
