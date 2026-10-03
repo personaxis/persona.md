@@ -50,7 +50,7 @@
 # The repo root `PERSONA.md` (or `.claude/agents/<slug>.md` in subagent mode)
 # is a SEPARATE, LLM-compiled QUALITATIVE document generated from this file via
 # `personaxis compile`. Editing the compiled document and running
-# `personaxis push` will `personaxis decompile` your edits back into this file.
+# `personaxis decompile` folds your edits back into this file.
 #
 # ── INFORMATION MODEL ───────────────────────────────────────────────────────────
 #
@@ -922,7 +922,7 @@ This persona's ability to edit its own spec is controlled by
 
 **Important:** state changes apply under `suggesting` and `autonomous` and stop
 under `locked`. Spec edits require improvement_policy >= suggesting.
-Whenever this file changes (by any of the above), `personaxis push` recompiles
+Whenever this file changes (by any of the above), `personaxis compile` recompiles
 the sibling `PERSONA.md` / `.claude/agents/<slug>.md` so the two stay in sync.
 
 ---
@@ -937,5 +937,5 @@ the sibling `PERSONA.md` / `.claude/agents/<slug>.md` so the two stay in sync.
 - `memory/`, date-stamped episodic memory.
 - `state.json`, current runtime state (current trait/affect/mood values).
 - `manifest.json` - compile/decompile provenance (last op, model, source) and
-  content hashes used by `personaxis push`/`pull` to detect hand-edits.
+  content hashes used by `personaxis compile`/`decompile` to detect hand-edits.
 - `policy.yaml`, observability, assertions, and improvement_policy mode.
