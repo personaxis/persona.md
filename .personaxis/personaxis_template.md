@@ -894,7 +894,7 @@ This persona's ability to edit its own spec is controlled by
 - State changes apply inside the declared envelopes and the drift thresholds.
 - The actor MAY call the canonical tool `propose_self_edit(scope, justification,
   evidence)` to surface a proposal.
-- Proposals are queued in the Personaxis dashboard for human review.
+- Proposals are queued for human review (`personaxis review`, or /persona → Evolution in the app).
 - Approved proposals mint a new PersonaVersion (semantic version bump).
 - `self_regulation.decisions.governance_decision.enabled` includes
   `propose_self_edit`.

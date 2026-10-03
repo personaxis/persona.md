@@ -64,7 +64,7 @@ Read your own @PERSONA.md too if one was provided to you.
 
 Re-running the command replaces this section instead of duplicating it. Existing human-authored `AGENTS.md` content is preserved.
 
-If you hand-edit `PERSONA.md` directly, run `npx personaxis push --root` (or `decompile --root` to preview) before the next compile - this folds your edits back into `.personaxis/personaxis.md` so the two stay consistent.
+If you hand-edit `PERSONA.md` directly, run `npx personaxis decompile --root` before the next compile: it folds your edits back into `.personaxis/personaxis.md` so the two stay consistent.
 
 ## Step 4b - Keep it alive (per-turn learning)
 
@@ -122,5 +122,5 @@ If the user is not sure, suggest they start with just the project baseline and a
 - Re-run `personaxis compile --root` after any change to `.personaxis/personaxis.md`. The managed section in `AGENTS.md` is replaced, never duplicated.
 - If you already have an `AGENTS.md` with existing content, the compile command appends or updates only the managed PERSONA.md section. Your existing content is untouched.
 - Named agent personas in `.personaxis/personas/<slug>/` compile to `.codex/agents/<slug>.toml`. Local skills declared in `extensions.skills` are materialized to `.agents/skills/<name>/` (not `persona-<slug>`). These are generated files, not replacements for the source package.
-- Edit `.personaxis/personas/<slug>/personaxis.md` and recompile, or edit `.codex/agents/<slug>.toml` directly and run `personaxis push <slug>` to fold the edit back. Do not edit materialized files in `.agents/skills/` directly.
+- Edit `.personaxis/personas/<slug>/personaxis.md` and recompile, or edit `.codex/agents/<slug>.toml` directly and run `personaxis decompile <slug>` to fold the edit back. Do not edit materialized files in `.agents/skills/` directly.
 - `personaxis.md` does not define MCP servers, plugins, or command approval rules. The Codex target does not generate `.codex/config.toml` or `.codex/rules/` from behavioral persona fields.

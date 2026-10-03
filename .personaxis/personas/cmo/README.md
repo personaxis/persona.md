@@ -1,23 +1,22 @@
 # cmo
 
-**CMO** - Chief Marketing Officer (spec v1.0.0)
+**CMO**, Chief Marketing Officer (spec v1.1.0, persona version 2.0.0)
 
-A complete persona example for a Chief Marketing Officer agent built to own the marketing function end-to-end: positioning, brand, demand generation, product marketing, lifecycle, growth loops, analytics, and the marketing P&L.
+A complete persona example for a Chief Marketing Officer agent built to own the marketing function end to end: positioning, brand, demand generation, product marketing, lifecycle, growth loops, analytics, and the marketing P&L.
 
-This is the first persona in the planned **C-suite series** and the reference example for the spec (three-artifact information model: `personaxis.md` for the quantitative spec, `PERSONA.md` for the compiled qualitative document, `state.json` for mutable runtime state). It ships at **spec v1.0.0** (migrated from 0.10 via `personaxis migrate 0.10-to-1.0`); the "What changed" notes below are kept as version history.
+It is the reference example for the spec's three artifacts: `personaxis.md` (the quantitative ten-layer spec), `PERSONA.md` (the compiled document a model reads) and `state.json` (the mutable runtime state).
 
-This persona lives at `.personaxis/personas/cmo/` in this repository, as part of the example collection under `.personaxis/personas/`. In a real deployment of `cmo` as a repository agent ("root mode"), `personaxis.md` and its siblings below would live at `.personaxis/` and `PERSONA.md` at the repo root - the directory contents are identical, only the placement differs.
+This persona lives at `.personaxis/personas/cmo/`, as part of the example collection. Deployed as a repository's own agent ("root mode"), `personaxis.md` and its siblings would live at `.personaxis/` and `PERSONA.md` at the repository root: the contents are identical, only the placement differs.
 
-A **subagent example**, `frontend-expert`, lives alongside this persona at `.personaxis/personas/frontend-expert/` + `.claude/agents/frontend-expert.md` (repo root), demonstrating the subagent-mode layout for a narrowly-scoped Claude Code subagent.
+A **subagent example**, `frontend-expert`, lives alongside it at `.personaxis/personas/frontend-expert/`, compiled to `.claude/agents/frontend-expert.md`.
 
 ## Who this is for
 
 - Founders and CEOs who need a senior marketing executive's judgment before the company can support the seat
 - Operators running marketing in startups from seed through Series B
 - Heads of marketing who want a peer to pressure-test strategy, narrative, and budget allocation
-- Teams using Personaxis to compose multi-agent C-suites
 
-## v0.7.0 structure (root mode, flattened for this example collection)
+## Structure
 
 ```
 .personaxis/personas/
@@ -72,42 +71,23 @@ A **subagent example**, `frontend-expert`, lives alongside this persona at `.per
 
 In a real "root mode" deployment of `cmo`, this same set of files (everything except `README.md`) lives at the consuming repo's `.personaxis/` and `PERSONA.md` at its root - identical contents, just `.personaxis/personas/cmo/` -> `.` / `.personaxis/`.
 
-## What changed in v0.7.0
-
-v0.7.0 is a layout-only move from v0.6.0 - no field changes. Notable changes:
-
-1. **Three artifacts instead of two.** `PERSONA.md` (compiled qualitative document, what a coding agent reads), `personaxis.md` (immutable quantitative spec), and `state.json` (mutable runtime). The Personaxis-hosted runtime actor never reads either Markdown file directly; it reads the per-request `.dist/` prompt produced by the runtime compiler from `personaxis.md` + `state.json`.
-
-2. **Quantitative spec relocated under `.personaxis/`.** What was repo-root `PERSONA.md` in v0.6.0 is now `.personaxis/personaxis.md` (root mode). `policy.yaml`, `state.json`, `memory.md`, `memory/`, `references/`, `examples/`, `skills/`, `assets/` all moved alongside it, unchanged in name and shape.
-
-3. **New `manifest.json`.** Records compile/decompile provenance (last op, model, source) and content hashes, used by `personaxis push`/`pull` to detect hand-edits.
-
-4. **New subagent example.** `.personaxis/personas/frontend-expert/` + `.claude/agents/frontend-expert.md` demonstrate the subagent-mode layout alongside this persona's root-mode layout.
-
-Carried over from v0.6.0 (unchanged):
-
-- **Unified governance.** `governance.per_layer_edit_policy` and `governance.drift_thresholds` replace the scattered `edit_policy` and `drift_threshold` fields from v0.5.
-- **Reflexive decisions categorized.** `reflexive_self_regulation.decisions{}` replaces the flat `actions[]` array. Four independent decision groups (response, interaction, governance, cognition).
-- **Trait/affect envelopes.** Personality traits and affect baselines declare envelopes (mean + range). Current values live in `state.json` and are mutated via the canonical `adjust_persona_state` tool, clamped to the envelope.
-- **Three improvement modes.** `improvement_policy.mode` accepts `locked` | `suggesting` | `autonomous`. This persona ships in `locked` mode.
-
 ## Quick start
 
+From the root of this repository:
+
 ```bash
-# Validate the spec
-personaxis validate ./personaxis.md
+# Validate the spec and its policy.yaml
+npx personaxis validate cmo
 
-# Compile the quantitative spec to PERSONA.md (compiled qualitative document)
-personaxis compile --root
+# Compile it for Claude Code (writes .claude/agents/cmo.md)
+npx personaxis compile cmo --platform claude-code
 
-# Compile to a runtime prompt (produces .dist/)
-personaxis compile ./personaxis.md --context task_mode=quarterly_planning,audience=ceo
+# Read and move its runtime state (clamped to the envelopes declared in personaxis.md)
+npx personaxis state show -f cmo
+npx personaxis state mutate -f cmo --field mood.tone --delta -0.10 --reason "user asked for less energy"
 
-# Adjust mutable state (clamped to envelopes declared in personaxis.md)
-personaxis state mutate ./state.json --field "mood.tone" --delta -0.10 --reason "user requested less energy"
-
-# Export the subagent example to Claude Code
-personaxis compile frontend-expert --platform claude-code
+# Talk to it
+npx personaxis --persona .personaxis/personas/cmo/personaxis.md
 ```
 
 ## Working with this persona
@@ -124,13 +104,9 @@ Without these, the first deliverable is the question set that produces them.
 
 ## Self-improvement
 
-The improvement posture is the inline `improvement_policy.mode` in `personaxis.md` (authoritative; `policy.yaml` may only restrict it). Under `suggesting`, the actor MAY call `propose_self_edit`, proposals queue for human approval, and approval mints a new PersonaVersion and recompiles `PERSONA.md`. Under `locked`, `personaxis.md` is immutable at runtime. State mutations (mood, affect, trait current values) work within declared envelopes under every mode.
+The improvement posture is the inline `improvement_policy.mode` in `personaxis.md` (authoritative; `policy.yaml` may only restrict it). This persona ships in `suggesting`: numeric state moves inside its envelopes, and an edit to the spec itself is proposed with `propose_self_edit`, queued for a person (`personaxis review`), and recompiles `PERSONA.md` once approved. Under `locked`, nothing the persona lives through moves it. Change the posture with `personaxis improve <mode>`.
 
-Change the posture with `personaxis improve <mode>` (keeps both copies aligned).
-
-For full autonomous self-edit (sandbox only): set mode to `autonomous` and define `autonomous_scope_allowlist`. The reflexive layer remains `governance_controlled` and cannot be auto-edited even in this mode.
-
-See the Personaxis documentation on self-improvement for the full state machine.
+`autonomous` (sandbox only) applies changes directly within an `autonomous_scope_allowlist` and needs a recorded sign-off (`approved_by`, `last_approval_at`). The self-regulation layer stays `governance_controlled` in every mode. The full rules are in [docs/SPEC.md](../../../docs/SPEC.md).
 
 ## Agent prompt guide
 
@@ -158,20 +134,7 @@ Write the marketing section. Material misses first.
 
 ## Spec compliance
 
-- Spec version: `0.7.0`
+- Spec version: `1.1.0` (migrated from 0.10 with `personaxis migrate 0.10-to-1.0`; the report is in `.personaxis/migrations/`)
 - Persona version: `2.0.0`
-- Validator: `personaxis validate ./personaxis.md` should emit `PASS`
-- Policy: `policy.yaml` ships ~17 hand-written assertions. The judge auto-derives ~30 more from `personaxis.md` (every hard virtue, every hard_limit, every monitor flag).
-
-## C-suite roadmap
-
-| Persona | Status | Owns |
-|---|---|---|
-| **CMO** | This release | Positioning, brand, demand, lifecycle, marketing P&L |
-| CRO | Planned | Pipeline, sales motion, revenue forecasting |
-| CPO | Planned | Product strategy, roadmap, discovery, PMF |
-| CFO | Planned | Financial planning, capital allocation, board reporting |
-| COO | Planned | Operations, hiring, process |
-| CEO | Planned | Vision, governance, board, capital |
-
-Each follows the same v0.7.0 structural template.
+- `personaxis validate cmo` emits `PASS`
+- `policy.yaml` declares 19 hand-written behavioral assertions

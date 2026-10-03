@@ -62,7 +62,7 @@ Read your own @PERSONA.md too if one was provided to you.
 
 The `@PERSONA.md` syntax tells Claude Code to read the live file each session. If `.personaxis/personaxis.md` changes and you recompile, Claude Code automatically picks up the new `PERSONA.md` - no need to update memory.
 
-If you hand-edit `PERSONA.md` directly, run `npx personaxis push --root` (or `decompile --root` to preview) before the next compile - this folds your edits back into `.personaxis/personaxis.md` so the two stay consistent.
+If you hand-edit `PERSONA.md` directly, run `npx personaxis decompile --root` before the next compile: it folds your edits back into `.personaxis/personaxis.md` so the two stay consistent.
 
 ## Step 4b - Keep it alive (per-turn learning)
 
@@ -116,4 +116,4 @@ If the user is not sure, suggest they start with just the project baseline and a
 - Re-run `personaxis compile --root` after any change to `.personaxis/personaxis.md`. The section in `CLAUDE.md` is replaced, never duplicated.
 - If you already have a `CLAUDE.md` with existing content, the compile command appends the baseline section. Your existing content is untouched.
 - Named agent personas in `.personaxis/personas/<slug>/` compile to `.claude/agents/<slug>.md`. Local skills declared in `extensions.skills` are materialized to `.claude/skills/<name>/` (not `persona-<slug>`). These are generated files, not replacements for the source package.
-- Edit `.personaxis/personas/<slug>/personaxis.md` and recompile, or edit `.claude/agents/<slug>.md` directly and run `personaxis push <slug>` to fold the edit back. Do not edit materialized files in `.claude/skills/` directly.
+- Edit `.personaxis/personas/<slug>/personaxis.md` and recompile, or edit `.claude/agents/<slug>.md` directly and run `personaxis decompile <slug>` to fold the edit back. Do not edit materialized files in `.claude/skills/` directly.

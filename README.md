@@ -3,7 +3,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Spec](https://img.shields.io/badge/spec-1.1.0-informational)](./docs/SPEC.md)
 [![CLI](https://img.shields.io/badge/CLI-personaxis-blue)](https://www.npmjs.com/package/personaxis)
-[![Registry](https://img.shields.io/badge/registry-personaxis.com-blueviolet)](https://personaxis.com)
 
 _AGENTS.md tells your agent what to do. PERSONA.md tells it who to be._
 
@@ -32,7 +31,6 @@ PERSONA.md is a declarative file, YAML frontmatter and Markdown, that captures t
 - [Linting rules](#linting-rules)
 - [Programmatic API](#programmatic-api)
 - [Examples](#examples)
-- [Registry](#registry)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -311,11 +309,6 @@ npx personaxis decompile frontend-expert
 npx personaxis skills list --root
 npx personaxis skills pull <name> --root   # github: entries only
 
-# Push/pull a persona version to and from the Personaxis registry
-npx personaxis push --root
-npx personaxis push frontend-expert
-npx personaxis pull <slug>
-
 # Seed and mutate runtime state (clamped to envelopes declared in personaxis.md)
 npx personaxis state init
 npx personaxis state mutate --field mood.tone --delta -0.10 --reason "less playful"
@@ -464,14 +457,14 @@ For Codex, the compiled document and materialized skills follow `.codex/agents/<
 
 `personaxis compile [--root | <slug>] --platform <claude-code|codex>`:
 
-- Generates `PERSONA.md` / `<slug>.md` from `personaxis.md` (plus `policy.yaml`/`state.json` and a capped resource manifest of `memory.md`, `memory/`, `references/`, `examples/`, `skills/`, `assets/`) via the configured provider (`local | byok | agent | remote`).
+- Generates `PERSONA.md` / `<slug>.md` from `personaxis.md` (plus `policy.yaml`/`state.json` and a capped resource manifest of `memory.md`, `memory/`, `references/`, `examples/`, `skills/`, `assets/`) via the configured provider (`local | byok | agent`).
 - Materializes every `local` entry in `extensions.skills` (e.g. `./skills/<name>`) into the platform's skill-discovery directory - `.claude/skills/<name>/` for `claude-code`, `.agents/skills/<name>/` for `codex` - marking each copy `.personaxis-generated`.
 - Writes `skills-manifest.json` recording each `extensions.skills` entry's status: `materialized`, `missing-local`, or `reference-only` (for `@org/name@version` registry and `github:org/repo` entries).
 - For Claude Code subagents, adds the materialized skill names to the compiled `.claude/agents/<slug>.md` frontmatter `skills:` list (preload).
 
 Run `personaxis skills list [--root|<slug>]` to inspect `skills-manifest.json`, and `personaxis skills pull <name> [--root|<slug>]` to pull a `github:org/repo[/path]` entry into `skills/<name>/`.
 
-Compiled and materialized files are generated outputs. Edit `personaxis.md` and the `.personaxis/[personas/<slug>/]` supporting folders, then re-run `personaxis compile` (or `personaxis push`, which does this automatically). Do not hand-edit `.claude/skills/`, `.agents/skills/`, `.codex/`, or `skills-manifest.json` directly; hand edits to `PERSONA.md`/`<slug>.md` are picked up by `personaxis decompile`/`personaxis push`.
+Compiled and materialized files are generated outputs. Edit `personaxis.md` and the `.personaxis/[personas/<slug>/]` supporting folders, then re-run `personaxis compile`. Do not hand-edit `.claude/skills/`, `.agents/skills/`, `.codex/`, or `skills-manifest.json` directly; hand edits to `PERSONA.md`/`<slug>.md` are picked up by `personaxis decompile`.
 
 ---
 
@@ -539,11 +532,11 @@ npm install -g personaxis
 npx personaxis <command>
 ```
 
-Requires Node.js 18+.
+Requires Node.js 20.18.1 or newer. Every command, flag and exit code is documented in the [CLI reference](https://github.com/personaxis/personaxis/blob/main/docs/commands/README.md); what follows is the part that concerns this spec.
 
 ### `validate`
 
-Schema and universals validation against the current spec, v1.1.0 (additive over v1.0.0, so 1.0.0 personas validate unchanged; personas at v0.3-v0.10 are accepted via a frozen legacy schema, the validator dispatches by `spec_version`). Exits `1` if invalid, `0` if clean. Safe for CI.
+Schema and universals validation against the current spec, v1.1.0 (additive over v1.0.0, so 1.0.0 personas validate unchanged; personas at v0.3-v0.10 are accepted via a frozen legacy schema, the validator dispatches by `spec_version`). Exits `0` when valid and `1`, `2` or `3` by the kind of failure (see [Validator outputs](#linting-rules)). Safe for CI.
 
 ```bash
 personaxis validate [file]
@@ -573,8 +566,8 @@ personaxis compile [--root | <slug>] [--platform <platform>] [--provider <name>]
 
 - `--root` compiles `.personaxis/personaxis.md` -> `PERSONA.md`. Default when `[slug]` is omitted.
 - `<slug>` compiles `.personaxis/personas/<slug>/personaxis.md` and places the result per `--platform`.
-- `--platform <claude-code|codex>` (default `claude-code`) selects the subagent placement convention for `<slug>` and, when `extensions.skills` declares `local` entries, the skill materialization directory (`.claude/skills/<name>/` or `.agents/skills/<name>/`).
-- `--provider <local|byok|agent|remote>` overrides the configured provider (see `personaxis config`).
+- `--platform <claude-code|codex|openclaw|hermes>` (default `claude-code`) selects the subagent placement convention for `<slug>` and, when `extensions.skills` declares `local` entries, the skill materialization directory (`.claude/skills/<name>/` or `.agents/skills/<name>/`).
+- `--provider <local|byok|agent>` overrides the configured provider (see `personaxis config`).
 - `--from-file <path>` uses a file's contents as the compiled output instead of calling the provider (useful for testing).
 - `--out <path>` overrides the output path, `--stdout` prints instead of writing.
 
@@ -587,17 +580,6 @@ Propose `personaxis.md` updates from a hand-edited `PERSONA.md` / `<slug>.md`. A
 ```bash
 personaxis decompile [--root | <slug>] [--provider <name>] [--from-file <path>]
 ```
-
-### `push` / `pull`
-
-Publish and download persona versions from the Personaxis registry.
-
-```bash
-personaxis push [--root | <slug>] [--provider <name>]
-personaxis pull <slug>
-```
-
-`push` validates `personaxis.md`, decompiles if `PERSONA.md`/`<slug>.md` was hand-edited since the last compile, recompiles so the uploaded pair is always consistent, then uploads the spec, compiled document, `policy.yaml`/`state.json`, and the supporting folders as a new `AgentPersonaVersion`.
 
 ### `skills`
 
@@ -615,9 +597,10 @@ personaxis skills pull <name> [--root | <slug>] [-y]
 Seed and mutate runtime state, clamped to the envelopes (`{mean, range}`) declared in `personaxis.md`.
 
 ```bash
-personaxis state init    [-f <path>] [--force]
-personaxis state mutate  [-f <path>] --field <path> --delta <number> --reason <text> [--tool-call-id <id>]
-personaxis state show    [-f <path>] [--json]
+personaxis state init    [-f <path|slug>] [--force]
+personaxis state mutate  [-f <path|slug>] --field <path> --delta <number> --reason <text> [--tool-call-id <id>]
+personaxis state show    [-f <path|slug>] [--json]
+personaxis state rewind  <n> [-f <path|slug>] [--dry-run]
 ```
 
 ### `export`
@@ -686,10 +669,10 @@ personaxis migrate 0.10-to-1.0 [path] [--apply]
 
 ### `config`
 
-Configure the provider used by `compile`/`decompile` (`local | byok | agent | remote`).
+Configure the provider used by `compile`/`decompile` (`local | byok | agent`).
 
 ```bash
-personaxis config set provider <local|byok|agent|remote>
+personaxis config set provider <local|byok|agent>
 personaxis config set <key> <value>   # e.g. local.endpoint, byok.apiProvider
 personaxis config get <key>
 personaxis config list
@@ -717,7 +700,7 @@ personaxis template get <name>     # download a template to author
 
 ## Linting rules
 
-The `personaxis lint` command checks a parsed `personaxis.md` against the layer and field contract in [docs/SPEC.md](./docs/SPEC.md) and reports structured findings at a fixed severity level: `error` (exit code 1), `warning`, or `info`.
+The `personaxis lint` command checks a parsed `personaxis.md` against the layer and field contract in [docs/SPEC.md](./docs/SPEC.md) and reports structured findings at a fixed severity level: `error` (exit code 1), `warning`, or `info`. The main rules (`personaxis spec --rules-only` lists all of them):
 
 | Rule | Severity | What it checks |
 |---|---|---|
@@ -773,7 +756,8 @@ interface Finding {
   rule: string;
   severity: "error" | "warning" | "info";
   path?: string;   // dot-notation path to the field, if applicable
-  message: string;
+  message: string; // what is wrong
+  fix: string;     // the edit that resolves it
 }
 ```
 
@@ -781,7 +765,7 @@ interface Finding {
 
 ## Examples
 
-See [.personaxis/personas/](./.personaxis/personas/) for complete, production-ready personas, in both root and subagent layouts.
+See [.personaxis/personas/](./.personaxis/personas/) for complete personas that validate against the current spec, in both root and subagent layouts. `personaxis lint` still flags numbers in some of them that no band expression uses yet.
 
 | Persona | Role | Mode | Status |
 |---|---|---|---|
@@ -789,19 +773,6 @@ See [.personaxis/personas/](./.personaxis/personas/) for complete, production-re
 | [frontend-expert](./.personaxis/personas/frontend-expert/) | Frontend code reviewer, with 1 local skill | Subagent (`.claude/agents/frontend-expert.md`) | Available |
 
 More examples coming. To contribute one, see [CONTRIBUTING.md](./CONTRIBUTING.md).
-
----
-
-## Registry
-
-A public registry for discovering, publishing, and sharing personas is at [personaxis.com](https://personaxis.com).
-
-```bash
-personaxis push [--root | <slug>]   # publish the current persona as a new AgentPersonaVersion
-personaxis pull <slug>              # download a published persona
-```
-
-`push` validates `personaxis.md`, keeps `PERSONA.md`/`<slug>.md` in sync (decompiling and recompiling as needed), and uploads the spec, compiled document, `policy.yaml`/`state.json`, and supporting folders as a new version. [Join the waitlist at personaxis.com](https://personaxis.com) for updates on the public catalog.
 
 ---
 
