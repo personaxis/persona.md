@@ -13,3 +13,6 @@
 .personaxis/sessions/
 .personaxis/traces/
 .personaxis/memory/*.jsonl
+
+# Codemod run logs name absolute local paths
+.personaxis/**/.personaxis/migrations/

@@ -33,12 +33,12 @@
       "type": "object",
       "required": ["mode"],
       "additionalProperties": false,
-      "description": "Mutation governance. Controls whether the Personaxis platform may suggest or apply changes to the persona-version based on observed drift. Default mode 'locked' is the only safe choice for production-critical personas.",
+      "description": "Mutation governance. Controls whether the Personaxis platform may suggest or apply changes to the persona-version based on observed drift. 'locked' is the kill-switch: while it holds, nothing the persona proposes applies, its state included.",
       "properties": {
         "mode": {
           "type": "string",
           "enum": ["locked", "suggesting", "autonomous", "auto"],
-          "description": "locked (default; safest): PERSONA.md is immutable at runtime. state.json mutations within envelopes are still allowed. Drift alerts only. suggesting: actor MAY call propose_self_edit; proposals queued in dashboard for human approval; approval mints a new PersonaVersion. autonomous (high-risk): actor MAY call apply_self_edit directly; each applied edit creates a new PersonaVersion. Bound by universal invariants, governance.per_layer_edit_policy, hard_limits, and autonomous_scope_allowlist/blocklist. 'auto' is a deprecated alias for 'autonomous' (v0.5 compatibility)."
+          "description": "locked: the kill-switch, for an incident or an audit. Nothing the persona or its model proposes applies, neither an edit to the spec nor a change to its state; only a person's own mutations and homeostasis (half_life) move it. It is the mode when none is declared. suggesting: the persona is alive. Changes to its state apply inside the declared envelopes and the drift thresholds; edits to the spec are proposed (propose_self_edit) and queued for a person. autonomous (high-risk): as suggesting, and spec edits also apply (apply_self_edit), each one a new PersonaVersion, bound by universal invariants, governance.per_layer_edit_policy, hard_limits and autonomous_scope_allowlist/blocklist; requires approved_by and last_approval_at. 'auto' is a deprecated alias for 'autonomous' (v0.5 compatibility)."
         },
         "autonomous_scope_allowlist": {
           "type": "array",
@@ -52,12 +52,12 @@
         },
         "approved_by": {
           "type": "string",
-          "description": "User id or org id that authorized non-locked modes. Required by validator when mode != 'locked'."
+          "description": "User id or org id that authorized the autonomous mode. Required when mode is 'autonomous'; optional for 'suggesting', where no spec edit applies without a person."
         },
         "last_approval_at": {
           "type": "string",
           "format": "date-time",
-          "description": "Timestamp of the last human approval for non-locked modes. Required by validator when mode != 'locked'."
+          "description": "Timestamp of the last human approval of the autonomous mode. Required when mode is 'autonomous'; optional for 'suggesting'."
         },
         "approval_expires_at": {
           "type": "string",
@@ -66,14 +66,6 @@
         }
       },
       "allOf": [
-        {
-          "if": {
-            "properties": { "mode": { "enum": ["suggesting", "autonomous", "auto"] } }
-          },
-          "then": {
-            "required": ["mode", "approved_by", "last_approval_at"]
-          }
-        },
         {
           "if": {
             "properties": { "mode": { "enum": ["autonomous", "auto"] } }

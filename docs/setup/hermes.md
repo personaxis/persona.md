@@ -1,6 +1,6 @@
 # Setting up PERSONA.md with Hermes (Nous Research)
 
-> **Live target.** Hermes is one of the four focus hosts (with Claude Code, Codex, and OpenClaw).
+> Hermes is one of the four supported hosts (with Claude Code, Codex, and OpenClaw).
 > Hermes reads `SOUL.md` as the FIRST section of its system prompt, from `~/.hermes/SOUL.md` or a
 > per-profile `SOUL.md`. `personaxis compile --platform hermes` generates it.
 
@@ -25,7 +25,7 @@ personaxis config set --global local.apiKeyEnv <ENV_VAR_WITH_YOUR_KEY>
 ```
 
 The key is read from the named env var (or your deploy's secret manager in production), never written
-to a file. See the CLI's `docs/configuration.md`.
+to a file. See the CLI configuration guide: https://github.com/personaxis/personaxis/blob/main/docs/guides/configuration.md.
 
 ## Step 3, Compile to SOUL.md
 
@@ -34,26 +34,24 @@ npx personaxis compile --root --platform hermes
 ```
 
 This writes `.hermes/SOUL.md`. Point your Hermes profile at it, or copy it to `~/.hermes/SOUL.md`
-(Hermes loads that as the agent identity; each Hermes **profile** can carry its own `SOUL.md`,
+(Hermes loads that as the first section of the system prompt; each Hermes profile can carry its own `SOUL.md`,
 `config.yaml`, and `.env`). Sub-personas compile to `.hermes/agents/<slug>/SOUL.md`.
 
 ## Step 4, Keep it alive (optional)
 
-To evolve the persona from each turn on **your own model**, run one governed tick per turn and let it
-recompile `SOUL.md` on drift:
+To evolve the persona from each turn on your own model, install the Hermes hook so each turn runs one
+governed tick and recompiles `SOUL.md` when it changes:
 
 ```bash
-# from a Hermes end-of-turn hook or a cron, pipe the turn to:
-personaxis observe --stdin        # or: personaxis observe --observation "<turn>"
+npx personaxis hooks install --host hermes
 ```
 
-`personaxis watch` (a local daemon) also recompiles `SOUL.md` whenever you hand-edit the spec. Native
-per-host hook installers beyond Claude Code are on the roadmap.
+`personaxis watch` (a local daemon) also recompiles `SOUL.md` whenever you hand-edit the spec.
 
 ## Notes
 
-- SOUL.md is injected verbatim as identity; keep it focused. Re-run `compile --platform hermes` after
+- SOUL.md is injected verbatim as the first section of the system prompt; keep it short. Re-run `compile --platform hermes` after
   any change to `.personaxis/personaxis.md`.
-- Hermes also supports MCP servers per profile, you can additionally expose the persona on-demand via
+- Hermes also supports MCP servers per profile. You can additionally expose the persona on-demand via
   `personaxis-mcp` (see the CLI's `docs/integrations/claude-code.md` for the tool list; the same server
   works for any MCP host).

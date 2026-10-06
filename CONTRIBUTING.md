@@ -8,9 +8,9 @@ PERSONA.md is an open specification. Contributions are welcome, from typo fixes 
 
 **Clarifications:** Ambiguous language in the spec. Open a PR with your proposed wording and a brief rationale.
 
-**New fields or changes to existing fields:** Open an issue first. Describe the use case, why existing fields do not cover it, and any backward-compatibility implications. Breaking changes require a spec version bump.
+**New fields or changes to existing fields:** Open an issue first. Fields that describe how a persona works (procedures, criteria, sources) are preferred over fields that describe state. Describe the use case, why existing fields do not cover it, and any backward-compatibility implications. Breaking changes require a spec version bump.
 
-**New example personas:** Open a PR with a complete persona package (PERSONA.md + README.md minimum). The persona must be clearly useful for a real role and must pass schema validation.
+**New example personas:** Open a PR with a complete persona package: `personaxis.md`, `policy.yaml`, `state.json`, at least one skill under `skills/` and one reference under `references/` with its sources, plus the compiled document. The persona must do a real job and pass `personaxis validate`, and every example output must come from a real run on a named model, never typed by hand.
 
 ## Before you open a PR
 
@@ -21,7 +21,7 @@ PERSONA.md is an open specification. Contributions are welcome, from typo fixes 
 
 ## Versioning
 
-The spec follows semantic versioning. During `0.x`, minor version bumps may include breaking changes, these are documented clearly in CHANGELOG.md. After `1.0`, semver applies normally.
+The spec follows semantic versioning. Breaking changes increment the major version and ship with a codemod (`personaxis migrate`). Additive changes increment the minor version.
 
 Breaking changes: removing a required field, changing a field type, removing an allowed enum value.
 
@@ -29,6 +29,4 @@ Non-breaking changes: adding an optional field, adding an allowed enum value, cl
 
 ## Governance
 
-The spec is maintained by [Personaxis](https://personaxis.com). Significant changes go through a public comment period before merging.
-
-The specification belongs to the community. Personaxis builds the tooling and platform around it.
+The spec is maintained by [Personaxis](https://personaxis.com). Significant changes are discussed in an issue before merging. The specification is MIT licensed, and the reference CLI lives in a separate repository.

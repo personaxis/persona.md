@@ -64,22 +64,22 @@ Read your own @PERSONA.md too if one was provided to you.
 
 Re-running the command replaces this section instead of duplicating it. Existing human-authored `AGENTS.md` content is preserved.
 
-If you hand-edit `PERSONA.md` directly, run `npx personaxis push --root` (or `decompile --root` to preview) before the next compile - this folds your edits back into `.personaxis/personaxis.md` so the two stay consistent.
+If you hand-edit `PERSONA.md` directly, run `npx personaxis decompile --root` before the next compile: it folds your edits back into `.personaxis/personaxis.md` so the two stay consistent.
 
 ## Step 4b - Keep it alive (per-turn learning)
 
-Codex has a **`Stop` hook** (like Claude Code), so per-turn learning is one command:
+Codex has a `Stop` hook (like Claude Code), so per-turn learning is one command:
 
 ```bash
 npx personaxis hooks install --host codex          # project (.codex/hooks.json)
 npx personaxis hooks install --host codex --global # user (~/.codex/hooks.json)
 ```
 
-This runs `personaxis observe --stdin` at the end of every turn, one governed tick on **your** model,
-recompiling on drift, with no Codex tokens spent. You can additionally keep the persona alive through:
+This runs `personaxis observe --stdin` at the end of every turn, one governed tick on your model,
+recompiling when a self-edit applies, with no Codex tokens spent. You can additionally keep the persona alive through:
 
-- **Subagent:** `.codex/agents/<slug>.toml` (Step 5), Codex adopts the persona as a custom agent.
-- **On-demand tools:** register the `personaxis-mcp` MCP server, or run `personaxis serve` for an HTTP boundary, so Codex can read/adjust the persona and run a governed `observe` tick when it chooses to.
+- Subagent: `.codex/agents/<slug>.toml` (Step 5). Codex uses the persona as a custom agent.
+- On-demand tools: register the `personaxis-mcp` MCP server, or run `personaxis serve` for a local HTTP boundary, so Codex can read/adjust the persona and run a governed `observe` tick when it chooses to.
 
 Either way, configure the model once (endpoint, model, and the env var holding the key):
 
@@ -89,7 +89,7 @@ npx personaxis config set --global local.model    your-model-name
 npx personaxis config set --global local.apiKeyEnv YOUR_API_KEY_ENV_VAR
 ```
 
-See the CLI configuration concept for the full precedence rules: https://github.com/personaxis/cli/blob/main/docs/configuration.md
+See the CLI configuration guide for the full precedence rules: https://github.com/personaxis/personaxis/blob/main/docs/guides/configuration.md
 
 ## Step 5 - Report and offer agent personas
 
@@ -97,20 +97,15 @@ After completing steps 1-4, give the user a brief summary:
 
 - `PERSONA.md` has been created and filled in based on this project. It defines the shared behavioral baseline for every agent here. Its source is `.personaxis/personaxis.md`.
 - `AGENTS.md` has been updated with a managed PERSONA.md section. Codex will read it as project instructions.
-- The user can open `.personaxis/personaxis.md` to review your interpretation and adjust any field that does not match their intent, then recompile - or edit `PERSONA.md` directly and let `push`/`decompile` fold the changes back.
+- The user can open `.personaxis/personaxis.md` to review your interpretation and adjust any field that does not match their intent, then recompile, or edit `PERSONA.md` directly and let `decompile` fold the changes back.
 
-Then run:
+Then ask whether they want to add a role-specific agent persona for this project, for example a dedicated marketing agent, a code reviewer, or a legal assistant.
 
-```bash
-npx personaxis templates
-```
-
-Show the user the output. Ask whether they want to add a role-specific agent persona for this project - for example, a dedicated marketing agent, a code reviewer, or a legal assistant.
-
-If the user says yes, help them choose from the list and run:
+If the user says yes, help them describe the job in one sentence and run:
 
 ```bash
-npx personaxis use <template-name> --target codex
+npx personaxis create <slug> --from-prompt "<one sentence describing the job>"
+npx personaxis compile <slug> --platform codex
 ```
 
 This creates the source persona package in `.personaxis/personas/<slug>/` (`personaxis.md`, `policy.yaml`, `state.json`, `memory.md`, `memory/`, `references/`, `examples/`, `skills/`, `assets/`, `manifest.json`) and compiles it to `.codex/agents/<slug>.toml`. The `.codex/agents/<slug>.toml` file follows the Codex custom-agent format: a TOML file with `name`, `description`, and `developer_instructions` (the compiled persona instructions). Local skills declared in `extensions.skills` are materialized to `.agents/skills/<name>/` by `personaxis compile`.
@@ -122,5 +117,5 @@ If the user is not sure, suggest they start with just the project baseline and a
 - Re-run `personaxis compile --root` after any change to `.personaxis/personaxis.md`. The managed section in `AGENTS.md` is replaced, never duplicated.
 - If you already have an `AGENTS.md` with existing content, the compile command appends or updates only the managed PERSONA.md section. Your existing content is untouched.
 - Named agent personas in `.personaxis/personas/<slug>/` compile to `.codex/agents/<slug>.toml`. Local skills declared in `extensions.skills` are materialized to `.agents/skills/<name>/` (not `persona-<slug>`). These are generated files, not replacements for the source package.
-- Edit `.personaxis/personas/<slug>/personaxis.md` and recompile, or edit `.codex/agents/<slug>.toml` directly and run `personaxis push <slug>` to fold the edit back. Do not edit materialized files in `.agents/skills/` directly.
+- Edit `.personaxis/personas/<slug>/personaxis.md` and recompile, or edit `.codex/agents/<slug>.toml` directly and run `personaxis decompile <slug>` to fold the edit back. Do not edit materialized files in `.agents/skills/` directly.
 - `personaxis.md` does not define MCP servers, plugins, or command approval rules. The Codex target does not generate `.codex/config.toml` or `.codex/rules/` from behavioral persona fields.

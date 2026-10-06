@@ -7,9 +7,18 @@ The spec follows [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [Unreleased], spec v1.1.0 (ADDITIVE; F6.3 of the proven-core program, see `cli/docs/MATH_CORE.md`)
+## [Unreleased]
 
-Every 1.0.0 document is a valid 1.1.0 document, **no codemod**.
+### Changed
+- Documentation re-centered on how a persona works: procedures (`skills/`), criteria (`character.behavioral_commitments`, `verification.gates`), tools (`extensions.tools`), sourced knowledge (`references/`) and what it learned (`memory/`). No schema change and no new required field.
+- Section 0 of `SPEC.md` now defines a persona as the complete way a professional works, with a table of where each part lives in the format.
+- Removed pointers to hosted upload and download from the setup guides, and the Cursor setup guide (the `--platform` values are `claude-code`, `codex`, `openclaw` and `hermes`).
+
+---
+
+## [1.1.0] - 2026-07-08: additive
+
+Every 1.0.0 document is a valid 1.1.0 document, no codemod.
 
 ### Added
 - **`verification.gates[].negate` (MAY, predicate)**: invert a predicate gate, pass when the
@@ -37,6 +46,16 @@ Every 1.0.0 document is a valid 1.1.0 document, **no codemod**.
 - **docs/MULTI_WRITER.md §3**: locking is explicitly NOT required. R1-R6 exist so that concurrent writers need no mutual exclusion; an implementation MAY offer a lease so an operator can serialise deliberately, MUST NOT require one for conformance, and MUST NOT treat a persona as unreadable because a lock is held elsewhere.
 
 ### Clarified
+- **§7.2 and `policy.schema.json`: `locked` is the kill-switch.** The schema described `locked` as
+  "state.json mutations within envelopes are still allowed", which no runtime did: the reference
+  implementation stops every change the persona proposes, state included, and C1 already gates state
+  by the mode. §7.2 now states what each mode lets move, and the schema descriptions say the same.
+  No validation changes.
+- **`policy.yaml`: `approved_by` and `last_approval_at` are required only for `autonomous`.** They
+  were required for `suggesting` too, where no spec edit applies without a person, so the only way to
+  create a living persona without inventing a sign-off was to leave it `locked`. Relaxation only:
+  every policy.yaml that validated still validates. The default when nothing is declared is still
+  `locked`.
 - **§8.2: one episodic chain per WRITER.** A hash chain admits exactly one appender, so a
   persona used from more than one machine keeps `memory/episodic.<deviceId>.jsonl` per
   device, each an independent chain; retrieval reads the union, verification runs per log and
@@ -59,7 +78,7 @@ Every 1.0.0 document is a valid 1.1.0 document, **no codemod**.
   right now" section is band-selected (the recompile-on-crossing surface). Re-validated
   PASS; `.claude/agents/cmo.md` host export refreshed.
 
-## [Unreleased], spec v1.0.0 (F2 of the master architecture review; see `cli/ARCHITECTURE_REVIEW.md` §11)
+## [1.0.0] - 2026-07-03
 
 **BREAKING.** First major release. The 10 canonical layers are KEPT as the anatomy of an AI
 Persona; every correction happens INSIDE them. 0.3.0–0.10.0 documents keep validating against the
@@ -115,9 +134,9 @@ frozen `schema/legacy/persona-0.10.schema.json` (read-compat window); migrate wi
   under each `.personaxis/migrations/`. Compiled documents pending regeneration (F2.W3, after the
   v1.0 template rewrite).
 
-## [Unreleased], integrity sweep (F1 of the master architecture review; see `cli/ARCHITECTURE_REVIEW.md`)
+## Integrity sweep, 2026-07-31
 
-**No spec field changes.** This closes the drift between the spec's own documents, catalogued by
+No spec field changes. This closes the drift between the spec's own documents, catalogued by
 the 2026-07 architecture audit:
 
 ### Fixed, normative documents
@@ -379,7 +398,7 @@ The migration handles: edit_policy unification, drift_threshold relocation, acti
 
 ## [0.3.0], 2026-05-18
 
-Breaking realignment to the Personaxis v10 spec. **No automatic migration from 0.2.x.** Personas written against 0.2.0 must be rewritten; see [`PERSONA_template.md`](./PERSONA_template.md) and [`docs/SPEC.md`](./docs/SPEC.md).
+Breaking realignment of the spec. **No automatic migration from 0.2.x.** Personas written against 0.2.0 must be rewritten; see [`PERSONA_template.md`](./PERSONA_template.md) and [`docs/SPEC.md`](./docs/SPEC.md).
 
 ### Added, top-level structure
 

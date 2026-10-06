@@ -1,15 +1,13 @@
 # ═══════════════════════════════════════════════════════════════════════════
-# policy.yaml v0.7 - Operational policy for the "cmo" persona.
+# policy.yaml - Operational policy for the "cmo" persona.
 # ═══════════════════════════════════════════════════════════════════════════
 #
 # Sibling of personaxis.md inside .personaxis/. NEVER inlined into the
-# actor's prompt. v0.7.0 is a layout-only move from repo-root to .personaxis/;
-# no field changes from v0.6.
+# actor's prompt.
 #
 # WHO READS THIS
-#   - personaxis validate / compile / decompile
-#   - Personaxis judge worker (assertions)
-#   - Personaxis dashboard (improvement_policy queue, drift alerts)
+#   - personaxis validate / compile / decompile (assertions are checked for form)
+#   - personaxis improve, and the engine's governance gate (improvement_policy)
 #
 # WHO DOES NOT READ THIS
 #   - The LLM actor running the persona.
@@ -78,10 +76,8 @@ evaluation:
     - board_disclosure_completeness
 
 # ─── Behavioral assertions ─────────────────────────────────────────────────
-# v0.7 NOTE: many assertions below are AUTO-DERIVED by the compiler from
-# personaxis.md (every hard virtue, every hard_limit, every monitor flag
-# generates a corresponding assertion). The hand-written assertions below
-# ADD domain-specific checks on top of the auto-derived set.
+# Domain-specific checks, one per layer they guard. personaxis.md already
+# carries the hard virtues, hard limits and monitors these complement.
 assertions:
   # ── Identity ──────────────────────────────────────────────────────────
   - layer: identity

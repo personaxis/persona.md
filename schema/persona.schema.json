@@ -1399,7 +1399,7 @@
             "suggesting",
             "autonomous"
           ],
-          "description": "locked: spec never self-edits (humans only). suggesting: persona PROPOSES edits, queued for approval. autonomous: proposals auto-apply, still gated by consensus + protected paths."
+          "description": "locked: the kill-switch; nothing the persona proposes applies, neither a spec edit nor a state change, and only a person's mutations and homeostasis move its state. suggesting: the persona is alive; state changes apply inside the envelopes and spec edits are PROPOSED, queued for approval. autonomous: spec edits also auto-apply, still gated by consensus + protected paths."
         }
       }
     },

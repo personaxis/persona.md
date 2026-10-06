@@ -1,6 +1,6 @@
 ---
 # ═══════════════════════════════════════════════════════════════════════════
-# personaxis.md - Canonical quantitative spec template (spec v1.0.0)
+# personaxis.md - Canonical quantitative spec template (spec 1.1.0; 1.0.0 documents stay valid)
 # ═══════════════════════════════════════════════════════════════════════════
 #
 # This template is the starting point for the QUANTITATIVE 10-layer spec of
@@ -50,7 +50,7 @@
 # The repo root `PERSONA.md` (or `.claude/agents/<slug>.md` in subagent mode)
 # is a SEPARATE, LLM-compiled QUALITATIVE document generated from this file via
 # `personaxis compile`. Editing the compiled document and running
-# `personaxis push` will `personaxis decompile` your edits back into this file.
+# `personaxis decompile` folds your edits back into this file.
 #
 # ── INFORMATION MODEL ───────────────────────────────────────────────────────────
 #
@@ -147,7 +147,6 @@ metadata:
 # EXTENSIONS, runtime capabilities and supporting materials (MAY)
 # ═══════════════════════════════════════════════════════════════════════════
 # Pointers to capability modules and supporting files. Consumed by [RUNTIME].
-# In v0.6.0, knowledge_anchors was removed (redundant with references/).
 #
 extensions:
   skills: []                          # MAY | list<string> | skill IDs or paths.
@@ -173,14 +172,14 @@ extensions:
 # LAYER 1: IDENTITY, continuity anchor
 # ═══════════════════════════════════════════════════════════════════════════
 # Defines who the persona is: canonical ID, role, purpose, scope, narrative.
-# Highest-stability layer. v0.6.0: edit_policy moved to governance block.
+# Highest-stability layer. Its editing rules live in the governance block.
 #
 identity:
   # ── Identifiers (MUST) ──────────────────────────────────────────────────
   canonical_id: ""                    # MUST | string-slug | unique in registry. [RUNTIME]
-  display_name: ""                    # MUST | string      | same as metadata.display_name. [ACTOR-HOT]
-  # short_name: ""                    # MAY  | string<=24  | v0.10: chat/UI handle (e.g. "Clio"). [ACTOR-HOT]
-  capabilities: []                    # MAY  | string[]    | v0.8: explicit capability tags for orchestration/routing. [RUNTIME]
+  display_name: ""                    # MUST | string      | the single owner of the display name. [ACTOR-HOT]
+  # short_name: ""                    # MAY  | string<=24  | chat/UI handle (e.g. "Clio"). [ACTOR-HOT]
+  capabilities: []                    # MAY  | string[]    | explicit capability tags for orchestration/routing. [RUNTIME]
 
   # ── System identity (purpose + scope) ──────────────────────────────────
   system_identity:
@@ -200,8 +199,7 @@ identity:
     continuity_principles:            # MAY    | list<string>
       - ""
 
-  # NOTE v0.6.0: edit_policy removed from this layer.
-  # Editing rules for identity now live in governance.per_layer_edit_policy.identity.
+  # Editing rules for identity live in governance.per_layer_edit_policy.identity.
 
 # ═══════════════════════════════════════════════════════════════════════════
 # LAYER 2: CHARACTER, normative dispositions
@@ -228,7 +226,8 @@ character:
                                       #   1. State envelope guards (mutations clamped)
                                       #   2. Output assertions (judge blocks fabrication)
                                       #   3. Tool gating (cognition blocks risky tools)
-                                      #   4. Memory write gate (no claims without evidence)
+                                      #   4. Memory write gate (declared in memory.write_policy; `personaxis lint` reports whether
+                                      #      this runtime consumes it)
                                       #
                                       # enforcement: "soft" produces only output assertions
                                       # with severity "revise" instead of "block".
@@ -249,7 +248,7 @@ character:
   principles:                         # MAY | list<string> | [ACTOR-COLD]
     - ""
 
-  # NOTE v0.6.0: edit_policy removed. See governance.per_layer_edit_policy.character.
+  # Editing rules live in governance.per_layer_edit_policy.character.
 
 # ═══════════════════════════════════════════════════════════════════════════
 # LAYER 3: PERSONALITY, descriptive style patterns
@@ -257,11 +256,9 @@ character:
 # Personality is DESCRIPTIVE, not normative. Modulates tone, exploration
 # depth, risk posture, response shape. Does NOT authorize or prohibit.
 #
-# v0.6.0 CHANGES:
-#   - context_modifiers REMOVED (redundant with persona.task_modes).
-#     Style modulation by context now lives only in persona.task_modes.
-#   - drift_threshold MOVED to governance.drift_thresholds.personality.
-#   - edit_policy MOVED to governance.per_layer_edit_policy.personality.
+# Style modulation by context lives in persona.task_modes. The sensitivity of this layer is
+# governance.drift_thresholds.personality, and its editing rules are
+# governance.per_layer_edit_policy.personality.
 #
 personality:
   # ── Taxonomy (MUST) ─────────────────────────────────────────────────────
@@ -294,7 +291,7 @@ personality:
       #                               # the deviation from `mean` halves every half_life ticks
       #                               # absent stimulus (audited as runtime-decay; SPEC §15).
       #                               # Guarantees bounded standing drift: max_step_delta/λ. [RUNTIME]
-    conscientiousness:                # CANONICAL LOAD-BEARING EXAMPLE (FASE 7): the full
+    conscientiousness:                # CANONICAL LOAD-BEARING EXAMPLE: the full
       mean: 0.0                       # trio, per-band expression + bands + half_life, 
       range: [0.0, 0.0]               # makes this number provably non-decorative (σ > 0,
       expression:                     # check with `personaxis jacobian`).
@@ -355,12 +352,12 @@ values_and_drives:
   motivations:                        # MAY | list<string> | [ACTOR-COLD]
     - ""
 
-  # NOTE v0.6.0: edit_policy removed. See governance.per_layer_edit_policy.values_and_drives.
+  # Editing rules live in governance.per_layer_edit_policy.values_and_drives.
 
 # ═══════════════════════════════════════════════════════════════════════════
 # LAYER 5: AFFECT, functional affective state
 # ═══════════════════════════════════════════════════════════════════════════
-# v0.6.0: baseline declares ENVELOPE only. Current values live in state.json.
+# The baseline declares the ENVELOPE only. Current values live in state.json.
 #
 affect:
   enabled: true                       # MUST | bool                | [RUNTIME]
@@ -425,7 +422,7 @@ cognition:
 # ═══════════════════════════════════════════════════════════════════════════
 # LAYER 7: MEMORY, continuity of experience
 # ═══════════════════════════════════════════════════════════════════════════
-# v0.6.0: dual structure clarified; v0.8.0: the episodic format is NORMATIVE
+# Two structures. The episodic format is NORMATIVE
 #   (schema/memory.schema.json, one JSON object per line, provenance + hash chain).
 #   - memory.md (FILE)   = long-term curated semantic memory. Stable.
 #   - memory/ (FOLDER)   = episodic memory: memory/episodic.jsonl (append-only,
@@ -448,7 +445,7 @@ memory:
       - relevance
       - safety_check
 
-  consolidation_policy:               # NEW v0.6.0 | SHOULD | [RUNTIME]
+  consolidation_policy:               # SHOULD | [RUNTIME]
     # Rules for promoting episodic entries → semantic memory.md.
     mode: "manual"                    # SHOULD | enum<manual|assisted|auto> | NEAR-UNIVERSAL: "manual" or "assisted"
                                       #   manual    = humans curate memory.md
@@ -471,7 +468,7 @@ memory:
 # ═══════════════════════════════════════════════════════════════════════════
 # LAYER 8: METACOGNITION, thought monitoring
 # ═══════════════════════════════════════════════════════════════════════════
-# v0.6.0: monitors are DECLARATIONS ("this persona considers X a relevant
+# Monitors are DECLARATIONS ("this persona considers X a relevant
 # failure mode"). The corresponding assertions live in policy.yaml.
 #
 metacognition:
@@ -509,16 +506,13 @@ metacognition:
     - ""
 
 # ═══════════════════════════════════════════════════════════════════════════
-# LAYER 9: REFLEXIVE SELF-REGULATION, superior control
+# LAYER 9: SELF-REGULATION, superior control
 # ═══════════════════════════════════════════════════════════════════════════
 # Arbitrates all other layers. Final decision point before response renders.
 #
-# v0.6.0 MAJOR CHANGE: flat actions[] replaced by structured decisions{} that
-# separates 4 categories. Each category represents an INDEPENDENT decision
-# the regulator makes per turn. The regulator picks ONE option from each.
-#
-# Old (v0.5.x): actions: [allow, revise_response, ask_user, block, escalate, ...]
-# New (v0.6.0): decisions: { response: [...], interaction: [...], ... }
+# Decisions are structured in 4 categories. Each category is an INDEPENDENT decision the
+# regulator makes per turn, and it picks ONE option from each:
+# decisions: { response: [...], interaction: [...], ... }
 #
 self_regulation:
   # ── Decisions (MUST) ────────────────────────────────────────────────────
@@ -579,8 +573,6 @@ self_regulation:
     ideal_self: ""                    # SHOULD | string | [ACTOR-COLD]
     ought_self: ""                    # SHOULD | string | [ACTOR-COLD]
 
-  # ── Principled refusals (SHOULD) ────────────────────────────────────────
-  # Situational refusals (distinct from hard_limits which are categorical).
   # ── Deferral policy (SHOULD) ────────────────────────────────────────────
   deferral_policy: ""                 # SHOULD | string | [ACTOR-COLD]
 
@@ -589,7 +581,7 @@ self_regulation:
   out_of_scope:                       # MAY | list<string> | [ACTOR-COLD]
     - ""
 
-  # NOTE: edit_policy removed in v0.6. See governance.per_layer_edit_policy.self_regulation.
+  # Editing rules live in governance.per_layer_edit_policy.self_regulation.
   # This layer's own editability is governance_controlled by default and
   # cannot be changed without org-level governance approval.
 
@@ -673,20 +665,19 @@ persona:
 # ═══════════════════════════════════════════════════════════════════════════
 # GOVERNANCE, unified runtime authorization and edit policy (MUST)
 # ═══════════════════════════════════════════════════════════════════════════
-# v0.6.0 UNIFICATION: previously, edit_policy was scattered across 5 layers
-# with 4 different naming conventions, and drift_threshold was only on
-# personality. Now both live in this single governance block.
+# The edit policy and the drift thresholds of every layer live in this single governance block.
+# The numbers in this template are placeholders: `personaxis create` derives real ones and records
+# where each came from.
 #
 governance:
   autonomy_envelope: "role_fidelity"  # MUST | enum<role_fidelity|conservative|extended>
                                       # NEAR-UNIVERSAL: "role_fidelity"
   approval_policy: "human_for_core_changes"  # MUST | enum
                                              # NEAR-UNIVERSAL: "human_for_core_changes"
-  max_step_delta: 0.15                        # MAY  | number 0..1 | v0.8: per-mutation drift cap (anti-runaway). [RUNTIME]
+  max_step_delta: 0.15                        # MAY  | number 0..1 | per-mutation cap on how far a value may move (anti-runaway). [RUNTIME]
 
   # ── Per-layer edit policy (MUST) ────────────────────────────────────────
   # Single source of truth for who/how each layer can be edited.
-  # Replaces the scattered edit_policy fields from v0.5.x.
   per_layer_edit_policy:              # MUST | map<layer_name, enum>
     # Allowed values:
     #   human_approval_required, only humans with governance rights approve
@@ -705,10 +696,9 @@ governance:
     persona: "review_required"
 
   # ── Drift thresholds (MUST) ─────────────────────────────────────────────
-  # Per-layer sensitivity to drift detection. Replaces the single
-  # drift_threshold field that lived only in personality in v0.5.x.
+  # Per-layer sensitivity to change detection.
   drift_thresholds:                   # MUST | map<layer_name, float[0..1]> | [JUDGE]
-    identity: 0.05                    # very tight: identity drift is critical
+    identity: 0.05                    # very tight: a change to identity is critical
     character: 0.10
     personality: 0.15
     values_and_drives: 0.10
@@ -716,7 +706,7 @@ governance:
     cognition: 0.15
     memory: 0.20
     metacognition: 0.15
-    self_regulation: 0.05   # very tight: regulator drift is critical
+    self_regulation: 0.05   # very tight: a change to the regulator is critical
     persona: 0.20
 
   # ── Pointer to improvement policy ───────────────────────────────────────
@@ -728,7 +718,9 @@ governance:
 # ═══════════════════════════════════════════════════════════════════════════
 # IMPROVEMENT_POLICY, inline self-improvement posture (MAY)
 # ═══════════════════════════════════════════════════════════════════════════
-# The runtime reads improvement_policy.mode (readMode); absent => "locked".
+# The runtime reads improvement_policy.mode (readMode); absent => "locked",
+# which is the kill-switch: nothing the persona proposes applies, state included.
+# A living persona declares "suggesting".
 # v1.0 precedence: inline is AUTHORITATIVE; a sibling policy.yaml may only
 # restrict it (the more conservative of the two wins). Change from the CLI with
 # `personaxis improve <mode>` or the REPL `/improve`.
@@ -743,7 +735,7 @@ security:
   memory_poisoning_defense: true      # MUST | bool | NEAR-UNIVERSAL
 
 # ═══════════════════════════════════════════════════════════════════════════
-# PERMISSIONS, v0.8: the persona's own sandbox posture, carried to any host (MAY)
+# PERMISSIONS: the persona's own sandbox posture, carried to any host (MAY)
 # ═══════════════════════════════════════════════════════════════════════════
 permissions:                          # MAY  | object | two-axis sandbox posture. [RUNTIME]
   sandbox: "workspace-write"          #      | enum read-only|workspace-write|danger-full-access
@@ -775,7 +767,7 @@ runtime_artifacts:
   memory_episodic_dir: "./memory/"    # MAY | path | date-stamped sessions
 
 # ═══════════════════════════════════════════════════════════════════════════
-# VERIFICATION, v0.9: objective gates (maker≠checker). The model that did the
+# VERIFICATION: objective gates (maker≠checker). The model that did the
 # work is NOT the one that grades it. Optional. (MAY) [RUNTIME] [JUDGE]
 # ═══════════════════════════════════════════════════════════════════════════
 verification:                         # MAY | object | objective agent-loop gates
@@ -797,7 +789,7 @@ verification:                         # MAY | object | objective agent-loop gate
     #   threshold: 0.7
 
 # ═══════════════════════════════════════════════════════════════════════════
-# AGENT BUDGET, v0.9: stop-conditions + resource caps for the agent loop (MAY)
+# AGENT BUDGET: stop-conditions + resource caps for the agent loop (MAY)
 # (anti runaway / money-pit). [RUNTIME]
 # ═══════════════════════════════════════════════════════════════════════════
 agent_budget:                         # MAY | object | loop caps
@@ -811,7 +803,7 @@ agent_budget:                         # MAY | object | loop caps
   on_exhaust: "summarize_and_stop"    #     | enum stop|summarize_and_stop
 
 # ═══════════════════════════════════════════════════════════════════════════
-# OBSERVABILITY, v0.9: tracing posture for the governed loops (MAY) [RUNTIME] [JUDGE]
+# OBSERVABILITY: tracing posture for the governed loops (MAY) [RUNTIME] [JUDGE]
 # ═══════════════════════════════════════════════════════════════════════════
 observability:                        # MAY | object | causal trace export
   trace: "off"                        #     | enum off|jsonl|otlp|both
@@ -872,26 +864,28 @@ observability:                        # MAY | object | causal trace export
 
 ---
 
-## Self-Improvement Modes (v0.6.0)
+## Self-improvement modes
 
 This persona's ability to edit its own spec is controlled by
-`policy.yaml#/improvement_policy/mode`. Three modes are supported:
+`improvement_policy.mode` (inline; a sibling policy.yaml can only restrict it). Three modes are supported:
 
-### `locked` (default; safest)
+### `locked` (the kill-switch; the mode when none is declared)
 
-- Spec is immutable in runtime.
-- The actor MAY observe drift but cannot propose or apply edits.
+- Spec is immutable in runtime, and so is state: nothing the actor proposes
+  applies, not even a change inside the envelopes.
+- Only a person's own mutations and homeostasis (`half_life`) move the state.
+- For an incident or an audit. A regulated deployment narrows the envelopes and
+  keeps the persona alive instead.
 - `self_regulation.decisions.governance_decision.enabled` excludes
   `propose_self_edit` and `apply_self_edit`.
-- State.json mutations within declared envelopes are still allowed: state
-  mutation is NOT a spec edit.
 
-### `suggesting` (assisted improvement)
+### `suggesting` (the persona is alive)
 
+- State changes apply inside the declared envelopes and the drift thresholds.
 - The actor MAY call the canonical tool `propose_self_edit(scope, justification,
   evidence)` to surface a proposal.
-- Proposals are queued in the Personaxis dashboard for human review.
-- Approved proposals mint a new PersonaVersion (semantic version bump).
+- Proposals are queued for human review (`personaxis review`, or /persona → Evolution in the app).
+- Approved proposals mint a new PersonaVersion (the persona's next semantic version).
 - `self_regulation.decisions.governance_decision.enabled` includes
   `propose_self_edit`.
 
@@ -916,9 +910,9 @@ This persona's ability to edit its own spec is controlled by
 | `propose_self_edit(virtues.honesty.enforcement, "soft")` | proposes change to `personaxis.md` | `improvement_policy.mode` + per-layer edit policy + universals |
 | `apply_self_edit(persona.voice.warmth_mean, 0.6)` | directly modifies `personaxis.md` | `improvement_policy.mode: autonomous` + per-layer edit policy + universals |
 
-**Important:** state.json mutations happen regardless of improvement_policy.mode
-(state is operational, not spec). Spec edits require improvement_policy >= suggesting.
-Whenever this file changes (by any of the above), `personaxis push` recompiles
+State changes apply under `suggesting` and `autonomous` and stop
+under `locked`. Spec edits require improvement_policy >= suggesting.
+Whenever this file changes (by any of the above), `personaxis compile` recompiles
 the sibling `PERSONA.md` / `.claude/agents/<slug>.md` so the two stay in sync.
 
 ---
@@ -932,6 +926,6 @@ the sibling `PERSONA.md` / `.claude/agents/<slug>.md` so the two stay in sync.
 - `memory.md`, curated long-term semantic memory.
 - `memory/`, date-stamped episodic memory.
 - `state.json`, current runtime state (current trait/affect/mood values).
-- `manifest.json` - compile/decompile provenance (last op, model, source) and
-  content hashes used by `personaxis push`/`pull` to detect hand-edits.
+- `manifest.json`, compile/decompile provenance (last op, model, source) and
+  content hashes used by `personaxis compile`/`decompile` to detect hand-edits.
 - `policy.yaml`, observability, assertions, and improvement_policy mode.
