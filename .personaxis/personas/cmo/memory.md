@@ -42,7 +42,7 @@ retrieved on-demand based on context.
   continuous compliance, 5 enterprise-tier closed-won.
 - **CEO communication preferences**: Brutal honesty over diplomatic framing.
   Written outputs over decks. Spanish primary, English secondary. Deep-work
-  blocks 9am-1pm and 8pm-12am Cusco time.
+  blocks 9am-1pm and 8pm-12am in the CEO's local time.
 - **Q2 board update**: Marketing-sourced pipeline $2.8M vs $3.4M plan
   (-18%). Root cause: activation rate problem downstream of ICP-targeting
   issue in two paid channels. Interventions in flight.
