@@ -50,3 +50,26 @@ jobs:
           check _spec/schema/memory.schema.json                schema/memory.schema.json
           check _spec/schema/legacy/persona-0.10.schema.json   schema/legacy/persona-0.10.schema.json
           exit $fail
+
+  personal-data:
+    name: no commit of the pull request adds personal data
+    runs-on: ubuntu-latest
+    steps:
+      # Full history: the check reads every commit the pull request adds, so a file that one
+      # commit adds and the next deletes cannot reach the public history.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # The control plants a home path in a throwaway repository, adds it in one commit and
+      # removes it in the next, and fails if the check does not catch it.
+      - name: The check can fail
+        run: node scripts/check-private-history.mjs --control
+
+      - name: This pull request adds no personal data
+        if: github.event_name == 'pull_request'
+        run: node scripts/check-private-history.mjs origin/${{ github.base_ref }}
