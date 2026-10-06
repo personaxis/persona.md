@@ -1,18 +1,16 @@
-# Persona Prompting, the methodology behind `PERSONA.md`
+# Persona prompting: the methodology behind `PERSONA.md`
 
 > Why the spec is shaped the way it is, and the research it draws on.
 
-The personaxis spec exists to make one thing reliable: getting a language model to **adopt
-and stay in** a precisely defined persona, and to let that persona **evolve under
-governance** instead of drifting at random. The quantitative spec
-(`.personaxis/personaxis.md`) is the *source of truth*; the compiled **`PERSONA.md`** is
-the *LLM-facing artifact*, the document a host agent reads ahead of every turn. `PERSONA.md`
-is therefore not a profile or a data dump. It is a **persona-prompting artifact**, engineered
-from the techniques below.
+The personaxis spec exists to make one thing reliable: getting a language model to adopt and stay
+in a precisely defined persona, and to let that persona change under governance instead of at
+random. The quantitative spec (`.personaxis/personaxis.md`) is the source of truth; the compiled
+`PERSONA.md` is the LLM-facing artifact, the document a host agent reads ahead of every turn. It is a
+persona-prompting artifact, engineered from the techniques below.
 
-This document is the normative reference for `personaxis compile` (forward) and for the
-`persona_prompting` source block in the spec. When you wonder "why is the compiled document
-written in the second person?" or "why scene contracts?", the answer is here.
+This document is the reference for `personaxis compile` (forward) and for the layer-10 `persona`
+fields in the spec. When you wonder why the compiled document is written in the second person, or why
+scene contracts, the answer is here.
 
 ---
 
@@ -26,10 +24,10 @@ as **"You are…", "You always…", "You think…"**.
 
 - Role prompting overview and guidance: [Learn Prompting, Role Prompting](https://learnprompting.org/docs/advanced/zero_shot/role_prompting), [WaterCrawl, Role Prompting](https://watercrawl.dev/blog/Role-Prompting).
 - A 47-paper review identifies two primary dimensions of persona prompts, **role adoption**
-  and **demographic priming**: and shows wide variation in how prompts are constructed, which
+  and **demographic priming**, and shows wide variation in how prompts are constructed, which
   is exactly the variation a *spec* removes. See *The Prompt Makes the Person(a)* ([arXiv:2507.16076](https://arxiv.org/abs/2507.16076)).
 
-**In the spec:** `persona_prompting.address.second_person` + `address.you_are`, and
+**In the spec:** `persona.address.second_person` + `address.you_are`, and
 `identity.short_name` (the handle the model is addressed by).
 
 ## 2. Character cards + scene contracts (RRP)
@@ -47,7 +45,7 @@ A character card alone makes a persona *describe* itself; scene contracts make i
 is why `PERSONA.md` has both a "Who you are" character card and an "In specific situations"
 section.
 
-**In the spec:** `persona_prompting.scene_contracts` (`situation` → `expected_behavior` →
+**In the spec:** `persona.scene_contracts` (`situation` → `expected_behavior` →
 `actions`) and `behavioral_anchors` (`do` / `dont` / `examples`).
 
 ## 3. Few-shot voice exemplars + memory for consistency
@@ -64,7 +62,7 @@ Persona consistency degrades over long, multi-turn interactions. Two devices cou
 `PERSONA.md` carries voice exemplars inline and points to the persona's memory/resources so the
 host can retrieve them.
 
-**In the spec:** `persona_prompting.voice_exemplars`; the compiled "Memory & resources" section;
+**In the spec:** `persona.voice_exemplars`; the compiled "Memory & resources" section;
 the runtime's append-only hash-chained episodic memory + `memory.md` semantic consolidation.
 
 ## 4. Stable / evolving / situational layers
@@ -74,7 +72,7 @@ characteristics (e.g. core values), **slowly evolving** ones (e.g. emphasis, ton
 **transient/situational** ones (e.g. emotional state). Separating these tells the model what is
 fixed and what may shift, and tells the *runtime* what it is allowed to change.
 
-**In the spec:** `persona_prompting.consistency` (`stable` / `evolving` / `situational`),
+**In the spec:** `persona.consistency` (`stable` / `evolving` / `situational`),
 backed quantitatively by the affect/personality **envelopes** (mean ± range) the runtime
 clamps to.
 
@@ -87,8 +85,8 @@ limits" section (which reproduces `self_regulation.hard_limits` +
 `persona.constraints`). Persona-prompting makes the model *more* itself; it must never make the
 model *less* safe.
 
-**In the spec:** `persona_prompting.break_character_guardrails`, subordinate to the universal
-invariants enforced by the validator (`src/schema.ts`).
+**In the spec:** `persona.break_character_guardrails`, subordinate to the universal
+invariants enforced by the validator (the validator).
 
 ## 6. General prompt structure & evaluation
 
@@ -97,36 +95,49 @@ conversation history*. `PERSONA.md` is the persistent **system-instructions** la
 supplies context and history each turn.
 
 To judge whether a persona artifact actually works, recent work proposes evaluation across
-**believability, morality, memory, persona, knowledge, and emotion**. The repo's governance
+**believability, morality, memory, persona, knowledge, and emotion**. The reference CLI's governance
 eval suite (`@personaxis/evals`) is the operational counterpart for the *governance* dimensions
-(safety, drift, reversibility). Broader background: *Personalization of Large Language Models: A
+(safety, change, reversibility). Broader background: *Personalization of Large Language Models: A
 Survey* ([arXiv:2411.00027](https://arxiv.org/abs/2411.00027)); *persona-aware contrastive
 learning* for role-play consistency.
 
 ---
 
-## What makes it "living"
+## How a persona changes
 
-Static persona prompts rot: the world changes, the persona doesn't. The personaxis difference is
-that the persona-prompting material is **governed and self-improvable**:
+Static persona prompts go stale as the work changes. In personaxis the persona-prompting material is
+governed and can change under review:
 
 - `improvement_policy.mode` = `locked` | `suggesting` | `autonomous` decides whether the spec may
-  evolve itself (change it from the CLI with `personaxis improve <mode>` or `/improve`).
+  evolve itself (change it from the CLI with `personaxis improve <mode>`).
 - Proposed self-edits, **quantitative** (envelope/number dot-paths) and **qualitative** (voice,
   scene contracts, anchors), go through an **append-only hash-chained ledger**, a **quorum of
   independent verifiers (consensus)**, and **protected paths** (identity, character, values,
-  reflexive self-regulation can never be self-edited). Every applied edit is **reversible** and
+  self-regulation can never be self-edited). Every applied edit is **reversible** and
   triggers a **recompile** of `PERSONA.md`.
 
-So the persona adopts a role (sections 1–2), stays consistent (3–4), stays safe (5), is
-measurable (6), and improves itself within hard governance, which is the whole thesis of the
-spec.
+Sections 1 to 5 cover how the compiled document is written. How a persona changes after loading is
+governed by `improvement_policy` (section 7 of `SPEC.md`).
+
+## 7. Procedures and criteria
+
+The sections above shape how the model speaks and holds a role. The parts of a persona that carry a job
+are its procedures and its criteria:
+
+- Procedures are `skills/<name>/SKILL.md` files declared in `extensions.skills`: when to use the skill,
+  numbered steps, and the shape of the output.
+- Criteria are the checks a deliverable must pass before it is handed over: `character.behavioral_commitments`,
+  `persona.behavioral_anchors` and the objective `verification.gates`.
+
+The compiled document points at both instead of copying them, so the document stays short and the skill
+files stay the single source. Claims in `references/` carry their source (author, title, year), so a reader
+can tell what is measured from what is the author's practice.
 
 ---
 
 ## Mapping: technique → spec field → `PERSONA.md` section
 
-| Technique | `persona_prompting` field | Compiled section |
+| Technique | `persona` field | Compiled section |
 |---|---|---|
 | Role adoption (2nd person) | `address.second_person`, `address.you_are`, `identity.short_name` | "You are <name>" opener |
 | Character card | (derived from identity/character) | "Who you are" |
@@ -135,7 +146,7 @@ spec.
 | Scene contracts (RRP) | `scene_contracts` | "In specific situations" |
 | Consistency layers | `consistency` | "What is fixed, what can change" |
 | Safety universals | (validator-enforced) | "Hard limits (never overridden)" |
-| Break-character guardrails | `break_character_guardrails` | "Staying in character" |
+| Break-character guardrails | `self_regulation.hard_limits` | "Staying in character" |
 | Memory retrieval | (resources/manifest) | "Memory & resources" |
 | Governed evolution | `improvement_policy.mode` | "Self-improvement" |
 

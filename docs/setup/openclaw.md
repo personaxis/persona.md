@@ -52,20 +52,18 @@ npx personaxis compile --root --platform openclaw
 
 This generates `SOUL.md` at the workspace root from your `.personaxis/personaxis.md`. OpenClaw reads
 `SOUL.md` first at every session start and shapes all subsequent behavior from it. (Configure the
-model once, `personaxis config set --global local.endpoint/model/apiKeyEnv`; see the CLI's
-`docs/configuration.md`.)
+model once with `personaxis config set --global local.endpoint/model/apiKeyEnv`; see the CLI
+configuration guide: https://github.com/personaxis/personaxis/blob/main/docs/guides/configuration.md.)
 
 ## Step 4b, Keep it alive (optional)
 
-To evolve the persona from each turn on **your own model** (not OpenClaw's), install the end-of-turn
-hook so `personaxis observe` runs one governed tick and recompiles `SOUL.md` on drift:
+To evolve the persona from each turn on your own model (not OpenClaw's), install the OpenClaw hook so
+`personaxis observe` runs one governed tick and recompiles `SOUL.md` when it changes:
 
 ```bash
-npx personaxis hooks install --host claude-code
+npx personaxis hooks install --host openclaw
+openclaw hooks enable personaxis-observe
 ```
-
-> Native OpenClaw hooks are on the roadmap; today the Claude-Code Stop hook covers the common local
-> flow, and any host can call `personaxis observe` from its own end-of-turn hook or a cron.
 
 ## Step 5, Report and offer agent personas
 
@@ -75,18 +73,12 @@ After completing steps 1–4, give the user a brief summary:
 - `SOUL.md` has been generated and is ready to inject into OpenClaw at agent startup.
 - The user can open `.personaxis/personaxis.md` to review your interpretation and adjust any field that does not match their intent. After any change, re-run `personaxis compile --root --platform openclaw` to regenerate SOUL.md.
 
-Then run:
+Then ask whether they want a role-specific agent persona, for example a dedicated marketing agent, a code reviewer, or a legal assistant.
+
+If the user says yes, help them describe the job in one sentence and run:
 
 ```bash
-npx personaxis templates
-```
-
-Show the user the output. Ask whether they want a role-specific agent persona, for example, a dedicated marketing agent, a code reviewer, or a legal assistant.
-
-If the user says yes, help them choose from the list and run:
-
-```bash
-npx personaxis use <template-name>
+npx personaxis create <slug> --from-prompt "<one sentence describing the job>"
 npx personaxis compile <slug> --platform openclaw
 ```
 
@@ -97,6 +89,6 @@ If the user is not sure, suggest they start with just the project baseline and a
 
 ## Notes
 
-- SOUL.md is injected directly into the OpenClaw system prompt at startup. Keep it under 2,000 words to avoid context bloat.
+- SOUL.md is injected directly into the OpenClaw system prompt at startup. Keep it short; it is injected on every session.
 - If `.personaxis/personaxis.md` (or `.personaxis/personas/<slug>/personaxis.md`) changes, re-run `personaxis compile --platform openclaw` (with `--root` for the project baseline) to regenerate SOUL.md, or let the `watch` daemon / the Step 4b hook do it automatically.
-- OpenClaw's `AGENTS.md` handles behavioral rules and workflows. `SOUL.md` handles identity and character. They are complementary, `personaxis.md` compiles into the `SOUL.md` layer via `PERSONA.md`.
+- OpenClaw's `AGENTS.md` handles behavioral rules and workflows. `SOUL.md` carries the persona's procedures, criteria and limits. They are complementary: `personaxis.md` compiles into the `SOUL.md` layer via `PERSONA.md`.

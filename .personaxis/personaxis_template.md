@@ -1,6 +1,6 @@
 ---
 # ═══════════════════════════════════════════════════════════════════════════
-# personaxis.md - Canonical quantitative spec template (spec v1.0.0)
+# personaxis.md - Canonical quantitative spec template (spec 1.1.0; 1.0.0 documents stay valid)
 # ═══════════════════════════════════════════════════════════════════════════
 #
 # This template is the starting point for the QUANTITATIVE 10-layer spec of
@@ -178,7 +178,7 @@ extensions:
 identity:
   # ── Identifiers (MUST) ──────────────────────────────────────────────────
   canonical_id: ""                    # MUST | string-slug | unique in registry. [RUNTIME]
-  display_name: ""                    # MUST | string      | same as metadata.display_name. [ACTOR-HOT]
+  display_name: ""                    # MUST | string      | the single owner of the display name. [ACTOR-HOT]
   # short_name: ""                    # MAY  | string<=24  | v0.10: chat/UI handle (e.g. "Clio"). [ACTOR-HOT]
   capabilities: []                    # MAY  | string[]    | v0.8: explicit capability tags for orchestration/routing. [RUNTIME]
 
@@ -294,7 +294,7 @@ personality:
       #                               # the deviation from `mean` halves every half_life ticks
       #                               # absent stimulus (audited as runtime-decay; SPEC §15).
       #                               # Guarantees bounded standing drift: max_step_delta/λ. [RUNTIME]
-    conscientiousness:                # CANONICAL LOAD-BEARING EXAMPLE (FASE 7): the full
+    conscientiousness:                # CANONICAL LOAD-BEARING EXAMPLE: the full
       mean: 0.0                       # trio, per-band expression + bands + half_life, 
       range: [0.0, 0.0]               # makes this number provably non-decorative (σ > 0,
       expression:                     # check with `personaxis jacobian`).
@@ -509,7 +509,7 @@ metacognition:
     - ""
 
 # ═══════════════════════════════════════════════════════════════════════════
-# LAYER 9: REFLEXIVE SELF-REGULATION, superior control
+# LAYER 9: SELF-REGULATION, superior control
 # ═══════════════════════════════════════════════════════════════════════════
 # Arbitrates all other layers. Final decision point before response renders.
 #
@@ -579,8 +579,6 @@ self_regulation:
     ideal_self: ""                    # SHOULD | string | [ACTOR-COLD]
     ought_self: ""                    # SHOULD | string | [ACTOR-COLD]
 
-  # ── Principled refusals (SHOULD) ────────────────────────────────────────
-  # Situational refusals (distinct from hard_limits which are categorical).
   # ── Deferral policy (SHOULD) ────────────────────────────────────────────
   deferral_policy: ""                 # SHOULD | string | [ACTOR-COLD]
 
@@ -708,7 +706,7 @@ governance:
   # Per-layer sensitivity to drift detection. Replaces the single
   # drift_threshold field that lived only in personality in v0.5.x.
   drift_thresholds:                   # MUST | map<layer_name, float[0..1]> | [JUDGE]
-    identity: 0.05                    # very tight: identity drift is critical
+    identity: 0.05                    # very tight: a change to identity is critical
     character: 0.10
     personality: 0.15
     values_and_drives: 0.10
@@ -716,7 +714,7 @@ governance:
     cognition: 0.15
     memory: 0.20
     metacognition: 0.15
-    self_regulation: 0.05   # very tight: regulator drift is critical
+    self_regulation: 0.05   # very tight: a change to the regulator is critical
     persona: 0.20
 
   # ── Pointer to improvement policy ───────────────────────────────────────
@@ -874,10 +872,10 @@ observability:                        # MAY | object | causal trace export
 
 ---
 
-## Self-Improvement Modes (v0.6.0)
+## Self-Improvement Modes
 
 This persona's ability to edit its own spec is controlled by
-`policy.yaml#/improvement_policy/mode`. Three modes are supported:
+`improvement_policy.mode` (inline; a sibling policy.yaml can only restrict it). Three modes are supported:
 
 ### `locked` (the kill-switch; the mode when none is declared)
 
@@ -895,7 +893,7 @@ This persona's ability to edit its own spec is controlled by
 - The actor MAY call the canonical tool `propose_self_edit(scope, justification,
   evidence)` to surface a proposal.
 - Proposals are queued for human review (`personaxis review`, or /persona → Evolution in the app).
-- Approved proposals mint a new PersonaVersion (semantic version bump).
+- Approved proposals mint a new PersonaVersion (the persona's next semantic version).
 - `self_regulation.decisions.governance_decision.enabled` includes
   `propose_self_edit`.
 
@@ -920,7 +918,7 @@ This persona's ability to edit its own spec is controlled by
 | `propose_self_edit(virtues.honesty.enforcement, "soft")` | proposes change to `personaxis.md` | `improvement_policy.mode` + per-layer edit policy + universals |
 | `apply_self_edit(persona.voice.warmth_mean, 0.6)` | directly modifies `personaxis.md` | `improvement_policy.mode: autonomous` + per-layer edit policy + universals |
 
-**Important:** state changes apply under `suggesting` and `autonomous` and stop
+State changes apply under `suggesting` and `autonomous` and stop
 under `locked`. Spec edits require improvement_policy >= suggesting.
 Whenever this file changes (by any of the above), `personaxis compile` recompiles
 the sibling `PERSONA.md` / `.claude/agents/<slug>.md` so the two stay in sync.

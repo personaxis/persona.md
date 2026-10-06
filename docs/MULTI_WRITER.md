@@ -6,7 +6,7 @@ persona is written from more than one process, machine or runtime. It does not p
 transport or a storage engine.
 
 A persona used from a desktop and a laptop, or served by two runtime instances, is the
-normal case, not an edge case. The guarantees the spec makes (§15) have to survive it.
+normal case. The guarantees the spec makes (§15) have to survive it.
 
 ---
 
@@ -67,7 +67,7 @@ individually-clamped steps, breaking T1 for merged history while preserving it l
 Hence "at each step", and hence the order must be agreed rather than incidental.
 
 A total order over `(logical time, writer id)` satisfies this. Wall-clock time alone does
-not: clocks drift, are corrected, and are wrong on unmaintained machines, so two entries
+not: clocks skew and get corrected, and are wrong on unmaintained machines, so two entries
 can carry timestamps in the opposite order to the one in which they were caused. A **hybrid
 logical clock** (physical time plus a counter that never regresses relative to what the
 writer has observed) is the recommended construction.

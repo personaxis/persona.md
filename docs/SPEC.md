@@ -6,25 +6,33 @@
 
 ---
 
-## 0. The official definition
+## 0. What this specification defines
 
-> An **AI Persona** is a person-model for an AI agent: the constructs psychology uses to describe
-> human personhood, identity, character, personality, values, affect, cognition, memory,
-> metacognition, self-regulation, and social expression, expressed as a validated, versioned
-> specification that any model can adopt. Not a system prompt: the spec compiles into one. Not a
-> role template: it lives, its state evolves within declared envelopes, and every change to who
-> it is is bounded, audited, and reversible. The same person across every model, every
-> conversation, every machine.
+A persona is the complete way a professional works: the procedures it follows, the criteria it
+judges its work by, the tools it uses, the knowledge it relies on with the source of each piece, and
+what it has learned from the work. A persona file is a versioned, validated package that any agent
+can load to do a job.
 
-The central list **is** the ten canonical layers (§6). They are the anatomy of an AI Persona and
-are kept in v1.0 deliberately: each layer earns its place by declaring (a) the psychological
-construct it models, with its grounding; (b) its operational contract (which runtime consumers
-read it); and (c) its composition rules (how it interacts with the other layers without
+This document defines the package (§5 and the folder layout), the source file `personaxis.md` and its
+schema (§3 to §12), and what a runtime must honor when it loads one (§8, §13 and §15).
+
+| What a persona contains | Where it lives in the format |
+|---|---|
+| Procedures | `extensions.skills`, `skills/<name>/SKILL.md` |
+| Criteria | `character.behavioral_commitments`, `persona.behavioral_anchors`, `verification.gates` |
+| Tools | `extensions.tools`, `cognition.tool_use_policy`, `permissions` |
+| Sourced knowledge | `extensions.references`, `references/` |
+| What it learned | `memory.md`, `memory/episodic.jsonl` (§8.2) |
+| Behavior and limits | the ten layers (§6) and the governance blocks (§7) |
+
+The ten canonical layers (§6) are the behavioral part of the format. Each layer declares (a) the
+psychological construct it models, with its grounding; (b) its operational contract (which runtime
+consumers read it); and (c) its composition rules (how it interacts with the other layers without
 duplicating them).
 
 ### 0.1 What's new in 1.0.0 (BREAKING)
 
-First major release. All corrections happen **inside** the ten layers; none removes a layer:
+First major release. All corrections happen inside the ten layers; none removes a layer:
 
 1. **Single-owner enforcement**: only `character.virtues` carry `enforcement`. A virtue MAY
    declare `refs:` (dot-paths to the traits/values that back it); the validator then REQUIRES
@@ -46,9 +54,9 @@ First major release. All corrections happen **inside** the ten layers; none remo
 7. **Monitors wire into decisions**: a metacognition monitor may declare
    `{enabled, feeds: <self_regulation decision>}`, making the monitor→decision loop explicit.
 8. **Behavior bands**: envelope dimensions may declare `bands: {low_max, moderate_max}` (the
-   low/moderate/high boundaries; the schema's $defs/bandBoundaries OBJECT is the normative form, 
+   low/moderate/high boundaries; the schema's $defs/bandBoundaries OBJECT is the normative form;
    an early draft of this section showed an array form, corrected as an erratum in 1.1), giving
-   the numbers deterministic compile semantics; **drift ≡ crossing a band boundary**.
+   the numbers deterministic compile semantics; a band crossing is the event that triggers a recompile.
 
 Plus: `apiVersion` is `personaxis.com/v1`; `metadata.display_name` is removed (single owner:
 `identity.display_name`); new OPTIONAL `runtime`, `interop`, `lineage`, `integrity` blocks;
@@ -89,9 +97,8 @@ validating example lives at
 | **`state.json`** | Mutable runtime state | The runtime, via `adjust_persona_state` tool calls from the actor |
 | **`.dist/`** (compiled output) | Ephemeral per-request | The runtime compiler (deterministic, separate from `personaxis compile`) |
 
-**The actor LLM never reads `personaxis.md` or `PERSONA.md` directly.** It reads the compiled
-prompt produced by the runtime compiler, a derivative of `personaxis.md` + `state.json` + active
-context + memory anchors. A coding agent (Claude Code, Codex) reads `PERSONA.md` /
+The model reads a compiled document, a derivative of `personaxis.md`, `state.json`, the active
+context and the memory anchors. A coding agent (Claude Code, Codex) reads `PERSONA.md` or
 `.claude/agents/<slug>.md` directly.
 
 ### 1.2 Field consumer model
@@ -137,7 +144,7 @@ Preceded by the spec identifiers (§3), `metadata` (§4) and `extensions` (§5).
 |---|---|---|
 | `apiVersion` | string (const) | `"personaxis.com/v1"`, universal, must be exactly this value (≤0.10: `"persona.dev/v1"`) |
 | `kind` | enum | `"AgentPersona"` for AI agents · `"UserPersona"` for human users |
-| `spec_version` | string | `"1.0.0"` is current. Version dispatch: 1.x documents validate against the current schema; `0.3.0`–`0.10.0` documents validate against the frozen legacy schema (read-compat window) with a pointer to `personaxis migrate 0.10-to-1.0` |
+| `spec_version` | string | `"1.1.0"` is current; `"1.0.0"` documents stay valid. Version dispatch: 1.x documents validate against the current schema; `0.3.0`–`0.10.0` documents validate against the frozen legacy schema (read-compat window) with a pointer to `personaxis migrate 0.10-to-1.0` |
 
 A validator rejecting any of these returns `FAIL_CONCEPTUAL` for `apiVersion` and `FAIL_SCHEMA`
 for `kind` / `spec_version`.
@@ -151,12 +158,12 @@ ten layers.
 
 | Field | Type | Tier | Notes |
 |---|---|---|---|
-| `metadata.name` | string-slug | MUST | primary key in the registry; lowercase, `[a-z0-9_-]` |
+| `metadata.name` | string-slug | MUST | the persona's key; lowercase, `[a-z0-9_-]` |
 | `metadata.version` | semver | MUST | version of this persona (not the spec) |
 | `metadata.description` | string | MUST | one-line description |
 | `metadata.created` | ISO date | MUST | `YYYY-MM-DD` |
-| `metadata.owner_tenant_id` | string | MAY | empty for public personas |
-| `metadata.tags` | list<string> | MAY | for search and filtering |
+| `metadata.owner_tenant_id` | string | MAY | an owner reference; empty for public personas |
+| `metadata.tags` | list<string> | MAY | free-form labels |
 | `metadata.license` | enum | MAY | `private` · `public` · `custom` |
 
 > **v1.0 removed:** `metadata.display_name`, it duplicated `identity.display_name` with no
@@ -170,7 +177,7 @@ Runtime capabilities and supporting materials. Not part of the ten semantic laye
 
 | Field | Type | Notes |
 |---|---|---|
-| `extensions.skills` | list<string> | invocable skill modules: local paths (`./skills/<name>` → `skills/<name>/SKILL.md`, agentskills.io format), registry IDs (`@org/name@version`), or GitHub (`github:org/repo[/path]`). `personaxis compile` materializes local entries to each platform's discovery dir and writes `skills-manifest.json`. |
+| `extensions.skills` | list<string> | invocable skill modules: local paths (`./skills/<name>` → `skills/<name>/SKILL.md`, agentskills.io format), published references (`@org/name@version`), or GitHub (`github:org/repo[/path]`). `personaxis compile` materializes local entries to each platform's discovery dir and writes `skills-manifest.json`. |
 | `extensions.tools` | list<string> | runtime tool identifiers (e.g., `web_search`, `adjust_persona_state`, `propose_self_edit`) |
 | `extensions.references` | list<string> | paths under `references/` for heavy framework prose |
 | `extensions.examples` | list<string> | paths under `examples/` for worked outputs |
@@ -383,8 +390,8 @@ The 3 universal `hard_limits` (must be present verbatim):
 
 ### Layer 10, `persona` (social expression)
 
-**Construct:** the social mask, Jung's persona; Goffman's presentation of self. The interface
-layer: how the person expresses itself to an audience, distinct from what it is.
+**Construct:** how the persona presents its work to an audience (Jung's persona; Goffman's
+presentation of self). The compiled document assembles these fields.
 **Contract:** `[ACTOR-HOT]` (voice, constraints, address), `[ACTOR-COLD]` (adaptations, modes,
 exemplars), `[JUDGE]` (constraints U4/U10).
 **Composition (v1.0):** absorbs the persona-prompting source material, it IS social expression,
@@ -541,8 +548,8 @@ Normative schema: [`schema/state.schema.json`](../schema/state.schema.json).
 | Block | Purpose |
 |---|---|
 | `interop` | declared host expectations: `protocols` (e.g. `mcp`, `http`), `tools` the persona assumes available |
-| `lineage` | provenance: `forked_from` (registry ref/URL of the ancestor), `authored_by` |
-| `integrity` | distribution pinning: `spec_hash` (sha256 of the file at publish time), `signature` (detached, registry-verifiable) |
+| `lineage` | provenance: `forked_from` (a reference or URL of the ancestor), `authored_by` |
+| `integrity` | distribution pinning: `spec_hash` (sha256 of the file at publish time), `signature` (detached) |
 
 ---
 
@@ -697,10 +704,9 @@ See [`CHANGELOG.md`](../CHANGELOG.md) for each diff and rationale.
 
 ## 15. Mathematical semantics (normative, v1.1)
 
-> The reference derivations and proofs are published separately as a research report; the
-> machine-checked obligations ship with the implementation, as property tests over theorems
+> The machine-checked obligations ship with the implementation, as property tests over theorems
 > T1-T6. This section states the normative contract a conforming runtime must honor, which is
-> the part an implementer needs and the only part that is binding. The governed object is the FULL persona: state coordinates span the personality /
+> the only binding part for an implementer. The governed object is the FULL persona: state coordinates span the personality /
 > affect / values_and_drives layers; governance and audit span all ten.
 
 **State space.** The mutable surface is exactly the set of envelope-bearing dot-paths `i`
