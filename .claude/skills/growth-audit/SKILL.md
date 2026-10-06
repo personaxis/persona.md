@@ -39,6 +39,6 @@ performance, or find the highest-leverage place to invest next.
 ## Output format
 
 Funnel table (stage, current rate, trend, baseline/benchmark), the binding
-constraint with reasoning for why it's the constraint and not just the lowest
+constraint with the reasoning for why it binds, which can differ from the lowest
 number, what marketing did that contributed, and one primary recommendation with
 its risk/assumption stated explicitly.

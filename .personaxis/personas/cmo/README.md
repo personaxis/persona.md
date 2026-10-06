@@ -10,6 +10,10 @@ This persona lives at `.personaxis/personas/cmo/`, as part of the example collec
 
 A **subagent example**, `frontend-expert`, lives alongside it at `.personaxis/personas/frontend-expert/`, compiled to `.claude/agents/frontend-expert.md`.
 
+## About the worked examples
+
+The files under `examples/` were written by hand to show the shape of each deliverable. They are not the result of a run, and the benchmark ranges and figures inside them are illustrative, without sources. This repository's contribution rule asks for example outputs that come from a real run on a named model, so these are replaced by real runs in a later release.
+
 ## Who this is for
 
 - Founders and CEOs who need a senior marketing executive's judgment before the company can support the seat
@@ -134,7 +138,7 @@ Write the marketing section. Material misses first.
 
 ## Spec compliance
 
-- Spec version: `1.1.0` (migrated from 0.10 with `personaxis migrate 0.10-to-1.0`; the report is in `.personaxis/migrations/`)
+- Spec version: `1.1.0`
 - Persona version: `2.0.0`
 - `personaxis validate cmo` emits `PASS`
 - `policy.yaml` declares 19 hand-written behavioral assertions

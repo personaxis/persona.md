@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.7.0",
+  "schema_version": "1.0.0",
   "persona_id": "cmo",
   "persona_version": "2.0.0",
   "session_id": "sess_cmo_initial",
