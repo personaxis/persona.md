@@ -16,7 +16,7 @@ The spec follows [Semantic Versioning](https://semver.org/).
 - README rewritten to what the format is: a diagram, a persona on one screen, the ten layers, and what this repository contains. The CLI reference, the lint rules table, the programmatic API and the setup prompts left it, because they describe the CLI and live in its repository.
 - `docs/SPEC.md` §1.2 states that a runtime may not read every field yet, instead of claiming every field has a consumer. The methodology link points at the CLI repository.
 - `CONTRIBUTING.md` points CLI questions at the CLI repository and lists the personal-data check that runs on every pull request.
-- CI gains a `personal-data` job that reads what each commit of a pull request adds and fails when a commit adds personal data, even one that a later commit removes.
+- CI gains a `personal-data` job that reads what each commit of a pull request adds and fails when a commit adds personal data, in text or inside a binary file, even when a later commit removes it.
 
 ### Removed
 - `docs/setup/` (Claude Code, Codex, OpenClaw, Hermes). They told an agent which CLI commands to run, and the same guides are maintained in the CLI repository under `docs/integrations/`.

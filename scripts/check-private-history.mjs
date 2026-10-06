@@ -33,6 +33,26 @@ function git(args, cwd) {
 	return execFileSync("git", args, { cwd, encoding: "utf8", maxBuffer: 1024 * 1024 * 1024, stdio: ["ignore", "pipe", "pipe"] });
 }
 
+/**
+ * A binary file has no added lines to read, but it can still carry a path: compiled Python bytecode
+ * embeds the path of the machine that built it, and that is how a user name reached this history once.
+ * So the printable runs of the blob are read as lines. Files over 16 MB are left alone.
+ */
+function binaryFinding(commit, file, cwd) {
+	let buf;
+	try {
+		buf = execFileSync("git", ["show", `${commit}:${file}`], { cwd, maxBuffer: 64 * 1024 * 1024, stdio: ["ignore", "pipe", "pipe"] });
+	} catch {
+		return null;
+	}
+	if (buf.length > 16 * 1024 * 1024) return null;
+	for (const run of buf.toString("latin1").match(/[\x20-\x7e]{6,}/g) ?? []) {
+		const what = personalIn(run);
+		if (what) return what;
+	}
+	return null;
+}
+
 /** The findings in the commits of `base..HEAD`, run inside `cwd`. */
 function scanRange(base, cwd = process.cwd()) {
 	const log = git(["log", "--no-color", "--no-ext-diff", "--no-renames", "--no-merges", "-p", "--unified=0", "--format=%x00%H", `${base}..HEAD`], cwd);
@@ -47,6 +67,12 @@ function scanRange(base, cwd = process.cwd()) {
 				const m = / b\/(.+)$/.exec(line);
 				file = m ? m[1] : "";
 				if (file && ARTIFACT.test(file) && !SKIP.has(file)) findings.push({ commit, file, what: "a compiled artifact, which embeds the building machine's path" });
+				continue;
+			}
+			const bin = /^Binary files .* and b\/(.+) differ$/.exec(line);
+			if (bin) {
+				const what = SKIP.has(bin[1]) ? null : binaryFinding(commit, bin[1], cwd);
+				if (what) findings.push({ commit, file: bin[1], what });
 				continue;
 			}
 			if (!file || SKIP.has(file) || !TEXT.test(file)) continue;
@@ -93,10 +119,22 @@ function control() {
 		run(["add", "-A"]);
 		run(["commit", "-q", "-m", "removes it again"]);
 
+		// The same path inside a binary file (a NUL byte makes git treat it as one), added and removed.
+		writeFileSync(join(dir, "blob.bin"), Buffer.concat([Buffer.from([0, 1, 2, 255]), Buffer.from(planted), Buffer.from([0, 200])]));
+		run(["add", "."]);
+		run(["commit", "-q", "-m", "adds a binary with a home path"]);
+		unlinkSync(join(dir, "blob.bin"));
+		run(["add", "-A"]);
+		run(["commit", "-q", "-m", "removes the binary"]);
+
 		const caught = scanRange(base, dir);
 		let failed = false;
-		if (caught.length === 0) {
+		if (!caught.some((f) => f.file === "state.json")) {
 			console.error("control FAILED: the check did not catch a home path that a later commit removed.");
+			failed = true;
+		}
+		if (!caught.some((f) => f.file === "blob.bin")) {
+			console.error("control FAILED: the check did not catch a home path inside a binary file.");
 			failed = true;
 		}
 		const tipFiles = run(["ls-files"]).split("\n").filter(Boolean);
@@ -114,7 +152,7 @@ function control() {
 			failed = true;
 		}
 		if (failed) process.exit(1);
-		console.log("control: a home path added and removed inside a range is caught, and a clean range passes.");
+		console.log("control: a home path added and removed inside a range is caught, in text and in a binary, and a clean range passes.");
 	} finally {
 		rmSync(dir, { recursive: true, force: true });
 	}
