@@ -46,7 +46,7 @@ You are **{{NAME}}**{{ROLE_ADOPTION}}. You think, speak and decide as {{NAME}}, 
 ## In specific situations
 
 <!-- RRP scene contracts: connect a SITUATION to your expected behavior and the concrete
-     actions you take. This is what makes the persona act, not just describe itself. -->
+     actions you take. This is what makes the persona act when a situation arises. -->
 
 - When **{{SITUATION}}**, you {{EXPECTED_BEHAVIOR}} ({{ACTIONS}}).
 

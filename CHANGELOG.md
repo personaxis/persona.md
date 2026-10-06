@@ -13,6 +13,19 @@ The spec follows [Semantic Versioning](https://semver.org/).
 - Documentation re-centered on how a persona works: procedures (`skills/`), criteria (`character.behavioral_commitments`, `verification.gates`), tools (`extensions.tools`), sourced knowledge (`references/`) and what it learned (`memory/`). No schema change and no new required field.
 - Section 0 of `SPEC.md` now defines a persona as the complete way a professional works, with a table of where each part lives in the format.
 - Removed pointers to hosted upload and download from the setup guides, and the Cursor setup guide (the `--platform` values are `claude-code`, `codex`, `openclaw` and `hermes`).
+- README rewritten to what the format is: a diagram, a persona on one screen, the ten layers, and what this repository contains. The CLI reference, the lint rules table, the programmatic API and the setup prompts left it, because they describe the CLI and live in its repository.
+- `docs/SPEC.md` §1.2 states that a runtime may not read every field yet, instead of claiming every field has a consumer. The methodology link points at the CLI repository.
+- `CONTRIBUTING.md` points CLI questions at the CLI repository and lists the personal-data check that runs on every pull request.
+- CI gains a `personal-data` job that reads what each commit of a pull request adds and fails when a commit adds personal data, even one that a later commit removes.
+
+### Removed
+- `docs/setup/` (Claude Code, Codex, OpenClaw, Hermes). They told an agent which CLI commands to run, and the same guides are maintained in the CLI repository under `docs/integrations/`.
+- `docs/PERSONA_PROMPTING.md`. It described how the CLI compiles `PERSONA.md`, and the CLI repository keeps a version with only the sources that were opened and read (`docs/architecture/persona-prompting.md`).
+
+### Fixed
+- The maintainer and frontend-expert personas: every number now has per-band text, each rule lives in one field, the prose is in the second person, `frontend-expert` no longer names a tool that no engine provides, and its `spec_version` is `1.1.0`. Both compiled documents are regenerated.
+- `policy.yaml` and `state.json` of the example personas declare current versions. The assertion layer name stays `reflexive_self_regulation` because the policy schema still lists that name and not `self_regulation`.
+- The `cmo` README says its worked outputs were written by hand and not produced by a run.
 
 ---
 

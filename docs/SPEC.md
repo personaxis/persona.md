@@ -112,8 +112,8 @@ Every field in the spec has a documented consumer:
 | `[RUNTIME]` | Orchestrator | `.dist/runtime.config.json` (compiler, tool gates, memory routing) |
 | `[JUDGE]` | Evaluator/judge worker | `.dist/judge.config.json` (assertions, drift detection) |
 
-These tags are documented inline in the template. **Nothing in the spec is wasted**: every field
-has at least one consumer, or it is removed.
+These tags are documented inline in the template. Every field names its consumer. A runtime may not
+read every field yet; `personaxis lint` reports the ones the reference runtime does not consume.
 
 ---
 
@@ -398,7 +398,7 @@ exemplars), `[JUDGE]` (constraints U4/U10).
 so it lives here. The compiler assembles these fields into the LLM-facing `PERSONA.md`
 (role adoption, character card, scene contracts, few-shot voice); each section degrades to
 derivation from the quantitative layers when its source field is absent. Methodology +
-citations: [PERSONA_PROMPTING.md](https://github.com/personaxis/persona.md/blob/main/docs/PERSONA_PROMPTING.md).
+citations: [persona-prompting.md](https://github.com/personaxis/personaxis/blob/main/docs/architecture/persona-prompting.md) in the reference CLI repository.
 
 | Field | Tier | Notes |
 |---|---|---|

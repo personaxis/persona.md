@@ -637,7 +637,7 @@ persona:
   # All optional; absence degrades to compiling from the quantitative layers.
   # NOTE: break-character guardrails are NOT here, stay-in-role rules that must
   # never be crossed belong in self_regulation.hard_limits (one refusal surface).
-  # See docs/PERSONA_PROMPTING.md.
+  # See docs/architecture/persona-prompting.md in the personaxis CLI repository.
   # address:
   #   second_person: true             # compile to "You are <name>…" direct address
   #   you_are: ""                     # one-line role-adoption statement

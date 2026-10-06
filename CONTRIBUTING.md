@@ -14,10 +14,11 @@ PERSONA.md is an open specification. Contributions are welcome, from typo fixes 
 
 ## Before you open a PR
 
-1. Run schema validation against your changes if they touch PERSONA.md files
-2. Ensure field names use `snake_case`
-3. Ensure all required fields are present in example personas
-4. Update CHANGELOG.md under `[Unreleased]`
+1. Run `personaxis validate` on every persona your change touches.
+2. Use `snake_case` for field names.
+3. Keep every required field in the example personas.
+4. Update CHANGELOG.md under `[Unreleased]`.
+5. Do not add personal data to any commit, even one a later commit removes: a check on every pull request reads what each commit adds and fails the build.
 
 ## Versioning
 
@@ -29,4 +30,4 @@ Non-breaking changes: adding an optional field, adding an allowed enum value, cl
 
 ## Governance
 
-The spec is maintained by [Personaxis](https://personaxis.com). Significant changes are discussed in an issue before merging. The specification is MIT licensed, and the reference CLI lives in a separate repository.
+The spec is maintained by [Personaxis](https://personaxis.com). Significant changes are discussed in an issue before merging. The specification is MIT licensed. The reference CLI lives in [its own repository](https://github.com/personaxis/personaxis), and anything about how to run it belongs there, not here.
