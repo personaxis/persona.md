@@ -64,7 +64,7 @@ episodic memory gains **real erasure** (§8.2); `state.json` keys are full dot-p
 `improvement_policy` inline is authoritative with policy.yaml restricted to min-wins (§7.2).
 
 **Read-compat:** 0.3.0–0.10.0 documents keep validating against the frozen
-[`schema/legacy/persona-0.10.schema.json`](../schema/legacy/persona-0.10.schema.json) for the
+[`schema/legacy/persona-0.10.schema.json`](https://github.com/personaxis/persona.md/blob/main/schema/legacy/persona-0.10.schema.json) for the
 whole 1.x window. Migrate with `personaxis migrate 0.10-to-1.0`, a structural,
 comment-preserving codemod (§14).
 
@@ -81,12 +81,12 @@ This document is the normative reference. It defines required fields, optional f
 values, universal constraints, conformance classes, and validator outputs. The repo-root
 `PERSONA.md` (or `.claude/agents/<slug>.md` in subagent mode) is a separate, compiled,
 qualitative document with its own section contract, see
-[`PERSONA_template.md`](../PERSONA_template.md).
+[`PERSONA_template.md`](https://github.com/personaxis/persona.md/blob/main/PERSONA_template.md).
 
 The canonical template lives at
-[`.personaxis/personaxis_template.md`](../.personaxis/personaxis_template.md). A complete,
+[`.personaxis/personaxis_template.md`](https://github.com/personaxis/persona.md/blob/main/.personaxis/personaxis_template.md). A complete,
 validating example lives at
-[`.personaxis/personas/cmo/personaxis.md`](../.personaxis/personas/cmo/personaxis.md).
+[`.personaxis/personas/cmo/personaxis.md`](https://github.com/personaxis/persona.md/blob/main/.personaxis/personas/cmo/personaxis.md).
 
 ### 1.1 Three-artifact information model
 
@@ -398,7 +398,7 @@ exemplars), `[JUDGE]` (constraints U4/U10).
 so it lives here. The compiler assembles these fields into the LLM-facing `PERSONA.md`
 (role adoption, character card, scene contracts, few-shot voice); each section degrades to
 derivation from the quantitative layers when its source field is absent. Methodology +
-citations: [PERSONA_PROMPTING.md](./PERSONA_PROMPTING.md).
+citations: [PERSONA_PROMPTING.md](https://github.com/personaxis/persona.md/blob/main/docs/PERSONA_PROMPTING.md).
 
 | Field | Tier | Notes |
 |---|---|---|
@@ -492,7 +492,7 @@ minors: any knob that tunes an implementation without changing who the persona i
 
 ### 8.2 Episodic memory, normative format with real erasure
 
-Normative schema: [`schema/memory.schema.json`](../schema/memory.schema.json). One JSON object
+Normative schema: [`schema/memory.schema.json`](https://github.com/personaxis/persona.md/blob/main/schema/memory.schema.json). One JSON object
 per line; every entry carries `source` provenance and forms a tamper-evident chain
 (`prev_hash` → `hash`).
 
@@ -504,7 +504,7 @@ each an independent chain starting at `""`. Retrieval reads the union in time or
 verification runs per log, and a break identifies WHICH log and at which entry. Implementations
 that only ever write from one place MAY use a single `memory/episodic.jsonl`, which the
 reference implementation still reads. The full requirements for concurrent writers, and why
-a single chain cannot satisfy them, are in [MULTI_WRITER.md](./MULTI_WRITER.md).
+a single chain cannot satisfy them, are in [MULTI_WRITER.md](https://github.com/personaxis/persona.md/blob/main/docs/MULTI_WRITER.md).
 
 **v1.0 (erasure):** the chain hash commits to `content_hash`, NOT to the content bytes, so an
 entry's content can be **redacted** (right-to-erasure) while the chain stays verifiable
@@ -521,7 +521,7 @@ redacting.
 
 ### 8.3 `state.json`, mutable runtime state
 
-Normative schema: [`schema/state.schema.json`](../schema/state.schema.json).
+Normative schema: [`schema/state.schema.json`](https://github.com/personaxis/persona.md/blob/main/schema/state.schema.json).
 
 - **The mutable surface is EXACTLY the set of fields that declare a `{mean, range}` envelope**
   in `personaxis.md` (traits, core_affect, mood, envelope-declaring drives). Nothing else is
@@ -630,7 +630,7 @@ A document **conforms** to this spec when:
 3. The YAML frontmatter parses cleanly and is bounded by `---` at top and bottom.
 
 The CLI is the reference implementation; the JSON Schema is published with it at
-[`schema/persona.schema.json`](../schema/persona.schema.json).
+[`schema/persona.schema.json`](https://github.com/personaxis/persona.md/blob/main/schema/persona.schema.json).
 
 ### 13.1 The canonical universals table (single source)
 
@@ -698,7 +698,7 @@ Migrations are automated codemods, chained oldest-first:
 | `0.7-to-0.8`, `0.8-to-0.9`, `0.9-to-0.10` | additive bumps |
 | `0.10-to-1.0` | **structural, comment-preserving** (§0.1 changes; sibling `state.json` keys → full dot-paths; `policy.yaml` bump); dry-run by default, written report under `.personaxis/migrations/` |
 
-See [`CHANGELOG.md`](../CHANGELOG.md) for each diff and rationale.
+See [`CHANGELOG.md`](https://github.com/personaxis/persona.md/blob/main/CHANGELOG.md) for each diff and rationale.
 
 ---
 
