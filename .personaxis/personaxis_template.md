@@ -126,7 +126,7 @@
 
 apiVersion: personaxis.com/v1         # MUST | UNIVERSAL, always "personaxis.com/v1"
 kind: AgentPersona                    # MUST | enum<AgentPersona|UserPersona>
-spec_version: "1.0.0"                # MUST | semver | spec version
+spec_version: "1.1.0"                # MUST | semver | spec version
 
 # ═══════════════════════════════════════════════════════════════════════════
 # METADATA, registry-level identification (MUST)
@@ -330,7 +330,7 @@ values_and_drives:
   drives:                             # MUST | map<string, object>
     # ── NEAR-UNIVERSAL ───────────────────────────────────────────────────
     seek_approval_for_identity_change:
-      level: "high"                  # was intensity: 1.00
+      level: "high"
       allowed: true                   # MUST   | bool          | [RUNTIME]
 
     # ── Per-persona drives ───────────────────────────────────────────────
@@ -552,7 +552,7 @@ self_regulation:
   # ── Flags (MAY) ─────────────────────────────────────────────────────────
   # Per-persona reasons that get TAGGED onto decisions. Not decisions themselves.
   flags:                              # MAY | list<string> | [JUDGE]
-    # Example for CMO: [strategic_error, budget_risk, data_gap]
+    # Example: [strategic_error, budget_risk, data_gap]
     - ""
 
   # ── Hard limits (MUST) ──────────────────────────────────────────────────
@@ -637,7 +637,7 @@ persona:
   # All optional; absence degrades to compiling from the quantitative layers.
   # NOTE: break-character guardrails are NOT here, stay-in-role rules that must
   # never be crossed belong in self_regulation.hard_limits (one refusal surface).
-  # See docs/PERSONA_PROMPTING.md.
+  # See docs/architecture/persona-prompting.md in the personaxis CLI repository.
   # address:
   #   second_person: true             # compile to "You are <name>…" direct address
   #   you_are: ""                     # one-line role-adoption statement

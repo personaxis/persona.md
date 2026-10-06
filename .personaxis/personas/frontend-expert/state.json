@@ -1,7 +1,7 @@
 {
-  "schema_version": "0.7.0",
+  "schema_version": "1.0.0",
   "persona_id": "frontend-expert",
-  "persona_version": "1.0.0",
+  "persona_version": "1.1.0",
   "session_id": "sess_frontend_expert_initial",
   "values": {
     "personality.traits.honesty_humility": 0.9,

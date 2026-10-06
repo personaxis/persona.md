@@ -1,10 +1,10 @@
 {
-  "spec_version": "0.10.0",
-  "compiledPath": ".claude/agents/frontend-expert.md",
-  "personaxisMdHash": "befad123392727f23292dab74e5b54f2fff69d2c9fd0caefe1c5a3432734e97c",
-  "compiledMdHash": "22eba5dc0f28098c72bfd281db29c0481ded5b61db4e1ee7aad7332c628b13b3",
+  "spec_version": "1.1.0",
+  "compiledPath": ".personaxis/personas/frontend-expert/PERSONA.md",
+  "personaxisMdHash": "5cecdc1b3dee9c64ee94385f15ee7f8dfee7fa624711c3208c201e26806721db",
+  "compiledMdHash": "c5f125918b6bcfd2fda4295d26efa220251e615231c3a449da293b7bfcca5892",
   "lastOp": "compile",
-  "model": "command-a-03-2025",
+  "model": "none",
   "source": "cli-local",
-  "timestamp": "2026-06-25T07:27:45.863Z"
+  "timestamp": "2026-10-06T20:15:44.894Z"
 }

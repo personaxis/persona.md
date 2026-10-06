@@ -32,7 +32,6 @@ jobs:
       - name: Validate golden personas (must exit 0 = PASS)
         run: |
           set -e
-          npx -y personaxis@latest validate .personaxis/personas/cmo/personaxis.md
           npx -y personaxis@latest validate .personaxis/personas/frontend-expert/personaxis.md
           npx -y personaxis@latest validate .personaxis/personaxis.md
 

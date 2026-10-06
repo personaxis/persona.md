@@ -12,7 +12,7 @@
 # WHO DOES NOT READ THIS
 #   - The LLM actor running the persona.
 
-spec_version: "0.7.0"
+spec_version: "1.1.0"
 
 applies_to:
   persona_name: "frontend-expert"
@@ -43,7 +43,7 @@ improvement_policy:
   # autonomous_scope_blocklist:
   #   - "identity.*"
   #   - "character.virtues.*.enforcement"
-  #   - "reflexive_self_regulation.*"
+  #   - "self_regulation.*"
   #   - "values_and_drives.values.safety.*"
   #   - "governance.*"
   #   - "security.*"

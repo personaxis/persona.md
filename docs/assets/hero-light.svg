@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="112" viewBox="0 0 640 112" role="img" aria-label="PERSONA.md: An open file format for the way a professional works">
+  <title>PERSONA.md</title>
+  <desc>An open file format for the way a professional works</desc>
+  <g transform="translate(0,4)"><path d="M14 8h40l20 20v66a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4V12a4 4 0 0 1 4-4z" fill="none" stroke="#0969da" stroke-width="6" stroke-linejoin="round"/><path d="M54 8v20h20" fill="none" stroke="#0969da" stroke-width="6" stroke-linejoin="round"/><rect x="24" y="48" width="40" height="7" rx="3.5" fill="#0969da"/><rect x="24" y="63" width="32" height="7" rx="3.5" fill="#0969da" opacity="0.7"/><rect x="24" y="78" width="36" height="7" rx="3.5" fill="#0969da" opacity="0.45"/></g>
+  <text x="100" y="58" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="52" font-weight="700" fill="#1f2328" letter-spacing="-1">PERSONA.md</text>
+  <text x="102" y="92" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#59636e">An open file format for the way a professional works</text>
+</svg>

@@ -19,16 +19,15 @@
 #   - MCP server, Claude Skills exporter, Cursor rules exporter.
 #     Only PERSONA.md / <slug>.md content reaches the actor (via the compiler).
 #
-# v0.6.0 NOTES (still in force for this quantitative layer)
-#   - improvement_policy.mode enum tightened: "locked" | "suggesting" | "autonomous"
-#     (replaces previous "auto" which was ambiguous).
+# NOTES
+#   - improvement_policy.mode is one of "locked" | "suggesting" | "autonomous".
 #   - Many assertions can be AUTO-DERIVED from personaxis.md (e.g., every virtue
 #     with enforcement: "hard" auto-generates a corresponding judge assertion).
 #     The compiler emits derived_assertions in .dist/judge.config.json.
 #     The assertions[] array in this file is for assertions you write by hand,
 #     on top of the auto-derived ones.
 
-spec_version: "1.0.0"
+spec_version: "1.1.0"
 
 applies_to:
   persona_name: ""                  # MUST: must match metadata.name in personaxis.md
