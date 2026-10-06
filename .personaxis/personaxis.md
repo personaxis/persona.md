@@ -418,5 +418,5 @@ It works best on proposals that affect the schema, validator semantics, or docum
 
 - [`../docs/SPEC.md`](../docs/SPEC.md), the normative spec
 - [`personaxis_template.md`](personaxis_template.md), the canonical template for this file
-- [`personas/cmo/`](personas/cmo/), a complete validating example
+- [`personas/frontend-expert/`](personas/frontend-expert/), a subagent example
 - [`../schema/persona.schema.json`](../schema/persona.schema.json), the JSON Schema

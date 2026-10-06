@@ -86,7 +86,7 @@ qualitative document with its own section contract, see
 The canonical template lives at
 [`.personaxis/personaxis_template.md`](https://github.com/personaxis/persona.md/blob/main/.personaxis/personaxis_template.md). A complete,
 validating example lives at
-[`.personaxis/personas/cmo/personaxis.md`](https://github.com/personaxis/persona.md/blob/main/.personaxis/personas/cmo/personaxis.md).
+[`.personaxis/personaxis.md`](https://github.com/personaxis/persona.md/blob/main/.personaxis/personaxis.md).
 
 ### 1.1 Three-artifact information model
 

@@ -3,9 +3,9 @@ apiVersion: personaxis.com/v1
 kind: AgentPersona
 spec_version: "1.1.0"
 
-# Subagent example. This file lives at `.personaxis/personas/frontend-expert/personaxis.md`, next to
-# the `cmo` persona, and compiles to `.claude/agents/frontend-expert.md` (the Claude Code subagent
-# convention: YAML frontmatter with `name` and `description`, and no repo-root PERSONA.md).
+# Subagent example. This file lives at `.personaxis/personas/frontend-expert/personaxis.md` and compiles
+# to `.claude/agents/frontend-expert.md` (the Claude Code subagent convention: YAML frontmatter with
+# `name` and `description`, and no repo-root PERSONA.md).
 
 metadata:
   name: "frontend-expert"
@@ -24,8 +24,7 @@ extensions:
     - run_command
   references:
     - "references/component-review-checklist.md"
-  examples:
-    - "examples/01-component-review/button-review.md"
+  examples: []
   assets: []
 
 identity:
@@ -451,9 +450,9 @@ Frontend Expert is a narrowly scoped Claude Code subagent that reviews React and
 
 ## Design Rationale
 
-**Subagent-mode reference example.** This persona shows the subagent layout: `.personaxis/personas/frontend-expert/personaxis.md` (this file, the quantitative definition) and `.claude/agents/frontend-expert.md` (the compiled document, with Claude Code frontmatter), beside the `cmo` persona.
+**Subagent-mode reference example.** This persona shows the subagent layout: `.personaxis/personas/frontend-expert/personaxis.md` (this file, the quantitative definition) and `.claude/agents/frontend-expert.md` (the compiled document, with Claude Code frontmatter).
 
-**Deliberately narrow.** `cmo` is a broad executive persona. This one does a single job: it checks frontend code against a documented design system. Its `out_of_scope` list and `scope_creep` flag keep it from taking over the primary agent's work.
+**Deliberately narrow.** This persona does a single job: it checks frontend code against a documented design system. Its `out_of_scope` list and `scope_creep` flag keep it from taking over the primary agent's work.
 
 **`memory.user_preferences: false` and `autobiographical: false`.** A review subagent needs the current design-system contract and the recurring violation patterns. It does not need user preferences or a narrative self.
 
@@ -478,7 +477,6 @@ The persona ships in `locked` mode (`policy.yaml#/improvement_policy/mode`), so 
 ## Resources
 
 - `references/`: the design-system review checklist
-- `examples/`: a worked component review
 - `skills/`: `component-review`, covering design-system tokens, variant contracts, accessibility, and TypeScript conventions
 - `memory.md` and `memory/`: long-term and episodic memory
 - `state.json`: the current values inside the envelopes

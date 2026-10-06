@@ -13,7 +13,7 @@ The spec follows [Semantic Versioning](https://semver.org/).
 - Documentation re-centered on how a persona works: procedures (`skills/`), criteria (`character.behavioral_commitments`, `verification.gates`), tools (`extensions.tools`), sourced knowledge (`references/`) and what it learned (`memory/`). No schema change and no new required field.
 - Section 0 of `SPEC.md` now defines a persona as the complete way a professional works, with a table of where each part lives in the format.
 - Removed pointers to hosted upload and download from the setup guides, and the Cursor setup guide (the `--platform` values are `claude-code`, `codex`, `openclaw` and `hermes`).
-- README rewritten to what the format is: a diagram, a persona on one screen, the ten layers, and what this repository contains. The CLI reference, the lint rules table, the programmatic API and the setup prompts left it, because they describe the CLI and live in its repository.
+- README rewritten to what the format is: a logo, a diagram, a persona on one screen, the ten layers, and what this repository contains. The CLI reference, the lint rules table, the programmatic API and the setup prompts left it, because they describe the CLI and live in its repository.
 - `docs/SPEC.md` §1.2 states that a runtime may not read every field yet, instead of claiming every field has a consumer. The methodology link points at the CLI repository.
 - `CONTRIBUTING.md` points CLI questions at the CLI repository and lists the personal-data check that runs on every pull request.
 - CI gains a `personal-data` job that reads what each commit of a pull request adds and fails when a commit adds personal data, in text or inside a binary file, even when a later commit removes it.
@@ -21,11 +21,11 @@ The spec follows [Semantic Versioning](https://semver.org/).
 ### Removed
 - `docs/setup/` (Claude Code, Codex, OpenClaw, Hermes). They told an agent which CLI commands to run, and the same guides are maintained in the CLI repository under `docs/integrations/`.
 - `docs/PERSONA_PROMPTING.md`. It described how the CLI compiles `PERSONA.md`, and the CLI repository keeps a version with only the sources that were opened and read (`docs/architecture/persona-prompting.md`).
+- The `cmo` example persona, with its skills, ten references, worked outputs and memory notes, and the hand-written review under `frontend-expert/examples/`. The outputs were typed by hand, their benchmark ranges carried no source, and the CMO definition described enforcement that no runtime performs, which `CONTRIBUTING.md` does not allow in an example. They come back when each output is the result of a real run on a named model.
 
 ### Fixed
 - The maintainer and frontend-expert personas: every number now has per-band text, each rule lives in one field, the prose is in the second person, `frontend-expert` no longer names a tool that no engine provides, and its `spec_version` is `1.1.0`. Both compiled documents are regenerated.
 - `policy.yaml` and `state.json` of the example personas declare current versions. The assertion layer name stays `reflexive_self_regulation` because the policy schema still lists that name and not `self_regulation`.
-- The `cmo` README says its worked outputs were written by hand and not produced by a run.
 
 ---
 
@@ -242,7 +242,7 @@ spec already declared but the runtime ignored are now fully enforced.
 
 ### Changed
 - **Compile** now produces a persona-prompting `PERSONA.md` (second-person role adoption, character card, voice exemplars, scene contracts, consistency layers, guardrails) instead of a generic profile; **decompile** maps prose edits back to `persona_prompting`. `PERSONA_template.md` redesigned to match.
-- New methodology doc **[docs/PERSONA_PROMPTING.md](docs/PERSONA_PROMPTING.md)** documents the techniques + research (RRP character-card/scene-contracts [arXiv:2509.00482], sociodemographic priming [arXiv:2507.16076], memory-driven role-play [arXiv:2603.19313], role adoption, consistency layers).
+- New methodology doc `docs/PERSONA_PROMPTING.md` (since moved to the CLI repository) documents the techniques + research (RRP character-card/scene-contracts [arXiv:2509.00482], sociodemographic priming [arXiv:2507.16076], memory-driven role-play [arXiv:2603.19313], role adoption, consistency layers).
 
 ---
 
@@ -480,7 +480,7 @@ The validator now returns one of five statuses (was a single `valid/invalid` boo
 
 ### Migration
 
-Migration is a clean rewrite, not a field-by-field rename. Start from [`PERSONA_template.md`](./PERSONA_template.md) or [`.personaxis/personas/cmo/personaxis.md`](./.personaxis/personas/cmo/personaxis.md) as a complete reference example, and translate the semantic content of your 0.2 file into the v0.3.0 structure. The CLI `personaxis init --agent` generates a v0.3.0 template ready to fill.
+Migration is a clean rewrite, not a field-by-field rename. Start from [`PERSONA_template.md`](./PERSONA_template.md) as a reference, and translate the semantic content of your 0.2 file into the v0.3.0 structure. The CLI `personaxis init --agent` generates a v0.3.0 template ready to fill.
 
 ---
 

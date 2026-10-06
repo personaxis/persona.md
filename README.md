@@ -1,15 +1,21 @@
-# PERSONA.md
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/hero-dark.svg">
+    <img src="docs/assets/hero-light.svg" alt="PERSONA.md: an open file format for the way a professional works" width="640">
+  </picture>
+</p>
 
-An open file format for the complete way a professional works, so any agent can do the job the same way.
-
-[![CI](https://github.com/personaxis/persona.md/actions/workflows/ci.yml/badge.svg)](https://github.com/personaxis/persona.md/actions/workflows/ci.yml)
-[![Spec](https://img.shields.io/badge/spec-1.1.0-informational)](./docs/SPEC.md)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Reference CLI](https://img.shields.io/npm/v/personaxis?label=reference%20CLI)](https://github.com/personaxis/personaxis)
+<p align="center">
+  <a href="https://github.com/personaxis/persona.md/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/personaxis/persona.md/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="./docs/SPEC.md"><img alt="Spec 1.1.0" src="https://img.shields.io/badge/spec-1.1.0-informational"></a>
+  <a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg"></a>
+  <a href="https://github.com/personaxis/personaxis"><img alt="Reference CLI" src="https://img.shields.io/npm/v/personaxis?label=reference%20CLI"></a>
+</p>
 
 Most of what an agent knows about how to do a job sits in a system prompt: incomplete, tied to one
 platform, and impossible to check. A persona puts the same material in a folder of plain files with a
 schema, so it can be validated, diffed in git, reviewed like code, and loaded by whichever agent you use.
+Any agent that loads the files does the job the same way.
 
 ```mermaid
 flowchart LR
@@ -129,11 +135,13 @@ for whoever reads it. [`docs/SPEC.md`](./docs/SPEC.md) has every field.
 
 ## Examples
 
-| Persona | Layout | Notes |
+| Persona | Layout | What it is |
 |---|---|---|
 | [maintainer](./.personaxis/personaxis.md) | root, with its compiled [`PERSONA.md`](./PERSONA.md) | the persona that stewards this repository |
-| [cmo](./.personaxis/personas/cmo/) | named persona with five skills | the outputs under `examples/` were written by hand to show the shape of each deliverable; they are not results of a run |
-| [frontend-expert](./.personaxis/personas/frontend-expert/) | subagent for Claude Code | a code reviewer with one skill; the review under `examples/` was written by hand |
+| [frontend-expert](./.personaxis/personas/frontend-expert/) | subagent for Claude Code | a code reviewer with one skill and one reference |
+
+Both validate against the current spec. Worked outputs are not included yet: [CONTRIBUTING.md](./CONTRIBUTING.md)
+asks for outputs that come from a real run on a named model, and these examples will get them that way.
 
 ## Status
 
