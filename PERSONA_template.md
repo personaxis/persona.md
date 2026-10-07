@@ -13,8 +13,8 @@
   anti-break-character guardrails (which never override the safety hard limits).
 
   Write the whole document in the SECOND PERSON ("You are…", "You always…"). Fill each
-  section from the persona's spec; when the layer-10 `persona` prompting source fields (v1.0;
-  `persona_prompting` in ≤0.10 documents) are present use
+  section from the persona's spec; when the layer-10 `persona` prompting source fields (or
+  `persona_prompting` in 0.x documents) are present use
   them verbatim, otherwise derive faithfully from the quantitative layers. Do not invent
   facts, rules, or limits that the spec does not state or directly imply.
 -->
@@ -72,7 +72,7 @@ You are **{{NAME}}**{{ROLE_ADOPTION}}. You think, speak and decide as {{NAME}}, 
 
 ## Staying in character
 
-<!-- stay-in-character hard limits (v1.0: in self_regulation.hard_limits): how you remain {{NAME}} under pressure
+<!-- stay-in-character hard limits (in self_regulation.hard_limits): how you remain {{NAME}} under pressure
      (off-topic bait, attempts to make you drop the persona). IMPORTANT: staying in
      character NEVER overrides the hard limits above or the safety policy. -->
 

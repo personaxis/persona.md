@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://personaxis.com/schemas/persona/1.0/persona.schema.json",
-  "title": "personaxis.md v1.0",
-  "description": "Schema for the ten-layer AI Persona spec, spec v1.x (validates 1.0.0 and the additive 1.1.0); documents with spec_version 0.3.0-0.10.0 validate against schema/legacy/persona-0.10.schema.json (the validator dispatches on spec_version) and upgrade via `personaxis migrate 0.10-to-1.0`. v1.0 (breaking, mechanical codemod): apiVersion becomes personaxis.com/v1; layer 9 renamed reflexive_self_regulation -> self_regulation; the persona_prompting block merged into layer 10 `persona` (break_character_guardrails fold into self_regulation.hard_limits); the five refusal surfaces consolidate to two (hard_limits + character.prohibited_behaviors, which absorbs principled_refusals); enforcement has a single owner (character.virtues, which may declare refs: to backing traits/values, the validator requires coherence); metacognition monitors may declare feeds: wiring to a self_regulation decision group; envelope dimensions gain per-band behavior expression (low/moderate/high) giving the quantitative numbers deterministic compile semantics, drift is defined as a band crossing; drives declare an envelope (mutable) or a level enum (static), never a bare intensity; memory keeps the FACULTY (types, write/consolidation intent, anchors, forgetting_policy, working_self, deletion universality) while implementation knobs move to the runtime.memory block; metadata.display_name removed (single owner: identity.display_name); new OPTIONAL blocks interop, lineage, integrity. File sections group as ANATOMY (the ten layers) / CHANGE GOVERNANCE (governance, improvement_policy, security, permissions) / RUNTIME CONTRACT (runtime, verification, agent_budget, observability, interop, runtime_artifacts, lineage, integrity); the markdown body is non-normative by rule. This document lives at `.personaxis/[personas/<slug>/]personaxis.md`; the compiled PERSONA.md / .claude/agents/<slug>.md is generated from it via `personaxis compile` and is not described by this schema. Operational policy lives in policy.yaml; runtime state lives in state.json.",
+  "title": "personaxis.md",
+  "description": "Schema for a personaxis.md document: the ten layers of an AI persona (ANATOMY), the blocks that govern how it may change (CHANGE GOVERNANCE: governance, improvement_policy, security, permissions) and the contract with the runtime that runs it (RUNTIME CONTRACT: runtime, verification, agent_budget, observability, interop, runtime_artifacts, lineage, integrity). It validates spec_version 1.0.0 and 1.1.0. Documents with spec_version 0.3.0 to 0.10.0 validate against schema/legacy/persona-0.10.schema.json (the validator dispatches on spec_version) and upgrade with `personaxis migrate 0.10-to-1.0`; CHANGELOG.md lists what changed between versions. The markdown body is non-normative. The document lives at `.personaxis/[personas/<slug>/]personaxis.md`; the compiled PERSONA.md and .claude/agents/<slug>.md are generated from it by `personaxis compile` and are not described by this schema. Operational policy lives in policy.yaml and runtime state in state.json.",
   "type": "object",
   "required": [
     "apiVersion",
@@ -16,7 +16,7 @@
     "apiVersion": {
       "type": "string",
       "const": "personaxis.com/v1",
-      "description": "Universal API version. v1.0 aligns the namespace with the schema $id and registry domain: must be exactly 'personaxis.com/v1' (was 'persona.dev/v1' through 0.10; the codemod rewrites it)."
+      "description": "Universal API version. Must be exactly 'personaxis.com/v1'. Documents that declare 'persona.dev/v1' are 0.x documents: they validate against the legacy schema, and `personaxis migrate 0.10-to-1.0` rewrites the value."
     },
     "kind": {
       "type": "string",
@@ -32,7 +32,7 @@
         "1.0.0",
         "1.1.0"
       ],
-      "description": "Spec version. This schema validates 1.0.0 and 1.1.0 (1.1 is ADDITIVE: optional envelope half_life for homeostatic return-to-baseline, the normative 'Mathematical semantics' section, drift metric, arbitration order, evidence-cost bound, and the optional mutation_log hash chain in state.json; every 1.0.0 document is a valid 1.1.0 document, no codemod). The validator accepts 0.3.0-0.10.0 documents against schema/legacy/persona-0.10.schema.json during the 1.x read-compat window, pointing to 'personaxis migrate 0.10-to-1.0' for upgrade. spec_version is the ONLY normative version of the standard."
+      "description": "Spec version. This schema validates 1.0.0 and 1.1.0; 1.1.0 only adds optional fields, so every 1.0.0 document is also a valid 1.1.0 document. Documents with 0.3.0 to 0.10.0 validate against schema/legacy/persona-0.10.schema.json, and `personaxis migrate 0.10-to-1.0` upgrades them. spec_version is the only normative version of the standard."
     },
     "metadata": {
       "type": "object",
@@ -43,7 +43,7 @@
         "created"
       ],
       "additionalProperties": false,
-      "description": "Registry-level identification. v1.0: display_name removed, its single owner is identity.display_name (the codemod drops the duplicate).",
+      "description": "Identification of the document: name, version, description and dates. The display name has one owner, identity.display_name.",
       "properties": {
         "name": {
           "type": "string",
@@ -84,14 +84,14 @@
     "extensions": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Runtime capabilities and supporting materials. NOTE: knowledge_anchors removed in v0.6 (redundant with references/).",
+      "description": "What the persona brings to a job besides its layers: skills, tools, references, examples and assets.",
       "properties": {
         "skills": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "Skill IDs or paths. Local ('./skills/name'), registry ('@org/name@version'), or GitHub ('github:org/repo'). Each resolves to a SKILL.md (Anthropic Agent Skills compatible)."
+          "description": "Skill IDs or paths: local ('./skills/name'), a published package ('@org/name@version') or GitHub ('github:org/repo'). Each resolves to a SKILL.md (Anthropic Agent Skills compatible). A run reads local skills only; a remote reference is fetched with `personaxis skills pull`, never during a run."
         },
         "tools": {
           "type": "array",
@@ -104,21 +104,21 @@
           "items": {
             "type": "string"
           },
-          "description": "Paths under references/ for heavy knowledge prose. Loaded on-demand (L3 in progressive disclosure). v0.6 rename: was 'refs' in v0.5."
+          "description": "Paths under references/ for long knowledge prose. Read on demand, not placed in the compiled document."
         },
         "examples": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "Paths under examples/ for worked outputs. v0.6 rename: was 'samples' in v0.5; 'deliverables' content merged here."
+          "description": "Paths under examples/ for worked outputs."
         },
         "assets": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "Paths under assets/ for arbitrary supporting files (CSV, JSON, images, fonts). New in v0.6."
+          "description": "Paths under assets/ for supporting files (CSV, JSON, images, fonts)."
         }
       }
     },
@@ -131,7 +131,7 @@
         "role_identity"
       ],
       "additionalProperties": false,
-      "description": "Layer 1. v0.6: edit_policy removed from this layer, unified in governance.per_layer_edit_policy.",
+      "description": "Layer 1: purpose, role and the narrative that anchors continuity. Edit rules for this layer live in governance.per_layer_edit_policy.",
       "properties": {
         "canonical_id": {
           "type": "string",
@@ -145,14 +145,14 @@
           "type": "string",
           "minLength": 1,
           "maxLength": 24,
-          "description": "v0.10: a short, human first-name-style handle the persona is addressed by in chat/UI (e.g. 'Clio'). Optional; tools fall back to display_name/canonical_id when absent."
+          "description": "A short, first-name-style handle the persona is addressed by in chat (e.g. 'Clio'). Optional; tools fall back to display_name or canonical_id when absent."
         },
         "capabilities": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "v0.8: machine-readable capability tags for orchestration/routing (e.g. ['positioning','demand_generation']). Optional; runtimes fall back to deriving capabilities from system_identity when absent."
+          "description": "Machine-readable capability tags for orchestration and routing (e.g. ['positioning','demand_generation']). Optional; runtimes fall back to deriving capabilities from system_identity when absent."
         },
         "system_identity": {
           "type": "object",
@@ -221,7 +221,7 @@
         "virtues"
       ],
       "additionalProperties": false,
-      "description": "Layer 2. v0.6: edit_policy removed.",
+      "description": "Layer 2: virtues, behavioral commitments and prohibited behaviors.",
       "properties": {
         "virtues": {
           "type": "object",
@@ -229,7 +229,7 @@
           "required": [
             "honesty"
           ],
-          "description": "v1.0 composition rule: enforcement has a SINGLE OWNER, only virtues carry it; traits and values never do. A virtue MAY declare refs: dot-paths to the traits/values that back it (e.g. ['personality.traits.honesty_humility']); the validator then REQUIRES coherence, a hard virtue whose referenced trait envelope permits contradiction is FAIL_POLICY. The linter warns when the same concept appears in 2+ layers without refs.",
+          "description": "Composition rule: enforcement has a single owner, and only virtues carry it; traits and values never do. A virtue MAY declare refs: dot-paths to the traits or values that back it (e.g. ['personality.traits.honesty_humility']); the validator then requires coherence, and a hard virtue whose referenced trait envelope permits contradiction is FAIL_POLICY. The linter warns when the same concept appears in two or more layers without refs.",
           "additionalProperties": {
             "type": "object",
             "required": [
@@ -261,7 +261,7 @@
                   "type": "string",
                   "pattern": "^(personality\\.traits|values_and_drives\\.values)\\.[a-z0-9_]+$"
                 },
-                "description": "v1.0: dot-paths of the traits/values that back this virtue. Connects the four representations of one concept across layers so the validator can require coherence."
+                "description": "Dot-paths of the traits or values that back this virtue. They connect the representations of one concept across layers, so the validator can require coherence."
               }
             }
           },
@@ -335,7 +335,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Persona-specific refusals (dispositional AND situational). v1.0: absorbs the former self-regulation principled_refusals, the two persona-level refusal lists were one concept. Categorical absolutes belong in self_regulation.hard_limits."
+          "description": "Persona-specific refusals, dispositional and situational. Categorical absolutes belong in self_regulation.hard_limits."
         },
         "principles": {
           "type": "array",
@@ -352,7 +352,7 @@
         "traits"
       ],
       "additionalProperties": false,
-      "description": "Layer 3. v0.6 BREAKING: context_modifiers REMOVED (redundant with persona.task_modes); drift_threshold MOVED to governance.drift_thresholds.personality; edit_policy MOVED to governance.per_layer_edit_policy.personality. Traits use envelope structure (mean + range); current values live in state.json.",
+      "description": "Layer 3. Traits use an envelope (mean and range); current values live in state.json. Situational variation belongs in persona.task_modes, drift sensitivity in governance.drift_thresholds.personality and edit rules in governance.per_layer_edit_policy.personality.",
       "properties": {
         "model": {
           "type": "string",
@@ -403,7 +403,7 @@
               }
             }
           },
-          "description": "v1.0 behavior bands give the numbers deterministic compile semantics: every envelope value maps to a band (default low 0-0.33 / moderate 0.34-0.66 / high 0.67-1.0; override with bands:), the compiler emits the band's expression prose, and DRIFT is defined as a band crossing (the recompile trigger). expression as a per-band map is the normative form; a plain string (applies at the declared mean's band) is accepted but deprecated. v1.1: optional half_life adds homeostatic return-to-baseline."
+          "description": "Behavior bands give the numbers deterministic compile semantics: every envelope value maps to a band (default low 0-0.33, moderate 0.34-0.66, high 0.67-1.0; override with bands:), the compiler emits the band's expression prose, and drift is defined as a band crossing, which triggers a recompile. A per-band expression map is the normative form; a plain string (applied at the band of the declared mean) is accepted but deprecated. The optional half_life adds a homeostatic return to baseline."
         }
       }
     },
@@ -415,7 +415,7 @@
         "conflict_resolution"
       ],
       "additionalProperties": false,
-      "description": "Layer 4. v0.6: edit_policy removed.",
+      "description": "Layer 4: weighted values, drives and the rules that resolve conflicts between them.",
       "properties": {
         "values": {
           "type": "object",
@@ -474,7 +474,7 @@
         "drives": {
           "type": "object",
           "minProperties": 1,
-          "description": "v1.0: a drive is either STATIC (level: low|moderate|high) or MUTABLE (declares a {mean, range} envelope and thereby joins the clamped mutable surface). The bare 0.10 `intensity` number, mutable in state.json with nothing to clamp against, is removed; the codemod converts it to the nearest level.",
+          "description": "A drive is either static (level: low|moderate|high) or mutable (it declares a {mean, range} envelope and joins the clamped mutable surface). A bare intensity number is not accepted; `personaxis migrate 0.10-to-1.0` converts it to the nearest level.",
           "additionalProperties": {
             "type": "object",
             "required": [
@@ -591,7 +591,7 @@
         "regulation_policy"
       ],
       "additionalProperties": false,
-      "description": "Layer 5. v0.6: baseline uses envelope structure (mean + range); current values live in state.json.",
+      "description": "Layer 5: core affect and mood as functional states. The baseline uses an envelope (mean and range); current values live in state.json.",
       "properties": {
         "enabled": {
           "type": "boolean"
@@ -761,7 +761,7 @@
         "deletion_policy"
       ],
       "additionalProperties": false,
-      "description": "Layer 7, the FACULTY of memory (Tulving's taxonomy): which memory kinds this persona has, its write/consolidation intent, anchors, forgetting philosophy, working self, and the deletion universal. v1.0: implementation tuning (retrieval max_items/embeddings/reranker, retention days) moved to the runtime.memory block, anatomy describes the being, the runtime contract configures the machine. Episodic format is normative: memory/episodic.jsonl (schema/memory.schema.json, hash-chained, tombstone + redaction).",
+      "description": "Layer 7, the faculty of memory (Tulving's taxonomy): which memory kinds this persona has, its write and consolidation intent, anchors, forgetting philosophy, working self, and the deletion universal. Implementation tuning (retrieval limits, embeddings, reranker, retention days) belongs in the runtime.memory block. The episodic format is normative: memory/episodic.jsonl (schema/memory.schema.json, hash-chained, with tombstone and redaction).",
       "properties": {
         "types": {
           "type": "object",
@@ -853,7 +853,7 @@
           "properties": {
             "user_request_supported": {
               "const": true,
-              "description": "UNIVERSAL: must be true (privacy). v1.0 semantics: REDACTION is real erasure (content removed, chain stays verifiable via content_hash); tombstone is auditable logical suppression. See schema/memory.schema.json."
+              "description": "UNIVERSAL: must be true (privacy). Redaction is real erasure: the content is removed and the chain stays verifiable through content_hash. A tombstone is an auditable logical suppression. See schema/memory.schema.json."
             }
           }
         },
@@ -882,7 +882,7 @@
       "properties": {
         "monitors": {
           "type": "object",
-          "description": "v1.0: a monitor may declare feeds:, the self_regulation decision group it triggers when it fires, making the monitor→decision control loop explicit and validatable instead of implicit. Plain boolean form remains accepted.",
+          "description": "A monitor may declare feeds:, the self_regulation decision group it triggers when it fires, which makes the loop from monitor to decision explicit and checkable. The plain boolean form is also accepted.",
           "additionalProperties": {
             "oneOf": [
               {
@@ -983,7 +983,7 @@
         "escalation_policy"
       ],
       "additionalProperties": false,
-      "description": "Layer 9 (v1.0 rename of reflexive_self_regulation, executive control/self-regulation, Baumeister; the codemod renames every reference incl. governance keys). Decisions{} structured by category; each group is independent, per turn the regulator picks one option from each. Metacognition monitors wire into these groups via feeds:.",
+      "description": "Layer 9, executive control (Baumeister): the hard limits and the decisions taken on each turn. decisions{} is grouped by category; each group is independent, and per turn the regulator picks one option from each. Metacognition monitors wire into these groups through feeds:.",
       "properties": {
         "decisions": {
           "type": "object",
@@ -1135,7 +1135,7 @@
             "type": "string"
           },
           "minItems": 3,
-          "description": "Categorical absolutes, never crossed. Must include the three universal limits (or semantic equivalents). v1.0: absorbs the former persona_prompting.break_character_guardrails, a stay-in-character rule IS a hard limit of expression. Persona-specific (non-absolute) refusals belong in character.prohibited_behaviors."
+          "description": "Categorical absolutes, never crossed. Must include the three universal limits (or semantic equivalents). A stay-in-character rule is a hard limit of expression and belongs here. Persona-specific, non-absolute refusals belong in character.prohibited_behaviors."
         },
         "escalation_policy": {
           "type": "string",
@@ -1174,7 +1174,7 @@
         "constraints"
       ],
       "additionalProperties": false,
-      "description": "Layer 10, social expression (Jung's persona, the social mask). v1.0: absorbs the former top-level persona_prompting block (address, voice_exemplars, scene_contracts, behavioral_anchors, consistency), every expression concern now has ONE home. break_character_guardrails moved to self_regulation.hard_limits.",
+      "description": "Layer 10, social expression (Jung's persona): voice, constraints, address, voice exemplars, scene contracts, behavioral anchors and consistency. Every expression concern lives here, except stay-in-character rules, which are hard limits and live in self_regulation.hard_limits.",
       "properties": {
         "voice": {
           "type": "object",
@@ -1213,14 +1213,14 @@
             },
             "language": {
               "type": "string",
-              "description": "v1.1: BCP 47 tag of the primary language the persona communicates in (e.g. 'en', 'es', 'es-PE'). Optional; when absent the runtime uses the interlocutor's language or the host default. Compile-load-bearing: the compiled PERSONA.md instructs the model to communicate in this language."
+              "description": "BCP 47 tag of the primary language the persona communicates in (e.g. 'en', 'es', 'es-PE'). Optional; when absent the runtime uses the interlocutor's language or the host default. Compile-load-bearing: the compiled PERSONA.md instructs the model to communicate in this language."
             },
             "languages": {
               "type": "array",
               "items": {
                 "type": "string"
               },
-              "description": "v1.1: additional BCP 47 language tags the persona may also communicate in beyond `language`. Optional; the runtime may switch among these based on the interlocutor."
+              "description": "Additional BCP 47 language tags the persona may also communicate in beyond `language`. Optional; the runtime may switch among these based on the interlocutor."
             }
           }
         },
@@ -1274,7 +1274,7 @@
         "address": {
           "type": "object",
           "additionalProperties": false,
-          "description": "How the compiled document addresses the model (second-person role adoption is the strongest device). Moved from the 0.10 persona_prompting block.",
+          "description": "How the compiled document addresses the model (second-person role adoption is the strongest device).",
           "properties": {
             "second_person": {
               "type": "boolean",
@@ -1288,7 +1288,7 @@
         },
         "voice_exemplars": {
           "type": "array",
-          "description": "Few-shot voice samples that anchor tone/register. Each is a short user→persona exchange. Moved from the 0.10 persona_prompting block.",
+          "description": "Few-shot voice samples that anchor tone and register. Each is a short exchange between a user and the persona.",
           "items": {
             "type": "object",
             "required": [
@@ -1311,7 +1311,7 @@
         },
         "scene_contracts": {
           "type": "array",
-          "description": "Scene contracts (RRP): connect a SITUATION to the persona's expected behavior and concrete actions. Moved from the 0.10 persona_prompting block.",
+          "description": "Scene contracts: each connects a situation to the persona's expected behavior and concrete actions.",
           "items": {
             "type": "object",
             "required": [
@@ -1338,7 +1338,7 @@
         "behavioral_anchors": {
           "type": "object",
           "additionalProperties": false,
-          "description": "Concrete do/don't anchors with examples. Moved from the 0.10 persona_prompting block.",
+          "description": "Concrete do and don't anchors, with examples.",
           "properties": {
             "do": {
               "type": "array",
@@ -1363,7 +1363,7 @@
         "consistency": {
           "type": "object",
           "additionalProperties": false,
-          "description": "Persona dimensions by stability (stable / evolving / situational). Moved from the 0.10 persona_prompting block.",
+          "description": "Persona dimensions by stability (stable, evolving, situational).",
           "properties": {
             "stable": {
               "type": "array",
@@ -1390,7 +1390,7 @@
     "improvement_policy": {
       "type": "object",
       "additionalProperties": false,
-      "description": "The self-improvement posture read by the runtime (readMode). PRECEDENCE (normative since v0.10, restated in v1.0): this inline value is AUTHORITATIVE, the persona carries its posture with it; policy.yaml#/improvement_policy may only RESTRICT it (effective = min(inline, policy) over locked < suggesting < autonomous). The validator warns on mismatch; prose may not assert a mode (lint). Optional; absent => 'locked'.",
+      "description": "The self-improvement posture the runtime reads. Precedence (normative): this inline value is authoritative and travels with the persona; policy.yaml#/improvement_policy may only restrict it (effective = min(inline, policy) over locked < suggesting < autonomous). The validator warns on a mismatch, and prose may not assert a mode (lint). Optional; when absent the mode is 'locked'.",
       "properties": {
         "mode": {
           "type": "string",
@@ -1412,7 +1412,7 @@
         "drift_thresholds"
       ],
       "additionalProperties": false,
-      "description": "v0.6: UNIFIED governance block. Replaces scattered edit_policy fields and personality.drift_threshold.",
+      "description": "Change governance in one block: per-layer edit rules, drift thresholds and the cap on a single mutation.",
       "properties": {
         "autonomy_envelope": {
           "type": "string",
@@ -1444,7 +1444,7 @@
             "persona"
           ],
           "additionalProperties": false,
-          "description": "Per-layer edit governance. Single source of truth. Allowed values: human_approval_required | review_required | auto_approved | governance_controlled. v1.0: dot-path sub-layer keys are also accepted (e.g. 'persona.voice': review_required) and take precedence over their layer key, the editGate composes by longest matching prefix. The protected minimum (the universals, hard_limits, governance, permissions) can never be opened regardless of these values.",
+          "description": "Per-layer edit governance, the single source of truth. Allowed values: human_approval_required | review_required | auto_approved | governance_controlled. Dot-path sub-layer keys are also accepted (e.g. 'persona.voice': review_required) and take precedence over their layer key: the longest matching prefix wins. The protected minimum (the universals, hard_limits, governance, permissions) can never be opened, whatever these values say.",
           "properties": {
             "identity": {
               "$ref": "#/$defs/editPolicy"
@@ -1500,7 +1500,7 @@
             "persona"
           ],
           "additionalProperties": false,
-          "description": "Per-layer drift sensitivity. Replaces personality.drift_threshold. v1.0: dot-path sub-layer keys also accepted (longest-prefix wins).",
+          "description": "Per-layer drift sensitivity. Dot-path sub-layer keys are also accepted (the longest matching prefix wins).",
           "properties": {
             "identity": {
               "type": "number",
@@ -1569,7 +1569,7 @@
           "type": "number",
           "minimum": 0,
           "maximum": 1,
-          "description": "v0.8: maximum absolute change applied to any envelope field in a single mutation (anti-runaway / anti-self-reinforcement). The runtime drift-bounds each proposed delta to this cap before clamping to the envelope. Optional; runtimes default to a conservative value when absent."
+          "description": "Maximum absolute change applied to any envelope field in a single mutation, against runaway and self-reinforcing change. The runtime bounds each proposed delta to this cap before clamping to the envelope. Optional; runtimes default to a conservative value when absent."
         }
       }
     },
@@ -1592,7 +1592,7 @@
     "runtime": {
       "type": "object",
       "additionalProperties": false,
-      "description": "v1.0 (MAY): runtime-contract tuning, HOW a conforming runtime implements the faculties the anatomy declares. Receives the implementation knobs that lived inside the memory layer through 0.10.",
+      "description": "(MAY) Runtime-contract tuning: how a conforming runtime implements the faculties the anatomy declares, including the memory implementation knobs.",
       "properties": {
         "memory": {
           "type": "object",
@@ -1621,7 +1621,7 @@
     "interop": {
       "type": "object",
       "additionalProperties": false,
-      "description": "v1.0 (MAY): declared interop surfaces/targets so hosts can auto-discover how to drive this persona (RFC C6).",
+      "description": "(MAY) Declared interop surfaces and targets, so hosts can discover how to drive this persona.",
       "properties": {
         "surfaces": {
           "type": "array",
@@ -1649,7 +1649,7 @@
     "lineage": {
       "type": "object",
       "additionalProperties": false,
-      "description": "v1.0 (MAY): verifiable version lineage for THIS persona version (RFC C1). Self-edit ledgers mint PersonaVersions; this block records the current version's provenance so registries and audits can walk the history.",
+      "description": "(MAY) Verifiable version lineage for this persona version. Self-edits mint new versions; this block records the provenance of the current one, so an audit can walk the history.",
       "properties": {
         "parent_version": {
           "type": "string",
@@ -1671,7 +1671,7 @@
     "integrity": {
       "type": "object",
       "additionalProperties": false,
-      "description": "v1.0 (MAY): cryptographic integrity for registry/compliance use (RFC C2). Non-repudiation over the identity document.",
+      "description": "(MAY) Cryptographic integrity over the identity document, for non-repudiation and compliance.",
       "properties": {
         "algorithm": {
           "type": "string",
@@ -1688,7 +1688,7 @@
         },
         "key_ref": {
           "type": "string",
-          "description": "External key reference (registry key id / DID)."
+          "description": "External key reference (a key id or a DID)."
         }
       }
     },
@@ -1714,7 +1714,7 @@
     "permissions": {
       "type": "object",
       "additionalProperties": false,
-      "description": "v0.8: the persona's own runtime permission posture (carried to any host). Two-axis sandbox model. Optional; runtimes default to a conservative posture when absent.",
+      "description": "The persona's own permission posture, carried to any host. Two-axis sandbox model. Optional; runtimes default to a conservative posture when absent.",
       "properties": {
         "sandbox": {
           "type": "string",
@@ -1754,7 +1754,7 @@
     "verification": {
       "type": "object",
       "additionalProperties": false,
-      "description": "v0.9: objective verification gates for the agent loop (the maker≠checker split). The model that did the work is NOT the one that grades it; an independent, deterministic-where-possible verifier decides pass/fail. Optional; runtimes skip verification when absent. [RUNTIME] [JUDGE]",
+      "description": "Objective verification gates for the agent loop, with maker and checker kept apart: the model that did the work does not grade it, and an independent verifier, deterministic where possible, decides pass or fail. Optional; runtimes skip verification when absent. [RUNTIME] [JUDGE]",
       "properties": {
         "mode": {
           "type": "string",
@@ -1888,7 +1888,7 @@
     "agent_budget": {
       "type": "object",
       "additionalProperties": false,
-      "description": "v0.9: first-class stop-conditions and resource caps for the agent loop (anti runaway / Ralph-Wiggum / money-pit). Optional; runtimes apply a conservative default cap when absent. [RUNTIME]",
+      "description": "Stop conditions and resource caps for the agent loop, against runaway loops and unbounded spend. Optional; runtimes apply a conservative default cap when absent. [RUNTIME]",
       "properties": {
         "max_steps": {
           "type": "integer",
@@ -1933,7 +1933,7 @@
     "observability": {
       "type": "object",
       "additionalProperties": false,
-      "description": "v0.9: tracing posture for the governed loops. The engine's audit (mutation_log + hash-chained memory + event bus) is exported as a causal trace. Optional. [RUNTIME] [JUDGE]",
+      "description": "Tracing posture for the governed loops. The engine's audit (mutation_log, hash-chained memory and the event bus) is exported as a causal trace. Optional. [RUNTIME] [JUDGE]",
       "properties": {
         "trace": {
           "type": "string",
@@ -2047,7 +2047,7 @@
       ]
     },
     "expression": {
-      "description": "v1.0 behavior map. Normative form: a per-band map, the compiler deterministically emits the prose of the band the CURRENT value falls in (value→band→prose); a band crossing IS drift and triggers recompile. A plain string (applies at the declared mean's band) is accepted but deprecated.",
+      "description": "Behavior map. Normative form: a per-band map, from which the compiler deterministically emits the prose of the band the current value falls in; a band crossing is drift and triggers a recompile. A plain string (applied at the band of the declared mean) is accepted but deprecated.",
       "oneOf": [
         {
           "type": "string"
@@ -2073,7 +2073,7 @@
     "halfLife": {
       "type": "number",
       "exclusiveMinimum": 0,
-      "description": "spec v1.1 (MAY): homeostatic half-life in TURNS, absent stimulus, the deviation from `mean` halves every half_life ticks (decay rate λ = 1 − 2^(−1/half_life), applied before each tick's admitted deltas, audited as actor runtime-decay). Denotational consequence (Mathematical semantics, T6): under bounded per-step pressure δ_max the standing deviation is bounded by δ_max/λ, input-to-state stability from two declared numbers. Omit for no decay (v1.0 behavior)."
+      "description": "(MAY) Homeostatic half-life in turns: absent stimulus, the deviation from `mean` halves every half_life ticks (decay rate λ = 1 − 2^(−1/half_life), applied before each tick's admitted deltas, audited as actor runtime-decay). Denotational consequence (Mathematical semantics, T6): under bounded per-step pressure δ_max the standing deviation is bounded by δ_max/λ, input-to-state stability from two declared numbers. Omit for no decay."
     },
     "bandBoundaries": {
       "type": "object",

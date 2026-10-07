@@ -10,6 +10,7 @@ The spec follows [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Changed
+- `frontend-expert` rebuilt with `personaxis create` from a brief on a named model (`command-a-03-2025`, recorded in its `manifest.json`). Its `creation-report.md` lists the source of every value and the defaults to review; its skill and its checklist are unchanged. Version `2.0.0`.
 - Documentation re-centered on how a persona works: procedures (`skills/`), criteria (`character.behavioral_commitments`, `verification.gates`), tools (`extensions.tools`), sourced knowledge (`references/`) and what it learned (`memory/`). No schema change and no new required field.
 - Section 0 of `SPEC.md` now defines a persona as the complete way a professional works, with a table of where each part lives in the format.
 - Removed pointers to hosted upload and download from the setup guides, and the Cursor setup guide (the `--platform` values are `claude-code`, `codex`, `openclaw` and `hermes`).
@@ -24,8 +25,11 @@ The spec follows [Semantic Versioning](https://semver.org/).
 - The `cmo` example persona, with its skills, ten references, worked outputs and memory notes, and the hand-written review under `frontend-expert/examples/`. The outputs were typed by hand, their benchmark ranges carried no source, and the CMO definition described enforcement that no runtime performs, which `CONTRIBUTING.md` does not allow in an example. They come back when each output is the result of a real run on a named model.
 
 ### Fixed
+- `schema/policy.schema.json` accepts `self_regulation` in `assertions[].layer`, and the `frontend-expert` policy uses it; `reflexive_self_regulation` still validates. Mirrored from `@personaxis/spec` 0.17.1.
+- The schema descriptions say what each field is and does: no version-history notes, no internal labels, and no claims about a hosted platform. The policy schema's `$id` and title no longer name version 0.10.
+- `policy_template.yaml` no longer says that `personaxis compile` writes a `judge.config.json`, nor suggests a `provider:` key the schema rejects; the templates drop their version-history labels.
 - The maintainer and frontend-expert personas: every number now has per-band text, each rule lives in one field, the prose is in the second person, `frontend-expert` no longer names a tool that no engine provides, and its `spec_version` is `1.1.0`. Both compiled documents are regenerated.
-- `policy.yaml` and `state.json` of the example personas declare current versions. The assertion layer name stays `reflexive_self_regulation` because the policy schema still lists that name and not `self_regulation`.
+- `policy.yaml` and `state.json` of the example personas declare current versions.
 
 ---
 
