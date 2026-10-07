@@ -1,10 +1,10 @@
 {
   "spec_version": "1.1.0",
   "compiledPath": ".personaxis/personas/frontend-expert/PERSONA.md",
-  "personaxisMdHash": "5cecdc1b3dee9c64ee94385f15ee7f8dfee7fa624711c3208c201e26806721db",
-  "compiledMdHash": "c5f125918b6bcfd2fda4295d26efa220251e615231c3a449da293b7bfcca5892",
+  "personaxisMdHash": "63f807ab42d0305e84017863e0361c68eff9f02ea9b89f0ce4523105addedaf4",
+  "compiledMdHash": "9407d23127a0c60da430f4afffdb87f7dd159cbb3293576d3700eeee987cd487",
   "lastOp": "compile",
-  "model": "none",
+  "model": "command-a-03-2025",
   "source": "cli-local",
-  "timestamp": "2026-10-06T20:15:44.894Z"
+  "timestamp": "2026-10-07T17:20:51.338Z"
 }

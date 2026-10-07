@@ -10,6 +10,7 @@ The spec follows [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Changed
+- `frontend-expert` rebuilt with `personaxis create` from a brief on a named model (`command-a-03-2025`, recorded in its `manifest.json`). Its `creation-report.md` lists the source of every value and the defaults to review; its skill and its checklist are unchanged. Version `2.0.0`.
 - Documentation re-centered on how a persona works: procedures (`skills/`), criteria (`character.behavioral_commitments`, `verification.gates`), tools (`extensions.tools`), sourced knowledge (`references/`) and what it learned (`memory/`). No schema change and no new required field.
 - Section 0 of `SPEC.md` now defines a persona as the complete way a professional works, with a table of where each part lives in the format.
 - Removed pointers to hosted upload and download from the setup guides, and the Cursor setup guide (the `--platform` values are `claude-code`, `codex`, `openclaw` and `hermes`).

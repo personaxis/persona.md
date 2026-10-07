@@ -140,8 +140,10 @@ for whoever reads it. [`docs/SPEC.md`](./docs/SPEC.md) has every field.
 | [maintainer](./.personaxis/personaxis.md) | root, with its compiled [`PERSONA.md`](./PERSONA.md) | the persona that stewards this repository |
 | [frontend-expert](./.personaxis/personas/frontend-expert/) | subagent for Claude Code | a code reviewer with one skill and one reference |
 
-Both validate against the current spec. Worked outputs are not included yet: [CONTRIBUTING.md](./CONTRIBUTING.md)
-asks for outputs that come from a real run on a named model, and these examples will get them that way.
+Both validate against the current spec. `frontend-expert` was built with `personaxis create` from a brief on a
+named model (`command-a-03-2025`, recorded in its `manifest.json`), and its `creation-report.md` says where each
+value came from and which ones are defaults. Worked outputs are not included yet:
+[CONTRIBUTING.md](./CONTRIBUTING.md) asks for outputs that come from a real run on a named model.
 
 ## Status
 
