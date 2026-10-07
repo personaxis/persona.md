@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://personaxis.com/schemas/state/1.0/state.schema.json",
-  "title": "state.json v1.0",
-  "description": "Mutable runtime state of an AI Persona. Sibling of personaxis.md inside .personaxis/[personas/<slug>/]. Holds current trait/affect/mood values, active context, and the mutation log. Mutations occur via the canonical adjust_persona_state tool, clamped to envelopes declared in personaxis.md. State mutations DO NOT modify personaxis.md or the compiled PERSONA.md/<slug>.md; they are operational, not spec edits. v1.0 (D4): the mutable surface is EXACTLY the set of fields that declare a {mean, range} envelope in personaxis.md; values keys are FULL dot-paths into the spec; and state.json is a CHECKPOINT derived from mutation_log, a conforming runtime can rebuild values by replaying the log from the envelope means.",
+  "title": "state.json",
+  "description": "Mutable runtime state of an AI persona. Sibling of personaxis.md inside .personaxis/[personas/<slug>/]. Holds current trait, affect and mood values, the active context and the mutation log. Mutations go through the canonical adjust_persona_state tool and are clamped to the envelopes declared in personaxis.md. State mutations do not modify personaxis.md or the compiled PERSONA.md/<slug>.md; they are operational, not spec edits. The mutable surface is exactly the set of fields that declare a {mean, range} envelope in personaxis.md; values keys are full dot-paths into the spec; and state.json is a checkpoint derived from mutation_log, so a conforming runtime can rebuild values by replaying the log from the envelope means.",
   "type": "object",
   "required": [
     "schema_version",
@@ -33,7 +33,7 @@
     },
     "values": {
       "type": "object",
-      "description": "Current values for all mutable fields. v1.0: keys are FULL dot-notation paths into personaxis.md ('personality.traits.openness', 'affect.baseline.core_affect.valence', 'affect.baseline.mood.tone', 'values_and_drives.drives.complete_task') and the key set is exactly the fields that declare a {mean, range} envelope. The short ≤0.10 forms ('traits.openness', 'affect.valence', 'mood.tone', 'drives.x') are legacy; conforming runtimes accept them as read-aliases during the 1.x window (the CLI's `migrate 0.10-to-1.0` renames them). Each value is a number that must lie within the envelope declared at the corresponding path; the runtime clamps any out-of-envelope value at mutation time.",
+      "description": "Current values for all mutable fields. Keys are full dot-notation paths into personaxis.md ('personality.traits.openness', 'affect.baseline.core_affect.valence', 'affect.baseline.mood.tone', 'values_and_drives.drives.complete_task') and the key set is exactly the fields that declare a {mean, range} envelope. The short forms of 0.x documents ('traits.openness', 'affect.valence', 'mood.tone', 'drives.x') are legacy; conforming runtimes accept them as read-aliases (`personaxis migrate 0.10-to-1.0` renames them). Each value is a number that must lie within the envelope declared at the corresponding path; the runtime clamps any out-of-envelope value at mutation time.",
       "additionalProperties": {
         "type": "number"
       }
@@ -115,19 +115,19 @@
           },
           "origin_node": {
             "type": "string",
-            "description": "v0.8: stable id of the machine/instance that produced this mutation. Makes cross-OS reconciliation of a portable persona deterministic (last-writer-wins per field across machines)."
+            "description": "Stable id of the machine or instance that produced this mutation. Makes reconciliation of a portable persona across machines deterministic (last writer wins per field)."
           },
           "session_id": {
             "type": "string",
-            "description": "v0.8: id of the runtime session that produced this mutation, for traceability."
+            "description": "Id of the runtime session that produced this mutation, for traceability."
           },
           "prev_hash": {
             "type": "string",
-            "description": "spec v1.1 (T3 forensic): hash of the previous chained entry ('' for the first). Same scheme as memory/episodic.jsonl, the audit trail is tamper-evident, not merely append-only by convention. Entries written by pre-1.1 runtimes carry no hash; verification tolerates a legacy PREFIX only. A runtime that trims old entries MUST re-anchor the chain (recompute from the new head), like migrateMemoryChain."
+            "description": "Hash of the previous chained entry ('' for the first). Same scheme as memory/episodic.jsonl: the audit trail is tamper-evident, not merely append-only by convention. Entries written before the chain existed carry no hash; verification tolerates such a legacy prefix only. A runtime that trims old entries MUST re-anchor the chain (recompute it from the new head)."
           },
           "hash": {
             "type": "string",
-            "description": "spec v1.1: sha256 over {ts, field, from, to, delta_requested, clamped, reason, actor, governance_blocked, prev_hash}."
+            "description": "sha256 over {ts, field, from, to, delta_requested, clamped, reason, actor, governance_blocked, prev_hash}."
           }
         }
       }
@@ -144,7 +144,7 @@
     "agent_session": {
       "type": "object",
       "additionalProperties": false,
-      "description": "v0.9: live agent-loop session tracking. Lets a task resume across runs and records budget spend + why the loop stopped.",
+      "description": "Live agent-loop session tracking. Lets a task resume across runs, and records the budget spent and why the loop stopped.",
       "properties": {
         "active_task": { "type": ["string", "null"], "description": "The task currently being executed, or null when idle." },
         "started_at": { "type": ["string", "null"], "format": "date-time" },

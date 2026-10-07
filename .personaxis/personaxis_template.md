@@ -4,37 +4,37 @@
 # ═══════════════════════════════════════════════════════════════════════════
 #
 # This template is the starting point for the QUANTITATIVE 10-layer spec of
-# every AI Persona conforming to the personaxis.md spec v1.0. Copy this file to
+# every AI Persona conforming to the personaxis.md spec 1.x. Copy this file to
 # `.personaxis/personaxis.md` (root mode) or
 # `.personaxis/personas/<slug>/personaxis.md` (subagent mode) and fill it in.
 # The final file must pass `personaxis validate` without errors.
 #
-# ── v1.0.0 ─────────────────────────────────────────────────────────────────────────
+# ── RULES INSIDE THE TEN LAYERS ────────────────────────────────────────────────
 #
-# The 10 canonical layers ARE the anatomy of an AI Persona and are kept; every
-# v1.0 correction happens INSIDE them:
+# The 10 canonical layers ARE the anatomy of an AI Persona. Inside them:
 #
-#   1. SINGLE-OWNER ENFORCEMENT, only character.virtues carry `enforcement`;
+#   1. SINGLE-OWNER ENFORCEMENT: only character.virtues carry `enforcement`;
 #      a virtue MAY declare `refs:` (dot-paths to the traits/values that back
 #      it) and the validator then REQUIRES coherence.
-#   2. TWO REFUSAL SURFACES (was five), self_regulation.hard_limits (absorbs
-#      break_character_guardrails) + character.prohibited_behaviors (absorbs
-#      principled_refusals).
-#   3. Layer 9 renamed: reflexive_self_regulation → self_regulation.
-#   4. persona_prompting merged into layer 10 `persona` (address,
-#      voice_exemplars, scene_contracts, behavioral_anchors, consistency).
-#   5. DRIVES DECLARE THEIR MUTABILITY, static `level: low|moderate|high` OR
+#   2. TWO REFUSAL SURFACES: self_regulation.hard_limits (categorical
+#      absolutes, stay-in-character rules included) and
+#      character.prohibited_behaviors (persona-specific refusals).
+#   3. Layer 10 `persona` holds every expression concern: address,
+#      voice_exemplars, scene_contracts, behavioral_anchors, consistency.
+#   4. DRIVES DECLARE THEIR MUTABILITY: static `level: low|moderate|high` OR
 #      a {mean, range} envelope that joins the clamped mutable surface.
-#   6. MEMORY FACULTY/KNOBS SPLIT, layer 7 keeps the psychological faculty;
-#      implementation knobs (max_items, embeddings…) move to `runtime.memory`.
-#   7. MONITORS WIRE INTO DECISIONS, metacognition monitors may declare
+#   5. MEMORY FACULTY AND KNOBS ARE SEPARATE: layer 7 keeps the psychological
+#      faculty; implementation knobs (max_items, embeddings…) live in
+#      `runtime.memory`.
+#   6. MONITORS WIRE INTO DECISIONS: metacognition monitors may declare
 #      `{enabled, feeds: <self_regulation decision>}`.
-#   8. BEHAVIOR BANDS, traits may declare low/moderate/high band boundaries,
-#      giving the numbers deterministic compile semantics (drift = band cross).
+#   7. BEHAVIOR BANDS: traits may declare low/moderate/high band boundaries,
+#      giving the numbers deterministic compile semantics (drift = band crossing).
 #
-# apiVersion is `personaxis.com/v1`; metadata.display_name is gone (identity
-# owns it). 0.3.0–0.10.0 documents keep validating against the frozen legacy
-# schema; migrate with `personaxis migrate 0.10-to-1.0` (comment-preserving).
+# apiVersion is `personaxis.com/v1`, and the display name lives in
+# identity.display_name. 0.3.0–0.10.0 documents keep validating against the
+# frozen legacy schema; migrate with `personaxis migrate 0.10-to-1.0`
+# (comment-preserving). CHANGELOG.md lists what changed between versions.
 #
 # ── DOCUMENT ORDER: THREE GROUPS ───────────────────────────────────────────────
 #
@@ -215,7 +215,7 @@ character:
       enforcement: "hard"             # MUST | enum<hard|soft>| [JUDGE] (hard auto-generates assertions)
       # refs: ["personality.traits.honesty_humility"]
       #                               # MAY | dot-paths to the traits/values BACKING this
-      #                               # virtue (v1.0 single-owner rule: enforcement lives
+      #                               # virtue (single-owner rule: enforcement lives
       #                               # ONLY here; refs make the backing explicit and the
       #                               # validator REQUIRES coherence, a hard virtue whose
       #                               # referenced trait envelope permits contradiction
@@ -241,7 +241,7 @@ character:
       severity: "medium"              # SHOULD | enum<low|medium|high> | [JUDGE]
 
   prohibited_behaviors:               # SHOULD | list<string> | [ACTOR-HOT]
-    # v1.0: ONE of the two refusal surfaces. Dispositional + situational refusals
+    # ONE of the two refusal surfaces. Dispositional + situational refusals
     # ("this agent is not the type that..." / "will not...") live HERE; the other
     # surface is self_regulation.hard_limits (categorical absolutes, universal).
     - ""
@@ -279,7 +279,7 @@ personality:
       # bands: { low_max: 0.33, moderate_max: 0.66 }
       #                               # MAY  | low/moderate/high boundaries ($defs/bandBoundaries;
       #                               # defaults 0.33/0.66 unsigned, -0.33/+0.33 signed)
-      #                               # v1.0 BEHAVIOR BANDS: give the number deterministic
+      #                               # BEHAVIOR BANDS: give the number deterministic
       #                               # compile semantics, the compiler picks the band's
       #                               # expression; drift ≡ crossing a band boundary. With
       #                               # bands, expression may be a map:
@@ -287,7 +287,7 @@ personality:
       #   low: ""
       #   moderate: ""
       #   high: ""                    # [ACTOR-COLD] (only the current band is injected)
-      # half_life: 4                  # MAY (v1.1) | turns | homeostatic return-to-baseline:
+      # half_life: 4                  # MAY | turns | homeostatic return-to-baseline:
       #                               # the deviation from `mean` halves every half_life ticks
       #                               # absent stimulus (audited as runtime-decay; SPEC §15).
       #                               # Guarantees bounded standing drift: max_step_delta/λ. [RUNTIME]
@@ -302,7 +302,7 @@ personality:
       #                               # MAY | declare explicitly when the envelope is narrow
       #                               # or signed (defaults may leave it inside ONE band:
       #                               # then no crossing is ever possible)
-      half_life: 4                    # MAY (v1.1) | homeostatic return-to-baseline (T6)
+      half_life: 4                    # MAY | homeostatic return-to-baseline (T6)
     extraversion:
       mean: 0.0
       range: [0.0, 0.0]
@@ -334,7 +334,7 @@ values_and_drives:
       allowed: true                   # MUST   | bool          | [RUNTIME]
 
     # ── Per-persona drives ───────────────────────────────────────────────
-    # v1.0: a drive is STATIC (level) or MUTABLE (envelope), never a bare number.
+    # A drive is STATIC (level) or MUTABLE (envelope), never a bare number.
     # Static:  <name>: { level: low|moderate|high, allowed: true }
     # Mutable: <name>: { mean: 0.8, range: [0.6, 1.0], allowed: true }
     #          (joins the clamped mutable surface; key in state.json:
@@ -473,7 +473,7 @@ memory:
 #
 metacognition:
   monitors:                           # MUST | map<string, bool|object> | [JUDGE] (enables corresponding assertion)
-    # v1.0: a monitor may WIRE INTO a self_regulation decision, 
+    # A monitor may WIRE INTO a self_regulation decision, 
     #   <name>: { enabled: true, feeds: response_decision }
     # feeds ∈ {response_decision, interaction_decision, governance_decision,
     #          cognition_decision}. A bare boolean stays valid (unwired).
@@ -631,7 +631,7 @@ persona:
   # ── Divergence from self (MAY) ──────────────────────────────────────────
   divergence_from_self: ""            # MAY | string | [ACTOR-COLD]
 
-  # ── Persona-prompting source material (v1.0: lives HERE, in layer 10) ───
+  # ── Persona-prompting source material (lives HERE, in layer 10) ───
   # The compiler assembles these into the LLM-facing PERSONA.md (role adoption,
   # character-card/scene-contracts, few-shot voice, staying-in-character rules).
   # All optional; absence degrades to compiling from the quantitative layers.
@@ -711,7 +711,7 @@ governance:
 
   # ── Pointer to improvement policy ───────────────────────────────────────
   improvement_policy_location: "./policy.yaml#/improvement_policy"
-  #                                   # MAY | v1.0: the INLINE improvement_policy below is
+  #                                   # MAY | the INLINE improvement_policy below is
   #                                   # authoritative; policy.yaml can only RESTRICT it
   #                                   # (min-wins). This pointer is informational.
 
@@ -721,7 +721,7 @@ governance:
 # The runtime reads improvement_policy.mode (readMode); absent => "locked",
 # which is the kill-switch: nothing the persona proposes applies, state included.
 # A living persona declares "suggesting".
-# v1.0 precedence: inline is AUTHORITATIVE; a sibling policy.yaml may only
+# Precedence: inline is AUTHORITATIVE; a sibling policy.yaml may only
 # restrict it (the more conservative of the two wins). Change from the CLI with
 # `personaxis improve <mode>` or the REPL `/improve`.
 # improvement_policy:
@@ -748,7 +748,7 @@ permissions:                          # MAY  | object | two-axis sandbox posture
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 # ═══════════════════════════════════════════════════════════════════════════
-# RUNTIME, v1.0 (MAY): memory implementation knobs (the faculty stays in layer 7)
+# RUNTIME (MAY): memory implementation knobs (the faculty stays in layer 7)
 # ═══════════════════════════════════════════════════════════════════════════
 runtime:
   memory:
@@ -814,7 +814,7 @@ observability:                        # MAY | object | causal trace export
   sample_rate: 1.0                    #     | number 0..1
 
 # ═══════════════════════════════════════════════════════════════════════════
-# INTEROP / LINEAGE / INTEGRITY, v1.0 (MAY): portability + provenance blocks
+# INTEROP / LINEAGE / INTEGRITY (MAY): portability + provenance blocks
 # ═══════════════════════════════════════════════════════════════════════════
 # interop:                            # MAY | declared host/tool surface expectations
 #   protocols: [mcp, http]            #     | which interop surfaces this persona expects
