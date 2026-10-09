@@ -130,20 +130,14 @@ for whoever reads it. [`docs/SPEC.md`](./docs/SPEC.md) has every field.
 | [`docs/MULTI_WRITER.md`](./docs/MULTI_WRITER.md) | what an implementation must do when one persona is written from several places |
 | [`schema/`](./schema) | the JSON Schemas: persona, state, memory, and the frozen 0.10 legacy schema |
 | [`PERSONA_template.md`](./PERSONA_template.md) | the section contract of the compiled document a model reads |
-| [`.personaxis/`](./.personaxis) | the authoring templates and the example personas |
+| [`.personaxis/`](./.personaxis) | the authoring templates and the persona that maintains this repository |
 | [`CHANGELOG.md`](./CHANGELOG.md) | every change to the spec, and why |
 
-## Examples
+## Example
 
-| Persona | Layout | What it is |
-|---|---|---|
-| [maintainer](./.personaxis/personaxis.md) | root, with its compiled [`PERSONA.md`](./PERSONA.md) | the persona that stewards this repository |
-| [frontend-expert](./.personaxis/personas/frontend-expert/) | subagent for Claude Code | a code reviewer with one skill and one reference |
-
-Both validate against the current spec. `frontend-expert` was built with `personaxis create` from a brief on a
-named model (`command-a-03-2025`, recorded in its `manifest.json`), and its `creation-report.md` says where each
-value came from and which ones are defaults. Worked outputs are not included yet:
-[CONTRIBUTING.md](./CONTRIBUTING.md) asks for outputs that come from a real run on a named model.
+The one persona in this repository is its [maintainer](./.personaxis/personaxis.md), at the root layout with its
+compiled [`PERSONA.md`](./PERSONA.md), and it validates against the current spec. Example personas are not kept
+here: they come through the registry, each created by `personaxis create` with its creation report.
 
 ## Status
 

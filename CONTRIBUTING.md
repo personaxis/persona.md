@@ -10,13 +10,13 @@ PERSONA.md is an open specification. Contributions are welcome, from typo fixes 
 
 **New fields or changes to existing fields:** Open an issue first. Fields that describe how a persona works (procedures, criteria, sources) are preferred over fields that describe state. Describe the use case, why existing fields do not cover it, and any backward-compatibility implications. Breaking changes require a spec version bump.
 
-**New example personas:** Open a PR with a complete persona package: `personaxis.md`, `policy.yaml`, `state.json`, at least one skill under `skills/` and one reference under `references/` with its sources, plus the compiled document. The persona must do a real job and pass `personaxis validate`, and every example output must come from a real run on a named model, never typed by hand.
+**Personas:** This repository is the specification and keeps no example personas; the only one here is its maintainer. Personas are shared through the registry, each created by `personaxis create` with its creation report.
 
 ## Before you open a PR
 
 1. Run `personaxis validate` on every persona your change touches.
 2. Use `snake_case` for field names.
-3. Keep every required field in the example personas.
+3. Keep every required field in the maintainer persona.
 4. Update CHANGELOG.md under `[Unreleased]`.
 5. Do not add personal data to any commit, even one a later commit removes: a check on every pull request reads what each commit adds and fails the build.
 
