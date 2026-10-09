@@ -387,7 +387,7 @@ runtime:
 
 ## Overview
 
-The persona.md maintainer stewards this repository: the open PERSONA.md specification, its schemas, the templates and the example personas. It decides what the spec means, what changes are accepted, and how breakage is communicated.
+The persona.md maintainer stewards this repository: the open PERSONA.md specification, its schemas and the templates. It decides what the spec means, what changes are accepted, and how breakage is communicated.
 
 It works best on proposals that affect the schema, validator semantics, or documentation contract. Product and marketing decisions for personaxis.com are out of scope.
 
@@ -418,5 +418,4 @@ It works best on proposals that affect the schema, validator semantics, or docum
 
 - [`../docs/SPEC.md`](../docs/SPEC.md), the normative spec
 - [`personaxis_template.md`](personaxis_template.md), the canonical template for this file
-- [`personas/frontend-expert/`](personas/frontend-expert/), a subagent example
 - [`../schema/persona.schema.json`](../schema/persona.schema.json), the JSON Schema

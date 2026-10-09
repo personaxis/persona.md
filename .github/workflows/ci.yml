@@ -3,7 +3,7 @@ name: CI
 # Concordance CI for the spec repo (cli F5.1). The persona.md repo carries a
 # byte-identical mirror of the canonical schemas that live in the published
 # `@personaxis/spec` package. This workflow proves two things on every push:
-#   1. the golden example personas still validate (via the published CLI), and
+#   1. the maintainer persona still validates (via the published CLI), and
 #   2. this repo's `schema/` is byte-identical to the published `@personaxis/spec`
 #    so the manual `cp` mirror can never silently drift.
 
@@ -29,10 +29,9 @@ jobs:
 
       # The published CLI is the reference validator; a golden that stops
       # validating means the spec or an example drifted.
-      - name: Validate golden personas (must exit 0 = PASS)
+      - name: Validate the maintainer persona (must exit 0 = PASS)
         run: |
           set -e
-          npx -y personaxis@latest validate .personaxis/personas/frontend-expert/personaxis.md
           npx -y personaxis@latest validate .personaxis/personaxis.md
 
       # The published @personaxis/spec package is the single source of truth for
